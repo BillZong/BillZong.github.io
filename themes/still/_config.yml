@@ -1,7 +1,7 @@
 menu:
-  Home: /
-  Archive: /archives/
-  About: "https://github.com/billzong"
+  主页: /
+  归档: /archives/
+  Github主页: "https://github.com/billzong"
 
 # title: Jeremy's Blog
 # keywords: Jeremy,Jeremy Fan,Blog,博客,技术,前端,生活
