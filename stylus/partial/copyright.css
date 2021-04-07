@@ -1,0 +1,19 @@
+footer {
+  padding-bottom: 1px;
+}
+footer .copyright {
+  padding: 1em 0 5em;
+  border-top: 1px solid #efefef;
+  text-align: left;
+}
+footer .copyright p,
+footer .copyright a {
+  font-size: 14px;
+  font-weight: 100;
+  color: #999;
+  margin: 0.5em 0;
+}
+footer .copyright a:hover {
+  text-decoration: underline;
+  color: #666;
+}
