@@ -106,3 +106,5 @@ deploy:
   type: git
   repo: https://github.com/BillZong/BillZong.github.io.git
   branch: master
+
+hexo-asset-folder: true
