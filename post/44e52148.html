@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 使用gpg签名git tag的过程 · 知易行难，一路向前</title><meta name="description" content="使用gpg签名git tag的过程 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">使用gpg签名git tag的过程</h1><div class="post-info">2021-04-08</div><div class="post-content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>开源项目在协作的过程中，很多都是远程贡献者，彼此间都互不认识。如何保证相互间的信任、确认身份、确保安全问题，是其中的重点。</p>
+<p>而 git 在比 svn 更开放的同时，也缺失了权限控制，如何对成员进行鉴别，以确保少量用户具备直接操作权限，是其中的难点。</p>
+<p>目前权限这块，都是利用GitHub、Gitlab、BitBucket等平台的账户权限管理。而身份证明基本都是用电子签名，并将签名公钥公布在社区内，由社区成员或基金会进行审核确认。</p>
+<p>通过审核后，作为项目代码的直接提交者，所有的代码提交都需要经过签名认证，以确保是本人操作。一般而言，GitHub、Gitlab这类开源平台会在绑定账号公钥后处理这类工作，其认证原理类似于 ssh 的授信。</p>
+<p>而给仓库打标签一般属于项目管理员的行为，其身份认证更为重要，必然需要进行签名以自证身份。</p>
+<p>平时我们直接打标签 <code>git tag</code>，是无签名模式，在对作者认证时是无法通过的 <code>git tag -v 标签名</code>。</p>
+<h2 id="完成流程"><a href="#完成流程" class="headerlink" title="完成流程"></a>完成流程</h2><ul>
+<li>安装GnuPG，以下简称GPG。<ul>
+<li><a href="https://gnupg.org/download/" target="_blank" rel="noopener">下载路径</a>，然后放到系统PATH中。</li>
+<li>或者使用Homebrew安装。</li>
+</ul>
+</li>
+<li>使用gpg生成key。<ul>
+<li>已存在有效key且同git账户相同，直接跳过。</li>
+<li>生成后key后，每个key都有自己的ID。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --gen-key # 然后输入git仓库（例如GitHub）账户名称、邮箱，最后是签名密码。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置git签名key。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.signingkey 签名key的ID</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>给git仓库打标签并签名。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -s -m &#39;提交日志&#39; # 终端首次签名需要输入签名密码</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决签名失败"><a href="#解决签名失败" class="headerlink" title="解决签名失败"></a>解决签名失败</h2><p>在 Mac 上，如果你碰到git tag签名失败，有几个原因：</p>
+<ul>
+<li>gpg证书的名称、邮箱与你设置为全局的名称、邮箱不符。</li>
+</ul>
+<p>查看git全局配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global -l</span><br></pre></td></tr></table></figure>
+
+<p>修改全局配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name&#x3D;账号名称</span><br><span class="line">git config --global user.email&#x3D;邮箱</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>gpg证书的ID设置不对，或者已过期。</li>
+</ul>
+<p>查看gpg的keyID</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --list-keys # 查看长ID</span><br><span class="line">gpg -K --keyid-format SHORT # 或者查看短ID</span><br></pre></td></tr></table></figure>
+
+<p>短ID指令获得结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sec   rsa2048&#x2F;A6D9D1A8 2019-08-14 [SC] [expires: 2021-08-13]</span><br><span class="line">      12B7104B2EC168B55A0FE6DD9A341BB3A6D9D1A8</span><br><span class="line">uid         [ultimate] BillZong &lt;billzong@163.com&gt;</span><br><span class="line">ssb   rsa2048&#x2F;7CB344A2 2019-08-14 [E] [expires: 2021-08-13]</span><br></pre></td></tr></table></figure>
+
+<p>短ID为：<code>A6D9D1A8</code><br>长ID为：<code>12B7104B2EC168B55A0FE6DD9A341BB3A6D9D1A8</code></p>
+<p>将短ID或长ID设置到git配置中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.signingkey A6D9D1A8</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>gpg守护进程异常。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">killall gpg-agent &amp;&amp; gpg-agent --daemon --pinentry-program &#x2F;usr&#x2F;local&#x2F;bin&#x2F;pinentry</span><br><span class="line"></span><br><span class="line"># 过期指令</span><br><span class="line"># killall gpg-agent &amp;&amp; gpg-agent --daemon --use-standard-socket --pinentry-program &#x2F;usr&#x2F;local&#x2F;bin&#x2F;pinentry</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work" target="_blank" rel="noopener">Git Tools - Signing Your Work</a></li>
+<li>[gpg failed to sign the data fatal: failed to write commit object [Git 2.10.0]](<a href="https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0" target="_blank" rel="noopener">https://stackoverflow.com/questions/39494631/gpg-failed-to-sign-the-data-fatal-failed-to-write-commit-object-git-2-10-0</a>)</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="next" href="/post/888b8b30.html">下一篇</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
