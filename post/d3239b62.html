@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GraphQL API构建示例(1) · 知易行难，一路向前</title><meta name="description" content="GraphQL API构建示例(1) - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">GraphQL API构建示例(1)</h1><div class="post-info">2021-04-08</div><div class="post-content"><h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><a href="./facd8695.html">前文</a>提到过<code>GraphQL API</code>的优点和一些粗浅介绍。然而知道怎么回事，不代表我们能正确地使用它，特别是一些新的技术思路。</p>
+<p>本文的绝大部分内容来自Medium一位AWS移动端<a href="https://medium.com/open-graphql/building-a-graphql-api-by-example-restaurant-reviews-acd80d60ec77" target="_blank" rel="noopener">知名博主</a>。作者通过一个简单的示例来描述如何正确地构建<code>GraphQL API</code>服务，并尝试说明其步骤和一般性的原则。</p>
+<p>因为文章很长，所以我们也会分段进行叙述。</p>
+<h3 id="老生常谈"><a href="#老生常谈" class="headerlink" title="老生常谈"></a>老生常谈</h3><p>为什么反复提及<code>GrapthQL API</code>？</p>
+<p>这门技术可以减少我们在开发<code>REST</code>风格后端时，为适应变化的需求不断地修改代码，也减少了为不同的前端业务需求进行开发的复杂性。<br>从此，我们不再为此类架构日趋复杂的业务维护问题而头疼。</p>
+<h3 id="实际步骤"><a href="#实际步骤" class="headerlink" title="实际步骤"></a>实际步骤</h3><ol>
+<li><strong>设计一个<code>GraphQL schema</code>方案。</strong></li>
+<li>设计并实现一个存储数据的后端数据方案。</li>
+<li>实现一个从<strong>1</strong>翻译到<strong>2</strong>的解析器。 </li>
+<li>实现API的授权。</li>
+</ol>
+<h2 id="用例说明"><a href="#用例说明" class="headerlink" title="用例说明"></a>用例说明</h2><p>后续的描述，将从一个简单的用例开始。</p>
+<ul>
+<li>APP需求描述:<ul>
+<li>一个餐馆评论App</li>
+<li>作为餐馆老板，我希望能够在数据库中添加餐厅。</li>
+<li>作为已登陆用户，我希望能够在餐馆评级列表中添加评论。</li>
+<li>作为已登陆用户，我希望能收藏餐馆。</li>
+<li>作为未登陆的用户，我想搜索餐馆并查看他们的平均评分。</li>
+<li>作为已登陆的用户，我想阅读特定餐厅的评论。</li>
+</ul>
+</li>
+</ul>
+<h2 id="构建“方案”"><a href="#构建“方案”" class="headerlink" title="构建“方案”"></a>构建“方案”</h2><p>关于设计“方案”，我们有一些可以参考的基本步骤。</p>
+<ul>
+<li>找出我们需要的原始数据类型。</li>
+<li>将任何返回列表的内容调整为“分页”查询。</li>
+<li>确定应用程序可能需要的合理操作。</li>
+<li>写入查询所需的输入类型。</li>
+<li>确定用户体验的实时更新要求。</li>
+<li>确定安全性的授权要求。</li>
+</ul>
+<h3 id="原始数据类型"><a href="#原始数据类型" class="headerlink" title="原始数据类型"></a>原始数据类型</h3><p>回归到之前的需求，我们可以分解其基本类型及行为。</p>
+<ul>
+<li>用户<ul>
+<li>获取自己添加的餐馆列表</li>
+<li>获取收藏的餐馆列表</li>
+<li>获取我填写的评论</li>
+</ul>
+</li>
+<li>餐馆位置<ul>
+<li>获取关于该位置的相关评论</li>
+</ul>
+</li>
+<li>评论<ul>
+<li>有评级和内容</li>
+</ul>
+</li>
+</ul>
+<p>直观地翻译成GraphQL，就输出了我们的第一版内容:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">type User &#123;</span><br><span class="line">    id: ID! &#x2F;&#x2F; 常规设计</span><br><span class="line">    name: String</span><br><span class="line">    locations: [Location] &#x2F;&#x2F; 直接引用</span><br><span class="line">    reviews: [Review] &#x2F;&#x2F; 直接引用</span><br><span class="line">    favorites: [Location] &#x2F;&#x2F; 直接引用</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Location &#123;</span><br><span class="line">    id: ID! &#x2F;&#x2F; 常规设计</span><br><span class="line">    owner: String!</span><br><span class="line">    longitude: Float</span><br><span class="line">    latitude: Float</span><br><span class="line">    address: String</span><br><span class="line">    averageRating: Float</span><br><span class="line">    favoritesCount: Int</span><br><span class="line">    reviews: [Review] &#x2F;&#x2F; 直接引用</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Review &#123;</span><br><span class="line">    id: ID! &#x2F;&#x2F; 常规设计</span><br><span class="line">    owner: User!</span><br><span class="line">    location: Location! &#x2F;&#x2F; 直接引用</span><br><span class="line">    content: String!</span><br><span class="line">    rating: Number!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这三者是相互依赖的，每种类型都与其他两种类型有联系。<br>如果是使用SQL模式，我们只会引用ID，确保表之间关联度尽可能地低。<br>但是，在GraphQL里，我们直接嵌入类型，以便进行查询。<br>例如，我们可以这样做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">query getUser(id: ID!) &#123;</span><br><span class="line">  name</span><br><span class="line">  email</span><br><span class="line">  favorites &#123;</span><br><span class="line">    id</span><br><span class="line">    name</span><br><span class="line">    averageRating</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在查询用户信息的同时获取我收藏的餐馆及它们的平均评级。<br>前端在组合这些复杂（甚至更复杂）查询（更新）业务时，可以比使用ID获得更多的灵活性。</p>
+<h3 id="分页支持"><a href="#分页支持" class="headerlink" title="分页支持"></a>分页支持</h3><p>两类基本方案：</p>
+<ul>
+<li><code>limit + nextToken</code>方式<ul>
+<li>最常用方案</li>
+</ul>
+</li>
+<li><code>start + end</code>方式<ul>
+<li>还要考虑列表越界处理</li>
+</ul>
+</li>
+</ul>
+<p>于是我们在<code>User</code>上添加相应的功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">input PagingRequest &#123; &#x2F;&#x2F; 表示入参均为可选</span><br><span class="line">    limit: Int &#x2F;&#x2F; 如未设置，则任由后端返回任意数值</span><br><span class="line">    nextToken: String &#x2F;&#x2F; 如未设置，则请求的是第一页</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type User &#123;</span><br><span class="line">    id: ID!</span><br><span class="line">    name: String!</span><br><span class="line">    email: String</span><br><span class="line">    location(paging: PagingRequest) LocationPagingConnection</span><br><span class="line">    reviews(paging: PagingRequest) ReviewPagingConnection</span><br><span class="line">    favorites(paging: PagingRequest) LocationPagingConnection</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type LocationPagingConnection &#123;</span><br><span class="line">    items: [Location]</span><br><span class="line">    nextToken: String &#x2F;&#x2F; 没有返回的情况下，则表示没有数据了</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type ReviewPagingConnection &#123;</span><br><span class="line">    items: [Review]</span><br><span class="line">    nextToken: String &#x2F;&#x2F; 没有返回的情况下，则表示没有数据了</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关于<code>input</code>的说明，可以参考更详细的<a href="https://graphql.org/graphql-js/mutations-and-input-types/" target="_blank" rel="noopener">文档</a></p>
+<h3 id="定义操作"><a href="#定义操作" class="headerlink" title="定义操作"></a>定义操作</h3><p>这部分内容是后端开发中最常修改的部分，因为前端业务总有改不完的需求。</p>
+<p>但针对当前这个示例而言，我们可以显式地定义出这些需求：</p>
+<ul>
+<li>获取“我的用户”记录（包括我记录下的位置，评论和收藏）</li>
+<li>搜索位置（GPS、名称）</li>
+<li>添加一个位置</li>
+<li>添加评论</li>
+<li>将地点标记为收藏</li>
+</ul>
+<p>转成<code>GraphQL</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">type Query &#123; &#x2F;&#x2F; 查询</span><br><span class="line">    me: User!</span><br><span class="line">    searchForLocation(byGPS: GPSInput, byAddress: AddressInput): LocationPagingConnection</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Mutation &#123; &#x2F;&#x2F; 修改</span><br><span class="line">    addLocation(location: LocationInput): Location</span><br><span class="line">    addReview(review: ReviewInput): Review</span><br><span class="line">    addFavorite(locationId: ID!): Location</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编辑输入类型"><a href="#编辑输入类型" class="headerlink" title="编辑输入类型"></a>编辑输入类型</h3><p>将前面定义的<code>Query</code>和<code>Mutation</code>接口参数定义清楚：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">input GPSInput &#123;</span><br><span class="line">  longitude: Float</span><br><span class="line">  latitude: Float</span><br><span class="line">  radius: Float</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input AddressInput &#123;</span><br><span class="line">  street: String</span><br><span class="line">  city: String</span><br><span class="line">  state: String</span><br><span class="line">  zipcode: String</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input LocationInput &#123;</span><br><span class="line">  name: String</span><br><span class="line">  address: AddressInput &#x2F;&#x2F; 参数复用!</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input ReviewInput &#123;</span><br><span class="line">  locationId: ID!</span><br><span class="line">  content: String!</span><br><span class="line">  rating: Number!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更合适的映射方式是采用<a href="https://github.com/prisma/prisma" target="_blank" rel="noopener">Prisma</a>这类GraphQL后端数据引擎，这里暂时不做赘述。</p>
+<h3 id="实时数据分发"><a href="#实时数据分发" class="headerlink" title="实时数据分发"></a>实时数据分发</h3><p>这个步骤主要是为了提升用户体验。</p>
+<p>实时数据的方案一般是通过<code>WebSocket</code>订阅进行支持的。</p>
+<p>在当前需求下，我们想更新用户在更新时所查看的位置，因为其中包含评级和收藏夹计数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type Subscription &#123;</span><br><span class="line">  updatedLocation(locationId: ID!): Location</span><br><span class="line">  @aws_subscribe(mutations: [ &quot;addReview&quot;, &quot;addFavorite&quot; ]) &#x2F;&#x2F; 云厂商的实时数据订阅</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体的<code>GraphQL server</code>实现，有不同的实时数据订阅设置。这里暂时不做赘述，go语言版本可参考<a href="https://outcrawl.com/go-graphql-realtime-chat" target="_blank" rel="noopener">这个链接</a>，基本思路就是使用<code>chan</code>来传递消息。</p>
+<h3 id="身份验证和授权"><a href="#身份验证和授权" class="headerlink" title="身份验证和授权"></a>身份验证和授权</h3><p>当前的接口需要根据业务，定义好哪些需要身份验证后才能访问的。一般而言，需要<code>mutation</code>和<code>subscription</code>的都需要身份验证，而部分非敏感数据的<code>query</code>都不需要身份验证。</p>
+<p>大部分server实现都可以通过添加中间件，或者库的方式，接管身份和注册身份验证组建。所以在接口层面，不需要考虑太多信息，把接口文档标识清楚即可。</p>
+<h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><p>本文是个系列，下篇会切换到其它主题，并进行扩展延伸。</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/f80ec8a1.html">PREV</a><a class="next" href="/post/facd8695.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CDN 简介 · 知易行难，一路向前</title><meta name="description" content="CDN 简介 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">CDN 简介</h1><div class="post-info">2021-04-08</div><div class="post-content"><h2 id="文档链接地址"><a href="#文档链接地址" class="headerlink" title="文档链接地址"></a>文档链接地址</h2><p><a href="http://wenku.it168.com/d_001628826.shtml" target="_blank" rel="noopener">168文库</a></p>
+<h2 id="CDN-要件"><a href="#CDN-要件" class="headerlink" title="CDN 要件"></a>CDN 要件</h2><p>分布式存储、负载均衡、网络请求的重定向、内容管理。</p>
+<p>内容管理和全局的网络流量管理（traffic management）是CDN的核心所在。</p>
+<p>内容服务基于缓存服务器，也称作代理缓存（Surrogate）。它位于网络的“边缘”，同时是内容提供商源服务器的一个透明镜像。</p>
+<h2 id="CDN-关键技术"><a href="#CDN-关键技术" class="headerlink" title="CDN 关键技术"></a>CDN 关键技术</h2><ul>
+<li>内容发布<ul>
+<li>它借助于建立索引、缓存、流分裂、组播等技术，将内容发布或投递到距离用户最近的远程服务点（PoP：Points of Presence）处。</li>
+</ul>
+</li>
+<li>内容路由<ul>
+<li>它是整体性的网络负载均衡技术，通过内容路由器中的重定向（DNS）机制，在多个远程PoP上均衡用户的请求，以使用户请求得到最近内容源的响应。</li>
+</ul>
+</li>
+<li>内容交换<ul>
+<li>它根据内容的可用性、服务器的可用性以及用户的背景，在PoP的缓存服务器上，利用应用层交换、流分裂、重定向（ICP、WCCP）等技术，智能地平衡负载流量。</li>
+</ul>
+</li>
+<li>性能管理<ul>
+<li>它通过内部和外部监控系统，获取网络部件的状况信息，测量内容发布的端到端性能（如包丢失、延时、平均贷款、启动时间、帧速率等），保证网络处于最佳的运行状态。</li>
+</ul>
+</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="next" href="/post/afdd4898.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

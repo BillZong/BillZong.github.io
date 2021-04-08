@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> WebSocket协议调研 · 知易行难，一路向前</title><meta name="description" content="WebSocket协议调研 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">WebSocket协议调研</h1><div class="post-info">2021-04-08</div><div class="post-content"><h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="一些重要概念"><a href="#一些重要概念" class="headerlink" title="一些重要概念"></a>一些重要概念</h2><ul>
+<li>BNF<ul>
+<li>Backus-Naur Form</li>
+</ul>
+</li>
+<li>ABNF<ul>
+<li>Augumented BNF</li>
+</ul>
+</li>
+<li>SNI<ul>
+<li>Server Name Indication</li>
+</ul>
+</li>
+<li>ESNI<ul>
+<li>Encrypted SNI</li>
+</ul>
+</li>
+</ul>
+<h2 id="WebSocket设计哲学"><a href="#WebSocket设计哲学" class="headerlink" title="WebSocket设计哲学"></a>WebSocket设计哲学</h2><p>Conceptually, WebSocket is really just a layer on top of TCP that does the following:</p>
+<ul>
+<li>adds a web origin-based security model for browsers</li>
+<li>adds an addressing and protocol naming mechanism to support multiple services on one port and multiple host names on one IP address</li>
+<li>layers a framing mechanism on top of TCP to get back to the IP packet mechanism that TCP is built on, but without length limits</li>
+<li>includes an additional closing handshake in-band that is designed to work in the presence of proxies and other intermediaries</li>
+</ul>
+<h1 id="重要细节"><a href="#重要细节" class="headerlink" title="重要细节"></a>重要细节</h1><p>细节太多，只挑重点和容易忽略的内容：</p>
+<h2 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ws-URI &#x3D; &quot;ws:&quot; &quot;&#x2F;&#x2F;&quot; host [ &quot;:&quot; port ] path [ &quot;?&quot; query ]</span><br><span class="line">wss-URI &#x3D; &quot;wss:&quot; &quot;&#x2F;&#x2F;&quot; host [ &quot;:&quot; port ] path [ &quot;?&quot; query ]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>大小写敏感。</li>
+<li>端口、query为可选。</li>
+<li>path对象为空时填为<code>/</code>。</li>
+<li><code>#</code>需要使用百分号编码。</li>
+</ul>
+<h2 id="握手"><a href="#握手" class="headerlink" title="握手"></a>握手</h2><ul>
+<li>一个客户端可以跟一个服务端创建多个连接，但不允许同一时间有多个通道处于 <code>CONNECTING</code> 状态。</li>
+<li>服务端可在负载过高时限制同一客户端的连接数。</li>
+<li>客户端通过代理连接时建议使用 <code>SOCKS5</code> 代理。</li>
+<li>TLS握手时，客户端、服务端需要支持<code>SNI</code>。<ul>
+<li>然而<code>SNI</code>域名未被加密，依然可能被监听，更安全的角度需要去实现<code>ESNI</code>，业内实现少。</li>
+</ul>
+</li>
+<li>握手升级为 <code>ws</code> 通道的请求中，<code>Sec-WebSocket-Key</code>, <code>Origin</code>, <code>Sec-WebSocket-Version</code>等字段都是必须的。</li>
+<li>请求回复的消息头字段都是<strong>大小写敏感</strong>。</li>
+<li><code>WebSocket</code> 可用版本目前只有 <strong>13</strong>，但考虑到向前兼容，服务端、客户端需要做版本协商。</li>
+</ul>
+<h3 id="客户端请求规则"><a href="#客户端请求规则" class="headerlink" title="客户端请求规则"></a>客户端请求规则</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Sec-WebSocket-Key &#x3D; base64-value-non-empty</span><br><span class="line">Sec-WebSocket-Extensions &#x3D; extension-list</span><br><span class="line">Sec-WebSocket-Protocol-Client &#x3D; 1#token</span><br><span class="line">Sec-WebSocket-Version-Client &#x3D; version</span><br><span class="line"></span><br><span class="line">base64-value-non-empty &#x3D; (1*base64-data [ base64-padding ]) |</span><br><span class="line">                         base64-padding</span><br><span class="line">base64-data      &#x3D; 4base64-character</span><br><span class="line">base64-padding   &#x3D; (2base64-character &quot;&#x3D;&#x3D;&quot;) |</span><br><span class="line">                   (3base64-character &quot;&#x3D;&quot;)</span><br><span class="line">base64-character &#x3D; ALPHA | DIGIT | &quot;+&quot; | &quot;&#x2F;&quot;</span><br><span class="line">extension-list &#x3D; 1#extension</span><br><span class="line">extension &#x3D; extension-token *( &quot;;&quot; extension-param )</span><br><span class="line">extension-token &#x3D; registered-token</span><br><span class="line">registered-token &#x3D; token</span><br><span class="line">extension-param &#x3D; token [ &quot;&#x3D;&quot; (token | quoted-string) ]</span><br><span class="line">                  ; When using the quoted-string syntax variant, the value</span><br><span class="line">                  ; after quoted-string unescaping MUST conform to the</span><br><span class="line">                  ; &#39;token&#39; ABNF.</span><br><span class="line">NZDIGIT       &#x3D;  &quot;1&quot; | &quot;2&quot; | &quot;3&quot; | &quot;4&quot; | &quot;5&quot; | &quot;6&quot; | &quot;7&quot; | &quot;8&quot; | &quot;9&quot;</span><br><span class="line">version &#x3D; DIGIT | (NZDIGIT DIGIT) |</span><br><span class="line">          (&quot;1&quot; DIGIT DIGIT) | (&quot;2&quot; DIGIT DIGIT)</span><br><span class="line">          ; Limited to 0-255 range, with no leading zeros</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务端回复规则"><a href="#服务端回复规则" class="headerlink" title="服务端回复规则"></a>服务端回复规则</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Sec-WebSocket-Extensions &#x3D; extension-list</span><br><span class="line">Sec-WebSocket-Accept     &#x3D; base64-value-non-empty</span><br><span class="line">Sec-WebSocket-Protocol-Server &#x3D; token</span><br><span class="line">Sec-WebSocket-Version-Server &#x3D; 1#version</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据分帧"><a href="#数据分帧" class="headerlink" title="数据分帧"></a>数据分帧</h2><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ul>
+<li>发送|接收不确定长度的消息，以便确定数据缓存大小。</li>
+<li>多路复用，提高传输效率。</li>
+</ul>
+<h3 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h3><ul>
+<li>客户端需要屏蔽（masking）全部（数据）帧，服务端不能屏蔽任何帧。</li>
+</ul>
+<h3 id="数据帧规则"><a href="#数据帧规则" class="headerlink" title="数据帧规则"></a>数据帧规则</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1                   2                   3</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</span><br><span class="line">+-+-+-+-+-------+-+-------------+-------------------------------+</span><br><span class="line">|F|R|R|R| opcode|M| Payload len |    Extended payload length    |</span><br><span class="line">|I|S|S|S|  (4)  |A|     (7)     |             (16&#x2F;64)           |</span><br><span class="line">|N|V|V|V|       |S|             |   (if payload len&#x3D;&#x3D;126&#x2F;127)   |</span><br><span class="line">| |1|2|3|       |K|             |                               |</span><br><span class="line">+-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +</span><br><span class="line">|     Extended payload length continued, if payload len &#x3D;&#x3D; 127  |</span><br><span class="line">+ - - - - - - - - - - - - - - - +-------------------------------+</span><br><span class="line">|                               |Masking-key, if MASK set to 1  |</span><br><span class="line">+-------------------------------+-------------------------------+</span><br><span class="line">| Masking-key (continued)       |          Payload Data         |</span><br><span class="line">+-------------------------------- - - - - - - - - - - - - - - - +</span><br><span class="line">:                     Payload Data continued ...                :</span><br><span class="line">+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +</span><br><span class="line">|                     Payload Data continued ...                |</span><br><span class="line">+---------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>opcode</code> 控制码位<ul>
+<li>目前只有3种数据帧：continuation | text | binary，3种控制帧：connection close | ping | pong 。</li>
+<li>opcode 提供了保留字段供使用（不建议用，将来协议变更可能会带来冲突）。</li>
+<li>控制角度来说是比较简单的。处理模式基本通用，就是逐帧解析、异常关闭。</li>
+</ul>
+</li>
+<li>数据长度<ul>
+<li>都是使用变长字段，最高可支持 <code>2^63</code> 字节。然而，我们并不建议使用过长的数据帧字段。</li>
+<li>因为网络环境的不确定性，随时有可能出现半开放连接（Half Open Connection）的场景，所以要保持控制帧 <code>ping</code>, <code>pong</code> 的通信。过长数据帧可能会出现 <code>ping</code>, <code>pong</code> 超时问题。</li>
+<li>另外，WebSocket 通道数据需要缓冲（是否需要拷贝得看具体实现），需要提防 OOM、处理超时等问题。</li>
+</ul>
+</li>
+<li>数据屏蔽|揭露（masking | unmasking）规则<ul>
+<li>original-octet-i：为原始数据的第i字节。</li>
+<li>transformed-octet-i：为转换后的数据的第i字节。</li>
+<li>j：为<code>i mod 4</code>的结果。</li>
+<li>masking-key-octet-j：为mask key第 j 字节。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">transformed-octet-i &#x3D; original-octet-i XOR masking-key-octet-j</span><br></pre></td></tr></table></figure>
+
+<h3 id="控制帧"><a href="#控制帧" class="headerlink" title="控制帧"></a>控制帧</h3><ul>
+<li>不能分帧，payload 总长度必须小于等于 125 字节。</li>
+<li>一条消息在发送时不能插入其它消息的数据帧，除非扩展支持并做了约定协商。</li>
+<li>一条消息的所有数据帧格式都必须一致。</li>
+<li>收到关闭控制帧后，服务端必须立刻回复关闭控制帧并关闭底层 TCP 连接；客户端需要等待服务端关闭 TCP 连接，但也可能随时关闭此 TCP 连接。</li>
+</ul>
+<h3 id="数据帧"><a href="#数据帧" class="headerlink" title="数据帧"></a>数据帧</h3><ul>
+<li>text帧<ul>
+<li>UTF-8 编码。client 必须 mask，master 不能 mask。</li>
+</ul>
+</li>
+<li>Binary帧<ul>
+<li>最常用的帧，应用层业务协议约定后自行解析。</li>
+</ul>
+</li>
+</ul>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>常见的扩展用途：</p>
+<ul>
+<li><p>可以在“应用程序数据”之前的“有效载荷数据”中放置“扩展数据”。</p>
+<ul>
+<li>可以存放多路复用数据，元数据等。</li>
+</ul>
+</li>
+<li><p>可以为每帧需求分配保留位。</p>
+</li>
+<li><p>可以定义保留的操作码值。</p>
+</li>
+<li><p>如果需要更多操作码值，可以将保留位分配给操作码字段。</p>
+</li>
+<li><p>可以定义一个保留位或一个“扩展”操作码，该操作码从“有效载荷数据”中分配其他位以定义更大的操作码或更多的每帧位。</p>
+</li>
+</ul>
+<h2 id="收发数据"><a href="#收发数据" class="headerlink" title="收发数据"></a>收发数据</h2><ul>
+<li><p>一条消息发送的最后一帧数据需要将 <code>fin</code> 位设置为 1。</p>
+</li>
+<li><p>一般情况下，一条消息多个分帧总是接连读取拼接起来的。但扩展可能会改变这种读取行为，具体得看服务器、客户端的约定协议。</p>
+<ul>
+<li>例如，多路复用扩展可能会接收到来自两条消息混插在一块的帧序列，但每一帧还是确保完整的。</li>
+</ul>
+</li>
+</ul>
+<h2 id="关闭连接"><a href="#关闭连接" class="headerlink" title="关闭连接"></a>关闭连接</h2><ul>
+<li>需要回复状态码及关闭原因</li>
+</ul>
+<h2 id="安全-1"><a href="#安全-1" class="headerlink" title="安全"></a>安全</h2><ul>
+<li>客户端必须在每一帧中使用不同的 <code>masking key</code>，且使用难以预测的生成算法。</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://tools.ietf.org/html/rfc6455" target="_blank" rel="noopener">RFC 6455 - The WebSocket Protocol</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Server_Name_Indication" target="_blank" rel="noopener">Server Name Indication</a></li>
+<li><a href="[https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_form](https://en.wikipedia.org/wiki/Augmented_Backus–Naur_form)">Augmented Backus–Naur form</a></li>
+<li><a href="https://stackoverflow.com/questions/23080900/why-does-websocket-rfc-allows-control-frame-interleaved-with-multiframe" target="_blank" rel="noopener">Why does Websocket RFC allows control frame interleaved with multiframe</a></li>
+<li><a href="https://blog.stephencleary.com/2009/05/detection-of-half-open-dropped.html" target="_blank" rel="noopener">Detection of Half-Open (Dropped) Connections</a></li>
+<li><a href="http://www.lenholgate.com/blog/2011/07/websockets-is-a-stream-not-a-message-based-protocol.html" target="_blank" rel="noopener">WebSockets is a stream, not a message based protocol</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/facd8695.html">PREV</a><a class="next" href="/post/44e52148.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
