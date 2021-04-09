@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>知易行难，一路向前</title>
+    <link>https://billzong.github.io/</link>
+    
+    <image>
+      <url>https://billzong.github.io/icon.png</url>
+      <title>知易行难，一路向前</title>
+      <link>https://billzong.github.io/</link>
+    </image>
+    
+    <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
+    
+    <description></description>
+    <pubDate>Thu, 08 Apr 2021 15:35:21 GMT</pubDate>
+    <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>CDN 简介</title>
+      <link>https://billzong.github.io/post/1c6c86cc.html</link>
+      <guid>https://billzong.github.io/post/1c6c86cc.html</guid>
+      <pubDate>Thu, 08 Apr 2021 15:30:37 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;文档链接地址&quot;&gt;&lt;a href=&quot;#文档链接地址&quot; class=&quot;headerlink&quot; title=&quot;文档链接地址&quot;&gt;&lt;/a&gt;文档链接地址&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://wenku.it168.com/d_001628826.shtml&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BC%93%E5%AD%98/">缓存</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BC%93%E5%AD%98/">缓存</category>
+      
+      
+      <comments>https://billzong.github.io/post/1c6c86cc.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>CDN 技术详解</title>
+      <link>https://billzong.github.io/post/afdd4898.html</link>
+      <guid>https://billzong.github.io/post/afdd4898.html</guid>
+      <pubDate>Thu, 08 Apr 2021 15:29:29 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;CDN-技术概述&quot;&gt;&lt;a href=&quot;#CDN-技术概述&quot; class=&quot;headerlink&quot; title=&quot;CDN 技术概述&quot;&gt;&lt;/a&gt;CDN 技术概述&lt;/h2&gt;&lt;h3 id=&quot;边缘计算的概念&quot;&gt;&lt;a href=&quot;#边缘计算的概念&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BC%93%E5%AD%98/">缓存</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BC%93%E5%AD%98/">缓存</category>
+      
+      
+      <comments>https://billzong.github.io/post/afdd4898.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>CDN技术原理</title>
+      <link>https://billzong.github.io/post/3363d042.html</link>
+      <guid>https://billzong.github.io/post/3363d042.html</guid>
+      <pubDate>Thu, 08 Apr 2021 15:28:03 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;文档链接地址&quot;&gt;&lt;a href=&quot;#文档链接地址&quot; class=&quot;headerlink&quot; title=&quot;文档链接地址&quot;&gt;&lt;/a&gt;文档链接地址&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://wenku.it168.com/d_001628827.shtml&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BC%93%E5%AD%98/">缓存</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BC%93%E5%AD%98/">缓存</category>
+      
+      
+      <comments>https://billzong.github.io/post/3363d042.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>终端生成TLS自签名证书</title>
+      <link>https://billzong.github.io/post/e4cf1ff8.html</link>
+      <guid>https://billzong.github.io/post/e4cf1ff8.html</guid>
+      <pubDate>Thu, 08 Apr 2021 15:26:27 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;&lt;strong&gt;Generating the private key:&lt;/strong&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <comments>https://billzong.github.io/post/e4cf1ff8.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>查看CSR信息</title>
+      <link>https://billzong.github.io/post/1eec93ef.html</link>
+      <guid>https://billzong.github.io/post/1eec93ef.html</guid>
+      <pubDate>Thu, 08 Apr 2021 15:24:52 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;查看CSR信息&quot;&gt;&lt;a href=&quot;#查看CSR信息&quot; class=&quot;headerlink&quot; title=&quot;查看CSR信息&quot;&gt;&lt;/a&gt;查看CSR信息&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;openssl req -noout -text -in</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <comments>https://billzong.github.io/post/1eec93ef.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>iris框架概览</title>
+      <link>https://billzong.github.io/post/12d311d1.html</link>
+      <guid>https://billzong.github.io/post/12d311d1.html</guid>
+      <pubDate>Thu, 08 Apr 2021 14:55:08 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;Web 框架的基本诉求：接收 HTTP 请求 -&amp;gt; 处理 HTTP 各项参数 -&amp;gt; 路由 -&amp;gt; 自定义控制器 -&amp;gt;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <comments>https://billzong.github.io/post/12d311d1.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>GraphQL API构建示例(2)</title>
+      <link>https://billzong.github.io/post/f80ec8a1.html</link>
+      <guid>https://billzong.github.io/post/f80ec8a1.html</guid>
+      <pubDate>Thu, 08 Apr 2021 14:52:51 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;./d3239b62.html&quot;&gt;设计一个&lt;code&gt;GraphQL</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <comments>https://billzong.github.io/post/f80ec8a1.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>GraphQL API构建示例(1)</title>
+      <link>https://billzong.github.io/post/d3239b62.html</link>
+      <guid>https://billzong.github.io/post/d3239b62.html</guid>
+      <pubDate>Thu, 08 Apr 2021 14:52:15 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;./facd8695.html&quot;&gt;前文&lt;/a&gt;提到过&lt;code&gt;GraphQL</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <comments>https://billzong.github.io/post/d3239b62.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>GraphQL API服务go语言版本的介绍</title>
+      <link>https://billzong.github.io/post/facd8695.html</link>
+      <guid>https://billzong.github.io/post/facd8695.html</guid>
+      <pubDate>Thu, 08 Apr 2021 14:50:14 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;GraphQL-API-是什么&quot;&gt;&lt;a href=&quot;#GraphQL-API-是什么&quot; class=&quot;headerlink&quot; title=&quot;GraphQL API 是什么&quot;&gt;&lt;/a&gt;GraphQL API 是什么&lt;/h2&gt;&lt;p&gt;GraphQL 是一个用于 API</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <comments>https://billzong.github.io/post/facd8695.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>WebSocket协议调研</title>
+      <link>https://billzong.github.io/post/beb9dd3.html</link>
+      <guid>https://billzong.github.io/post/beb9dd3.html</guid>
+      <pubDate>Thu, 08 Apr 2021 14:48:17 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h1&gt;&lt;h2 id=&quot;一些重要概念&quot;&gt;&lt;a href=&quot;#一些重要概念&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <comments>https://billzong.github.io/post/beb9dd3.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>使用gpg签名git tag的过程</title>
+      <link>https://billzong.github.io/post/44e52148.html</link>
+      <guid>https://billzong.github.io/post/44e52148.html</guid>
+      <pubDate>Wed, 07 Apr 2021 16:33:11 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/">版本管理工具</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/">版本管理工具</category>
+      
+      
+      <comments>https://billzong.github.io/post/44e52148.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>CNCF组织架构及准入说明</title>
+      <link>https://billzong.github.io/post/888b8b30.html</link>
+      <guid>https://billzong.github.io/post/888b8b30.html</guid>
+      <pubDate>Wed, 07 Apr 2021 16:10:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;组织介绍&quot;&gt;&lt;a href=&quot;#组织介绍&quot; class=&quot;headerlink&quot; title=&quot;组织介绍&quot;&gt;&lt;/a&gt;组织介绍&lt;/h2&gt;&lt;h3 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%BC%80%E6%BA%90%E7%BB%84%E7%BB%87/">开源组织</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/opensource/">opensource</category>
+      
+      <category domain="https://billzong.github.io/tags/CNCF/">CNCF</category>
+      
+      
+      <comments>https://billzong.github.io/post/888b8b30.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Apache软件基金会运作介绍</title>
+      <link>https://billzong.github.io/post/2f833ac7.html</link>
+      <guid>https://billzong.github.io/post/2f833ac7.html</guid>
+      <pubDate>Wed, 07 Apr 2021 15:56:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;是什么&quot;&gt;&lt;a href=&quot;#是什么&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%BC%80%E6%BA%90%E7%BB%84%E7%BB%87/">开源组织</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E5%BC%80%E6%BA%90%E7%BB%84%E7%BB%87/">开源组织</category>
+      
+      
+      <comments>https://billzong.github.io/post/2f833ac7.html#disqus_thread</comments>
+      
+    </item>
+    
+  </channel>
+</rss>
