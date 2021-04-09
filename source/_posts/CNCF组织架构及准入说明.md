@@ -1,12 +1,13 @@
----
 title: CNCF组织架构及准入说明
 comments: true
 abbrlink: 888b8b30
-date: 2021-04-08 00:10:16
-categories: 开源组织
-tags: 开源组织
+categories:
+  - 开源组织
+tags:
+  - opensource
+  - CNCF
+date: 2021-04-08 00:10:00
 ---
-
 ## 组织介绍
 
 ### 背景
@@ -17,7 +18,7 @@ tags: 开源组织
 
 ### Cloud Native 全景图
 
-![landscape-cloud-native](/media/15784056979737/landscape-cncf.png)
+![landscape-cncf.png](/images/pasted-0.png)
 
 ### CNCF的使命
 
@@ -109,7 +110,7 @@ tags: 开源组织
 
 是否可以成为CNCF项目需要通过Technical Oversight Committee (技术监督委员会）简称TOC，投票采取fallback策略，即回退策略，先从最高级别（graduated）开始，如果2/3多数投票通过的话则确认为该级别，如果没通过的话，则进行下一低级别的投票，如果一直到inception级别都没得到2/3多数投票通过的话，则拒绝其进入CNCF项目。
 
-![](/media/15784056979737/15784095112292.jpg)
+![15784095112292.jpg](/images/pasted-1.png)
 
 ## 参考资料
 
