@@ -1,10 +1,11 @@
----
 title: CDN 简介
 comments: true
 abbrlink: 1c6c86cc
-date: 2021-04-08 23:30:37
-categories: 缓存
-tags: 缓存
+categories:
+  - 缓存
+tags:
+  - CDN
+date: 2021-04-08 23:30:00
 ---
 
 ## 文档链接地址

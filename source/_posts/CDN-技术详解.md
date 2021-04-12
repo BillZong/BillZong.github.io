@@ -1,10 +1,11 @@
----
 title: CDN 技术详解
 comments: true
 abbrlink: afdd4898
-date: 2021-04-08 23:29:29
-categories: 缓存
-tags: 缓存
+categories:
+  - 缓存
+tags:
+  - CDN
+date: 2021-04-08 23:29:00
 ---
 
 ## CDN 技术概述

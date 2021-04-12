@@ -1,10 +1,11 @@
----
 title: 查看CSR信息
 comments: true
 abbrlink: 1eec93ef
-date: 2021-04-08 23:24:52
-categories: 网络
-tags: 网络
+categories:
+  - 网络
+tags:
+  - certificate
+date: 2021-04-08 23:24:00
 ---
 
 ## 查看CSR信息

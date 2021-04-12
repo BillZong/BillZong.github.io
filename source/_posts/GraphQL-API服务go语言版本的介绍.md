@@ -1,10 +1,13 @@
----
 title: GraphQL API服务go语言版本的介绍
 comments: true
 abbrlink: facd8695
-date: 2021-04-08 22:50:14
-categories: 网络
-tags: 网络
+categories:
+  - 网络
+tags:
+  - GraphQL
+  - protocol
+  - network
+date: 2021-04-08 22:50:00
 ---
 
 ## GraphQL API 是什么

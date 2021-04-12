@@ -1,10 +1,13 @@
----
 title: GraphQL API构建示例(2)
 comments: true
 abbrlink: f80ec8a1
-date: 2021-04-08 22:52:51
-categories: 网络
-tags: 网络
+categories:
+  - 网络
+tags:
+  - GraphQL
+  - protocol
+  - network
+date: 2021-04-08 22:52:00
 ---
 
 ## 概要

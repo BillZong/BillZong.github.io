@@ -1,10 +1,11 @@
----
 title: CDN技术原理
 comments: true
 abbrlink: 3363d042
-date: 2021-04-08 23:28:03
-categories: 缓存
-tags: 缓存
+categories:
+  - 缓存
+tags:
+  - CDN
+date: 2021-04-08 23:28:00
 ---
 
 ## 文档链接地址

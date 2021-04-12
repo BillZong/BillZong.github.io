@@ -1,10 +1,13 @@
----
 title: WebSocket协议调研
 comments: true
 abbrlink: beb9dd3
-date: 2021-04-08 22:48:17
-categories: 网络
-tags: 网络
+categories:
+  - 网络
+tags:
+  - WebSocket
+  - protocol
+  - network
+date: 2021-04-08 22:48:00
 ---
 
 # 介绍

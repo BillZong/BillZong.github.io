@@ -1,10 +1,12 @@
----
 title: 终端生成TLS自签名证书
 comments: true
 abbrlink: e4cf1ff8
-date: 2021-04-08 23:26:27
-categories: 网络
-tags: 网络
+categories:
+  - 网络
+tags:
+  - certificate
+  - tls
+date: 2021-04-08 23:26:00
 ---
 
 **Generating the private key:**

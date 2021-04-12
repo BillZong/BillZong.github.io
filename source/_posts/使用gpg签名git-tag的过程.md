@@ -1,10 +1,13 @@
----
 title: 使用gpg签名git tag的过程
 comments: true
 abbrlink: '44e52148'
-date: 2021-04-08 00:33:11
-categories: 版本管理工具
-tags: 版本管理工具
+categories:
+  - 版本管理工具
+tags:
+  - git
+  - GNUpg
+  - tool
+date: 2021-04-08 00:33:00
 ---
 
 ## 背景
