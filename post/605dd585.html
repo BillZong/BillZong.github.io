@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Helm部署OpenWhisk全流程分析 · 知易行难，一路向前</title><meta name="description" content="Helm部署OpenWhisk全流程分析 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Helm部署OpenWhisk全流程分析</h1><div class="post-info">2021-04-11</div><div class="post-content"><h2 id="主流程"><a href="#主流程" class="headerlink" title="主流程"></a>主流程</h2><ul>
+<li>拷贝<a href="https://github.com/apache/incubator-openwhisk" target="_blank" rel="noopener">incubator-openwhisk</a>仓库<ul>
+<li>删除默认的授权配置文件</li>
+</ul>
+</li>
+<li>执行<code>installRouteMgmt.sh</code>脚本<ul>
+<li>进入目录<code>$OPENWHISK_HOME/ansible/roles/routemgmt/file</code></li>
+</ul>
+</li>
+<li><code>installRouteMgmt.sh</code>脚本主要内容<ul>
+<li>分别进入目录<code>$OPENWHISK_HOME/core/routemgmt/getApi</code>，<code>$OPENWHISK_HOME/core/routemgmt/createApi</code>，<code>$OPENWHISK_HOME/core/routemgmt/deleteApi</code>，执行<code>npm install</code>和<code>zip -r</code>任务。</li>
+<li>将打包好<code>zip</code>文件作为<code>Action</code>安装到<code>system</code>这个名称空间中。</li>
+</ul>
+</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/73ccc9b4.html">PREV</a><a class="next" href="/post/81965e0a.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

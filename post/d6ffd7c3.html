@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 搭建OpenWhisk · 知易行难，一路向前</title><meta name="description" content="搭建OpenWhisk - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">搭建OpenWhisk</h1><div class="post-info">2021-04-11</div><div class="post-content"><h1 id="在云上购买机器"><a href="#在云上购买机器" class="headerlink" title="在云上购买机器"></a>在云上购买机器</h1><ul>
+<li><p>命名master为 btc-001</p>
+</li>
+<li><p>命令worker为 eth-001 eth-002 eth-003</p>
+</li>
+<li><p>这些机器全部使用了私网ip</p>
+</li>
+<li><p>前端部署负载均衡，ip为 10.1.2.3</p>
+<ul>
+<li>文中涉及到这个ip的地方都需要替换</li>
+</ul>
+</li>
+<li><p>这里购买了一个nfs，地址为 259ae4bcd9-gos35.cn-shenzhen.nas.aliyuncs.com</p>
+<ul>
+<li>文中涉及到这个nfs地址的地方都需要替换</li>
+</ul>
+</li>
+</ul>
+<h1 id="登录每台机器，关闭swap分区，安装工具软件"><a href="#登录每台机器，关闭swap分区，安装工具软件" class="headerlink" title="登录每台机器，关闭swap分区，安装工具软件"></a>登录每台机器，关闭swap分区，安装工具软件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"># turnoff swap (no need to reboot)</span><br><span class="line">swapoff -a &amp;&amp; sed -i.bak &#39;&#x2F; swap &#x2F; s&#x2F;^\(.*\)$&#x2F;#\1&#x2F;g&#39; &#x2F;etc&#x2F;fstab</span><br><span class="line"></span><br><span class="line"># prepare install utils</span><br><span class="line">apt-get -y update</span><br><span class="line">apt-get install -y apt-transport-https ca-certificates curl software-properties-common</span><br><span class="line"></span><br><span class="line"># install docker ce</span><br><span class="line">curl -fsSL http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;docker-ce&#x2F;linux&#x2F;ubuntu&#x2F;gpg | apt-key add -</span><br><span class="line">add-apt-repository &quot;deb [arch&#x3D;amd64] http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;docker-ce&#x2F;linux&#x2F;ubuntu $(lsb_release -cs) stable&quot;</span><br><span class="line">apt-get -y update</span><br><span class="line">apt-get install -y docker-ce&#x3D;5:18.09.2~3-0~ubuntu-bionic</span><br><span class="line"></span><br><span class="line"># install kubeadm</span><br><span class="line">curl https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kubernetes&#x2F;apt&#x2F;doc&#x2F;apt-key.gpg | apt-key add -</span><br><span class="line">add-apt-repository &quot;deb https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;kubernetes&#x2F;apt&#x2F; kubernetes-xenial main&quot;</span><br><span class="line">apt-get -y update</span><br><span class="line">apt-get install -y kubernetes-cni&#x3D;0.6.0-00</span><br><span class="line">apt-get install -y kubelet&#x3D;1.13.3-00</span><br><span class="line">apt-get install -y kubectl&#x3D;1.13.3-00</span><br><span class="line">apt-get install -y kubeadm&#x3D;1.13.3-00</span><br></pre></td></tr></table></figure>
+
+<h1 id="trick：-可能需要手动下载镜像（因为墙的关系，可能无法下载到k8s的所有的image）"><a href="#trick：-可能需要手动下载镜像（因为墙的关系，可能无法下载到k8s的所有的image）" class="headerlink" title="trick： 可能需要手动下载镜像（因为墙的关系，可能无法下载到k8s的所有的image）"></a>trick： 可能需要手动下载镜像（因为墙的关系，可能无法下载到k8s的所有的image）</h1><ul>
+<li>这里跳过</li>
+</ul>
+<h1 id="在master上通过kubeadm初始化集群"><a href="#在master上通过kubeadm初始化集群" class="headerlink" title="在master上通过kubeadm初始化集群"></a>在master上通过kubeadm初始化集群</h1><figure class="highlight plain"><figcaption><span>kubeadm-config.yaml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: kubeadm.k8s.io&#x2F;v1beta1</span><br><span class="line">kind: ClusterConfiguration</span><br><span class="line">kubernetesVersion: 1.13.3</span><br><span class="line">networking:</span><br><span class="line">  podSubnet: &quot;10.244.0.0&#x2F;16&quot;</span><br><span class="line">apiServer:</span><br><span class="line">  certSANs:</span><br><span class="line">  - 10.1.2.3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意上面的podSubnet无需修改，certSANs需要修改为你的前端负载均衡ip</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init --config&#x3D;kubeadm-config.yaml</span><br><span class="line"># 注意此命令运行完毕后会打印出一条加入命令，这条加入命令将在worker上执行（后续步骤中提示）</span><br><span class="line"># 打印出来的命令格式如下： kubeadm join ... --token ... --discovery-token-ca-cert-hash ...</span><br><span class="line"># 请将此命令保存好</span><br></pre></td></tr></table></figure>
+
+<h1 id="在master上配置kubectl"><a href="#在master上配置kubectl" class="headerlink" title="在master上配置kubectl"></a>在master上配置kubectl</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 执行以下命令后，就可以在master上直接执行kubectl命令了</span><br><span class="line">mkdir -p $&#123;HOME&#125;&#x2F;.kube &amp;&amp; cp -i &#x2F;etc&#x2F;kubernetes&#x2F;admin.conf $&#123;HOME&#125;&#x2F;.kube&#x2F;config &amp;&amp; chown $(id -u):$(id -g) $&#123;HOME&#125;&#x2F;.kube&#x2F;config</span><br></pre></td></tr></table></figure>
+
+<h1 id="配置网络，在master上执行以下命令"><a href="#配置网络，在master上执行以下命令" class="headerlink" title="配置网络，在master上执行以下命令"></a>配置网络，在master上执行以下命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https:&#x2F;&#x2F;docs.projectcalico.org&#x2F;v3.3&#x2F;getting-started&#x2F;kubernetes&#x2F;installation&#x2F;hosted&#x2F;canal&#x2F;rbac.yaml</span><br><span class="line">kubectl apply -f https:&#x2F;&#x2F;docs.projectcalico.org&#x2F;v3.3&#x2F;getting-started&#x2F;kubernetes&#x2F;installation&#x2F;hosted&#x2F;canal&#x2F;canal.yaml</span><br></pre></td></tr></table></figure>
+
+<h1 id="在worker节点上执行命令，加入master初始化好的k8s集群"><a href="#在worker节点上执行命令，加入master初始化好的k8s集群" class="headerlink" title="在worker节点上执行命令，加入master初始化好的k8s集群"></a>在worker节点上执行命令，加入master初始化好的k8s集群</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 执行上文中“在master上通过kubeadm初始化集群”输出的命令</span><br><span class="line">kubeadm join ... --token ... --discovery-token-ca-cert-hash ...</span><br></pre></td></tr></table></figure>
+
+<h1 id="至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态"><a href="#至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态" class="headerlink" title="至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态"></a>至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br><span class="line"># 如果看到全部ready，则说明集群已经初始化完毕</span><br></pre></td></tr></table></figure>
+
+<h1 id="接下里的操作全部是在本地上执行的"><a href="#接下里的操作全部是在本地上执行的" class="headerlink" title="接下里的操作全部是在本地上执行的"></a>接下里的操作全部是在本地上执行的</h1><h1 id="安装helm"><a href="#安装helm" class="headerlink" title="安装helm"></a>安装helm</h1><ul>
+<li>注意helm需要一个配置好的kubectl，我们可以选在在本地配置好kubectl。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 把master上的 ~&#x2F;.kube&#x2F;config 拷贝到本地 ~&#x2F;.kube&#x2F;config即可</span><br><span class="line">scp btc:~&#x2F;.kube&#x2F;config ~&#x2F;.kube&#x2F;config</span><br><span class="line"># 注意同时还需要将负载均衡的6443端口转发到master的6443端口</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>下载helm</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;storage.googleapis.com&#x2F;kubernetes-helm&#x2F;helm-v2.12.3-darwin-amd64.tar.gz</span><br><span class="line"># 加压缩并添加到path中</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置helm，执行以下命令（请注意这里需要翻墙）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helm init</span><br><span class="line">kubectl create clusterrolebinding tiller-cluster-admin --clusterrole&#x3D;cluster-admin --serviceaccount&#x3D;kube-system:default</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="通过helm来搭建openwhisk集群"><a href="#通过helm来搭建openwhisk集群" class="headerlink" title="通过helm来搭建openwhisk集群"></a>通过helm来搭建openwhisk集群</h1><ul>
+<li>首先需要配置worker角色</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl label nodes eth-001 openwhisk-role&#x3D;invoker</span><br><span class="line">kubectl label nodes eth-002 openwhisk-role&#x3D;invoker</span><br><span class="line">kubectl label nodes eth-003 openwhisk-role&#x3D;invoker</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置持久化存储（这里需要在云服务商处购买nfs存储）</li>
+</ul>
+<figure class="highlight plain"><figcaption><span>openwhisk-nfs-client-provisioner.yaml，注意修改server地址的配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">nfs:</span><br><span class="line">   server: 259ae4bcd9-gos35.cn-shenzhen.nas.aliyuncs.com</span><br><span class="line">   path: &#x2F;</span><br><span class="line"></span><br><span class="line">storageClass:</span><br><span class="line">   name: openwhisk-nfs</span><br><span class="line">   reclaimPolicy: Delete</span><br></pre></td></tr></table></figure>
+
+<h1 id="通过helm在k8s中安装存储的storage-class"><a href="#通过helm在k8s中安装存储的storage-class" class="headerlink" title="通过helm在k8s中安装存储的storage class"></a>通过helm在k8s中安装存储的storage class</h1><ul>
+<li><p>注意，我们首先需要在所有的worker机器上安装mount nfs的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install -y nfs-common</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后继续安装</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install --namespace openwhisk --values openwhisk-nfs-client-provisioner.yaml stable&#x2F;nfs-client-provisioner</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取openwhisk的部署配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;incubator-openwhisk-deploy-kube</span><br><span class="line">cd incubator-openwhisk-deploy-kube</span><br><span class="line"># 注意这里我们使用给一个老的版本的openwhisk部署</span><br><span class="line">git checkout 89f1787</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编写openwhisk helm部署的配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">whisk:</span><br><span class="line">  ingress:</span><br><span class="line">    apiHostName: 10.1.2.3</span><br><span class="line">  limits:</span><br><span class="line">    actionsInvokesPerminute: 999999</span><br><span class="line">    actionsInvokesConcurrent: 999999</span><br><span class="line">    triggersFiresPerminute: 999999</span><br><span class="line">    actionsSequenceMaxlength: 999999</span><br><span class="line"></span><br><span class="line">k8s:</span><br><span class="line">  persistence:</span><br><span class="line">    enabled: true</span><br><span class="line">    hasDefaultStorageClass: false</span><br><span class="line">    explicitStorageClass: openwhisk-nfs</span><br></pre></td></tr></table></figure>
+
+<h1 id="执行helm部署命令"><a href="#执行helm部署命令" class="headerlink" title="执行helm部署命令"></a>执行helm部署命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install .&#x2F;helm&#x2F;openwhisk --namespace&#x3D;openwhisk --name&#x3D;owdev -f owdev.yaml</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>等到所有的pod完成执行即可</li>
+</ul>
+<h1 id="部署ingress"><a href="#部署ingress" class="headerlink" title="部署ingress"></a>部署ingress</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;kubernetes&#x2F;ingress-nginx&#x2F;master&#x2F;deploy&#x2F;mandatory.yaml</span><br><span class="line">kubectl apply -f https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;kubernetes&#x2F;ingress-nginx&#x2F;master&#x2F;deploy&#x2F;provider&#x2F;baremetal&#x2F;service-nodeport.yaml</span><br><span class="line"></span><br><span class="line"># 通过 kubectl -ningress-nginx get pods 来查看nginx是否正常启动</span><br></pre></td></tr></table></figure></div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/d13f2d70.html">PREV</a><a class="next" href="/post/3e321d5a.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

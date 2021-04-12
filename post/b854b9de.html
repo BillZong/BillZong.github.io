@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> OpenWhisk部署配置说明 · 知易行难，一路向前</title><meta name="description" content="OpenWhisk部署配置说明 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">OpenWhisk部署配置说明</h1><div class="post-info">2021-04-11</div><div class="post-content"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文主要描述当前OpenWhisk部署项目的代码修改、配置修改及生产环境下的配置说明。</p>
+<h3 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h3><p>部署仓库<a href="https://github.com/apache/incubator-openwhisk-deploy-kube" target="_blank" rel="noopener">初始版本</a>。<code>master</code>分支，节点<code>89f1787ed58228063ae813ff85acfa9824ea045b</code>，缩减描述为<code>89f1787</code>。<br>其对应的<a href="https://github.com/apache/incubator-openwhisk" target="_blank" rel="noopener">代码仓库</a>，<code>master</code>分支，节点<code>5a2bf810dc5fda2f0d184c022e5931ac65de9721</code>，缩减描述为<code>5a2bf810</code>。</p>
+<hr>
+<h2 id="代码修改"><a href="#代码修改" class="headerlink" title="代码修改"></a>代码修改</h2><ul>
+<li>将 Node.js runtime 的预热容器数量提升，以便后面进行性能测试。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// helm/openwhisk/runtimes.json line 19-20</span></span><br><span class="line">"count": 8,</span><br><span class="line">"memory": "128 MB"</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将 OpenWhisk 初始化 CouchDB 的超时时间延长，避免网络超时导致失败。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">//</span> <span class="string">helm/openwhisk/templates/couchdb-init-job.yaml</span> <span class="string">line</span> <span class="number">13</span></span><br><span class="line"><span class="attr">activeDeadlineSeconds:</span> <span class="number">6000</span> <span class="comment"># 原值为 600</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将 OpenWhisk 安装 package 的超时时间延长，避免网络超时导致失败。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">..</span> <span class="string">helm/openwhisk/templates/install-packages-job.yaml</span> <span class="string">line</span> <span class="number">12</span></span><br><span class="line"><span class="attr">activeDeadlineSeconds:</span> <span class="number">9000</span> <span class="comment"># 原值为 900</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="配置修改"><a href="#配置修改" class="headerlink" title="配置修改"></a>配置修改</h2><p>这部分内容通过自测，可以直接使用在网聚和阿里云服务器上。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># openwhisk 自定义部署配置文件，yaml格式</span></span><br><span class="line"><span class="attr">k8s:</span></span><br><span class="line">  <span class="attr">persistence:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span> <span class="comment"># 必须持久化</span></span><br><span class="line">    <span class="attr">explicitStorageClass:</span> <span class="string">nfs-storage</span> <span class="comment"># 使用已初始化完成的局域网nfs存储</span></span><br><span class="line">    <span class="attr">hasDefaultStorageClass:</span> <span class="literal">false</span> <span class="comment"># 不设置默认存储类</span></span><br><span class="line"><span class="attr">providers:</span></span><br><span class="line">  <span class="attr">alarm:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">false</span> <span class="comment"># 不做预警提示，生产环境需要修正</span></span><br><span class="line"><span class="attr">whisk:</span></span><br><span class="line">  <span class="attr">containerPool:</span></span><br><span class="line">    <span class="attr">userMemory:</span> <span class="string">2048m</span> <span class="comment"># 一般节点内存池在8G左右，所以预留2G给内存池没什么问题</span></span><br><span class="line">  <span class="attr">ingress:</span></span><br><span class="line">    <span class="attr">apiHostName:</span> <span class="number">47.106</span><span class="number">.26</span><span class="number">.103</span> <span class="comment"># OpenWhisk API服务暴露的公网IP</span></span><br><span class="line">  <span class="attr">limits:</span></span><br><span class="line">    <span class="attr">actions:</span></span><br><span class="line">      <span class="attr">memory:</span></span><br><span class="line">        <span class="attr">min:</span> <span class="string">128m</span> <span class="comment"># 主要配合whisk.containerPool.userMemory，用于控制Invoker容器slots数量</span></span><br><span class="line">        <span class="attr">std:</span> <span class="string">384m</span> <span class="comment"># 主要是给人脸检测这种Docker Action使用，其计算内存存在波动</span></span><br><span class="line">    <span class="attr">actionsInvokesConcurrent:</span> <span class="number">999999</span> <span class="comment"># 每个名称空间并发容器上限</span></span><br><span class="line">    <span class="attr">actionsInvokesPerminute:</span> <span class="number">999999</span> <span class="comment"># 每个名称空间并发容器每分钟上限</span></span><br><span class="line">    <span class="attr">actionsSequenceMaxlength:</span> <span class="number">999999</span> <span class="comment"># 每个名称空间容器队列最大长度</span></span><br><span class="line">    <span class="attr">triggersFiresPerminute:</span> <span class="number">999999</span> <span class="comment"># 每个名称空间触发器每分钟触发上限</span></span><br><span class="line">  <span class="attr">loadbalancer:</span></span><br><span class="line">    <span class="attr">blackboxFraction:</span> <span class="number">90</span><span class="string">%</span> <span class="comment"># 多分配主要是考虑到后续集群业务主要集中在视频分析这类Docker Action上</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="生产环境配置"><a href="#生产环境配置" class="headerlink" title="生产环境配置"></a>生产环境配置</h2><p>配置都在<code>helm/openwhisk/values.yaml</code>文件，可直接在外部提供文件覆盖这些配置。</p>
+<h3 id="备份数量"><a href="#备份数量" class="headerlink" title="备份数量"></a>备份数量</h3><p>默认情况下，所有的 OpenWhisk 控制平面的微服务，其部署的备份数量都为 1。我们可以修改其冗余备份数量，即修改其<code>replicaCount</code>即可。</p>
+<p>部分组件不支持这种配置设置。</p>
+<ul>
+<li><code>apigateway</code>和<code>redis</code>。<ul>
+<li>因为其不太可能成为瓶颈。</li>
+</ul>
+</li>
+<li><code>couchdb</code><ul>
+<li>建议使用外部<code>CouchDB</code>集群，提高其稳定性和性能。</li>
+</ul>
+</li>
+<li>事件提供者，如<code>alarmprovider</code>，<code>cloudantprovider</code>，<code>kafkaprovider</code><ul>
+<li>相对灵活，方便管理。</li>
+<li>的<code>providers</code>项。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="https://github.com/apache/incubator-openwhisk-deploy-kube/blob/master/docs/configurationChoices.md" target="_blank" rel="noopener">configurationChoices</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/3e321d5a.html">PREV</a><a class="next" href="/post/73ccc9b4.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

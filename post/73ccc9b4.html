@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> OpenWhisk开发环境配置说明 · 知易行难，一路向前</title><meta name="description" content="OpenWhisk开发环境配置说明 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">OpenWhisk开发环境配置说明</h1><div class="post-info">2021-04-11</div><div class="post-content"><p>这里描述的内容为本人自测通过的信息，其它平台建议在社区或者其它渠道查找。</p>
+<hr>
+<h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><ul>
+<li><p>系统</p>
+<ul>
+<li>Mac 10.15 beta</li>
+</ul>
+</li>
+<li><p>Java</p>
+<ul>
+<li>下载<a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">JDK 8</a>，并安装到本地机器。</li>
+<li>使用<strong>HomeBrew</strong>安装管理 Java 版本。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">brew install jenv</span><br><span class="line"></span><br><span class="line"># 添加这部分内容到你使用的 shell rc 或者 profile 文件中，如 ~&#x2F;.bashrc 或 ~&#x2F;.bash_profile</span><br><span class="line"># Init jenv</span><br><span class="line">if which jenv &gt; &#x2F;dev&#x2F;null; then eval &quot;$(jenv init -)&quot;; fi</span><br><span class="line"></span><br><span class="line"># source 上边的配置文件，或者重新打开一个终端，完成后输入下面这行指令</span><br><span class="line">jenv add &#x2F;Library&#x2F;Java&#x2F;JavaVirtualMachines&#x2F;jdk1.8.0_221.jdk&#x2F;Contents&#x2F;Home&#x2F;</span><br><span class="line"></span><br><span class="line"># 查看当前java版本，能看到除了系统默认的 Java 11，还有刚安装的 Java 8</span><br><span class="line">jenv versions</span><br><span class="line"></span><br><span class="line"># 切换全局版本到 Java 8</span><br><span class="line">jenv global 1.8.0.221</span><br><span class="line"></span><br><span class="line"># 如果你想在某些工程里使用回系统的高版本，如 Java 11，可切换到该工程，并进行下面的设置</span><br><span class="line">cd my_project</span><br><span class="line">jenv local 11</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Scala<ul>
+<li>使用<strong>HomeBrew</strong>安装，方便本地<code>REPL</code>调试。<code>brew install scala</code></li>
+<li>目前本人安装的版本是<code>stable 2.13.0</code>。</li>
+<li>你也可以使用<code>brew install scala@2.12</code>安装旧版本。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h2><ul>
+<li>IntelliJ IDEA<ul>
+<li>版本：ULTIMATE 2018.3</li>
+<li>自行解决<code>Hack</code>问题，或者使用社区版本。</li>
+</ul>
+</li>
+<li>安装 Scala 插件<ul>
+<li><code>Preferences =&gt; Plugins</code>。</li>
+<li>安装后重启 IDE。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="项目设置"><a href="#项目设置" class="headerlink" title="项目设置"></a>项目设置</h2><ul>
+<li>下载<a href="https://github.com/apache/openwhisk" target="_blank" rel="noopener">OpenWhisk工程</a>到本地。</li>
+<li>使用 IDEA 打开项目目录，并做好如下配置。<ul>
+<li>打开<code>Preferences =&gt; Build,Execution,Deployment =&gt; Build Tools =&gt; Gradle</code>。</li>
+<li>修改<code>Gradle JVM</code>为我们前面下载的<code>JDK 8</code>目录，一般情况下为 <code>/Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home</code>。</li>
+<li>打开<code>Preferences =&gt; Build,Execution,Deployment =&gt; Compiler =&gt; Java Compiler</code>。</li>
+<li>修改<code>Project bytecode version</code>为<strong>8</strong>。</li>
+<li>点击<code>OK</code>，随即完成设置。</li>
+</ul>
+</li>
+</ul>
+<p>具体设置说明：</p>
+<ol>
+<li>OpenWhisk项目是使用<code>Maven</code>进行构建的。</li>
+<li>该项目的代码在使用<code>Scala 1.12</code>及以上版本后，要求必须使用<code>JDK 8</code>进行构建，其它版本会失败。</li>
+</ol>
+<hr>
+<h2 id="项目构建"><a href="#项目构建" class="headerlink" title="项目构建"></a>项目构建</h2><ul>
+<li>打开<code>Maven</code>面板，刷新一下项目。</li>
+<li>找到我们要开发和测试的某个模块，执行<code>build</code>构建（下载依赖，编译等），然后再执行<code>testClass</code>。</li>
+<li>如果可以看到任务正常执行完成，且测试通过，则认为项目构建流程全部跑完。剩下来的就是继续“打码”了。</li>
+</ul>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://docs.scala-lang.org/getting-started/intellij-track/getting-started-with-scala-in-intellij.html" target="_blank" rel="noopener">GETTING STARTED WITH SCALA IN INTELLIJ</a></li>
+<li><a href="http://davidcai.github.io/blog/posts/install-multiple-jdk-on-mac/" target="_blank" rel="noopener">Install Multiple Java Versions on Mac</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/b854b9de.html">PREV</a><a class="next" href="/post/605dd585.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
