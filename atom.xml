@@ -6,7 +6,7 @@
   <link href="https://billzong.github.io/atom.xml" rel="self"/>
   
   <link href="https://billzong.github.io/"/>
-  <updated>2021-04-11T08:46:46.467Z</updated>
+  <updated>2021-04-12T14:37:06.998Z</updated>
   <id>https://billzong.github.io/</id>
   
   <author>
@@ -17,11 +17,436 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>基于cobra构建命令行</title>
+    <link href="https://billzong.github.io/post/89751058.html"/>
+    <id>https://billzong.github.io/post/89751058.html</id>
+    <published>2021-04-12T14:36:00.000Z</published>
+    <updated>2021-04-12T14:37:06.998Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;strong&gt;Table of Contents&lt;/strong&gt;&lt;/p&gt;
+&lt;!-- BEGIN MUNGE: GENERATED_TOC --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#环境准备&quot;&gt;环境准备&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="cobra" scheme="https://billzong.github.io/tags/cobra/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Context用法</title>
+    <link href="https://billzong.github.io/post/9c69c716.html"/>
+    <id>https://billzong.github.io/post/9c69c716.html</id>
+    <published>2021-04-12T14:34:00.000Z</published>
+    <updated>2021-04-12T14:35:57.178Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;在 Go http包的Server中，每一个请求在都有一个对应的 goroutine 去处理。 请求处理函数通常会启动额外的</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="context" scheme="https://billzong.github.io/tags/context/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>golang项目编码规范</title>
+    <link href="https://billzong.github.io/post/107a8b74.html"/>
+    <id>https://billzong.github.io/post/107a8b74.html</id>
+    <published>2021-04-12T14:33:00.000Z</published>
+    <updated>2021-04-12T14:34:32.791Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="guide" scheme="https://billzong.github.io/tags/guide/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go语言指南拾遗</title>
+    <link href="https://billzong.github.io/post/fe86d1b6.html"/>
+    <id>https://billzong.github.io/post/fe86d1b6.html</id>
+    <published>2021-04-12T14:32:00.000Z</published>
+    <updated>2021-04-12T14:32:32.082Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Practical TDD in Go</title>
+    <link href="https://billzong.github.io/post/37e0e416.html"/>
+    <id>https://billzong.github.io/post/37e0e416.html</id>
+    <published>2021-04-12T14:32:00.000Z</published>
+    <updated>2021-04-12T14:33:33.712Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;!-- START doctoc generated TOC please keep comment here to allow auto update --&gt;
+&lt;!-- DON&#39;T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="TDD" scheme="https://billzong.github.io/tags/TDD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>go语言log库调研</title>
+    <link href="https://billzong.github.io/post/6d4a1154.html"/>
+    <id>https://billzong.github.io/post/6d4a1154.html</id>
+    <published>2021-04-12T14:30:00.000Z</published>
+    <updated>2021-04-12T14:31:49.579Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;系统日志库&quot;&gt;&lt;a href=&quot;#系统日志库&quot; class=&quot;headerlink&quot; title=&quot;系统日志库&quot;&gt;&lt;/a&gt;系统日志库&lt;/h1&gt;&lt;figure class=&quot;highlight</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="log" scheme="https://billzong.github.io/tags/log/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go语言constants说明</title>
+    <link href="https://billzong.github.io/post/a646ef82.html"/>
+    <id>https://billzong.github.io/post/a646ef82.html</id>
+    <published>2021-04-12T14:29:00.000Z</published>
+    <updated>2021-04-12T14:30:30.879Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Go语言constants说明&quot;&gt;&lt;a href=&quot;#Go语言constants说明&quot; class=&quot;headerlink&quot; title=&quot;Go语言constants说明&quot;&gt;&lt;/a&gt;Go语言constants说明&lt;/h1&gt;&lt;h2 id=&quot;概述&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>go版本升级VSCode环境更新说明</title>
+    <link href="https://billzong.github.io/post/1ec527c6.html"/>
+    <id>https://billzong.github.io/post/1ec527c6.html</id>
+    <published>2021-04-12T14:28:00.000Z</published>
+    <updated>2021-04-12T14:29:31.785Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;推荐&quot;&gt;&lt;a href=&quot;#推荐&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="VSCode" scheme="https://billzong.github.io/tags/VSCode/"/>
+    
+    <category term="debug" scheme="https://billzong.github.io/tags/debug/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>go111module编译实践说明</title>
+    <link href="https://billzong.github.io/post/cb3e5607.html"/>
+    <id>https://billzong.github.io/post/cb3e5607.html</id>
+    <published>2021-04-12T14:27:00.000Z</published>
+    <updated>2021-04-12T14:28:41.615Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h1&gt;&lt;p&gt;本文只关注&lt;code&gt;go 1.11&lt;/code&gt;版本新添加的&lt;code&gt;modules&lt;/code&gt;编译方式，说明本次&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="module" scheme="https://billzong.github.io/tags/module/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>布洛城BaaS系统设计方案</title>
+    <link href="https://billzong.github.io/post/d5577457.html"/>
+    <id>https://billzong.github.io/post/d5577457.html</id>
+    <published>2021-04-12T14:24:00.000Z</published>
+    <updated>2021-04-12T14:29:43.899Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;系统架构&quot;&gt;&lt;a href=&quot;#系统架构&quot; class=&quot;headerlink&quot; title=&quot;系统架构&quot;&gt;&lt;/a&gt;系统架构&lt;/h2&gt;&lt;h3 id=&quot;架构图&quot;&gt;&lt;a href=&quot;#架构图&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="blockchain" scheme="https://billzong.github.io/tags/blockchain/"/>
+    
+    <category term="BaaS" scheme="https://billzong.github.io/tags/BaaS/"/>
+    
+    <category term="architecture" scheme="https://billzong.github.io/tags/architecture/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>创世区块账户预挖机制</title>
+    <link href="https://billzong.github.io/post/8d8620.html"/>
+    <id>https://billzong.github.io/post/8d8620.html</id>
+    <published>2021-04-12T14:23:00.000Z</published>
+    <updated>2021-04-12T14:24:13.582Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;预挖是指在创世区块中，将部分账户余额状态修改为指定数值的操作。&lt;/p&gt;
+&lt;h1 id=&quot;go-ethereum实现&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="ethereum" scheme="https://billzong.github.io/tags/ethereum/"/>
+    
+    <category term="source" scheme="https://billzong.github.io/tags/source/"/>
+    
+    <category term="mining" scheme="https://billzong.github.io/tags/mining/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用docker调试以太坊多节点通讯功能</title>
+    <link href="https://billzong.github.io/post/48c09b8d.html"/>
+    <id>https://billzong.github.io/post/48c09b8d.html</id>
+    <published>2021-04-12T14:21:00.000Z</published>
+    <updated>2021-04-12T14:23:00.173Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;内容提要&quot;&gt;&lt;a href=&quot;#内容提要&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="ethereum" scheme="https://billzong.github.io/tags/ethereum/"/>
+    
+    <category term="docker" scheme="https://billzong.github.io/tags/docker/"/>
+    
+    <category term="p2p" scheme="https://billzong.github.io/tags/p2p/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RLPx阅读笔记</title>
+    <link href="https://billzong.github.io/post/5d25bab6.html"/>
+    <id>https://billzong.github.io/post/5d25bab6.html</id>
+    <published>2021-04-12T14:19:00.000Z</published>
+    <updated>2021-04-12T14:21:01.153Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;实现的组成部分&quot;&gt;&lt;a href=&quot;#实现的组成部分&quot; class=&quot;headerlink&quot; title=&quot;实现的组成部分&quot;&gt;&lt;/a&gt;实现的组成部分&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Node Discovery&lt;/li&gt;
+&lt;li&gt;Encrypted</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="ethereum" scheme="https://billzong.github.io/tags/ethereum/"/>
+    
+    <category term="source" scheme="https://billzong.github.io/tags/source/"/>
+    
+    <category term="RLPx" scheme="https://billzong.github.io/tags/RLPx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Prism协议基本介绍</title>
+    <link href="https://billzong.github.io/post/749896c7.html"/>
+    <id>https://billzong.github.io/post/749896c7.html</id>
+    <published>2021-04-12T14:17:00.000Z</published>
+    <updated>2021-04-12T14:21:11.959Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E6%A6%82%E8%A6%81&quot;&gt;概要&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E8%AF%8D%E6%B1%87%E8%A1%A8&quot;&gt;词汇表&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="prism" scheme="https://billzong.github.io/tags/prism/"/>
+    
+    <category term="blockchain" scheme="https://billzong.github.io/tags/blockchain/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>go-ethereum日志库调研</title>
+    <link href="https://billzong.github.io/post/410d6a4b.html"/>
+    <id>https://billzong.github.io/post/410d6a4b.html</id>
+    <published>2021-04-12T14:15:00.000Z</published>
+    <updated>2021-04-12T14:21:20.633Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;log15&quot;&gt;&lt;a href=&quot;#log15&quot; class=&quot;headerlink&quot; title=&quot;log15&quot;&gt;&lt;/a&gt;log15&lt;/h1&gt;&lt;figure class=&quot;highlight</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="ethereum" scheme="https://billzong.github.io/tags/ethereum/"/>
+    
+    <category term="source" scheme="https://billzong.github.io/tags/source/"/>
+    
+  </entry>
+  
+  <entry>
     <title>balance-attack相关说明</title>
     <link href="https://billzong.github.io/post/7742e199.html"/>
     <id>https://billzong.github.io/post/7742e199.html</id>
     <published>2021-04-11T08:39:00.000Z</published>
-    <updated>2021-04-11T08:46:46.467Z</updated>
+    <updated>2021-04-12T01:58:17.863Z</updated>
     
     
       
@@ -37,9 +462,9 @@
     <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
     
     
-    <category term="Ethereum" scheme="https://billzong.github.io/tags/Ethereum/"/>
-    
     <category term="blockchain" scheme="https://billzong.github.io/tags/blockchain/"/>
+    
+    <category term="Ethereum" scheme="https://billzong.github.io/tags/Ethereum/"/>
     
     <category term="security" scheme="https://billzong.github.io/tags/security/"/>
     
@@ -50,7 +475,7 @@
     <link href="https://billzong.github.io/post/d13f2d70.html"/>
     <id>https://billzong.github.io/post/d13f2d70.html</id>
     <published>2021-04-11T08:38:00.000Z</published>
-    <updated>2021-04-11T08:47:19.076Z</updated>
+    <updated>2021-04-12T01:58:17.866Z</updated>
     
     
       
@@ -77,7 +502,7 @@
     <link href="https://billzong.github.io/post/d6ffd7c3.html"/>
     <id>https://billzong.github.io/post/d6ffd7c3.html</id>
     <published>2021-04-11T08:36:00.000Z</published>
-    <updated>2021-04-11T08:48:32.723Z</updated>
+    <updated>2021-04-12T01:58:17.865Z</updated>
     
     
       
@@ -105,7 +530,7 @@
     <link href="https://billzong.github.io/post/3e321d5a.html"/>
     <id>https://billzong.github.io/post/3e321d5a.html</id>
     <published>2021-04-11T08:35:00.000Z</published>
-    <updated>2021-04-11T08:48:51.641Z</updated>
+    <updated>2021-04-12T01:58:17.864Z</updated>
     
     
       
@@ -133,7 +558,7 @@
     <link href="https://billzong.github.io/post/b854b9de.html"/>
     <id>https://billzong.github.io/post/b854b9de.html</id>
     <published>2021-04-11T08:34:00.000Z</published>
-    <updated>2021-04-11T08:49:16.656Z</updated>
+    <updated>2021-04-12T01:58:17.862Z</updated>
     
     
       
@@ -161,7 +586,7 @@
     <link href="https://billzong.github.io/post/73ccc9b4.html"/>
     <id>https://billzong.github.io/post/73ccc9b4.html</id>
     <published>2021-04-11T08:33:00.000Z</published>
-    <updated>2021-04-12T01:47:50.815Z</updated>
+    <updated>2021-04-12T01:58:17.861Z</updated>
     
     
       
@@ -190,7 +615,7 @@
     <link href="https://billzong.github.io/post/605dd585.html"/>
     <id>https://billzong.github.io/post/605dd585.html</id>
     <published>2021-04-11T08:32:00.000Z</published>
-    <updated>2021-04-12T01:53:17.138Z</updated>
+    <updated>2021-04-12T01:58:17.861Z</updated>
     
     
       
@@ -220,7 +645,7 @@
     <link href="https://billzong.github.io/post/81965e0a.html"/>
     <id>https://billzong.github.io/post/81965e0a.html</id>
     <published>2021-04-11T08:31:00.000Z</published>
-    <updated>2021-04-12T01:46:02.382Z</updated>
+    <updated>2021-04-12T01:58:17.857Z</updated>
     
     
       
@@ -238,9 +663,9 @@
     
     <category term="OpenWhisk" scheme="https://billzong.github.io/tags/OpenWhisk/"/>
     
-    <category term="deploy" scheme="https://billzong.github.io/tags/deploy/"/>
-    
     <category term="ansible" scheme="https://billzong.github.io/tags/ansible/"/>
+    
+    <category term="deploy" scheme="https://billzong.github.io/tags/deploy/"/>
     
   </entry>
   
@@ -249,7 +674,7 @@
     <link href="https://billzong.github.io/post/b265443c.html"/>
     <id>https://billzong.github.io/post/b265443c.html</id>
     <published>2021-04-09T15:30:00.000Z</published>
-    <updated>2021-04-09T15:34:01.582Z</updated>
+    <updated>2021-04-12T01:58:17.862Z</updated>
     
     
       
@@ -276,7 +701,7 @@
     <link href="https://billzong.github.io/post/1c6c86cc.html"/>
     <id>https://billzong.github.io/post/1c6c86cc.html</id>
     <published>2021-04-08T15:30:00.000Z</published>
-    <updated>2021-04-12T01:53:35.826Z</updated>
+    <updated>2021-04-12T01:58:17.859Z</updated>
     
     
       
@@ -301,7 +726,7 @@
     <link href="https://billzong.github.io/post/afdd4898.html"/>
     <id>https://billzong.github.io/post/afdd4898.html</id>
     <published>2021-04-08T15:29:00.000Z</published>
-    <updated>2021-04-12T01:53:52.929Z</updated>
+    <updated>2021-04-12T01:58:17.858Z</updated>
     
     
       
@@ -326,7 +751,7 @@
     <link href="https://billzong.github.io/post/3363d042.html"/>
     <id>https://billzong.github.io/post/3363d042.html</id>
     <published>2021-04-08T15:28:00.000Z</published>
-    <updated>2021-04-12T01:54:02.570Z</updated>
+    <updated>2021-04-12T01:58:17.859Z</updated>
     
     
       
@@ -351,7 +776,7 @@
     <link href="https://billzong.github.io/post/e4cf1ff8.html"/>
     <id>https://billzong.github.io/post/e4cf1ff8.html</id>
     <published>2021-04-08T15:26:00.000Z</published>
-    <updated>2021-04-12T01:54:33.018Z</updated>
+    <updated>2021-04-12T01:58:17.866Z</updated>
     
     
       
@@ -379,7 +804,7 @@
     <link href="https://billzong.github.io/post/1eec93ef.html"/>
     <id>https://billzong.github.io/post/1eec93ef.html</id>
     <published>2021-04-08T15:24:00.000Z</published>
-    <updated>2021-04-12T01:54:45.526Z</updated>
+    <updated>2021-04-12T01:58:17.865Z</updated>
     
     
       
@@ -405,7 +830,7 @@
     <link href="https://billzong.github.io/post/12d311d1.html"/>
     <id>https://billzong.github.io/post/12d311d1.html</id>
     <published>2021-04-08T14:55:00.000Z</published>
-    <updated>2021-04-12T01:55:18.337Z</updated>
+    <updated>2021-04-12T01:58:17.863Z</updated>
     
     
       
@@ -421,9 +846,9 @@
     <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
     
     
-    <category term="framework" scheme="https://billzong.github.io/tags/framework/"/>
-    
     <category term="network" scheme="https://billzong.github.io/tags/network/"/>
+    
+    <category term="framework" scheme="https://billzong.github.io/tags/framework/"/>
     
   </entry>
   
@@ -432,7 +857,7 @@
     <link href="https://billzong.github.io/post/f80ec8a1.html"/>
     <id>https://billzong.github.io/post/f80ec8a1.html</id>
     <published>2021-04-08T14:52:00.000Z</published>
-    <updated>2021-04-12T01:55:41.243Z</updated>
+    <updated>2021-04-12T01:58:17.861Z</updated>
     
     
       
@@ -449,11 +874,11 @@
     <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
     
     
-    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
-    
     <category term="GraphQL" scheme="https://billzong.github.io/tags/GraphQL/"/>
     
     <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
     
   </entry>
   
@@ -462,7 +887,7 @@
     <link href="https://billzong.github.io/post/d3239b62.html"/>
     <id>https://billzong.github.io/post/d3239b62.html</id>
     <published>2021-04-08T14:52:00.000Z</published>
-    <updated>2021-04-12T01:56:07.925Z</updated>
+    <updated>2021-04-12T01:58:17.860Z</updated>
     
     
       
@@ -478,11 +903,11 @@
     <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
     
     
-    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
-    
     <category term="GraphQL" scheme="https://billzong.github.io/tags/GraphQL/"/>
     
     <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
     
   </entry>
   
@@ -491,7 +916,7 @@
     <link href="https://billzong.github.io/post/facd8695.html"/>
     <id>https://billzong.github.io/post/facd8695.html</id>
     <published>2021-04-08T14:50:00.000Z</published>
-    <updated>2021-04-12T01:56:28.077Z</updated>
+    <updated>2021-04-12T01:58:17.860Z</updated>
     
     
       
@@ -507,11 +932,11 @@
     <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
     
     
-    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
-    
     <category term="GraphQL" scheme="https://billzong.github.io/tags/GraphQL/"/>
     
     <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
     
   </entry>
   
@@ -520,7 +945,7 @@
     <link href="https://billzong.github.io/post/beb9dd3.html"/>
     <id>https://billzong.github.io/post/beb9dd3.html</id>
     <published>2021-04-08T14:48:00.000Z</published>
-    <updated>2021-04-12T01:56:44.720Z</updated>
+    <updated>2021-04-12T01:58:17.863Z</updated>
     
     
       
@@ -536,9 +961,9 @@
     <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
     
     
-    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
-    
     <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
     
     <category term="WebSocket" scheme="https://billzong.github.io/tags/WebSocket/"/>
     
@@ -549,7 +974,7 @@
     <link href="https://billzong.github.io/post/44e52148.html"/>
     <id>https://billzong.github.io/post/44e52148.html</id>
     <published>2021-04-07T16:33:00.000Z</published>
-    <updated>2021-04-12T01:57:17.754Z</updated>
+    <updated>2021-04-12T01:58:17.864Z</updated>
     
     
       
@@ -578,7 +1003,7 @@
     <link href="https://billzong.github.io/post/888b8b30.html"/>
     <id>https://billzong.github.io/post/888b8b30.html</id>
     <published>2021-04-07T16:10:00.000Z</published>
-    <updated>2021-04-09T15:22:11.896Z</updated>
+    <updated>2021-04-12T01:58:17.860Z</updated>
     
     
       
@@ -605,7 +1030,7 @@
     <link href="https://billzong.github.io/post/2f833ac7.html"/>
     <id>https://billzong.github.io/post/2f833ac7.html</id>
     <published>2021-04-07T15:56:00.000Z</published>
-    <updated>2021-04-08T15:16:10.233Z</updated>
+    <updated>2021-04-12T01:58:17.857Z</updated>
     
     
       

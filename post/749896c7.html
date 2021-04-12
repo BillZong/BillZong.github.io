@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Prism协议基本介绍 · 知易行难，一路向前</title><meta name="description" content="Prism协议基本介绍 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Prism协议基本介绍</h1><div class="post-info">2021-04-12</div><div class="post-content"><ul>
+<li><a href="#%E6%A6%82%E8%A6%81">概要</a></li>
+<li><a href="#%E8%AF%8D%E6%B1%87%E8%A1%A8">词汇表</a></li>
+<li><a href="#%E5%8D%8F%E8%AE%AE%E7%9B%AE%E6%A0%87">协议目标</a></li>
+<li><a href="#%E5%88%86%E6%9E%90%E8%A7%92%E5%BA%A6">分析角度</a></li>
+<li><a href="#%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3">协议详解</a><ul>
+<li><a href="#prism-10">Prism 1.0</a></li>
+</ul>
+</li>
+<li><a href="#%E7%90%86%E8%AE%BA%E7%BB%93%E6%9E%9C">理论结果</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
+</ul>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p><code>Bitcoin</code>共识协议，是<code>Prism</code>协议的基础。在作者提供的这篇论文中，详细地分析了当前一些常见算法的优缺点，以及为什么拓展<code>BitCoin</code>协议，而不是彻底改造它，提供了<code>Prism</code>协议的部分细节，并提供了详尽的证明。当前分析的<code>Prism</code>协议版本为<code>V2</code>。</p>
+<h1 id="词汇表"><a href="#词汇表" class="headerlink" title="词汇表"></a>词汇表</h1><table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">单词</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">作恶节点占比</td>
+<td align="center">β</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">处理延迟</td>
+<td align="center">τp</td>
+<td align="center">从交易进入交易队列到该交易第一次被打包到区块的延迟。</td>
+</tr>
+<tr>
+<td align="center">确认延迟</td>
+<td align="center">τ</td>
+<td align="center">从交易首次打包到（最终）确认时的延迟。</td>
+</tr>
+<tr>
+<td align="center">网络最大性能</td>
+<td align="center">C</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">传播延迟</td>
+<td align="center">D</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">带宽延迟乘积</td>
+<td align="center">BDP(BandWidth Delay Product)</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Bandwidth-delay_product" target="_blank" rel="noopener">BDP</a>决定了网络中可以传输的数据量。它是可用带宽和延迟（RTT）的产物。</td>
+</tr>
+</tbody></table>
+<h1 id="协议目标"><a href="#协议目标" class="headerlink" title="协议目标"></a>协议目标</h1><p>提供一种基于<code>PoW</code>的共识协议，并同时达成以下几个目标：</p>
+<ol>
+<li>低于50%算力的攻击安全性。</li>
+<li>接近网络最大性能<code>C</code>的吞吐量。</li>
+<li>诚实交易正比于传播延迟<code>D</code>的确认等待时间，同时，带宽延迟乘积<code>BDP</code>的确认错误概率指数级的低。</li>
+<li>所有交易正确的最终排序。</li>
+</ol>
+<h1 id="分析角度"><a href="#分析角度" class="headerlink" title="分析角度"></a>分析角度</h1><ul>
+<li>降低难度是最简单的提升<code>TPS</code>的办法，同时也能降低确认延迟。<ul>
+<li>但是降低难度会导致大量分叉。</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>为了解决分叉问题，人们提出了更为复杂的数据结构，例如<code>DAG</code>。<ul>
+<li>这类协议包括<code>GHOST</code>/<code>Inclusive</code>/<code>Spectre</code>/<code>Phantom</code>/<code>Conflux</code>。</li>
+<li><code>GHOST/Phantom/Conflux</code>有安全问题。具体说明参考论文。</li>
+<li><code>Spectre</code>没有提出所有交易排序的解决方案，会导致无法使用智能合约。</li>
+<li><code>Conflux</code>仅提高了吞吐量，但难以确认。</li>
+</ul>
+</li>
+<li>解耦化共识<ul>
+<li>概念：将区块的责任进行解耦，将区块分为负责交易的区块，和负责投票的区块。</li>
+<li><code>BitcoinNG</code>因为其先验性，存在对领导区块的 DDOS 攻击风险。</li>
+<li><code>Fruitchains</code>则仅机械式地拆分了职责。</li>
+<li><code>Prism</code>也属于这类共识。<br><img src="https://lexiangla.com/assets/a1af99d0f64511e8b3c55254004f9daa" alt="解构区块链"><ul>
+<li>将区块链解构为交易区块（按级别排列部分排序的提议块），并在选民链中组织选民区块。通过选民区块选择主链，选民区块在每个级别的提议区块之间投票以选择领导区块。例如，在级别3，块b被选为块a上的领导者。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>混合式共识（区块链+BFT）<ul>
+<li><code>Thunderella</code>在乐观情况下（有一个诚实的领导节点，且<code>β &lt; 0.25</code>），可以达到低确认延迟。但在极端情况下(<code>β = 0.25</code>）跟<code>BitCoin</code>也是一样的表现。</li>
+</ul>
+</li>
+</ol>
+<h1 id="协议详解"><a href="#协议详解" class="headerlink" title="协议详解"></a>协议详解</h1><h2 id="Prism-1-0"><a href="#Prism-1-0" class="headerlink" title="Prism 1.0"></a>Prism 1.0</h2><ul>
+<li><p>具体结构</p>
+<ol>
+<li>存在两个散列阈值参数αc和αt，使得<code>αc≤αt</code>。节点使用随机数挖掘区块。如果散列小于严格阈值<code>αc</code>，则该区块是核心区块。如果散列小于松弛阈值<code>αt</code>但大于<code>αc</code>，则该块是交易区块。攻击者在块被挖掘之前不知道它正在挖掘哪种类型的区块。</li>
+<li>核心区块用于确定主链的结构。每个核心区块将引用几个交易区块，然后假定它们被合并到账本中。</li>
+<li>区块包含以下数据项。<ul>
+<li>奖励的公钥。</li>
+<li>交易列表。</li>
+<li>指向其正在挖掘的当前核心区块的<code>Hash</code>。</li>
+<li>指向当前节点已知且未在当前主链被引用的所有交易区块<code>Hash</code>。</li>
+<li><code>PoW</code>的结果<code>Nonce</code>。<br><img src="https://lexiangla.com/assets/a45229f4f6b411e8bca0525400b4d70f" alt="Prism区块结构"></li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>交易顺序如何确认</p>
+<ol>
+<li>如果区块是交易区块，则不使用其指向其它区块的Hash。 如果区块是核心区块，则不使用交易列表。</li>
+<li>通过核心区块链（主链）的顺序，确定交易区块的顺序，以此来确认交易顺序。<br><img src="https://lexiangla.com/assets/dea76a2ef6b411e89a0a525400ac2e73" alt="Prism交易顺序确认逻辑"></li>
+</ol>
+</li>
+<li><p>节点交互</p>
+<ol>
+<li>每条新交易都广播到网络中的所有节点。</li>
+<li>每个节点都维护一个未完成交易的队列。如果发现一个区块打包了某条交易，则从队列中清除它。</li>
+<li>每个节点维护一个区块树，包含核心区块和交易区块。</li>
+<li>节点尝试在其本地区块树中当前最长的核心区块链上挖掘其新区块。<ul>
+<li>根据当前最长核心链的状态，节点打包合法的交易。</li>
+<li>该区块指向当前最长核心链父区块Hash，同时指向其核心主链当前未引用的所有交易区块的Hash。<br><img src="https://lexiangla.com/assets/d04aa4ecf64511e8bd815254002ec14d" alt="Prism区块引用"></li>
+</ul>
+</li>
+<li>节点接收到区块后不确认交易有效性，因为稍后会对账本进行清理。</li>
+</ol>
+</li>
+</ul>
+<p><img src="https://lexiangla.com/assets/dd6ba05ef64511e88c15525400177fdc" alt="Prism结构"><br>吞吐量，延迟和可靠性通过增加每个提议块的交易块数和并行投票链数来扩展到物理限制。整个结构，包括三种块和它们之间的链接，是一个结构化的<code>DAG</code>。</p>
+<ul>
+<li>交易安排</li>
+</ul>
+<ol>
+<li>交易随机分配成 q 个队列。</li>
+</ol>
+<ul>
+<li>吞吐量-延迟权衡<ol>
+<li>交易区块大小只要不超过<code>BDP</code>即可。<br><img src="https://lexiangla.com/assets/e881cd24f64511e8a943525400a20cd4" alt="网络延迟"><ul>
+<li><code>Prism</code>和<code>BitCoin</code>的确认延迟 vs. 安全参数。红色曲线是<code>BitCoin</code>延迟的下限。 <code>Prism</code>的延迟与安全参数值无关，最高为<code>C*D</code>，并且在此之后非常缓慢地增加（斜率为<code>1 / C</code>）。对于<code>BitCoin</code>，使用更安全的参数，延迟增加得更快。</li>
+</ul>
+</li>
+<li>延迟说明<br><img src="https://lexiangla.com/assets/e881cd24f64511e8a943525400a20cd4" alt="延迟说明"></li>
+</ol>
+</li>
+</ul>
+<h1 id="理论结果"><a href="#理论结果" class="headerlink" title="理论结果"></a>理论结果</h1><p><img src="https://lexiangla.com/assets/89dd0252f64511e887bb525400b4d70f" alt="吞吐量对比"></p>
+<ul>
+<li><code>Prism</code>和<code>BitCoin</code>的吞吐量与对抗性分数β。 红色曲线是<code>BitCoin</code>吞吐量的优化上限。Prism的吞吐量是网络容量的正值部分，一直到<code>β=0.5</code>，但<code>BitCoin</code>的吞吐量在<code>β→0.5</code>时急剧降低。</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://arxiv.org/pdf/1810.08092.pdf" target="_blank" rel="noopener">Deconstructing the Blockchain to Approach Physical Limits</a><ul>
+<li><a href="https://arxiv.org/abs/1810.08092" target="_blank" rel="noopener">Paper来源及信息</a></li>
+</ul>
+</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/5d25bab6.html">PREV</a><a class="next" href="/post/410d6a4b.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

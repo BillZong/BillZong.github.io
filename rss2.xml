@@ -15,8 +15,463 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 11 Apr 2021 08:46:46 GMT</pubDate>
+    <pubDate>Mon, 12 Apr 2021 14:37:06 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>基于cobra构建命令行</title>
+      <link>https://billzong.github.io/post/89751058.html</link>
+      <guid>https://billzong.github.io/post/89751058.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:36:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;&lt;strong&gt;Table of Contents&lt;/strong&gt;&lt;/p&gt;
+&lt;!-- BEGIN MUNGE: GENERATED_TOC --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#环境准备&quot;&gt;环境准备&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      <category domain="https://billzong.github.io/tags/cobra/">cobra</category>
+      
+      
+      <comments>https://billzong.github.io/post/89751058.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Context用法</title>
+      <link>https://billzong.github.io/post/9c69c716.html</link>
+      <guid>https://billzong.github.io/post/9c69c716.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:34:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;在 Go http包的Server中，每一个请求在都有一个对应的 goroutine 去处理。 请求处理函数通常会启动额外的</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      <category domain="https://billzong.github.io/tags/context/">context</category>
+      
+      
+      <comments>https://billzong.github.io/post/9c69c716.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>golang项目编码规范</title>
+      <link>https://billzong.github.io/post/107a8b74.html</link>
+      <guid>https://billzong.github.io/post/107a8b74.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:33:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      <category domain="https://billzong.github.io/tags/guide/">guide</category>
+      
+      
+      <comments>https://billzong.github.io/post/107a8b74.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Go语言指南拾遗</title>
+      <link>https://billzong.github.io/post/fe86d1b6.html</link>
+      <guid>https://billzong.github.io/post/fe86d1b6.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:32:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      
+      <comments>https://billzong.github.io/post/fe86d1b6.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Practical TDD in Go</title>
+      <link>https://billzong.github.io/post/37e0e416.html</link>
+      <guid>https://billzong.github.io/post/37e0e416.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:32:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;!-- START doctoc generated TOC please keep comment here to allow auto update --&gt;
+&lt;!-- DON&#39;T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      <category domain="https://billzong.github.io/tags/TDD/">TDD</category>
+      
+      
+      <comments>https://billzong.github.io/post/37e0e416.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>go语言log库调研</title>
+      <link>https://billzong.github.io/post/6d4a1154.html</link>
+      <guid>https://billzong.github.io/post/6d4a1154.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:30:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;系统日志库&quot;&gt;&lt;a href=&quot;#系统日志库&quot; class=&quot;headerlink&quot; title=&quot;系统日志库&quot;&gt;&lt;/a&gt;系统日志库&lt;/h1&gt;&lt;figure class=&quot;highlight</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      <category domain="https://billzong.github.io/tags/log/">log</category>
+      
+      
+      <comments>https://billzong.github.io/post/6d4a1154.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Go语言constants说明</title>
+      <link>https://billzong.github.io/post/a646ef82.html</link>
+      <guid>https://billzong.github.io/post/a646ef82.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:29:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;Go语言constants说明&quot;&gt;&lt;a href=&quot;#Go语言constants说明&quot; class=&quot;headerlink&quot; title=&quot;Go语言constants说明&quot;&gt;&lt;/a&gt;Go语言constants说明&lt;/h1&gt;&lt;h2 id=&quot;概述&quot;&gt;&lt;a</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      
+      <comments>https://billzong.github.io/post/a646ef82.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>go版本升级VSCode环境更新说明</title>
+      <link>https://billzong.github.io/post/1ec527c6.html</link>
+      <guid>https://billzong.github.io/post/1ec527c6.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:28:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;推荐&quot;&gt;&lt;a href=&quot;#推荐&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      <category domain="https://billzong.github.io/tags/VSCode/">VSCode</category>
+      
+      <category domain="https://billzong.github.io/tags/debug/">debug</category>
+      
+      
+      <comments>https://billzong.github.io/post/1ec527c6.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>go111module编译实践说明</title>
+      <link>https://billzong.github.io/post/cb3e5607.html</link>
+      <guid>https://billzong.github.io/post/cb3e5607.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:27:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h1&gt;&lt;p&gt;本文只关注&lt;code&gt;go 1.11&lt;/code&gt;版本新添加的&lt;code&gt;modules&lt;/code&gt;编译方式，说明本次&lt;a</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      <category domain="https://billzong.github.io/tags/module/">module</category>
+      
+      
+      <comments>https://billzong.github.io/post/cb3e5607.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>布洛城BaaS系统设计方案</title>
+      <link>https://billzong.github.io/post/d5577457.html</link>
+      <guid>https://billzong.github.io/post/d5577457.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:24:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;系统架构&quot;&gt;&lt;a href=&quot;#系统架构&quot; class=&quot;headerlink&quot; title=&quot;系统架构&quot;&gt;&lt;/a&gt;系统架构&lt;/h2&gt;&lt;h3 id=&quot;架构图&quot;&gt;&lt;a href=&quot;#架构图&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/blockchain/">blockchain</category>
+      
+      <category domain="https://billzong.github.io/tags/BaaS/">BaaS</category>
+      
+      <category domain="https://billzong.github.io/tags/architecture/">architecture</category>
+      
+      
+      <comments>https://billzong.github.io/post/d5577457.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>创世区块账户预挖机制</title>
+      <link>https://billzong.github.io/post/8d8620.html</link>
+      <guid>https://billzong.github.io/post/8d8620.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:23:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;预挖是指在创世区块中，将部分账户余额状态修改为指定数值的操作。&lt;/p&gt;
+&lt;h1 id=&quot;go-ethereum实现&quot;&gt;&lt;a</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/ethereum/">ethereum</category>
+      
+      <category domain="https://billzong.github.io/tags/source/">source</category>
+      
+      <category domain="https://billzong.github.io/tags/mining/">mining</category>
+      
+      
+      <comments>https://billzong.github.io/post/8d8620.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>使用docker调试以太坊多节点通讯功能</title>
+      <link>https://billzong.github.io/post/48c09b8d.html</link>
+      <guid>https://billzong.github.io/post/48c09b8d.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:21:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;内容提要&quot;&gt;&lt;a href=&quot;#内容提要&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/ethereum/">ethereum</category>
+      
+      <category domain="https://billzong.github.io/tags/docker/">docker</category>
+      
+      <category domain="https://billzong.github.io/tags/p2p/">p2p</category>
+      
+      
+      <comments>https://billzong.github.io/post/48c09b8d.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>RLPx阅读笔记</title>
+      <link>https://billzong.github.io/post/5d25bab6.html</link>
+      <guid>https://billzong.github.io/post/5d25bab6.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:19:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;实现的组成部分&quot;&gt;&lt;a href=&quot;#实现的组成部分&quot; class=&quot;headerlink&quot; title=&quot;实现的组成部分&quot;&gt;&lt;/a&gt;实现的组成部分&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Node Discovery&lt;/li&gt;
+&lt;li&gt;Encrypted</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/ethereum/">ethereum</category>
+      
+      <category domain="https://billzong.github.io/tags/source/">source</category>
+      
+      <category domain="https://billzong.github.io/tags/RLPx/">RLPx</category>
+      
+      
+      <comments>https://billzong.github.io/post/5d25bab6.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Prism协议基本介绍</title>
+      <link>https://billzong.github.io/post/749896c7.html</link>
+      <guid>https://billzong.github.io/post/749896c7.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:17:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E6%A6%82%E8%A6%81&quot;&gt;概要&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E8%AF%8D%E6%B1%87%E8%A1%A8&quot;&gt;词汇表&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
+      
+      <category domain="https://billzong.github.io/tags/prism/">prism</category>
+      
+      <category domain="https://billzong.github.io/tags/blockchain/">blockchain</category>
+      
+      
+      <comments>https://billzong.github.io/post/749896c7.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>go-ethereum日志库调研</title>
+      <link>https://billzong.github.io/post/410d6a4b.html</link>
+      <guid>https://billzong.github.io/post/410d6a4b.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:15:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;log15&quot;&gt;&lt;a href=&quot;#log15&quot; class=&quot;headerlink&quot; title=&quot;log15&quot;&gt;&lt;/a&gt;log15&lt;/h1&gt;&lt;figure class=&quot;highlight</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/ethereum/">ethereum</category>
+      
+      <category domain="https://billzong.github.io/tags/source/">source</category>
+      
+      
+      <comments>https://billzong.github.io/post/410d6a4b.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>balance-attack相关说明</title>
@@ -38,9 +493,9 @@
       <category domain="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</category>
       
       
-      <category domain="https://billzong.github.io/tags/Ethereum/">Ethereum</category>
-      
       <category domain="https://billzong.github.io/tags/blockchain/">blockchain</category>
+      
+      <category domain="https://billzong.github.io/tags/Ethereum/">Ethereum</category>
       
       <category domain="https://billzong.github.io/tags/security/">security</category>
       
@@ -253,9 +708,9 @@
       
       <category domain="https://billzong.github.io/tags/OpenWhisk/">OpenWhisk</category>
       
-      <category domain="https://billzong.github.io/tags/deploy/">deploy</category>
-      
       <category domain="https://billzong.github.io/tags/ansible/">ansible</category>
+      
+      <category domain="https://billzong.github.io/tags/deploy/">deploy</category>
       
       
       <comments>https://billzong.github.io/post/81965e0a.html#disqus_thread</comments>
@@ -450,9 +905,9 @@
       <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
       
       
-      <category domain="https://billzong.github.io/tags/framework/">framework</category>
-      
       <category domain="https://billzong.github.io/tags/network/">network</category>
+      
+      <category domain="https://billzong.github.io/tags/framework/">framework</category>
       
       
       <comments>https://billzong.github.io/post/12d311d1.html#disqus_thread</comments>
@@ -480,11 +935,11 @@
       <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
       
       
-      <category domain="https://billzong.github.io/tags/network/">network</category>
-      
       <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
       
       <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
+      
+      <category domain="https://billzong.github.io/tags/network/">network</category>
       
       
       <comments>https://billzong.github.io/post/f80ec8a1.html#disqus_thread</comments>
@@ -511,11 +966,11 @@
       <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
       
       
-      <category domain="https://billzong.github.io/tags/network/">network</category>
-      
       <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
       
       <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
+      
+      <category domain="https://billzong.github.io/tags/network/">network</category>
       
       
       <comments>https://billzong.github.io/post/d3239b62.html#disqus_thread</comments>
@@ -542,11 +997,11 @@
       <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
       
       
-      <category domain="https://billzong.github.io/tags/network/">network</category>
-      
       <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
       
       <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
+      
+      <category domain="https://billzong.github.io/tags/network/">network</category>
       
       
       <comments>https://billzong.github.io/post/facd8695.html#disqus_thread</comments>
@@ -573,9 +1028,9 @@
       <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
       
       
-      <category domain="https://billzong.github.io/tags/network/">network</category>
-      
       <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
+      
+      <category domain="https://billzong.github.io/tags/network/">network</category>
       
       <category domain="https://billzong.github.io/tags/WebSocket/">WebSocket</category>
       

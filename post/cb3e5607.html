@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> go111module编译实践说明 · 知易行难，一路向前</title><meta name="description" content="go111module编译实践说明 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">go111module编译实践说明</h1><div class="post-info">2021-04-12</div><div class="post-content"><h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>本文只关注<code>go 1.11</code>版本新添加的<code>modules</code>编译方式，说明本次<a href="">PR</a>合入后项目依赖管理和编译方式的变化，以及其中具体的一些坑。</p>
+<p>以下操作仅提供相对简便的方式，更复杂、专业的操作内容，请参考相关文档和指令说明。</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p><code>go 1.11</code>版本发布了大量改动，其中就包括我们关注的<code>modules</code>。</p>
+<p>官方放出的<a href="https://golang.org/doc/go1.11#modules" target="_blank" rel="noopener">Release Note</a>中，将<code>moduels</code>描述为包版本管理、依赖管理。</p>
+<p>从此代码不必再放到<code>GOPATH</code>路径下，<code>go get</code>也不再是以前那种无版本管理的挫样了。</p>
+<h1 id="详细说明"><a href="#详细说明" class="headerlink" title="详细说明"></a>详细说明</h1><h2 id="编译依赖"><a href="#编译依赖" class="headerlink" title="编译依赖"></a>编译依赖</h2><p>分为两种情况，一种是路径在<code>GOPATH</code>路径中，另外一种是不在此路径中。我们优先讨论本地仓库路径不在<code>GOPATH</code>中的情况。后续描述以此为参考。</p>
+<p>所有脚本执行都是在仓库根目录下。</p>
+<ol>
+<li><p>创建<code>module</code></p>
+<blockquote>
+<p>go mod init [module] # 创建go.mod，并生成vendor目录</p>
+</blockquote>
+</li>
+<li><p>新增某个第三方库</p>
+<ul>
+<li><p><code>github.com/author/repo_name</code>在此被称为<strong>module</strong>，还可以使用<code>go get module@none</code>拉取该<code>module</code>当前最新的版本</p>
+</li>
+<li><p>将代码拉到本地缓存，解决依赖问题并更新go.mod。同时，还会做代码编译，生成<code>.a</code>文件</p>
+<blockquote>
+<p>go get github.com/author/repo_name@v1.0.0</p>
+</blockquote>
+</li>
+<li><p>将本地下载缓存的代码更新vendor（<strong>可不执行，甚至可以完全不依赖此文件夹，但不使用vendor意味着每次缓存失效后都要从网络重新下载</strong>）</p>
+<blockquote>
+<p>go mod vendor</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>更新其他童鞋新增的第三方库</p>
+<ul>
+<li><p>下载模块信息</p>
+<blockquote>
+<p>go mod download</p>
+</blockquote>
+</li>
+<li><p>执行更新。</p>
+<blockquote>
+<p>go mod tidy</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>修正某个第三方库版本</p>
+<ul>
+<li><p>直接拉取指定版本的代码</p>
+<blockquote>
+<p>go get github.com/author/repo_name@v1.1.0</p>
+</blockquote>
+</li>
+<li><p>执行更新动作。<strong>注意！</strong>该操作除了更新未下载的<code>module</code>，将<code>go.mod</code>的版本信息更新到<code>go.sum</code>，还会删除<code>go.mod</code>中未被引用的<code>module</code>。</p>
+<blockquote>
+<p>go mod tidy</p>
+</blockquote>
+</li>
+<li><p>将本地下载缓存的代码更新vendor（<strong>可不执行</strong>，甚至可以完全不依赖此文件夹，但不使用vendor意味着每次缓存失效后都要从网络重新下载）</p>
+<blockquote>
+<p>go mod vendor</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>移除某个第三方库版本</p>
+<ul>
+<li><p>编辑<code>go.mod</code>。如果你确保项目里边已经不存在这个<code>module</code>的引用，<strong>可不执行此步骤</strong></p>
+<blockquote>
+<p>go mod edit -droprequire [module]</p>
+</blockquote>
+</li>
+<li><p>执行更新动作。</p>
+<blockquote>
+<p>go mod tidy</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>声明为什么引入第三方库</p>
+<ul>
+<li><p>个人认为这非常重要。如果不声明则引入，建议<code>Decline</code>。如果引入了第三方库，但说明填入<code>Commit</code>的描述，会随着时间过去而难以被确认。</p>
+<blockquote>
+<p>go mod why [-m] [-vendor] packages…</p>
+</blockquote>
+</li>
+<li><p>例如查找一个未被引用的<code>module</code>，结果如下:</p>
+<blockquote>
+<p>$ go mod why github.com/signintech/gopdf</p>
+</blockquote>
+<blockquote>
+<p>github.com/signintech/gopdf<br>(main module does not need package github.com/signintech/gopdf)</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>查看当前项目所有的<code>module</code>，包括自身的</p>
+<blockquote>
+<p>go mod graph</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p>极度简单，在仓库根目录下执行<code>make</code>即可。</p>
+<p>但考虑到大伙没有把代码放到<code>GOPATH</code>环境，可以再执行<code>make install</code>将编译出来的<code>gbloc</code>拷贝到<code>$GOPATH/bin/</code>这个可执行路径下。</p>
+<h2 id="仓库在GOPATH环境下怎么玩"><a href="#仓库在GOPATH环境下怎么玩" class="headerlink" title="仓库在GOPATH环境下怎么玩"></a>仓库在<code>GOPATH</code>环境下怎么玩</h2><p>其实也不难，一个办法是在所有<code>go mod</code>指令前面添加上<code>GO111MODULE=on</code>，如下所示：</p>
+<blockquote>
+<p>GO111MODULE=on go mod tidy</p>
+</blockquote>
+<p>但这个操作毕竟不太方便。如果长期使用，可以考虑添加别名，减少输入。</p>
+<p>在当前使用的<code>shell</code>环境变量配置脚本的最后一行，添加一行内容：<br><code>alias go111=&quot;GO111MODULE=on go&quot;</code>。</p>
+<p>重新加载终端配置，从此就可以使用<code>go111 mod ***</code>来进行操作了。而其它常规的操作，则使用<code>go ***</code>来完成。</p>
+<p>因为目前<code>go</code>命令行没有提供便捷的配置操作，暂时只能这么处理。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a href="https://golang.org/cmd/go" target="_blank" rel="noopener">Command go</a></li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/1ec527c6.html">PREV</a><a class="next" href="/post/d5577457.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

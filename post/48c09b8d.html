@@ -1,0 +1,242 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 使用docker调试以太坊多节点通讯功能 · 知易行难，一路向前</title><meta name="description" content="使用docker调试以太坊多节点通讯功能 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">使用docker调试以太坊多节点通讯功能</h1><div class="post-info">2021-04-12</div><div class="post-content"><h2 id="内容提要"><a href="#内容提要" class="headerlink" title="内容提要"></a>内容提要</h2><p>本文将介绍如何使用docker来启动多个以太坊应用实例，并且使用IDE连接这些实例进行调试。<br>本文仅做基础性介绍，不涉及docker原理、docker容器编排(多机部署)等内容</p>
+<h2 id="本文目的"><a href="#本文目的" class="headerlink" title="本文目的"></a>本文目的</h2><ol>
+<li><p>使用docker缓解多节点部署带来的困难</p>
+<ul>
+<li>p2p网络需要&gt;=2两个节点来验证</li>
+<li>使用多台物理机非常困难，需要依赖同事配合</li>
+<li>在一台机器上运行多个节点<ul>
+<li>需要调整端口、数据文件夹<ul>
+<li>但是代码是共享的，修改比较麻烦</li>
+<li>不过也可以通过指定参数来缓解</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>使用docker来隔离运行环境</p>
+<ul>
+<li>不再因为每个人运行环境不一样而导致问题</li>
+<li>不再需要调整端口、数据文件夹<ul>
+<li>因为都是隔离的运行环境，可以认为就是一台虚拟机</li>
+</ul>
+</li>
+<li>可以互相通讯</li>
+<li>可以比较方便的控制启动、停止等</li>
+</ul>
+</li>
+<li><p>远端调试go程序</p>
+<ul>
+<li>节点通过docker运行后就需要使用远端调试技术</li>
+</ul>
+</li>
+<li><p>在docker中使用本地文件夹（挂载）</p>
+</li>
+<li><p>一些简单的docker命令</p>
+</li>
+</ol>
+<p>##正文1 docker的简单介绍</p>
+<ul>
+<li><p><a href="http://www.docker.com" target="_blank" rel="noopener">www.docker.com</a><br><img src="https://lexiangla.com/assets/f5782f54d34b11e8bab4525400e884b1" alt="图片" title="图片"></p>
+</li>
+<li><p>什么是docker</p>
+<ul>
+<li>一项虚拟化技术</li>
+<li>开箱即用</li>
+<li>Container Engine</li>
+</ul>
+</li>
+<li><p>与传统虚拟化技术的比较<br><img src="https://lexiangla.com/assets/3f538d5cd34d11e88376525400ac2e73" alt="图片" title="图片"></p>
+</li>
+<li><p>名词解释</p>
+<ul>
+<li><p>image 可以认为和安装操作系统时用到的镜像是一个概念</p>
+<ul>
+<li>image是一个不可修改的可运行的系统的模板</li>
+<li>通过层的概念，可以非常方便的创建、复用</li>
+</ul>
+</li>
+<li><p>container 可以认为就是一个正在运行的虚拟机</p>
+<ul>
+<li>拥有自己的网络等配置</li>
+<li>可以很方便的启动、停止、重启</li>
+<li>我们也称container为image的一个实例(instance)</li>
+</ul>
+</li>
+<li><p>registries 用于存储image的地方</p>
+<ul>
+<li>可公有或者私有</li>
+</ul>
+</li>
+<li><p>docker engine</p>
+<ul>
+<li>可以认为就是docker的运行时环境</li>
+<li>在linux上体现为dockerd服务</li>
+</ul>
+</li>
+<li><p>docker命令行</p>
+<ul>
+<li>docker是cs架构</li>
+<li>通过命令行docker与docker engine交互</li>
+<li>具体命令都发送给docker engine去执行</li>
+<li>下文中docker的具体含义请根据上下文去理解是指docker运行时还是指docker命令</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>架构<br><img src="https://lexiangla.com/assets/d23aeb92d34d11e8aebd5254004f9daa" alt="图片" title="图片"></p>
+</li>
+<li><p>下载</p>
+<ul>
+<li>使用 community edition即可</li>
+</ul>
+</li>
+</ul>
+<p>##正文2 docker实操(命令介绍)</p>
+<p><strong><em>此处仅介绍若干命令的基本用法，不是完整而完全正确的解释</em></strong></p>
+<ul>
+<li><p>docker pull</p>
+<ul>
+<li>用于获取镜像</li>
+<li>默认从 <a href="https://hub.docker.com/" target="_blank" rel="noopener">https://hub.docker.com/</a> 获取image<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull $&#123;image_name&#125;:$&#123;tag_name&#125;</span><br><span class="line"># eg: </span><br><span class="line">dcoker pull kirklandatdocker&#x2F;godev</span><br></pre></td></tr></table></figure></li>
+<li>tag用于控制版本，可以省略，默认为latest</li>
+</ul>
+</li>
+<li><p>docker images</p>
+<ul>
+<li><p>用于列出本地的所有镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure></li>
+<li><p>示例输出<br><img src="https://lexiangla.com/assets/a793fc3cd36411e88a73525400a20cd4" alt="图片" title="图片"></p>
+</li>
+<li><p>可以看到image的名字(REPOSITYORY的部分) 、TAG 和 ID</p>
+</li>
+<li><p>可以使用 名字或者ID + TAG 来唯一表示一个image</p>
+</li>
+</ul>
+</li>
+<li><p>docker run</p>
+<ul>
+<li>用于运行一个新的容器<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run $&#123;options&#125; $&#123;image_name&#125; $&#123;comamnd&#125; $&#123;command_args&#125;</span><br><span class="line"># eg:</span><br><span class="line">docker run -p 2349:2349 --security-opt&#x3D;seccomp:unconfined --name &quot;p2pserver_debug&quot; -it -v &#x2F;Users&#x2F;you&#x2F;go&#x2F;src:&#x2F;root&#x2F;go&#x2F;src kirklandatdocker&#x2F;godev</span><br></pre></td></tr></table></figure></li>
+<li>重要的options<ul>
+<li>–name=${name} 表示container的名字，后续可以使用这个名字来操作此container</li>
+<li>-it 其实是 -i -t 的简写，用于表示我们需要一个终端(tty)并且要进行交互操作</li>
+<li>-v 表示将本地目录挂载到contianer<ul>
+<li>eg中的例子表示将 /Users/you/go/src 目录挂载到 container的/root/go/src位置</li>
+<li>这样在container中/root/go/src下的内容就是/Users/you/go/src下的文件内容</li>
+</ul>
+</li>
+<li>–security-opt=seccomp:unconfined 解除Secure computing mode限制，是我们能自由地使用全部系统调用<ul>
+<li>如果我们想对container的进程进行debug，那么这个选项就是必须的</li>
+</ul>
+</li>
+<li>-p ${host_port}:${container_port} 表示将container上的${cotainer_port} 映射为host的${host_port}<ul>
+<li>例子中所有经过主机上2349端口上的流量将被全部映射到container的2349端口上</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>问题： run的是什么命令呢？</li>
+</ul>
+</li>
+<li><p>docker ps</p>
+<ul>
+<li><p>用于列出系统中所有的container</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure></li>
+<li><p>示例输出<br><img src="https://lexiangla.com/assets/a6c2f4a4d36211e8a0ce5254009b631d" alt="图片" title="图片"></p>
+</li>
+<li><p>可以看到cotainer的id和name，他们都可以用于标识一个container</p>
+</li>
+<li><p>可以看到container使用的image</p>
+</li>
+<li><p>可以看到cotainer的状态</p>
+<ul>
+<li>Up 运行中</li>
+<li>Exited 已经退出，但是可以被重启</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>docker start</p>
+<ul>
+<li>可以用于重启一个已经停止(Exited)的container<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker start $&#123;options&#125; $&#123;container_identifier&#125;</span><br><span class="line"># eg</span><br><span class="line">docker start -ai p2pserver_test</span><br></pre></td></tr></table></figure></li>
+<li>重要的options<ul>
+<li>-a 表示将标准输入输出attach到container上</li>
+<li>-i 表示需要进行交互操作</li>
+</ul>
+</li>
+<li>问题： run的是什么命令呢？</li>
+</ul>
+</li>
+<li><p>docker rm</p>
+<ul>
+<li>表示彻底删除一个container<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rm $&#123;options&#125; $&#123;container_identifier&#125;</span><br><span class="line"># eg</span><br><span class="line">docker rm -f p2pserver_test</span><br></pre></td></tr></table></figure></li>
+<li>重要的options <ul>
+<li>-f 强制删除，即使container还在运行中</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="OK，掌握了上面的命令之后，你就可以使用docker来搭建、调试相关程序了"><a href="#OK，掌握了上面的命令之后，你就可以使用docker来搭建、调试相关程序了" class="headerlink" title="OK，掌握了上面的命令之后，你就可以使用docker来搭建、调试相关程序了"></a>OK，掌握了上面的命令之后，你就可以使用docker来搭建、调试相关程序了</h2><ul>
+<li>还有一个疑问，docker run, docker start启动了一个container，但是container里面运行了什么进程？<ul>
+<li>docker run后面可以接command参数，表示启动container后要运行这个进程</li>
+<li>或者将使用 dockerfile 中指定的命令 CMD / ENTRYPOINT，这个不详细介绍了</li>
+<li>docker start之后，container将执行run时候指定的命令</li>
+</ul>
+</li>
+</ul>
+<p>##正文3 使用部署、启动以太坊节点</p>
+<ol>
+<li>先获取image</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull kirklandatdocker&#x2F;godev</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将获取我打包好的一个image，里面包含了go的开发环境、git命令等</li>
+<li>但是不包含任何go、以太坊等源代码</li>
+</ul>
+<ol start="2">
+<li><p>启动一个container</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --security-opt&#x3D;seccomp:unconfined --name &quot;p2pserver_debug&quot; -it -v &#x2F;Users&#x2F;you&#x2F;workspace&#x2F;go&#x2F;src:&#x2F;root&#x2F;go&#x2F;src kirklandatdocker&#x2F;godev</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>如命令，我们启动一个名为p2pserver_debug的container</p>
+</li>
+<li><p>container的/root/go/src目录就是主机上的/Users/you/workspace/go目录</p>
+<ul>
+<li>注意请将 /Users/you/workspace/go 替换为你自己机器上的go目录</li>
+</ul>
+</li>
+<li><p>启动后我们应该进入了一个linux shell中，表明目前我们在contianer内</p>
+</li>
+<li><p>通过ifconfig获取此container的ip地址</p>
+</li>
+<li><p>示例输出<br><img src="https://lexiangla.com/assets/ace97c80d36811e8b8f15254004f9daa" alt="图片" title="图片"></p>
+</li>
+<li><p>执行相关命令，编译程序并进行运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;root&#x2F;go&#x2F;src&#x2F;bitbucket.org&#x2F;oudmondev&#x2F;go-blockcloud-transaction-chain</span><br><span class="line">make &amp;&amp; .&#x2F;build&#x2F;bin&#x2F;gbloc --verbosity&#x3D;10</span><br></pre></td></tr></table></figure></li>
+<li><p>示例输出<br><img src="https://lexiangla.com/assets/611813fcd36811e8983c5254004f9daa" alt="图片" title="图片"></p>
+</li>
+<li><p>请注意保留 self=”enode://…” 的输出，后续我们需要通过这个标识来连接到这个gbloc节点</p>
+</li>
+</ul>
+</li>
+<li><p>启动另一个container</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 2349:2349 --security-opt&#x3D;seccomp:unconfined --name &quot;p2pclient1_debug&quot; -it -v &#x2F;Users&#x2F;you&#x2F;workspace&#x2F;go&#x2F;src:&#x2F;root&#x2F;go&#x2F;src kirklandatdocker&#x2F;godev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动了一个名为 p2pclient1_debug 的container，并且暴露了端口2349，这个端口将用于远程debug</li>
+<li>需要进行dubug，我们首先要安装dlv程序(请先自行下载好相关源代码)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;root&#x2F;go&#x2F;src&#x2F;github.com&#x2F;derekparker&#x2F;delve</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></li>
+<li>执行debug命令，启动debug服务端<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;root&#x2F;go&#x2F;src&#x2F;bitbucket.org&#x2F;oudmondev&#x2F;go-blockcloud-transaction-chain&#x2F;cmd&#x2F;gbloc</span><br><span class="line">dlv debug --headless --listen&#x3D;:2349 --log -- --bootnodes &quot;enode:&#x2F;&#x2F;...@$&#123;p2p_server_ip&#125;:30303&quot; --verbosity&#x3D;10</span><br><span class="line"># 请注意，如果ide需要dlv version 2的支持，那么需要添加一个执行参数 dlv debug --api-version&#x3D;2 ...</span><br></pre></td></tr></table></figure></li>
+<li>enode参数和p2p_server_ip都是上一步骤上获取到的相关参数，请进行相关替换</li>
+<li>–listen=:2349 表示dlv debugger会监听2349端口，远端的程序可以发送debug命令道这个端口，然后被debugger接收并执行</li>
+</ul>
+</li>
+<li><p>打开ide，设置好相关断点，配置好远端调试命令，然后就可以执行debug了</p>
+<ul>
+<li>以下为vscode的一个远程调试的配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">       &quot;name&quot;: &quot;remote debug&quot;,</span><br><span class="line">       &quot;type&quot;: &quot;go&quot;,</span><br><span class="line">       &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">       &quot;mode&quot;: &quot;remote&quot;,</span><br><span class="line">       &quot;remotePath&quot;: &quot;&#x2F;root&#x2F;go&#x2F;src&#x2F;bitbucket.org&#x2F;oudmondev&#x2F;go-blockcloud-transaction-chain&#x2F;cmd&#x2F;gbloc&#x2F;main.go&quot;,</span><br><span class="line">       &quot;port&quot;: 2350,</span><br><span class="line">       &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">       &quot;program&quot;: &quot;$&#123;workspaceRoot&#125;&#x2F;cmd&#x2F;gbloc&#x2F;main.go&quot;,</span><br><span class="line">       &quot;env&quot;: &#123;&#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></li>
+<li>配置完毕后就可以在vscode中像调试本地程序一样调试container中的程序了</li>
+</ul>
+</li>
+</ol>
+<h2 id="全文完"><a href="#全文完" class="headerlink" title="全文完"></a>全文完</h2></div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/8d8620.html">PREV</a><a class="next" href="/post/5d25bab6.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

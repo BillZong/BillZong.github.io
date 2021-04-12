@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Practical TDD in Go · 知易行难，一路向前</title><meta name="description" content="Practical TDD in Go - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Practical TDD in Go</h1><div class="post-info">2021-04-12</div><div class="post-content"><!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+<ul>
+<li><p><a href="#abstract">Abstract</a></p>
+</li>
+<li><p><a href="#abstract">Abstract</a></p>
+</li>
+<li><p><a href="#introduction">Introduction</a></p>
+</li>
+<li><p><a href="#premilinaries">Premilinaries</a></p>
+</li>
+<li><p><a href="#the-three-tdd-laws">The Three TDD Laws</a></p>
+</li>
+<li><p><a href="#test-driven-development">Test-Driven Development</a></p>
+<ul>
+<li><a href="#tools">Tools</a></li>
+<li><a href="#practice">Practice</a><ul>
+<li><a href="#basic-tdd">Basic TDD</a></li>
+<li><a href="#show-code-coverage">Show Code Coverage</a></li>
+<li><a href="#what-if-we-write-some-race-condition-codestests">What if we write some race condition codes/tests?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a href="#mocking">Mocking</a></p>
+<ul>
+<li><a href="#effectiveness">Effectiveness</a></li>
+<li><a href="#isnt-mocking-evil">Isn’t mocking evil?</a></li>
+</ul>
+</li>
+<li><p><a href="#reference">reference</a></p>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This Paragraph is all about TDD(Test-Driven Development) in Go.</p>
+<p>We introduce the basic raws in TDD; introduce some usful tools in Go; show one practice using TDD. And we discuss the mocking in the final chapter.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This paragraph suppose that you are familiar with Go, and have already heard about TDD before.</p>
+<ul>
+<li>For those ones who hadn’t heard about TDD, read <a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank" rel="noopener">this wiki</a> first.</li>
+<li>If you have already used TDD in Go before, all you need is reviewing <a href="">“The Three TDD Laws”</a>, and <a href="">the discussion on mocking</a>.</li>
+<li>If you’re an expert on TDD, skip this paragraph as you wish.</li>
+</ul>
+<h2 id="Premilinaries"><a href="#Premilinaries" class="headerlink" title="Premilinaries"></a>Premilinaries</h2><p>TDD is an exellent revolution on coding practice. Everyone should try it, no matter you like it or not.</p>
+<p>The “red/green/refactor” mandra makes you focusing on actual behavior of codes. That means your codes are easier to test, easier to refactor, and more robust.</p>
+<p>The first thing you need to do with TDD is to break down your programmer’s conventional thinking. You have to think as a user and a programmer, when you’re in different coding stage.</p>
+<ul>
+<li>You are a user when you are writing tests.</li>
+<li>You are a programmer when you are writing codes.</li>
+</ul>
+<p>There are lots of helpful details about TDD. Such as “Test structure”, “Best practices”, “Anti-patterns”, “Limitations”. For more details on those topic, read <a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank" rel="noopener">this wiki</a></p>
+<h2 id="The-Three-TDD-Laws"><a href="#The-Three-TDD-Laws" class="headerlink" title="The Three TDD Laws"></a>The Three TDD Laws</h2><p>Although there are lots of rules to compiliance, the basic laws can be briefly described as the following three:</p>
+<ol>
+<li>You are not allowed to write any production code unless it is to make a failing unit test pass.</li>
+<li>You are not allowed to write any more of a unit test than is sufficient to fail; and compilation failures are failures.</li>
+<li>You are not allowed to write any more production code than is sufficient to pass the one failing unit test.</li>
+</ol>
+<p>There is another easier saying:</p>
+<ol>
+<li>Starting with a test forces you to think about the intended behavior;</li>
+<li>Writing code based on a test forces you to write testable code;</li>
+<li>Immediately refactoring the result forces you to think about your code and how it fits in the larger picture.</li>
+</ol>
+<h2 id="Test-Driven-Development"><a href="#Test-Driven-Development" class="headerlink" title="Test-Driven Development"></a>Test-Driven Development</h2><h3 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h3><ul>
+<li>VSCode<ul>
+<li><strong>IDE</strong> we use in this paragragh.</li>
+</ul>
+</li>
+<li>VSCode plugins<ul>
+<li><code>Go</code> by <em>Microsoft</em>.<ul>
+<li>It’s full of commands using other go tools.</li>
+<li>It provides the code coverage highlight.</li>
+<li>It formats go files automacicly when you save any files.</li>
+</ul>
+</li>
+<li><code>Golang TDD</code> by <em>joaoacdias</em>.<ul>
+<li>It will run the current package’s tests when you save a file or a test file. The result is showing on the status bar immediately when the tests finished.</li>
+<li>It runs tests in parallel. That means, when your tests are in race condition, they would be <strong>“sometimes failing”</strong> status.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Practice"><a href="#Practice" class="headerlink" title="Practice"></a>Practice</h3><p><strong>*”Talk is cheap, show me the data and images.”*</strong></p>
+<h4 id="Basic-TDD"><a href="#Basic-TDD" class="headerlink" title="Basic TDD"></a>Basic TDD</h4><ul>
+<li><p>Enable the <code>Golang TDD</code>.<br>  <img src="https://lexiangla.com/assets/8c9cdf96164611e9b440525400ac2e73" alt="001" title="001"></p>
+<ul>
+<li>Enabled<br>  <img src="https://lexiangla.com/assets/ae070e72164611e996f05254004f9daa" alt="002"></li>
+</ul>
+</li>
+<li><p>Create/Open any test file, and write some tests, save it.<br>  <img src="https://lexiangla.com/assets/b758040e164611e98bb452540089e328" alt="003" title="003"></p>
+<ul>
+<li>Fail<br>  <img src="https://lexiangla.com/assets/bf6db67a164611e991e8525400a20cd4" alt="004" title="004"></li>
+</ul>
+</li>
+<li><p>Write some codes to make test pass, save it.<br>  <img src="https://lexiangla.com/assets/ccf53016164611e9aedf5254002ec14d" alt="005" title="005"></p>
+<ul>
+<li>Success<br>  <img src="https://lexiangla.com/assets/d1e15e24164611e986885254004f9daa" alt="006" title="006"></li>
+</ul>
+</li>
+<li><p>Write more tests.</p>
+</li>
+<li><p>Write more codes, do some refactor work if necessary.</p>
+</li>
+<li><p>And so on…</p>
+</li>
+</ul>
+<h4 id="Show-Code-Coverage"><a href="#Show-Code-Coverage" class="headerlink" title="Show Code Coverage"></a>Show Code Coverage</h4><ul>
+<li>When we pass the tests, we could highlight codes haved been covered.</li>
+</ul>
+<p><img src="https://lexiangla.com/assets/dc09c166164611e99a0f525400b4d70f" alt="007" title="007"></p>
+<ul>
+<li>The results:</li>
+</ul>
+<p><img src="https://lexiangla.com/assets/e29f0086164611e9b89d525400dca728" alt="008" title="008"></p>
+<ul>
+<li>Rerun the toggle command to disabled highlight.</li>
+</ul>
+<h4 id="What-if-we-write-some-race-condition-codes-tests"><a href="#What-if-we-write-some-race-condition-codes-tests" class="headerlink" title="What if we write some race condition codes/tests?"></a>What if we write some race condition codes/tests?</h4><ul>
+<li>We got the green failing status.</li>
+</ul>
+<p><img src="https://lexiangla.com/assets/ea1e8c6e164611e9954c525400177fdc" alt="009" title="009"></p>
+<h2 id="Mocking"><a href="#Mocking" class="headerlink" title="Mocking"></a>Mocking</h2><p><strong>Mock</strong>: A mock is specified by an individual test case to validate test-specific behavior, checking parameter values and call sequencing.</p>
+<h3 id="Effectiveness"><a href="#Effectiveness" class="headerlink" title="Effectiveness"></a>Effectiveness</h3><ol>
+<li>Help the test process by always returning the same, realistic data that tests can rely upon.</li>
+<li>Can be set into predefined fault modes so that error-handling routines can be developed and reliably tested.</li>
+<li>Help the test focusing on interface, make the structure design more  modular.</li>
+<li>Take less time to test. Reply a service in mocking would take milliseconds. At the same time, it might take seconds in actual world.</li>
+</ol>
+<h3 id="Isn’t-mocking-evil"><a href="#Isn’t-mocking-evil" class="headerlink" title="Isn’t mocking evil?"></a>Isn’t mocking evil?</h3><p>Yes, sometimes. Especially when you’re just numbly coding tests, and won’t do any refactor work.</p>
+<p>It is sign that you should think about the design or refactor your codes:</p>
+<ol>
+<li>The thing you are testing is having to do too many things.<ul>
+<li>Break the module apart so it does less.</li>
+</ul>
+</li>
+<li>Its dependencies are too fine-grained.<ul>
+<li>Think about how you can consolidate some of these dependencies into one meaningful module.</li>
+</ul>
+</li>
+<li>Your test is too concerned with implementation details.<ul>
+<li>Favour testing expected behaviour rather than the implementation.</li>
+</ul>
+</li>
+</ol>
+<p>The basic resolution:</p>
+<ol>
+<li>Make right abstraction.</li>
+<li>Stop testing private functions.</li>
+<li>Mocking should not know too much about your implementation details.</li>
+</ol>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
+<li><a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank" rel="noopener">Test-driven development</a></li>
+<li><a href="https://medium.com/@pierreprinetti/test-driven-development-in-go-baeab5adb468" target="_blank" rel="noopener">Test-Driven Development in Go</a></li>
+<li><a href="https://github.com/quii/learn-go-with-tests/blob/master/dependency-injection.md" target="_blank" rel="noopener">Dependency Injection</a></li>
+<li><a href="https://github.com/quii/learn-go-with-tests/blob/master/mocking.md" target="_blank" rel="noopener">Mocking</a></li>
+<li><a href="https://leanpub.com/golang-tdd/read" target="_blank" rel="noopener">Test-driven development with Go</a></li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/fe86d1b6.html">PREV</a><a class="next" href="/post/6d4a1154.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
