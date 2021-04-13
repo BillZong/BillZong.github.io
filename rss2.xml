@@ -15,8 +15,129 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 12 Apr 2021 14:37:06 GMT</pubDate>
+    <pubDate>Tue, 13 Apr 2021 14:03:25 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>awk结合kubeadm删除无效token的脚本</title>
+      <link>https://billzong.github.io/post/756e1ce4.html</link>
+      <guid>https://billzong.github.io/post/756e1ce4.html</guid>
+      <pubDate>Tue, 13 Apr 2021 14:02:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Shell/">Shell</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/bash/">bash</category>
+      
+      <category domain="https://billzong.github.io/tags/awk/">awk</category>
+      
+      <category domain="https://billzong.github.io/tags/kubeadm/">kubeadm</category>
+      
+      
+      <comments>https://billzong.github.io/post/756e1ce4.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Ubuntu安装nc的命令</title>
+      <link>https://billzong.github.io/post/3305f638.html</link>
+      <guid>https://billzong.github.io/post/3305f638.html</guid>
+      <pubDate>Tue, 13 Apr 2021 14:01:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Shell/">Shell</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/nc/">nc</category>
+      
+      <category domain="https://billzong.github.io/tags/Ubuntu/">Ubuntu</category>
+      
+      
+      <comments>https://billzong.github.io/post/3305f638.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>SSH禁止密码登录，修改SSH配置文件</title>
+      <link>https://billzong.github.io/post/56b134ed.html</link>
+      <guid>https://billzong.github.io/post/56b134ed.html</guid>
+      <pubDate>Tue, 13 Apr 2021 14:00:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;&lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;关闭root用户使用密码登陆&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Shell/">Shell</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/bash/">bash</category>
+      
+      <category domain="https://billzong.github.io/tags/ssh/">ssh</category>
+      
+      
+      <comments>https://billzong.github.io/post/56b134ed.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>curl发送multipart文件的命令</title>
+      <link>https://billzong.github.io/post/5574d8a6.html</link>
+      <guid>https://billzong.github.io/post/5574d8a6.html</guid>
+      <pubDate>Tue, 13 Apr 2021 13:59:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;&lt;code&gt;curl -v -F key1=value1 -F key2=@localfilename URL&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Shell/">Shell</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/bash/">bash</category>
+      
+      <category domain="https://billzong.github.io/tags/curl/">curl</category>
+      
+      
+      <comments>https://billzong.github.io/post/5574d8a6.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>基于cobra构建命令行</title>
@@ -915,6 +1036,37 @@
     </item>
     
     <item>
+      <title>GraphQL API构建示例(1)</title>
+      <link>https://billzong.github.io/post/d3239b62.html</link>
+      <guid>https://billzong.github.io/post/d3239b62.html</guid>
+      <pubDate>Thu, 08 Apr 2021 14:52:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;./facd8695.html&quot;&gt;前文&lt;/a&gt;提到过&lt;code&gt;GraphQL</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
+      
+      <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
+      
+      <category domain="https://billzong.github.io/tags/network/">network</category>
+      
+      
+      <comments>https://billzong.github.io/post/d3239b62.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
       <title>GraphQL API构建示例(2)</title>
       <link>https://billzong.github.io/post/f80ec8a1.html</link>
       <guid>https://billzong.github.io/post/f80ec8a1.html</guid>
@@ -943,37 +1095,6 @@
       
       
       <comments>https://billzong.github.io/post/f80ec8a1.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>GraphQL API构建示例(1)</title>
-      <link>https://billzong.github.io/post/d3239b62.html</link>
-      <guid>https://billzong.github.io/post/d3239b62.html</guid>
-      <pubDate>Thu, 08 Apr 2021 14:52:00 GMT</pubDate>
-      
-        
-        
-          
-          
-      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;./facd8695.html&quot;&gt;前文&lt;/a&gt;提到过&lt;code&gt;GraphQL</description>
-          
-        
-      
-      
-      
-      
-      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
-      
-      
-      <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
-      
-      <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
-      
-      <category domain="https://billzong.github.io/tags/network/">network</category>
-      
-      
-      <comments>https://billzong.github.io/post/d3239b62.html#disqus_thread</comments>
       
     </item>
     
