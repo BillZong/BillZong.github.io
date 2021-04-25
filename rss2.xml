@@ -15,8 +15,240 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 13 Apr 2021 14:03:25 GMT</pubDate>
+    <pubDate>Sun, 25 Apr 2021 14:12:15 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>关闭CentOS交换分区</title>
+      <link>https://billzong.github.io/post/e9025282.html</link>
+      <guid>https://billzong.github.io/post/e9025282.html</guid>
+      <pubDate>Sun, 25 Apr 2021 14:11:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Linux/">Linux</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/swap/">swap</category>
+      
+      
+      <comments>https://billzong.github.io/post/e9025282.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>CentOS部署和配置NTP服务器</title>
+      <link>https://billzong.github.io/post/c9a962b3.html</link>
+      <guid>https://billzong.github.io/post/c9a962b3.html</guid>
+      <pubDate>Sun, 25 Apr 2021 14:10:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;ntp服务端&quot;&gt;&lt;a href=&quot;#ntp服务端&quot; class=&quot;headerlink&quot; title=&quot;ntp服务端&quot;&gt;&lt;/a&gt;ntp服务端&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Linux/">Linux</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/deploy/">deploy</category>
+      
+      <category domain="https://billzong.github.io/tags/CentOS-7/">CentOS 7</category>
+      
+      <category domain="https://billzong.github.io/tags/ntp/">ntp</category>
+      
+      
+      <comments>https://billzong.github.io/post/c9a962b3.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>CentOS7升级内核全流程</title>
+      <link>https://billzong.github.io/post/2a353e7b.html</link>
+      <guid>https://billzong.github.io/post/2a353e7b.html</guid>
+      <pubDate>Sun, 25 Apr 2021 14:09:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;rpm –import &lt;a href=&quot;https://www.elrepo.org/RPM-GPG-KEY-elrepo.org&quot; target=&quot;_blank&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Linux/">Linux</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/kernel/">kernel</category>
+      
+      <category domain="https://billzong.github.io/tags/upgrade/">upgrade</category>
+      
+      
+      <comments>https://billzong.github.io/post/2a353e7b.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>一次OpenSSH升级记录</title>
+      <link>https://billzong.github.io/post/87c46404.html</link>
+      <guid>https://billzong.github.io/post/87c46404.html</guid>
+      <pubDate>Sun, 25 Apr 2021 14:08:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Linux/">Linux</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/upgrade/">upgrade</category>
+      
+      <category domain="https://billzong.github.io/tags/OpenSSH/">OpenSSH</category>
+      
+      
+      <comments>https://billzong.github.io/post/87c46404.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Linux二进制文件安全资料</title>
+      <link>https://billzong.github.io/post/4cf4d379.html</link>
+      <guid>https://billzong.github.io/post/4cf4d379.html</guid>
+      <pubDate>Sun, 25 Apr 2021 14:07:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;Linux二进制文件安全资料&quot;&gt;&lt;a href=&quot;#Linux二进制文件安全资料&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Linux/">Linux</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/security/">security</category>
+      
+      
+      <comments>https://billzong.github.io/post/4cf4d379.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>远程执行sed脚本</title>
+      <link>https://billzong.github.io/post/6fcc8439.html</link>
+      <guid>https://billzong.github.io/post/6fcc8439.html</guid>
+      <pubDate>Sun, 25 Apr 2021 14:04:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Shell/">Shell</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/bash/">bash</category>
+      
+      <category domain="https://billzong.github.io/tags/ssh/">ssh</category>
+      
+      <category domain="https://billzong.github.io/tags/sed/">sed</category>
+      
+      
+      <comments>https://billzong.github.io/post/6fcc8439.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>ssh连接超时解决方案</title>
+      <link>https://billzong.github.io/post/4c3910cf.html</link>
+      <guid>https://billzong.github.io/post/4c3910cf.html</guid>
+      <pubDate>Sun, 25 Apr 2021 14:04:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;修改Server端&quot;&gt;&lt;a href=&quot;#修改Server端&quot; class=&quot;headerlink&quot; title=&quot;修改Server端&quot;&gt;&lt;/a&gt;修改Server端&lt;/h2&gt;&lt;figure class=&quot;highlight</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Shell/">Shell</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/bash/">bash</category>
+      
+      <category domain="https://billzong.github.io/tags/ssh/">ssh</category>
+      
+      
+      <comments>https://billzong.github.io/post/4c3910cf.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Bash为alias开启补全功能</title>
+      <link>https://billzong.github.io/post/ae364355.html</link>
+      <guid>https://billzong.github.io/post/ae364355.html</guid>
+      <pubDate>Sun, 25 Apr 2021 14:02:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;别名命令补全功能&quot;&gt;&lt;a href=&quot;#别名命令补全功能&quot; class=&quot;headerlink&quot; title=&quot;别名命令补全功能&quot;&gt;&lt;/a&gt;别名命令补全功能&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Shell/">Shell</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/bash/">bash</category>
+      
+      <category domain="https://billzong.github.io/tags/completion/">completion</category>
+      
+      
+      <comments>https://billzong.github.io/post/ae364355.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>awk结合kubeadm删除无效token的脚本</title>
@@ -1036,37 +1268,6 @@
     </item>
     
     <item>
-      <title>GraphQL API构建示例(1)</title>
-      <link>https://billzong.github.io/post/d3239b62.html</link>
-      <guid>https://billzong.github.io/post/d3239b62.html</guid>
-      <pubDate>Thu, 08 Apr 2021 14:52:00 GMT</pubDate>
-      
-        
-        
-          
-          
-      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;./facd8695.html&quot;&gt;前文&lt;/a&gt;提到过&lt;code&gt;GraphQL</description>
-          
-        
-      
-      
-      
-      
-      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
-      
-      
-      <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
-      
-      <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
-      
-      <category domain="https://billzong.github.io/tags/network/">network</category>
-      
-      
-      <comments>https://billzong.github.io/post/d3239b62.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
       <title>GraphQL API构建示例(2)</title>
       <link>https://billzong.github.io/post/f80ec8a1.html</link>
       <guid>https://billzong.github.io/post/f80ec8a1.html</guid>
@@ -1095,6 +1296,37 @@
       
       
       <comments>https://billzong.github.io/post/f80ec8a1.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>GraphQL API构建示例(1)</title>
+      <link>https://billzong.github.io/post/d3239b62.html</link>
+      <guid>https://billzong.github.io/post/d3239b62.html</guid>
+      <pubDate>Thu, 08 Apr 2021 14:52:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;./facd8695.html&quot;&gt;前文&lt;/a&gt;提到过&lt;code&gt;GraphQL</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
+      
+      <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
+      
+      <category domain="https://billzong.github.io/tags/network/">network</category>
+      
+      
+      <comments>https://billzong.github.io/post/d3239b62.html#disqus_thread</comments>
       
     </item>
     
