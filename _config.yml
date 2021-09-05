@@ -18,8 +18,8 @@ root: /
 #permalink: :year/:month/:day/:title/
 permalink: post/:abbrlink.html
 abbrlink:
-  alg: crc32  # 算法：crc16(default) and crc32
-  rep: hex    # 进制：dec(default) and hex
+  alg: crc32 # 算法：crc16(default) and crc32
+  rep: hex # 进制：dec(default) and hex
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -104,7 +104,8 @@ theme: still
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/BillZong/BillZong.github.io.git
+  # repo: https://github.com/BillZong/BillZong.github.io.git
+  repo: git@github.com:BillZong/BillZong.github.io.git
   branch: master
 
 hexo-asset-folder: true
@@ -121,7 +122,7 @@ feed:
   hub:
   content:
   content_limit: 140
-  content_limit_delim: ' '
+  content_limit_delim: " "
   order_by: -date
   icon: icon.png
   autodiscovery: true
