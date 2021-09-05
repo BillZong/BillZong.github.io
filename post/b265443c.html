@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> OpenWhisk当前监控指标详细说明 · 知易行难，一路向前</title><meta name="description" content="OpenWhisk当前监控指标详细说明 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">OpenWhisk当前监控指标详细说明</h1><div class="post-info">2021-04-09</div><div class="post-content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>系统指标是通过<code>Kamon</code>的方式收集，其中<code>Controller</code>包含了<code>Kamon-Prometheus</code>后端和<code>Kamon System Metrics</code>等模块，所以数据可以直接汇集到<code>Prometheus</code>服务上。</p>
+<p>当前 OpenWhisk 集群并没有集成 Prometheus 服务，仅在<code>standalone</code>模式下（jar包）集成了本地的<code>Prometheus</code>服务。其上报模式是通过启动 Docker 打包好的服务镜像，接收<code>Kafka</code>相关的<code>events</code>主题事件，再暴露<code>9095</code>端口给<code>Prometheus</code>。</p>
+<p>目前，<code>ansible</code>部署的<code>playbook</code>中并没有这些服务，<code>openwhisk-deploy-kube</code>项目在部署上仅提供了系统指标、用户事件（指标）的收集开关，并没有部署<code>user-events</code>和<code>Prometheus</code>等服务。整体完成度相对较低，但可以进行改造以达成用户事件监控的目标。</p>
+<hr>
+<h2 id="流程说明"><a href="#流程说明" class="headerlink" title="流程说明"></a>流程说明</h2><p><img src="/images/pasted-2.png" alt="ow-metrics.png"></p>
+<ul>
+<li>默认的<code>Controller</code>镜像使用的是<code>Akka HTTP</code>接口提供指标数据，并关闭了本地<code>Prometheus</code>服务。<ul>
+<li>之所以这么做，应该是基于<code>Controller</code>存在多实例部署场景的考虑。毕竟<code>Prometheus</code>多实例管理不会自动形成集群。</li>
+</ul>
+</li>
+<li>其 HTTP 路径类似于<code>https://NaN/metrics</code>。<ul>
+<li>安全起见，一般不会直接暴露<code>nginx</code>服务到公网环境。例如，<code>FDN</code>用了<code>edge-gateway</code>进行转发管理。目前该路径暂不支持。</li>
+</ul>
+</li>
+<li>用户事件和系统指标是分开提供的。</li>
+</ul>
+<hr>
+<h2 id="系统指标"><a href="#系统指标" class="headerlink" title="系统指标"></a>系统指标</h2><h3 id="获取方式"><a href="#获取方式" class="headerlink" title="获取方式"></a>获取方式</h3><p>目前采用的方式较为繁琐，详细过程如下：</p>
+<ul>
+<li>开启指标功能：<ul>
+<li>在<code>openwhisk-deploy-kube</code>项目的<code>helm/openwhisk/values.yaml</code>文件下修改以下内容。（或者另外创建一个文件，替换这部分内容）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Metrics</span><br><span class="line">metrics:</span><br><span class="line">  prometheusEnabled: true</span><br><span class="line">  whiskconfigFile: &quot;whiskconfig.conf&quot; # 功能的详细配置，一般不修改</span><br><span class="line">  kamonEnabled: true</span><br><span class="line">  kamonTags: true</span><br><span class="line">  userMetricsEnabled: true # 用户指标</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>（重新）部署 OpenWhisk 集群<ul>
+<li><code>helm install helm/openwhisk --namespace=openwhisk --name=owdev</code></li>
+<li>其中<code>openwhisk</code>是命名空间，<code>owdev</code>是本次<code>Release</code>的名称，具体根据部署情况进行替换。</li>
+</ul>
+</li>
+<li>使用端口转发到本地：<ul>
+<li><code>kubectl -n openwhisk port-forward svc/owdev-nginx 12345:443</code></li>
+</ul>
+</li>
+<li>直接通过 HTTP 接口获取统计指标：<ul>
+<li><code>https://localhost:12345/metrics</code></li>
+</ul>
+</li>
+</ul>
+<p>在网页浏览器上我们能看到详细的指标内容，即本次试验成功。</p>
+<h3 id="已采集指标"><a href="#已采集指标" class="headerlink" title="已采集指标"></a>已采集指标</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># TYPE counter_database_cacheMiss_counter_total counter</span><br><span class="line"># TYPE counter_controller_blockingActivation_start_total counter</span><br><span class="line"># TYPE counter_database_cacheHit_counter_total counter</span><br><span class="line"># TYPE counter_database_getDocument_start_total counter</span><br><span class="line"># TYPE counter_controller_startup_counter_total counter</span><br><span class="line"># TYPE counter_database_saveDocument_start_total counter</span><br><span class="line"># TYPE counter_controller_loadbalancer_start_total counter</span><br><span class="line"># TYPE counter_database_saveDocumentAttachment_start_total counter</span><br><span class="line"># TYPE counter_http_put_counter_total counter</span><br><span class="line"># TYPE counter_controller_kafka_start_total counter</span><br><span class="line"># TYPE counter_loadbalancer_invokerState_counter_total counter</span><br><span class="line"># TYPE counter_http_get_counter_total counter</span><br><span class="line"># TYPE counter_database_queryView_start_total counter</span><br><span class="line"># TYPE counter_loadbalancer_activations_counter_total counter</span><br><span class="line"># TYPE counter_loadbalancer_completionAck_counter_total counter</span><br><span class="line"># TYPE gauge_loadbalancer_totalOfflineInvokerManaged_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalHealthyInvokerManaged_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalUnresponsiveInvokerManaged_counter gauge</span><br><span class="line"># TYPE jvm_class_loading gauge</span><br><span class="line"># TYPE gauge_loadbalancer_memoryBlackboxInflight_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalCapacityManaged_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalUnhealthyInvokerBlackBox_counter gauge</span><br><span class="line"># TYPE jvm_threads gauge</span><br><span class="line"># TYPE gauge_loadbalancer_memoryManagedInflight_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalUnresponsiveInvokerBlackBox_counter gauge</span><br><span class="line"># TYPE gauge_kafka_topic_counter gauge</span><br><span class="line"># TYPE jvm_memory_buffer_pool_count gauge</span><br><span class="line"># TYPE gauge_loadbalancer_activationsInflight_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalCapacityBlackBox_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_memoryInflight_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalUnhealthyInvokerManaged_counter gauge</span><br><span class="line"># TYPE jvm_memory_buffer_pool_usage gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalHealthyInvokerBlackBox_counter gauge</span><br><span class="line"># TYPE gauge_loadbalancer_totalOfflineInvokerBlackBox_counter gauge</span><br><span class="line"># TYPE histogram_database_saveDocument_finish_seconds histogram</span><br><span class="line"># TYPE histogram_kafka_topic_start_seconds histogram</span><br><span class="line"># TYPE jvm_gc_seconds histogram</span><br><span class="line"># TYPE jvm_memory_bytes histogram</span><br><span class="line"># TYPE jvm_gc_promotion histogram</span><br><span class="line"># TYPE histogram_database_queryView_finish_seconds histogram</span><br><span class="line"># TYPE histogram_controller_blockingActivation_finish_seconds histogram</span><br><span class="line"># TYPE histogram_http_put_counter_seconds histogram</span><br><span class="line"># TYPE histogram_http_get_counter_seconds histogram</span><br><span class="line"># TYPE histogram_database_saveDocumentAttachment_finish_seconds histogram</span><br><span class="line"># TYPE histogram_controller_loadbalancer_finish histogram</span><br><span class="line"># TYPE histogram_database_getDocument_finish_seconds histogram</span><br><span class="line"># TYPE histogram_controller_kafka_finish_seconds histogram</span><br></pre></td></tr></table></figure>
+
+<p>主要分类包括以下几种：</p>
+<ul>
+<li>JMX收集的信息<ul>
+<li>包括内存、GC、线程、类等。</li>
+<li>因为<code>Sigar</code>服务未开启，所以无法获取 CPU、文件系统 等系统指标。<ul>
+<li><code>Sigar</code>实例非线程安全。</li>
+<li>CPU 指标采集时间低于1秒的情况下不准确。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络IO<ul>
+<li>HTTP PUT/GET 的统计。</li>
+</ul>
+</li>
+<li>数据库<ul>
+<li>缓存和文档读写统计。</li>
+</ul>
+</li>
+<li>Controller<ul>
+<li>跟 Kafka 交互的统计。</li>
+</ul>
+</li>
+<li>LoadBalancer<ul>
+<li>Activation运行情况、内存使用情况、Invoker分类及健康状况等。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="用户指标"><a href="#用户指标" class="headerlink" title="用户指标"></a>用户指标</h2><p>暂时还没有可使用 helm 进行便利集群部署的功能。</p>
+<p>目前的方案是使用<code>openwhisk docker-compose</code>进行本地部署：</p>
+<ul>
+<li>在同一<code>docker-compose</code>网络内(默认为<code>openwhisk_default</code>)启动服务。</li>
+<li>该服务会占用9095端口。</li>
+<li>该服务会使用<code>/metrics</code>路径和<code>9095</code>端口给<code>Prometheus</code>提供数据。</li>
+</ul>
+<p>后续会针对这块做部署改造，其思路同流程说明示意图中的<code>Monitor</code>和<code>Prometheus</code>模块。</p>
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://github.com/apache/openwhisk/blob/master/docs/metrics.md" target="_blank" rel="noopener">OpenWhisk Metric Support</a><br><a href="https://github.com/apache/openwhisk/blob/master/core/monitoring/user-events/README.md" target="_blank" rel="noopener">OpenWhisk User Events</a><br><a href="https://index.scala-lang.org/kamon-io/kamon/kamon-spray/0.2.1" target="_blank" rel="noopener">Kamon</a><br><a href="https://kamon.io/docs/v1/instrumentation/system-metrics/" target="_blank" rel="noopener">System Metrics</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/81965e0a.html">PREV</a><a class="next" href="/post/1c6c86cc.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

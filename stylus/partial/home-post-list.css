@@ -1,0 +1,24 @@
+.home.post-list {
+  margin: 2em 0;
+}
+.home.post-list .post-list-item {
+  padding: 1em 0 3em;
+  border-bottom: 1px solid #efefef;
+}
+.home.post-list .post-list-item:last-child {
+  border-bottom: 0px;
+}
+.home.post-list .post-content h2:before,
+.home.post-list .post-content h3:before,
+.home.post-list .post-content h4:before,
+.home.post-list .post-content h5:before,
+.home.post-list .post-content h6:before {
+  content: '';
+}
+.home.post-list .post-content > ul {
+  list-style: initial;
+}
+.home.post-list .read-more {
+  color: #333;
+  text-decoration: underline;
+}

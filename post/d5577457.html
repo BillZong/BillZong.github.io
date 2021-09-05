@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 布洛城BaaS系统设计方案 · 知易行难，一路向前</title><meta name="description" content="布洛城BaaS系统设计方案 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">布洛城BaaS系统设计方案</h1><div class="post-info">2021-04-12</div><div class="post-content"><h2 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h2><h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p><img src="https://i.loli.net/2020/02/25/otE4QJ6scxhnWe8.jpg" alt="布洛城BaaS架构图"></p>
+<h3 id="模块说明"><a href="#模块说明" class="headerlink" title="模块说明"></a>模块说明</h3><ul>
+<li>网络层<ul>
+<li>考虑到多个项目都是部署在内网环境，存在多节点管理、高可用、恢复服务等需求，同时存在不少需求变更可能。</li>
+<li>不再使用 <code>docker swarm</code> 来管理网络，更不用考虑 <code>docker-compose</code>。</li>
+<li>K8S 的管理比较灵活，且第三方插件众多，适合做功能扩展。</li>
+</ul>
+</li>
+<li>内核层<ul>
+<li>Fabric 使用版本 <code>v1.4.4</code>，这是个 LTS 版本，支持 <code>EtcdRaft</code> 和 <code>Kafka</code> 协议。直接默认使用 <code>EtcdRaft</code>，为将来提升版本做准备。</li>
+<li>提供国密版本，并提供相应的支持 SDK 和 Docker 镜像。</li>
+</ul>
+</li>
+<li>平台控制层<ul>
+<li>部署模块关注的是将 Fabric 网络部署到 K8S 上。<ul>
+<li>当前会使用 <code>helm</code> 将编辑好的 <code>chart</code>，根据模板和具体配置下发到 K8S 集群上部署。</li>
+<li>后续拓展功能包括：连接已创建 Fabric 网络的功能（要求版本必须是平台能支持的）。</li>
+</ul>
+</li>
+<li>管理模块关注的是 Fabric 网络的配置管理。<ul>
+<li>功能：证书秘钥管理、节点管理、智能合约管理、联盟链管理、业务通道管理。</li>
+<li>考虑到工期原因，会逐步实现以上功能，在迭代周期内做功能裁剪。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3><h4 id="K8S"><a href="#K8S" class="headerlink" title="K8S"></a>K8S</h4><ul>
+<li>使用 <code>v1.13.3</code> 的 K8S。<ul>
+<li>目前该版本已在多个测试集群上稳定运行。</li>
+<li>目前最新的稳定版本为 <code>v1.17.3</code>，其它低于 <code>v1.17</code> 版本的文档已不再维护。如果需要迁移，可考虑在一段时间后切换到 </li>
+</ul>
+</li>
+<li>使用 <code>v2.14.2</code> 的 helm。</li>
+</ul>
+<h3 id="核心网络层"><a href="#核心网络层" class="headerlink" title="核心网络层"></a>核心网络层</h3><h4 id="Fabric"><a href="#Fabric" class="headerlink" title="Fabric"></a>Fabric</h4><ul>
+<li>使用官方 <code>v1.4.4</code> 版本。</li>
+<li>默认使用 <code>EtcdRaft</code> 协议，暂不考虑提供 <code>Kafka</code> 协议的模板，减少兼容的复杂度。</li>
+<li>对其进行修改国密，提供 docker 镜像并提供相应 SDK。<ul>
+<li>官方和国密版本两者都需要提供，允许管理员在创建时进行配置。</li>
+<li>暂不考虑加密配置兼容。后期可考虑在代码层面直接兼容两种算法，在接收配置后启用不同的算法处理。</li>
+<li><a href="https://www.cnblogs.com/laolieren/p/hyperledger_fabric_gm_summary.html" target="_blank" rel="noopener">改造方案参考资料</a></li>
+</ul>
+</li>
+<li><code>PBFT</code> 协议支持。<ul>
+<li>当前版本不考虑。</li>
+<li>可考虑基于 <code>Tendermint</code> 来改造，实现难度较低一些。参考<a href="https://blog.csdn.net/hexinming/article/details/86617482" target="_blank" rel="noopener">携程区块链部门的实现说明</a></li>
+<li>或者等 HyperLedger Fabric 社区贡献 PBFT 版本。</li>
+</ul>
+</li>
+</ul>
+<h3 id="平台控制层"><a href="#平台控制层" class="headerlink" title="平台控制层"></a>平台控制层</h3><h4 id="部署模块"><a href="#部署模块" class="headerlink" title="部署模块"></a>部署模块</h4><ul>
+<li>使用 <code>nephos</code> 或 <code>fabric-on-helm</code> 或 <code>Ansible-Fabric-Starter</code> 项目改造<ul>
+<li><a href="https://github.com/hyperledger-labs/nephos" target="_blank" rel="noopener">nephos 项目工程</a></li>
+<li><a href="https://github.com/horan-geeker/fabric-on-helm" target="_blank" rel="noopener">fabric-on-helm 项目工程</a></li>
+<li><a href="https://github.com/Altoros/Ansible-Fabric-Starter" target="_blank" rel="noopener">Ansible-Fabric-Starter 项目工程</a></li>
+</ul>
+</li>
+</ul>
+<p>不考虑 <code>blockchain-automation-framework</code> 原因有几个：</p>
+<ul>
+<li>暂时不支持 Fabric EtcdRaft 协议配置。</li>
+<li>对第三方服务，包括 <code>aws/vault/flux/ambassador</code> 等依赖度很高，内网部署难度太大。</li>
+<li>部署和管理耦合程度很高。<ul>
+<li>虽然提供了便利，也增加了开发调试/测试的难度。</li>
+</ul>
+</li>
+</ul>
+<h4 id="管理模块"><a href="#管理模块" class="headerlink" title="管理模块"></a>管理模块</h4><ul>
+<li>使用 <code>ansible</code> 模块进行任务管理。<ul>
+<li>任务做成 API 的方式，粒度尽可能细。</li>
+</ul>
+</li>
+<li>难点<ul>
+<li>管理模块和部署模块在解耦的要求下，如何确保其配置注入。</li>
+<li>管理模块的任务需要异步进行，方案包括：<ul>
+<li>使用 ansible（版本 &gt;= 2.3）的异步 Action 和状态轮询。<strong>版本特性依赖较重</strong>。</li>
+<li>上层分发给 ansible 的消息为异步，再使用 ansible 错误处理。考虑到 Fabric 网络配置变更基本是<strong>非幂等</strong>，ansible 使用同步模式（默认）应该更合理一些。</li>
+</ul>
+</li>
+<li>管理模块的任务结果返回，方案包括：<ul>
+<li>消息队列 + 消息 ID。这种方式层级间<strong>耦合度较低</strong>，可水平扩容增强吞吐能力，但部署难度更高一些。</li>
+<li>WebSocket 长链路 + 会话 ID。<strong>耦合较高</strong>，开发较困难，稳定性和扩容能力较差，但调试和部署方便一些。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="平台服务层"><a href="#平台服务层" class="headerlink" title="平台服务层"></a>平台服务层</h3><h4 id="链浏览器"><a href="#链浏览器" class="headerlink" title="链浏览器"></a>链浏览器</h4><ul>
+<li>使用 Fabric 官方开源的 <code>blockchain-explorer</code> 项目。<ul>
+<li>进行一些业务裁剪。</li>
+<li>使用通用的配置。</li>
+</ul>
+</li>
+</ul>
+<h4 id="链日志-审计"><a href="#链日志-审计" class="headerlink" title="链日志/审计"></a>链日志/审计</h4><p>使用运营管理日志服务的 API，进行权限管理下的日志展示、查询等操作。</p>
+<p>难点：</p>
+<ul>
+<li>分模块、分级别。</li>
+<li>分布式系统业务流程追踪。</li>
+<li>权限管理。</li>
+<li>定时回滚，避免日志体量过大，塞满内网硬盘存储。</li>
+</ul>
+<p>实现要点：</p>
+<ul>
+<li>模块和业务流程追踪可以通过 meta + ID 的方式来做。</li>
+<li>日志级别统一标准：verbose(trace)/debug/info/warm/error(fatal)，括号内的级别统一归到同一级别。<ul>
+<li>系统日志如果没有级别，统一使用 info 输出，并独立模块。</li>
+</ul>
+</li>
+<li>权限管理需要结合 BaaS 用户来做。<ul>
+<li>BaaS 用户可查看自己组织和联盟内组件的日志。</li>
+<li>BaaS 管理员和安全审计人员可查看所有组织和联盟组件的日志。</li>
+<li>可能需要结合 ELK 的权限控制插件来做管理。</li>
+</ul>
+</li>
+<li>定时回滚目前只能使用 ElasticSearch 的接口来定时删除数据。<ul>
+<li>定时任务可使用 K8S 的 CronJob。</li>
+<li>该模块需要提供定时任务的周期配置等。</li>
+<li>考虑到审计需求，不删除用户操作记录。</li>
+</ul>
+</li>
+</ul>
+<h4 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h4><p>这里的用户包括两个概念范畴，一个是 BaaS 系统用户（BaaS管理员、BaaS用户、安全审计人员等），另外一个是 MSP 用户（企业管理员、用户、审计人员等）。<br>两者的控制权限重叠部分少，需要进行分离。故此，我们会设定两类用户角色，其中：</p>
+<ul>
+<li>BaaS 系统用户<ul>
+<li>邀请制创建，BaaS 管理员具有唯一审核权限。</li>
+<li>使用账号密码登陆。</li>
+<li>允许创建 key，开放部分功能给 API 调用。</li>
+<li>安全审计人员拥有整个网络的最高审核权限，但只读。</li>
+</ul>
+</li>
+<li>MSP 用户<ul>
+<li>BaaS 用户可创建唯一一个顶层 MSP，其中默认创建一个 MSP 管理员。</li>
+<li>MSP 下的用户管理模型同 Fabric，即 ACL、ABAC。</li>
+<li>每个 MSP 用户都有自己的证书，仅创建时可导出私钥。</li>
+</ul>
+</li>
+</ul>
+<p>用户系统的开源库实现可以使用 <code>Casbin</code>，其支持 ACL、RBAC、ABAC 等多种权限管理模式。<br>该开源组织有多个语言版本的实现，包括：</p>
+<ul>
+<li><a href="https://github.com/casbin/casbin" target="_blank" rel="noopener">golang</a></li>
+<li><a href="https://github.com/casbin/jcasbin" target="_blank" rel="noopener">java</a></li>
+<li><a href="https://github.com/casbin/node-casbin" target="_blank" rel="noopener">nodejs</a></li>
+<li>等等。</li>
+</ul>
+<h4 id="链管理平台"><a href="#链管理平台" class="headerlink" title="链管理平台"></a>链管理平台</h4><p>这块暂时没有成熟且一直维护的开源项目支持，只能考虑自研。内容参考一些知名的 BaaS 平台，或开源的 Fabric 管理工具，如 <a href="https://github.com/fabric-lab/hyperledger-fabric-manager" target="_blank" rel="noopener">hyperledger-fabric-manager</a>。</p>
+<p>该层主要是调用平台控制层中的管理模块的 API 对底层 Fabric 网络做增删改查的工作，变更操作和结果需要进行持久化存储。</p>
+<h5 id="证书秘钥管理"><a href="#证书秘钥管理" class="headerlink" title="证书秘钥管理"></a>证书秘钥管理</h5><ul>
+<li>隶属于组织（MSP）管理的一部分。</li>
+<li>暂时只考虑 OpenSSL 证书，国密证书需要改造完成后再支持。</li>
+<li>允许导出。</li>
+<li>用户列表查询。</li>
+<li>吊销证书。</li>
+<li>吊销证书查询。</li>
+<li>用户状态查询。</li>
+</ul>
+<h5 id="节点管理"><a href="#节点管理" class="headerlink" title="节点管理"></a>节点管理</h5><ul>
+<li>添加节点。</li>
+<li>启动节点。</li>
+<li>停止节点。</li>
+<li>删除节点。</li>
+<li>节点列表查询。</li>
+<li>节点状态查询。</li>
+</ul>
+<h5 id="智能合约管理"><a href="#智能合约管理" class="headerlink" title="智能合约管理"></a>智能合约管理</h5><ul>
+<li>添加合约。</li>
+<li>初始化合约。</li>
+<li>升级合约。</li>
+<li>停止合约。</li>
+<li>合约列表查询。</li>
+<li>合约状态查询。</li>
+<li>签名政策修改。</li>
+</ul>
+<h5 id="联盟链管理"><a href="#联盟链管理" class="headerlink" title="联盟链管理"></a>联盟链管理</h5><ul>
+<li>创建联盟。</li>
+<li>修改联盟配置（包括区块等）。</li>
+<li>邀请新组织。</li>
+<li>加入新组织。</li>
+<li>移除组织。</li>
+<li>查询组织信息。</li>
+<li>查询组织列表。</li>
+<li>获取联盟信息。</li>
+</ul>
+<h3 id="运营管理"><a href="#运营管理" class="headerlink" title="运营管理"></a>运营管理</h3><h4 id="日志服务"><a href="#日志服务" class="headerlink" title="日志服务"></a>日志服务</h4><ul>
+<li>使用 <code>ELK</code> 技术栈<ul>
+<li><code>ElasticSearch</code> + <code>Kinana</code> 是明确使用的存储 + 展示日志技术方案。</li>
+<li><code>Logstash</code> 可替换为 <code>fleuntd-pilot</code>。<ul>
+<li>后者性能要求更匹配我们的硬件规格，一个节点仅运行一个实例。</li>
+<li>后者不需要多个组件，一次完成标准输出和文件日志的收集，且为无侵入式。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用 <code>graylog</code><ul>
+<li><code>fleuntd-pilot</code> 收集的日志同样可以输出到 <code>graylog</code>。</li>
+<li>完整的日志系统，包括结构化日志存储和展示UI等，没有那么多组件。<ul>
+<li>换个角度来说，存储和展示服务放在同一台机器，没办法放在不同设备，扩容不够灵活。</li>
+</ul>
+</li>
+<li>实时通知。</li>
+<li>TB 级别存储和查询支持。</li>
+<li>自动归档（如 SSD + HDD 存储并存时适用）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="存储（数据库）管理"><a href="#存储（数据库）管理" class="headerlink" title="存储（数据库）管理"></a>存储（数据库）管理</h4><ul>
+<li>使用 CouchDB 做（配置、操作）数据存储。<ul>
+<li>Fabric 网络、组织、用户、通道等数据变更频率低。</li>
+</ul>
+</li>
+<li>适配多集群业务场景。<ul>
+<li>多集群是后续版本迭代的方向，当前版本不考虑这部分。</li>
+<li>CouchDB 多主同步数据能有效避免单点失效问题，且配置简单。</li>
+</ul>
+</li>
+</ul>
+<h3 id="安全管理"><a href="#安全管理" class="headerlink" title="安全管理"></a>安全管理</h3><h4 id="操作审计"><a href="#操作审计" class="headerlink" title="操作审计"></a>操作审计</h4><ul>
+<li>用户操作日志全纪录。</li>
+<li>访问权限同业务日志。</li>
+<li>目前日志展示模块可合并到 <code>Kinaba</code>，即管理平台端也需要运行 <code>Logstash</code> 或者 <code>fleuntd-pilot</code>，进行日志收集汇总。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><h3 id="携程BaaS"><a href="#携程BaaS" class="headerlink" title="携程BaaS"></a>携程BaaS</h3><ul>
+<li><a href="https://techsummit.ctrip.com/2018/pdf/hexinming.pdf" target="_blank" rel="noopener">HyperLedger Fabric的架构与设计理念 - 2019携程技术峰</a></li>
+<li><a href="https://mp.weixin.qq.com/s/tQCLIiaLoumffoGfxVO6Pg" target="_blank" rel="noopener">HyperLedger Fabric在携程区块链服务平台的应用实战</a></li>
+<li><a href="https://blog.csdn.net/hexinming/article/details/86617482" target="_blank" rel="noopener">HyperLedger Fabric orderer过程解析&amp;如何基于tendermint实现fabric的拜占庭容错排序</a></li>
+</ul>
+<h3 id="BaaS比较"><a href="#BaaS比较" class="headerlink" title="BaaS比较"></a>BaaS比较</h3><ul>
+<li><a href="https://www.feixiaohao.com/news/6259724.html" target="_blank" rel="noopener">阿里、腾讯、百度区块链落地案例大PK，谁弱谁强？</a></li>
+<li><a href="https://www.chainnews.com/articles/847272068062.htm" target="_blank" rel="noopener">一文读懂百度、阿里、腾讯的区块链技术与布局对垒</a></li>
+</ul>
+<h3 id="XuperChain"><a href="#XuperChain" class="headerlink" title="XuperChain"></a>XuperChain</h3><ul>
+<li><a href="https://github.com/xuperchain/xuperchain/blob/master/README.md" target="_blank" rel="noopener">XuperChain</a></li>
+</ul>
+<h3 id="TBaaS"><a href="#TBaaS" class="headerlink" title="TBaaS"></a>TBaaS</h3><ul>
+<li><a href="https://cloud.tencent.com/document/product/663/14016" target="_blank" rel="noopener">TBaaS产品架构</a></li>
+<li><a href="https://cloud.tencent.com/document/product/663/38470" target="_blank" rel="noopener">TBaaS操作指南-联盟</a></li>
+</ul>
+<h3 id="WeBASE"><a href="#WeBASE" class="headerlink" title="WeBASE"></a>WeBASE</h3><ul>
+<li><a href="https://webasedoc.readthedocs.io/zh_CN/latest/docs/WeBASE/introduction.html" target="_blank" rel="noopener">什么是WeBASE</a></li>
+<li><a href="https://webasedoc.readthedocs.io/zh_CN/latest/docs/WeBASE-Node-Manager/README.html" target="_blank" rel="noopener">节点前置服务概要介绍</a></li>
+</ul>
+<h3 id="阿里云BaaS"><a href="#阿里云BaaS" class="headerlink" title="阿里云BaaS"></a>阿里云BaaS</h3><ul>
+<li><a href="https://yq.aliyun.com/articles/326173" target="_blank" rel="noopener">区块链Hyperledger Fabric在阿里云容器服务Kubernetes中的进阶使用技巧（一）</a></li>
+<li><a href="https://yq.aliyun.com/articles/563496" target="_blank" rel="noopener">阿里云容器服务区块链解决方案全新升级 支持Hyperledger Fabric v1.1</a></li>
+<li><a href="https://help.aliyun.com/document_detail/64316.html" target="_blank" rel="noopener">配置部署区块链</a></li>
+<li><a href="https://help.aliyun.com/document_detail/85269.html" target="_blank" rel="noopener">阿里云BaaS产品架构</a></li>
+<li><a href="https://help.aliyun.com/document_detail/107822.html" target="_blank" rel="noopener">阿里云BaaS使用限制</a></li>
+</ul>
+<h3 id="开源BaaS"><a href="#开源BaaS" class="headerlink" title="开源BaaS"></a>开源BaaS</h3><ul>
+<li><a href="https://blockchain-automation-framework.readthedocs.io/en/latest/keyConcepts/features.html" target="_blank" rel="noopener">The Blockchain Automation Framework’s Features</a></li>
+<li><a href="https://blockchain-automation-framework.readthedocs.io/en/latest/operations/fabric_networkyaml.html" target="_blank" rel="noopener">Configuration file specification: Hyperledger-Fabric</a></li>
+<li><a href="https://blockchain-automation-framework.readthedocs.io/en/latest/operations/configure_prerequisites.html" target="_blank" rel="noopener">Configuring pre-requisites for the Blockchain Automation Framework</a></li>
+<li><a href="https://blockchain-automation-framework.readthedocs.io/en/latest/architectureref.html" target="_blank" rel="noopener">Architecture Reference of BAF</a></li>
+<li><a href="https://blockchain-automation-framework.readthedocs.io/en/latest/architectureref/hyperledger-fabric.html" target="_blank" rel="noopener">Hyperledger Fabric Architecture Reference of BAF</a></li>
+<li><a href="https://github.com/hyperledger-labs/blockchain-automation-framework/issues/46" target="_blank" rel="noopener">BAF未实现Fabric的Raft协议配置</a></li>
+</ul>
+<h3 id="ansible"><a href="#ansible" class="headerlink" title="ansible"></a>ansible</h3><ul>
+<li><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_async.html" target="_blank" rel="noopener">Asynchronous Actions and Polling</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_error_handling.html" target="_blank" rel="noopener">Error Handling In Playbooks</a></li>
+</ul>
+<h3 id="国密"><a href="#国密" class="headerlink" title="国密"></a>国密</h3><ul>
+<li><a href="https://github.com/guanzhi/GmSSL/blob/master/README.md" target="_blank" rel="noopener">支持国密SM2/SM3/SM4/SM9/ZUC/SSL的OpenSSL分支</a></li>
+</ul>
+<h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><ul>
+<li><a href="https://yq.aliyun.com/articles/72700" target="_blank" rel="noopener">Docker日志收集最佳实践</a></li>
+<li><a href="https://blog.csdn.net/rancherlabs/article/details/53688474" target="_blank" rel="noopener">容器内应用日志收集方案</a></li>
+<li><a href="https://medium.com/@logicify/advantages-of-graylog-grafana-compared-to-elk-stack-a7c86d58bc2c" target="_blank" rel="noopener">Advantages of Graylog+Grafana Compared to ELK Stack</a></li>
+<li><a href="https://docs.graylog.org/en/3.2/pages/getting_started/planning.html" target="_blank" rel="noopener">Planning Your Log Collection</a></li>
+<li><a href="https://blog.csdn.net/xuplus/article/details/51611658" target="_blank" rel="noopener">给Elasticsearch 和Kibana添加基于角色的访问权限控制</a></li>
+<li><a href="https://blog.csdn.net/xuezhangjun0121/article/details/80913678" target="_blank" rel="noopener">elasticsearch定期删除策略 - 日志分析系统ELK搭建</a></li>
+</ul>
+<h3 id="用户管理-1"><a href="#用户管理-1" class="headerlink" title="用户管理"></a>用户管理</h3><ul>
+<li><a href="https://hyperledger-fabric-ca.readthedocs.io/en/release-1.4/users-guide.html?spm=a2c4g.11186623.2.11.622f48cdPA27KC#attribute-based-access-control" target="_blank" rel="noopener">Attribute-Based Access Control</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/cb3e5607.html">PREV</a><a class="next" href="/post/8d8620.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

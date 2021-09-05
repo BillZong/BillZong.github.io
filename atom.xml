@@ -1,0 +1,1407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>知易行难，一路向前</title>
+  <icon>https://billzong.github.io/icon.png</icon>
+  <subtitle>看到更本质的世界，尝试更有趣的未来</subtitle>
+  <link href="https://billzong.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://billzong.github.io/"/>
+  <updated>2021-09-05T16:51:19.455Z</updated>
+  <id>https://billzong.github.io/</id>
+  
+  <author>
+    <name>Bill Zong</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>《认知天性》阅读感悟</title>
+    <link href="https://billzong.github.io/post/228615af.html"/>
+    <id>https://billzong.github.io/post/228615af.html</id>
+    <published>2021-09-05T15:45:25.000Z</published>
+    <updated>2021-09-05T16:51:19.455Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;什么是学习？&quot;&gt;&lt;a href=&quot;#什么是学习？&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="learning" scheme="https://billzong.github.io/categories/learning/"/>
+    
+    
+    <category term="learning,reading,psychology" scheme="https://billzong.github.io/tags/learning-reading-psychology/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关闭CentOS交换分区</title>
+    <link href="https://billzong.github.io/post/e9025282.html"/>
+    <id>https://billzong.github.io/post/e9025282.html</id>
+    <published>2021-04-25T14:11:00.000Z</published>
+    <updated>2021-09-05T16:51:19.456Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://billzong.github.io/categories/Linux/"/>
+    
+    
+    <category term="swap" scheme="https://billzong.github.io/tags/swap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS部署和配置NTP服务器</title>
+    <link href="https://billzong.github.io/post/c9a962b3.html"/>
+    <id>https://billzong.github.io/post/c9a962b3.html</id>
+    <published>2021-04-25T14:10:00.000Z</published>
+    <updated>2021-09-05T16:51:19.447Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;ntp服务端&quot;&gt;&lt;a href=&quot;#ntp服务端&quot; class=&quot;headerlink&quot; title=&quot;ntp服务端&quot;&gt;&lt;/a&gt;ntp服务端&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://billzong.github.io/categories/Linux/"/>
+    
+    
+    <category term="deploy" scheme="https://billzong.github.io/tags/deploy/"/>
+    
+    <category term="CentOS 7" scheme="https://billzong.github.io/tags/CentOS-7/"/>
+    
+    <category term="ntp" scheme="https://billzong.github.io/tags/ntp/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7升级内核全流程</title>
+    <link href="https://billzong.github.io/post/2a353e7b.html"/>
+    <id>https://billzong.github.io/post/2a353e7b.html</id>
+    <published>2021-04-25T14:09:00.000Z</published>
+    <updated>2021-09-05T16:51:19.446Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;rpm –import &lt;a href=&quot;https://www.elrepo.org/RPM-GPG-KEY-elrepo.org&quot; target=&quot;_blank&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://billzong.github.io/categories/Linux/"/>
+    
+    
+    <category term="kernel" scheme="https://billzong.github.io/tags/kernel/"/>
+    
+    <category term="upgrade" scheme="https://billzong.github.io/tags/upgrade/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一次OpenSSH升级记录</title>
+    <link href="https://billzong.github.io/post/87c46404.html"/>
+    <id>https://billzong.github.io/post/87c46404.html</id>
+    <published>2021-04-25T14:08:00.000Z</published>
+    <updated>2021-09-05T16:51:19.455Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://billzong.github.io/categories/Linux/"/>
+    
+    
+    <category term="upgrade" scheme="https://billzong.github.io/tags/upgrade/"/>
+    
+    <category term="OpenSSH" scheme="https://billzong.github.io/tags/OpenSSH/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux二进制文件安全资料</title>
+    <link href="https://billzong.github.io/post/4cf4d379.html"/>
+    <id>https://billzong.github.io/post/4cf4d379.html</id>
+    <published>2021-04-25T14:07:00.000Z</published>
+    <updated>2021-09-05T16:51:19.449Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Linux二进制文件安全资料&quot;&gt;&lt;a href=&quot;#Linux二进制文件安全资料&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://billzong.github.io/categories/Linux/"/>
+    
+    
+    <category term="security" scheme="https://billzong.github.io/tags/security/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ssh连接超时解决方案</title>
+    <link href="https://billzong.github.io/post/4c3910cf.html"/>
+    <id>https://billzong.github.io/post/4c3910cf.html</id>
+    <published>2021-04-25T14:04:00.000Z</published>
+    <updated>2021-09-05T16:51:19.455Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;修改Server端&quot;&gt;&lt;a href=&quot;#修改Server端&quot; class=&quot;headerlink&quot; title=&quot;修改Server端&quot;&gt;&lt;/a&gt;修改Server端&lt;/h2&gt;&lt;figure class=&quot;highlight</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://billzong.github.io/categories/Shell/"/>
+    
+    
+    <category term="bash" scheme="https://billzong.github.io/tags/bash/"/>
+    
+    <category term="ssh" scheme="https://billzong.github.io/tags/ssh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>远程执行sed脚本</title>
+    <link href="https://billzong.github.io/post/6fcc8439.html"/>
+    <id>https://billzong.github.io/post/6fcc8439.html</id>
+    <published>2021-04-25T14:04:00.000Z</published>
+    <updated>2021-09-05T16:51:19.458Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://billzong.github.io/categories/Shell/"/>
+    
+    
+    <category term="bash" scheme="https://billzong.github.io/tags/bash/"/>
+    
+    <category term="ssh" scheme="https://billzong.github.io/tags/ssh/"/>
+    
+    <category term="sed" scheme="https://billzong.github.io/tags/sed/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Bash为alias开启补全功能</title>
+    <link href="https://billzong.github.io/post/ae364355.html"/>
+    <id>https://billzong.github.io/post/ae364355.html</id>
+    <published>2021-04-25T14:02:00.000Z</published>
+    <updated>2021-09-05T16:51:19.445Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;别名命令补全功能&quot;&gt;&lt;a href=&quot;#别名命令补全功能&quot; class=&quot;headerlink&quot; title=&quot;别名命令补全功能&quot;&gt;&lt;/a&gt;别名命令补全功能&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://billzong.github.io/categories/Shell/"/>
+    
+    
+    <category term="bash" scheme="https://billzong.github.io/tags/bash/"/>
+    
+    <category term="completion" scheme="https://billzong.github.io/tags/completion/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>awk结合kubeadm删除无效token的脚本</title>
+    <link href="https://billzong.github.io/post/756e1ce4.html"/>
+    <id>https://billzong.github.io/post/756e1ce4.html</id>
+    <published>2021-04-13T14:02:00.000Z</published>
+    <updated>2021-09-05T16:51:19.451Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://billzong.github.io/categories/Shell/"/>
+    
+    
+    <category term="bash" scheme="https://billzong.github.io/tags/bash/"/>
+    
+    <category term="awk" scheme="https://billzong.github.io/tags/awk/"/>
+    
+    <category term="kubeadm" scheme="https://billzong.github.io/tags/kubeadm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu安装nc的命令</title>
+    <link href="https://billzong.github.io/post/3305f638.html"/>
+    <id>https://billzong.github.io/post/3305f638.html</id>
+    <published>2021-04-13T14:01:00.000Z</published>
+    <updated>2021-09-05T16:51:19.451Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://billzong.github.io/categories/Shell/"/>
+    
+    
+    <category term="nc" scheme="https://billzong.github.io/tags/nc/"/>
+    
+    <category term="Ubuntu" scheme="https://billzong.github.io/tags/Ubuntu/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SSH禁止密码登录，修改SSH配置文件</title>
+    <link href="https://billzong.github.io/post/56b134ed.html"/>
+    <id>https://billzong.github.io/post/56b134ed.html</id>
+    <published>2021-04-13T14:00:00.000Z</published>
+    <updated>2021-09-05T16:51:19.451Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;关闭root用户使用密码登陆&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://billzong.github.io/categories/Shell/"/>
+    
+    
+    <category term="bash" scheme="https://billzong.github.io/tags/bash/"/>
+    
+    <category term="ssh" scheme="https://billzong.github.io/tags/ssh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>curl发送multipart文件的命令</title>
+    <link href="https://billzong.github.io/post/5574d8a6.html"/>
+    <id>https://billzong.github.io/post/5574d8a6.html</id>
+    <published>2021-04-13T13:59:00.000Z</published>
+    <updated>2021-09-05T16:51:19.453Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;code&gt;curl -v -F key1=value1 -F key2=@localfilename URL&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://billzong.github.io/categories/Shell/"/>
+    
+    
+    <category term="bash" scheme="https://billzong.github.io/tags/bash/"/>
+    
+    <category term="curl" scheme="https://billzong.github.io/tags/curl/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>基于cobra构建命令行</title>
+    <link href="https://billzong.github.io/post/89751058.html"/>
+    <id>https://billzong.github.io/post/89751058.html</id>
+    <published>2021-04-12T14:36:00.000Z</published>
+    <updated>2021-09-05T16:51:19.456Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;strong&gt;Table of Contents&lt;/strong&gt;&lt;/p&gt;
+&lt;!-- BEGIN MUNGE: GENERATED_TOC --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#环境准备&quot;&gt;环境准备&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="cobra" scheme="https://billzong.github.io/tags/cobra/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Context用法</title>
+    <link href="https://billzong.github.io/post/9c69c716.html"/>
+    <id>https://billzong.github.io/post/9c69c716.html</id>
+    <published>2021-04-12T14:34:00.000Z</published>
+    <updated>2021-09-05T16:51:19.447Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;在 Go http包的Server中，每一个请求在都有一个对应的 goroutine 去处理。 请求处理函数通常会启动额外的</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="context" scheme="https://billzong.github.io/tags/context/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>golang项目编码规范</title>
+    <link href="https://billzong.github.io/post/107a8b74.html"/>
+    <id>https://billzong.github.io/post/107a8b74.html</id>
+    <published>2021-04-12T14:33:00.000Z</published>
+    <updated>2021-09-05T16:51:19.454Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="guide" scheme="https://billzong.github.io/tags/guide/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Practical TDD in Go</title>
+    <link href="https://billzong.github.io/post/37e0e416.html"/>
+    <id>https://billzong.github.io/post/37e0e416.html</id>
+    <published>2021-04-12T14:32:00.000Z</published>
+    <updated>2021-09-05T16:51:19.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;!-- START doctoc generated TOC please keep comment here to allow auto update --&gt;
+&lt;!-- DON&#39;T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="TDD" scheme="https://billzong.github.io/tags/TDD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go语言指南拾遗</title>
+    <link href="https://billzong.github.io/post/fe86d1b6.html"/>
+    <id>https://billzong.github.io/post/fe86d1b6.html</id>
+    <published>2021-04-12T14:32:00.000Z</published>
+    <updated>2021-09-05T16:51:19.448Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>go语言log库调研</title>
+    <link href="https://billzong.github.io/post/6d4a1154.html"/>
+    <id>https://billzong.github.io/post/6d4a1154.html</id>
+    <published>2021-04-12T14:30:00.000Z</published>
+    <updated>2021-09-05T16:51:19.454Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;系统日志库&quot;&gt;&lt;a href=&quot;#系统日志库&quot; class=&quot;headerlink&quot; title=&quot;系统日志库&quot;&gt;&lt;/a&gt;系统日志库&lt;/h1&gt;&lt;figure class=&quot;highlight</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="log" scheme="https://billzong.github.io/tags/log/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go语言constants说明</title>
+    <link href="https://billzong.github.io/post/a646ef82.html"/>
+    <id>https://billzong.github.io/post/a646ef82.html</id>
+    <published>2021-04-12T14:29:00.000Z</published>
+    <updated>2021-09-05T16:51:19.447Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Go语言constants说明&quot;&gt;&lt;a href=&quot;#Go语言constants说明&quot; class=&quot;headerlink&quot; title=&quot;Go语言constants说明&quot;&gt;&lt;/a&gt;Go语言constants说明&lt;/h1&gt;&lt;h2 id=&quot;概述&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>go版本升级VSCode环境更新说明</title>
+    <link href="https://billzong.github.io/post/1ec527c6.html"/>
+    <id>https://billzong.github.io/post/1ec527c6.html</id>
+    <published>2021-04-12T14:28:00.000Z</published>
+    <updated>2021-09-05T16:51:19.454Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;推荐&quot;&gt;&lt;a href=&quot;#推荐&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="VSCode" scheme="https://billzong.github.io/tags/VSCode/"/>
+    
+    <category term="debug" scheme="https://billzong.github.io/tags/debug/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>go111module编译实践说明</title>
+    <link href="https://billzong.github.io/post/cb3e5607.html"/>
+    <id>https://billzong.github.io/post/cb3e5607.html</id>
+    <published>2021-04-12T14:27:00.000Z</published>
+    <updated>2021-09-05T16:51:19.453Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h1&gt;&lt;p&gt;本文只关注&lt;code&gt;go 1.11&lt;/code&gt;版本新添加的&lt;code&gt;modules&lt;/code&gt;编译方式，说明本次&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Golang" scheme="https://billzong.github.io/categories/Golang/"/>
+    
+    
+    <category term="golang" scheme="https://billzong.github.io/tags/golang/"/>
+    
+    <category term="module" scheme="https://billzong.github.io/tags/module/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>布洛城BaaS系统设计方案</title>
+    <link href="https://billzong.github.io/post/d5577457.html"/>
+    <id>https://billzong.github.io/post/d5577457.html</id>
+    <published>2021-04-12T14:24:00.000Z</published>
+    <updated>2021-09-05T16:51:19.457Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;系统架构&quot;&gt;&lt;a href=&quot;#系统架构&quot; class=&quot;headerlink&quot; title=&quot;系统架构&quot;&gt;&lt;/a&gt;系统架构&lt;/h2&gt;&lt;h3 id=&quot;架构图&quot;&gt;&lt;a href=&quot;#架构图&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="blockchain" scheme="https://billzong.github.io/tags/blockchain/"/>
+    
+    <category term="BaaS" scheme="https://billzong.github.io/tags/BaaS/"/>
+    
+    <category term="architecture" scheme="https://billzong.github.io/tags/architecture/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>创世区块账户预挖机制</title>
+    <link href="https://billzong.github.io/post/8d8620.html"/>
+    <id>https://billzong.github.io/post/8d8620.html</id>
+    <published>2021-04-12T14:23:00.000Z</published>
+    <updated>2021-09-05T16:51:19.456Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;预挖是指在创世区块中，将部分账户余额状态修改为指定数值的操作。&lt;/p&gt;
+&lt;h1 id=&quot;go-ethereum实现&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="ethereum" scheme="https://billzong.github.io/tags/ethereum/"/>
+    
+    <category term="source" scheme="https://billzong.github.io/tags/source/"/>
+    
+    <category term="mining" scheme="https://billzong.github.io/tags/mining/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用docker调试以太坊多节点通讯功能</title>
+    <link href="https://billzong.github.io/post/48c09b8d.html"/>
+    <id>https://billzong.github.io/post/48c09b8d.html</id>
+    <published>2021-04-12T14:21:00.000Z</published>
+    <updated>2021-09-05T16:51:19.456Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;内容提要&quot;&gt;&lt;a href=&quot;#内容提要&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="ethereum" scheme="https://billzong.github.io/tags/ethereum/"/>
+    
+    <category term="docker" scheme="https://billzong.github.io/tags/docker/"/>
+    
+    <category term="p2p" scheme="https://billzong.github.io/tags/p2p/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RLPx阅读笔记</title>
+    <link href="https://billzong.github.io/post/5d25bab6.html"/>
+    <id>https://billzong.github.io/post/5d25bab6.html</id>
+    <published>2021-04-12T14:19:00.000Z</published>
+    <updated>2021-09-05T16:51:19.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;实现的组成部分&quot;&gt;&lt;a href=&quot;#实现的组成部分&quot; class=&quot;headerlink&quot; title=&quot;实现的组成部分&quot;&gt;&lt;/a&gt;实现的组成部分&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Node Discovery&lt;/li&gt;
+&lt;li&gt;Encrypted</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="ethereum" scheme="https://billzong.github.io/tags/ethereum/"/>
+    
+    <category term="source" scheme="https://billzong.github.io/tags/source/"/>
+    
+    <category term="RLPx" scheme="https://billzong.github.io/tags/RLPx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Prism协议基本介绍</title>
+    <link href="https://billzong.github.io/post/749896c7.html"/>
+    <id>https://billzong.github.io/post/749896c7.html</id>
+    <published>2021-04-12T14:17:00.000Z</published>
+    <updated>2021-09-05T16:51:19.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E6%A6%82%E8%A6%81&quot;&gt;概要&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E8%AF%8D%E6%B1%87%E8%A1%A8&quot;&gt;词汇表&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="prism" scheme="https://billzong.github.io/tags/prism/"/>
+    
+    <category term="blockchain" scheme="https://billzong.github.io/tags/blockchain/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>go-ethereum日志库调研</title>
+    <link href="https://billzong.github.io/post/410d6a4b.html"/>
+    <id>https://billzong.github.io/post/410d6a4b.html</id>
+    <published>2021-04-12T14:15:00.000Z</published>
+    <updated>2021-09-05T16:51:19.453Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;log15&quot;&gt;&lt;a href=&quot;#log15&quot; class=&quot;headerlink&quot; title=&quot;log15&quot;&gt;&lt;/a&gt;log15&lt;/h1&gt;&lt;figure class=&quot;highlight</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="ethereum" scheme="https://billzong.github.io/tags/ethereum/"/>
+    
+    <category term="source" scheme="https://billzong.github.io/tags/source/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>balance-attack相关说明</title>
+    <link href="https://billzong.github.io/post/7742e199.html"/>
+    <id>https://billzong.github.io/post/7742e199.html</id>
+    <published>2021-04-11T08:39:00.000Z</published>
+    <updated>2021-09-05T16:51:19.453Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;balance-attack相关说明&quot;&gt;&lt;a href=&quot;#balance-attack相关说明&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="区块链" scheme="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+    <category term="security" scheme="https://billzong.github.io/tags/security/"/>
+    
+    <category term="blockchain" scheme="https://billzong.github.io/tags/blockchain/"/>
+    
+    <category term="Ethereum" scheme="https://billzong.github.io/tags/Ethereum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>阿里云腾讯云OpenWhisk性能测试方案</title>
+    <link href="https://billzong.github.io/post/d13f2d70.html"/>
+    <id>https://billzong.github.io/post/d13f2d70.html</id>
+    <published>2021-04-11T08:38:00.000Z</published>
+    <updated>2021-09-05T16:51:19.458Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Serverless" scheme="https://billzong.github.io/categories/Serverless/"/>
+    
+    
+    <category term="OpenWhisk" scheme="https://billzong.github.io/tags/OpenWhisk/"/>
+    
+    <category term="performance" scheme="https://billzong.github.io/tags/performance/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>搭建OpenWhisk</title>
+    <link href="https://billzong.github.io/post/d6ffd7c3.html"/>
+    <id>https://billzong.github.io/post/d6ffd7c3.html</id>
+    <published>2021-04-11T08:36:00.000Z</published>
+    <updated>2021-09-05T16:51:19.457Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;在云上购买机器&quot;&gt;&lt;a href=&quot;#在云上购买机器&quot; class=&quot;headerlink&quot; title=&quot;在云上购买机器&quot;&gt;&lt;/a&gt;在云上购买机器&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;命名master为</summary>
+        
+      
+    
+    
+    
+    <category term="Serverless" scheme="https://billzong.github.io/categories/Serverless/"/>
+    
+    
+    <category term="OpenWhisk" scheme="https://billzong.github.io/tags/OpenWhisk/"/>
+    
+    <category term="deploy" scheme="https://billzong.github.io/tags/deploy/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>如何缩短K8S部署固定版本OpenWhisk集群的时长</title>
+    <link href="https://billzong.github.io/post/3e321d5a.html"/>
+    <id>https://billzong.github.io/post/3e321d5a.html</id>
+    <published>2021-04-11T08:35:00.000Z</published>
+    <updated>2021-09-05T16:51:19.457Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;p&gt;本文主要描述当前OpenWhisk部署项目的代码修改、配置修改及生产环境下的配置说明。&lt;/p&gt;
+&lt;h3 id=&quot;版本说明&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Serverless" scheme="https://billzong.github.io/categories/Serverless/"/>
+    
+    
+    <category term="OpenWhisk" scheme="https://billzong.github.io/tags/OpenWhisk/"/>
+    
+    <category term="deploy" scheme="https://billzong.github.io/tags/deploy/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OpenWhisk部署配置说明</title>
+    <link href="https://billzong.github.io/post/b854b9de.html"/>
+    <id>https://billzong.github.io/post/b854b9de.html</id>
+    <published>2021-04-11T08:34:00.000Z</published>
+    <updated>2021-09-05T16:51:19.450Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;p&gt;本文主要描述当前OpenWhisk部署项目的代码修改、配置修改及生产环境下的配置说明。&lt;/p&gt;
+&lt;h3 id=&quot;版本说明&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Serverless" scheme="https://billzong.github.io/categories/Serverless/"/>
+    
+    
+    <category term="OpenWhisk" scheme="https://billzong.github.io/tags/OpenWhisk/"/>
+    
+    <category term="deploy" scheme="https://billzong.github.io/tags/deploy/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OpenWhisk开发环境配置说明</title>
+    <link href="https://billzong.github.io/post/73ccc9b4.html"/>
+    <id>https://billzong.github.io/post/73ccc9b4.html</id>
+    <published>2021-04-11T08:33:00.000Z</published>
+    <updated>2021-09-05T16:51:19.449Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;这里描述的内容为本人自测通过的信息，其它平台建议在社区或者其它渠道查找。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;开发环境&quot;&gt;&lt;a href=&quot;#开发环境&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Serverless" scheme="https://billzong.github.io/categories/Serverless/"/>
+    
+    
+    <category term="OpenWhisk" scheme="https://billzong.github.io/tags/OpenWhisk/"/>
+    
+    <category term="develop" scheme="https://billzong.github.io/tags/develop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Helm部署OpenWhisk全流程分析</title>
+    <link href="https://billzong.github.io/post/605dd585.html"/>
+    <id>https://billzong.github.io/post/605dd585.html</id>
+    <published>2021-04-11T08:32:00.000Z</published>
+    <updated>2021-09-05T16:51:19.449Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;主流程&quot;&gt;&lt;a href=&quot;#主流程&quot; class=&quot;headerlink&quot; title=&quot;主流程&quot;&gt;&lt;/a&gt;主流程&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;拷贝&lt;a href=&quot;https://github.com/apache/incubator-openwhisk&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Serverless" scheme="https://billzong.github.io/categories/Serverless/"/>
+    
+    
+    <category term="OpenWhisk" scheme="https://billzong.github.io/tags/OpenWhisk/"/>
+    
+    <category term="deploy" scheme="https://billzong.github.io/tags/deploy/"/>
+    
+    <category term="helm" scheme="https://billzong.github.io/tags/helm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ansible在Mac本地部署OpenWhisk填坑记</title>
+    <link href="https://billzong.github.io/post/81965e0a.html"/>
+    <id>https://billzong.github.io/post/81965e0a.html</id>
+    <published>2021-04-11T08:31:00.000Z</published>
+    <updated>2021-09-05T16:51:19.444Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;h3 id=&quot;目的&quot;&gt;&lt;a href=&quot;#目的&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Serverless" scheme="https://billzong.github.io/categories/Serverless/"/>
+    
+    
+    <category term="OpenWhisk" scheme="https://billzong.github.io/tags/OpenWhisk/"/>
+    
+    <category term="ansible" scheme="https://billzong.github.io/tags/ansible/"/>
+    
+    <category term="deploy" scheme="https://billzong.github.io/tags/deploy/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OpenWhisk当前监控指标详细说明</title>
+    <link href="https://billzong.github.io/post/b265443c.html"/>
+    <id>https://billzong.github.io/post/b265443c.html</id>
+    <published>2021-04-09T15:30:00.000Z</published>
+    <updated>2021-09-05T16:51:19.449Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Serverless" scheme="https://billzong.github.io/categories/Serverless/"/>
+    
+    
+    <category term="openwhisk" scheme="https://billzong.github.io/tags/openwhisk/"/>
+    
+    <category term="serverless" scheme="https://billzong.github.io/tags/serverless/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CDN 简介</title>
+    <link href="https://billzong.github.io/post/1c6c86cc.html"/>
+    <id>https://billzong.github.io/post/1c6c86cc.html</id>
+    <published>2021-04-08T15:30:00.000Z</published>
+    <updated>2021-09-05T16:51:19.445Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;文档链接地址&quot;&gt;&lt;a href=&quot;#文档链接地址&quot; class=&quot;headerlink&quot; title=&quot;文档链接地址&quot;&gt;&lt;/a&gt;文档链接地址&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://wenku.it168.com/d_001628826.shtml&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="缓存" scheme="https://billzong.github.io/categories/%E7%BC%93%E5%AD%98/"/>
+    
+    
+    <category term="CDN" scheme="https://billzong.github.io/tags/CDN/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CDN 技术详解</title>
+    <link href="https://billzong.github.io/post/afdd4898.html"/>
+    <id>https://billzong.github.io/post/afdd4898.html</id>
+    <published>2021-04-08T15:29:00.000Z</published>
+    <updated>2021-09-05T16:51:19.445Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;CDN-技术概述&quot;&gt;&lt;a href=&quot;#CDN-技术概述&quot; class=&quot;headerlink&quot; title=&quot;CDN 技术概述&quot;&gt;&lt;/a&gt;CDN 技术概述&lt;/h2&gt;&lt;h3 id=&quot;边缘计算的概念&quot;&gt;&lt;a href=&quot;#边缘计算的概念&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="缓存" scheme="https://billzong.github.io/categories/%E7%BC%93%E5%AD%98/"/>
+    
+    
+    <category term="CDN" scheme="https://billzong.github.io/tags/CDN/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CDN技术原理</title>
+    <link href="https://billzong.github.io/post/3363d042.html"/>
+    <id>https://billzong.github.io/post/3363d042.html</id>
+    <published>2021-04-08T15:28:00.000Z</published>
+    <updated>2021-09-05T16:51:19.446Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;文档链接地址&quot;&gt;&lt;a href=&quot;#文档链接地址&quot; class=&quot;headerlink&quot; title=&quot;文档链接地址&quot;&gt;&lt;/a&gt;文档链接地址&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://wenku.it168.com/d_001628827.shtml&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="缓存" scheme="https://billzong.github.io/categories/%E7%BC%93%E5%AD%98/"/>
+    
+    
+    <category term="CDN" scheme="https://billzong.github.io/tags/CDN/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>终端生成TLS自签名证书</title>
+    <link href="https://billzong.github.io/post/e4cf1ff8.html"/>
+    <id>https://billzong.github.io/post/e4cf1ff8.html</id>
+    <published>2021-04-08T15:26:00.000Z</published>
+    <updated>2021-09-05T16:51:19.458Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;strong&gt;Generating the private key:&lt;/strong&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+    <category term="certificate" scheme="https://billzong.github.io/tags/certificate/"/>
+    
+    <category term="tls" scheme="https://billzong.github.io/tags/tls/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>查看CSR信息</title>
+    <link href="https://billzong.github.io/post/1eec93ef.html"/>
+    <id>https://billzong.github.io/post/1eec93ef.html</id>
+    <published>2021-04-08T15:24:00.000Z</published>
+    <updated>2021-09-05T16:51:19.457Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;查看CSR信息&quot;&gt;&lt;a href=&quot;#查看CSR信息&quot; class=&quot;headerlink&quot; title=&quot;查看CSR信息&quot;&gt;&lt;/a&gt;查看CSR信息&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;openssl req -noout -text -in</summary>
+        
+      
+    
+    
+    
+    <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+    <category term="certificate" scheme="https://billzong.github.io/tags/certificate/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iris框架概览</title>
+    <link href="https://billzong.github.io/post/12d311d1.html"/>
+    <id>https://billzong.github.io/post/12d311d1.html</id>
+    <published>2021-04-08T14:55:00.000Z</published>
+    <updated>2021-09-05T16:51:19.454Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;Web 框架的基本诉求：接收 HTTP 请求 -&amp;gt; 处理 HTTP 各项参数 -&amp;gt; 路由 -&amp;gt; 自定义控制器 -&amp;gt;</summary>
+        
+      
+    
+    
+    
+    <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
+    
+    <category term="framework" scheme="https://billzong.github.io/tags/framework/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GraphQL API构建示例(2)</title>
+    <link href="https://billzong.github.io/post/f80ec8a1.html"/>
+    <id>https://billzong.github.io/post/f80ec8a1.html</id>
+    <published>2021-04-08T14:52:00.000Z</published>
+    <updated>2021-09-05T16:51:19.448Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;./d3239b62.html&quot;&gt;设计一个&lt;code&gt;GraphQL</summary>
+        
+      
+    
+    
+    
+    <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+    <category term="GraphQL" scheme="https://billzong.github.io/tags/GraphQL/"/>
+    
+    <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GraphQL API构建示例(1)</title>
+    <link href="https://billzong.github.io/post/d3239b62.html"/>
+    <id>https://billzong.github.io/post/d3239b62.html</id>
+    <published>2021-04-08T14:52:00.000Z</published>
+    <updated>2021-09-05T16:51:19.448Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;./facd8695.html&quot;&gt;前文&lt;/a&gt;提到过&lt;code&gt;GraphQL</summary>
+        
+      
+    
+    
+    
+    <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+    <category term="GraphQL" scheme="https://billzong.github.io/tags/GraphQL/"/>
+    
+    <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GraphQL API服务go语言版本的介绍</title>
+    <link href="https://billzong.github.io/post/facd8695.html"/>
+    <id>https://billzong.github.io/post/facd8695.html</id>
+    <published>2021-04-08T14:50:00.000Z</published>
+    <updated>2021-09-05T16:51:19.448Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;GraphQL-API-是什么&quot;&gt;&lt;a href=&quot;#GraphQL-API-是什么&quot; class=&quot;headerlink&quot; title=&quot;GraphQL API 是什么&quot;&gt;&lt;/a&gt;GraphQL API 是什么&lt;/h2&gt;&lt;p&gt;GraphQL 是一个用于 API</summary>
+        
+      
+    
+    
+    
+    <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+    <category term="GraphQL" scheme="https://billzong.github.io/tags/GraphQL/"/>
+    
+    <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>WebSocket协议调研</title>
+    <link href="https://billzong.github.io/post/beb9dd3.html"/>
+    <id>https://billzong.github.io/post/beb9dd3.html</id>
+    <published>2021-04-08T14:48:00.000Z</published>
+    <updated>2021-09-05T16:51:19.451Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h1&gt;&lt;h2 id=&quot;一些重要概念&quot;&gt;&lt;a href=&quot;#一些重要概念&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="网络" scheme="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+    <category term="protocol" scheme="https://billzong.github.io/tags/protocol/"/>
+    
+    <category term="network" scheme="https://billzong.github.io/tags/network/"/>
+    
+    <category term="WebSocket" scheme="https://billzong.github.io/tags/WebSocket/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用gpg签名git tag的过程</title>
+    <link href="https://billzong.github.io/post/44e52148.html"/>
+    <id>https://billzong.github.io/post/44e52148.html</id>
+    <published>2021-04-07T16:33:00.000Z</published>
+    <updated>2021-09-05T16:51:19.456Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="版本管理工具" scheme="https://billzong.github.io/categories/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="git" scheme="https://billzong.github.io/tags/git/"/>
+    
+    <category term="GNUpg" scheme="https://billzong.github.io/tags/GNUpg/"/>
+    
+    <category term="tool" scheme="https://billzong.github.io/tags/tool/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CNCF组织架构及准入说明</title>
+    <link href="https://billzong.github.io/post/888b8b30.html"/>
+    <id>https://billzong.github.io/post/888b8b30.html</id>
+    <published>2021-04-07T16:10:00.000Z</published>
+    <updated>2021-09-05T16:51:19.446Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;组织介绍&quot;&gt;&lt;a href=&quot;#组织介绍&quot; class=&quot;headerlink&quot; title=&quot;组织介绍&quot;&gt;&lt;/a&gt;组织介绍&lt;/h2&gt;&lt;h3 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="开源组织" scheme="https://billzong.github.io/categories/%E5%BC%80%E6%BA%90%E7%BB%84%E7%BB%87/"/>
+    
+    
+    <category term="opensource" scheme="https://billzong.github.io/tags/opensource/"/>
+    
+    <category term="CNCF" scheme="https://billzong.github.io/tags/CNCF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Apache软件基金会运作介绍</title>
+    <link href="https://billzong.github.io/post/2f833ac7.html"/>
+    <id>https://billzong.github.io/post/2f833ac7.html</id>
+    <published>2021-04-07T15:56:00.000Z</published>
+    <updated>2021-09-05T16:51:19.445Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;是什么&quot;&gt;&lt;a href=&quot;#是什么&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="开源组织" scheme="https://billzong.github.io/categories/%E5%BC%80%E6%BA%90%E7%BB%84%E7%BB%87/"/>
+    
+    
+    <category term="开源组织" scheme="https://billzong.github.io/tags/%E5%BC%80%E6%BA%90%E7%BB%84%E7%BB%87/"/>
+    
+  </entry>
+  
+</feed>

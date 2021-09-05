@@ -1,0 +1,31 @@
+.archive .archive-year {
+  font-size: 2em;
+}
+.archive .post-item {
+  padding: 1.5em 0;
+}
+.archive .post-item .post-info {
+  float: right;
+  width: 125px;
+  text-align: right;
+  color: #7f8c8d;
+}
+.archive .post-time,
+.archive .post-title-link {
+  font-size: 1rem;
+}
+.archive .post-title-link {
+  color: #333;
+  word-break: break-all;
+}
+.archive .post-title-link:hover {
+  border-bottom: 0;
+  text-decoration: underline;
+}
+.archive .post-from {
+  margin-left: 8px;
+  color: #333;
+}
+.archive .post-from:hover {
+  text-decoration: underline;
+}

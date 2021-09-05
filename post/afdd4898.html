@@ -1,0 +1,332 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CDN 技术详解 · 知易行难，一路向前</title><meta name="description" content="CDN 技术详解 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">CDN 技术详解</h1><div class="post-info">2021-04-08</div><div class="post-content"><h2 id="CDN-技术概述"><a href="#CDN-技术概述" class="headerlink" title="CDN 技术概述"></a>CDN 技术概述</h2><h3 id="边缘计算的概念"><a href="#边缘计算的概念" class="headerlink" title="边缘计算的概念"></a>边缘计算的概念</h3><p>对于当前日益丰富的动态内容加速，需要在 CDN 上复制和缓存业务逻辑层和后台数据访问层。其中，业务逻辑层在 CDN Cache 上的复制使之能够承担用户请求处理、应用数据计算、动态内容生成等工作，因此这类方法也被称为“边缘计算”。</p>
+<h3 id="CDN-动态内容加速"><a href="#CDN-动态内容加速" class="headerlink" title="CDN 动态内容加速"></a>CDN 动态内容加速</h3><p>在某些应用场景中，动态内容的生成需要大量的数据支持，比如目录服务、交易数据等，仅仅将业务逻辑复制到边缘服务器中还不足以解决从源站获取其生成动态内容所需的数据而造成的传输性能瓶颈，因此还需要对数据访问层进行必要的复制，即除了在 Cache 上完成业务逻辑的运算工作，还复制了源站后台数据访问层的内容，用以加速动态内容的生成。<br>这个过程的关键在于合理解决系统中多个数据副本间的一致性问题。<br>另外，还有一些网站的动态内容是基于具体用户的个性化数据定制生成的，需要再数据访问层对用户数据进行特别的关注。<br>用户数据本身也是依托于数据访问层的存储介质和管理系统存在的，但在访问模式等方面具有独特性，因此 CDN  需要制定相应的复制和缓存策略，并解决相关的隐私和安全问题。</p>
+<h2 id="内容缓存工作原理及实现"><a href="#内容缓存工作原理及实现" class="headerlink" title="内容缓存工作原理及实现"></a>内容缓存工作原理及实现</h2><h3 id="网页访问过程"><a href="#网页访问过程" class="headerlink" title="网页访问过程"></a>网页访问过程</h3><p>根据 HTTP 协议的定义，在一次网页访问中，用户从客户端发出请求到网站服务器响应请求内容的交互过程中，通常会涉及4个关键的网元：用户、代理、网关和 Web 服务器。其中，在用户端实现缓存技术在 HTTP 协议中有明确的规定，比如用户浏览器可以缓存已经访问过的网页，用户再次访问时可以直接访问这个网页副本。<br>根据不同的应用场景和用户需求，Web Cache 通常作为代理或网关部署在用户的访问路径上，部署的位置不同、工作模式不同，对 Web Cache 有不同的要求。<br>当 Web Cache 作为代理使用时，通常工作在正向代理或透明代理的模式，Web Cache 可以在这两种模式下实现访问内容副本的缓存和服务；Web Cache 应用最多的地方还是在网关上，这也是 CDN 的典型应用场景，网关通常工作在反向代理模式。</p>
+<h3 id="反向代理的应用场景之一"><a href="#反向代理的应用场景之一" class="headerlink" title="反向代理的应用场景之一"></a>反向代理的应用场景之一</h3><p>反向代理服务器部署与应用服务器部署在同一网络环境中，应用服务器借助反向代理对外提供服务，反向代理提供负载分担和安全隔离作用。</p>
+<h3 id="透明代理的概念"><a href="#透明代理的概念" class="headerlink" title="透明代理的概念"></a>透明代理的概念</h3><p>透明代理方式下，用户的浏览器不需要配置代理服务器地址，但是用户的路由设备需要支持 WCCP 协议（Web Cache Control Protocol）。路由器配置了 WCCP 功能后，会把指定的用户流量转发给 Cache，由 Cache 对用户提供服务。<br>另一种方案是利用 4 层交换机将用户的流量转发给 Cache，由 Cache 对用户提供服务。<br>使用 WCCP 或 4 层交换都可以支持负载均衡，可以对多台 Cache 平均分配流量。这样可以扩展网络规模，支持大量的用户访问。用户不会感觉到任何 Cache 的存在。</p>
+<h3 id="Web-架构的精华"><a href="#Web-架构的精华" class="headerlink" title="Web 架构的精华"></a>Web 架构的精华</h3><p>从技术层面看，Web 架构的精华有三处：用超文本技术（HTML)实现信息与信息的连接；用统一资源标识符（URI）实现全球信息的精确定位；用应用层协议（HTTP）实现分布式的信息共享。</p>
+<h3 id="HTTP-1-0-与-1-1"><a href="#HTTP-1-0-与-1-1" class="headerlink" title="HTTP 1.0 与 1.1"></a>HTTP 1.0 与 1.1</h3><ul>
+<li>HTTP 1.0 中，使用的是非持久连接。</li>
+<li>HTTP 1.1 中，使用了效率更高的持续连接机制。<ul>
+<li>即客户端和服务器端建立 TCP 连接后，后续相关联的 HTTP 请求可以重复利用已经建立起来的 TCP 连接，不仅整个 Web 页面可以使用这个持续的 TCP 连接来完成 HTTP 请求和相应，而且同一个服务器内的多个 Web 页面也可以通过同一个持续 TCP 连接来请求和相应。</li>
+<li>通常情况下，这个持续地 TCP 连接会在空闲一段特定的时间后关闭，而这个最大空闲时间是可以设置的。</li>
+<li>持续连接的 TCP 连接一般可以分为两类：带流水线和不带流水线。</li>
+<li>在不带流水线的持续连接下，用户的 HTTP 请求只能在上一个请求得到响应后才能发出。</li>
+<li>带流水线的持续连接则没有这个限制，客户端在 Web 页面发现引用时就可以发起 HTTP 请求，无需考虑上一个请求的响应消息是否已经收到。</li>
+</ul>
+</li>
+</ul>
+<h3 id="隧道（Tunnel）的概念"><a href="#隧道（Tunnel）的概念" class="headerlink" title="隧道（Tunnel）的概念"></a>隧道（Tunnel）的概念</h3><p>隧道是作为两个连接中继的中介程序员。尽管隧道可能由一个 HTTP 请求初始化，但通常认为它不属于 HTTP 通信。当被中继的连接两端关闭时，隧道也就随着消失了。</p>
+<h3 id="服务器将-Session-ID-返回给浏览器的方式"><a href="#服务器将-Session-ID-返回给浏览器的方式" class="headerlink" title="服务器将 Session ID 返回给浏览器的方式"></a>服务器将 Session ID 返回给浏览器的方式</h3><ol>
+<li>Cookie 方法。</li>
+<li>URL 重写。即路径上带上这个信息，可以作为查询参数也可以作为URL路径的附加信息。后者用的比较多。</li>
+</ol>
+<h3 id="控制缓存或不缓存的方法"><a href="#控制缓存或不缓存的方法" class="headerlink" title="控制缓存或不缓存的方法"></a>控制缓存或不缓存的方法</h3><ol>
+<li>HTML META 标签和 HTTP 头信息</li>
+<li>使用 Expires 头信息来控制保鲜期</li>
+<li>验证，304</li>
+<li>Cache-Control HTTP 头信息</li>
+</ol>
+<h3 id="Web-Cache-关键性能指标"><a href="#Web-Cache-关键性能指标" class="headerlink" title="Web Cache 关键性能指标"></a>Web Cache 关键性能指标</h3><ol>
+<li>并发量</li>
+<li>吞吐量</li>
+<li>命中率</li>
+<li>响应时间和丢包率</li>
+</ol>
+<h3 id="Web-Cache-优化方式"><a href="#Web-Cache-优化方式" class="headerlink" title="Web Cache 优化方式"></a>Web Cache 优化方式</h3><ol>
+<li>Cache 存储机制</li>
+<li>内容更新机制</li>
+<li>协议优化<ul>
+<li>HTTP 协议实施优化<ul>
+<li>HTTP连接聚合</li>
+<li>gzip压缩</li>
+</ul>
+</li>
+<li>TCP 传输协议优化<ul>
+<li>协议压缩</li>
+<li>减少广域网会话交互</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="Web-Cache-安全实现机制"><a href="#Web-Cache-安全实现机制" class="headerlink" title="Web Cache 安全实现机制"></a>Web Cache 安全实现机制</h3><ol>
+<li>访问控制</li>
+<li>病毒防护</li>
+<li>网络安全防护<ul>
+<li>DDOS</li>
+<li>SYN 风暴<ul>
+<li>不用 Ack 缓冲应答未确认的 SYN</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内容加密</li>
+</ol>
+<h2 id="集群服务与负载均衡技术"><a href="#集群服务与负载均衡技术" class="headerlink" title="集群服务与负载均衡技术"></a>集群服务与负载均衡技术</h2><h3 id="集群分类"><a href="#集群分类" class="headerlink" title="集群分类"></a>集群分类</h3><p>根据用途的不同，可以分为：</p>
+<ol>
+<li>计算集群</li>
+<li>负载均衡集群<ul>
+<li>计算任务处理负载</li>
+<li>网络 I/O 流量负载</li>
+</ul>
+</li>
+<li>高可用集群</li>
+</ol>
+<h3 id="服务器集群的系统结构"><a href="#服务器集群的系统结构" class="headerlink" title="服务器集群的系统结构"></a>服务器集群的系统结构</h3><p>4个层次，从下到上分别为：</p>
+<ol>
+<li>网络层<ul>
+<li>关键技术包括网络互连结构、网络通信协议、信号传输技术等</li>
+</ul>
+</li>
+<li>节点服务器操作系统层<ul>
+<li>具有一定的自治能力，能够独立完成集群分配到本地的任务</li>
+<li>关键技术包括高性能服务器架构、高性能操作系统内核技术等</li>
+</ul>
+</li>
+<li>应用层<ul>
+<li>由执行负载任务的软件构成，可在集群管理层的干预下实现相应应用功能</li>
+<li>关键技术包括并行程序开发环境、各类解决任务负载的串、并行应用等</li>
+</ul>
+</li>
+<li>集群管理系统层<ul>
+<li>核心组件</li>
+<li>对集群内的服务器资源及其上运行的任务进行管理和调度，以实现集群内负载的均衡，从而避免个别节点称为瓶颈，最大程度地发挥集群的整体性能</li>
+</ul>
+</li>
+</ol>
+<h3 id="Cache-集群协同交互方法"><a href="#Cache-集群协同交互方法" class="headerlink" title="Cache 集群协同交互方法"></a>Cache 集群协同交互方法</h3><p>p104</p>
+<ul>
+<li>松散耦合<ul>
+<li>ICP</li>
+<li>HTCP</li>
+<li>Cache Digest</li>
+<li>Cache Prefilling<ul>
+<li>紧密耦合</li>
+</ul>
+</li>
+<li>CARP (Cache Array Routing Protocol) p107<ul>
+<li>基于哈希算法</li>
+<li>无需资源查询的请求和应答过程</li>
+<li>消除了重复缓存数据</li>
+<li>具有更好的扩展性</li>
+<li>可以灵活增删服务器节点</li>
+<li>能确保所有的 URL 数据都能够有效地缓存在系统中</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="负载均衡分类"><a href="#负载均衡分类" class="headerlink" title="负载均衡分类"></a>负载均衡分类</h3><p>按目的区分</p>
+<ol>
+<li>任务分担</li>
+<li>协同计算</li>
+</ol>
+<h3 id="负载均衡关键技术"><a href="#负载均衡关键技术" class="headerlink" title="负载均衡关键技术"></a>负载均衡关键技术</h3><p>p110 - p115</p>
+<ul>
+<li>负载均衡调度算法<ul>
+<li>轮询</li>
+<li>加权轮询</li>
+<li>随机</li>
+<li>加权随机</li>
+<li>基于源 IP 的 Hash</li>
+<li>基于源 IP 端口的 Hash</li>
+<li>基于目的 IP 的 Hash</li>
+<li>基于 UDP 报文静荷的 Hash</li>
+<li>最小连接</li>
+<li>加权最小连接</li>
+<li>最小响应时间</li>
+</ul>
+</li>
+<li>会话持续性保证技术<ul>
+<li>基于源 IP 地址的持续性保持</li>
+<li>基于 Cookie 数据的持续性保持</li>
+<li>基于 SIP 报文 Call-ID 的持续性保持</li>
+<li>基于 HTTP 报文头的持续性保持</li>
+</ul>
+</li>
+<li>服务器健康监测技术<ul>
+<li>ICMP</li>
+<li>TCP</li>
+<li>HTTP</li>
+<li>FTP</li>
+<li>DNS</li>
+<li>RADIUS</li>
+<li>SSL</li>
+</ul>
+</li>
+</ul>
+<h3 id="负载均衡部署方式"><a href="#负载均衡部署方式" class="headerlink" title="负载均衡部署方式"></a>负载均衡部署方式</h3><ul>
+<li>直连<ul>
+<li>NAT </li>
+</ul>
+</li>
+<li>旁挂<ul>
+<li>SSL 加速</li>
+</ul>
+</li>
+<li>双机热备<ul>
+<li>主备模式</li>
+<li>负载分担模式</li>
+</ul>
+</li>
+</ul>
+<h3 id="链路负载均衡概念"><a href="#链路负载均衡概念" class="headerlink" title="链路负载均衡概念"></a>链路负载均衡概念</h3><p>通过动态算法在多条网络链路中进行负载均衡。</p>
+<ul>
+<li>Outbound链路负载均衡</li>
+<li>Inbound链路负载均衡</li>
+</ul>
+<p>特有的调度算法</p>
+<ul>
+<li>就近链路选择算法</li>
+</ul>
+<h3 id="知名开源负载均衡软件"><a href="#知名开源负载均衡软件" class="headerlink" title="知名开源负载均衡软件"></a>知名开源负载均衡软件</h3><ul>
+<li>LVS<ul>
+<li>四层负载均衡</li>
+</ul>
+</li>
+<li>Nginx<ul>
+<li>七层负载均衡</li>
+<li>p132</li>
+</ul>
+</li>
+</ul>
+<h2 id="全局负载均衡工作原理及实现"><a href="#全局负载均衡工作原理及实现" class="headerlink" title="全局负载均衡工作原理及实现"></a>全局负载均衡工作原理及实现</h2><p>GSLB 在全网进行负载均衡的目标，是保持各节点、各设备负载保持在一个有利于提供优质服务的水平（对于 CDN 服务商来说，可能还有从成本、收益角度考虑的负载均衡，人为地造成负载不均衡）。<br>为了实现这个目的，GSLB 会依靠一些灵活的均衡策略来进行负载判断，而这些策略的实现有赖于 GSLB 对全局信息的收集和分析能力。</p>
+<h3 id="为什么大部分厂商都基于-DNS-解析的-GSLB-实现"><a href="#为什么大部分厂商都基于-DNS-解析的-GSLB-实现" class="headerlink" title="为什么大部分厂商都基于 DNS 解析的 GSLB 实现"></a>为什么大部分厂商都基于 DNS 解析的 GSLB 实现</h3><ul>
+<li><p>基于 DNS 解析的 GSLB 系统，利用了 DNS 系统固有的域名解析、就近性判断、轮询算法等，可以很大程度借助独立于 CDN 系统之外的公共 DNS 系统来完成负载均衡，降低了对 CDN 系统本身的压力。</p>
+</li>
+<li><p>另外，由于 DNS 的缓存机制屏蔽掉相当一部分用户请求，从而大大减轻了 GSLB 处理压力，使得系统抗流量冲击能力显著提升。</p>
+<ul>
+<li>弊端是，如果在 DNS 缓存刷新间隔之内，系统发生影响用户服务器的变化，比如某个节点故障、某个链路拥塞等，用户依然会被调度到故障节点去。</li>
+<li>为了解决这个弊端，需要对单个节点做多机热备份；需要网管系统做性能告警，即使排查与切换链路。<br>同时，DNS 解析技术成熟，这块的积累也比较多。</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>DNS 误配置带来调度错误问题</li>
+<li>DNS 缓存带来 GSLB 失效问题</li>
+<li>DNS 缓存无法应对服务器突发故障问题</li>
+</ul>
+</li>
+</ul>
+<h3 id="DNS-记录类型"><a href="#DNS-记录类型" class="headerlink" title="DNS 记录类型"></a>DNS 记录类型</h3><ul>
+<li>A, Address</li>
+<li>NS, Name Server</li>
+<li>SOA, Start of Authority</li>
+<li>CNAME, Canonical Name</li>
+<li>PTR, Pointor</li>
+</ul>
+<h3 id="基于-DNS-解析的-GSLB-工作方式"><a href="#基于-DNS-解析的-GSLB-工作方式" class="headerlink" title="基于 DNS 解析的 GSLB 工作方式"></a>基于 DNS 解析的 GSLB 工作方式</h3><p>这种方案实际上就是把负载均衡设备部署在 DNS 系统中。在用户发出任何应用连接请求时，首先必须通过 DNS 系统来请求获得服务器的 IP 地址，基于 DNS 的 GSLB 正式在返回 DNS 解析结果的过程中进行智能决策，给用户返回一个最佳的服务器的 IP 地址。从用户的视角看，整个应用流程与没有 GSLB 参与时没有发生任何变化。</p>
+<h3 id="基于-DNS-解析来实现-GSLB-的方法"><a href="#基于-DNS-解析来实现-GSLB-的方法" class="headerlink" title="基于 DNS 解析来实现 GSLB 的方法"></a>基于 DNS 解析来实现 GSLB 的方法</h3><ul>
+<li>通过 CNAME 方式实现负载均衡<ul>
+<li>其实就是使用 DNS 系统本身的别名、轮询机制</li>
+</ul>
+</li>
+<li>负载均衡器作为权威 DNS 服务器<ul>
+<li>作为一个域名空间的权威 DNS 服务器</li>
+<li>接收所有对这个域的 DNS 请求</li>
+<li>可以预先设置一些策略</li>
+</ul>
+</li>
+<li>负载均衡器作为代理 DNS 服务器<ul>
+<li>注册为一个域名空间的权威 DNS 服务器，后面还有真正的权威域名服务器</li>
+<li>转发 DNS 请求给真正的权威 DNS 服务器</li>
+<li>可以预先设置一些策略</li>
+<li>只修改需要实现 GSLB 的域名的 DNS 查询响应，对其它请求透明转发</li>
+</ul>
+</li>
+</ul>
+<h3 id="负载均衡的策略判断条件信息"><a href="#负载均衡的策略判断条件信息" class="headerlink" title="负载均衡的策略判断条件信息"></a>负载均衡的策略判断条件信息</h3><ul>
+<li>服务器的“健康状况”</li>
+<li>地理区域距离</li>
+<li>会话保持</li>
+<li>响应时间</li>
+<li>IP 地址权重</li>
+<li>会话能力阈值</li>
+<li>往返时间 RTT</li>
+<li>其它信息，包括服务器当前可用会话数、最少选择次数、轮询等</li>
+</ul>
+<h3 id="知名开源-DNS-服务软件"><a href="#知名开源-DNS-服务软件" class="headerlink" title="知名开源 DNS 服务软件"></a>知名开源 DNS 服务软件</h3><ul>
+<li>BIND (Berkeley Internet Name Domain)<ul>
+<li>p153</li>
+</ul>
+</li>
+</ul>
+<h3 id="负载均衡策略"><a href="#负载均衡策略" class="headerlink" title="负载均衡策略"></a>负载均衡策略</h3><ul>
+<li>静态策略 ——第一层调度（区域间调度）使用较多<ul>
+<li>基于特定的用户源 IP 地址</li>
+<li>基于加权的 IP 地址</li>
+<li>基于甲醛的 PoP 节点</li>
+<li>基于地理位置</li>
+<li>基于 PoP 节点管理优先级</li>
+<li>基于简单的轮询</li>
+<li>基于成本</li>
+</ul>
+</li>
+<li>动态策略 ——第二层调度（区域内调度）使用较多<ul>
+<li>基于 PoP 节点健康情况</li>
+<li>基于相对会话能力</li>
+<li>基于绝对会话能力</li>
+<li>基于物理服务器绑定</li>
+<li>基于主动测量的用户访问往返时间 RTT</li>
+<li>基于被动测量的用户访问往返时间<ul>
+<li>即 SYN/ACK 时间</li>
+</ul>
+</li>
+<li>基于新建连接数<ul>
+<li>适用于 Web 页面这种访问对象都是小文件、连接频繁且持续时间短、反复新建和拆除连接这种场景。</li>
+</ul>
+</li>
+<li>基于流量<ul>
+<li>适用于流媒体这种大文件、带宽要求高、连接时间长、I/O 要求高的场景。</li>
+</ul>
+</li>
+<li>基于 PoP 节点访问次数</li>
+</ul>
+</li>
+</ul>
+<h3 id="GSLB-部署中的关键问题"><a href="#GSLB-部署中的关键问题" class="headerlink" title="GSLB 部署中的关键问题"></a>GSLB 部署中的关键问题</h3><p>p171</p>
+<ul>
+<li>网站 SP 的接入<ul>
+<li>要求全网加速</li>
+<li>要求部分区域加速 —— SP 自行控制</li>
+<li>除了部分区域加速，还要求 GSLB 提供权威 DNS 服务 —— 为一定区域用户提供加速，其它区域用户提供该 SP 源域名的授权解析服务。</li>
+</ul>
+</li>
+<li>用户访问调度</li>
+<li>异常流程<ul>
+<li>告警</li>
+<li>调度</li>
+</ul>
+</li>
+<li>网络攻击<ul>
+<li>主备服务</li>
+</ul>
+</li>
+</ul>
+<h3 id="基于-HTTP-重定向的-GSLB-优缺点"><a href="#基于-HTTP-重定向的-GSLB-优缺点" class="headerlink" title="基于 HTTP 重定向的 GSLB 优缺点"></a>基于 HTTP 重定向的 GSLB 优缺点</h3><ul>
+<li>优点<ul>
+<li>更精细的定位</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>GSLB 性能压力大</li>
+<li>协议扩展性差</li>
+<li>安全性问题</li>
+</ul>
+</li>
+</ul>
+<h3 id="基于-IP-路由的-GSLB-优缺点"><a href="#基于-IP-路由的-GSLB-优缺点" class="headerlink" title="基于 IP 路由的 GSLB 优缺点"></a>基于 IP 路由的 GSLB 优缺点</h3><ul>
+<li>优点<ul>
+<li>路由器直接负载均衡，不用额外购买或开发 GSLB 设备</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>概率均衡，部署 PoP、SLB 时需要预测了路由均衡性</li>
+<li>无法实现会话保持</li>
+</ul>
+</li>
+</ul>
+<p>p183<br>Cisco 公司在2006年提出了个 LISP 协议，IP in IP 工作方式。可供参考和调研</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/1c6c86cc.html">PREV</a><a class="next" href="/post/3363d042.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

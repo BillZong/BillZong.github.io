@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Ansible在Mac本地部署OpenWhisk填坑记 · 知易行难，一路向前</title><meta name="description" content="Ansible在Mac本地部署OpenWhisk填坑记 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Ansible在Mac本地部署OpenWhisk填坑记</h1><div class="post-info">2021-04-11</div><div class="post-content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>本地开发调试用，非此目的不建议轻易尝试入坑。</p>
+<p>另外，执行测试必须将环境部署起来。</p>
+<h3 id="系统说明"><a href="#系统说明" class="headerlink" title="系统说明"></a>系统说明</h3><p>本人使用的是 MacOS 10.15 Beta 系统。<br>其它系统暂未测试，未确定实际效果。</p>
+<h3 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h3><p>建议阅读少量<code>Ansible</code>的<a href="https://www.ansible.com/" target="_blank" rel="noopener">文档</a>，了解一些基本的概念。</p>
+<hr>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>本地需要的一些工具和环境。其中版本参考的是本地的，部分标注<strong>必须</strong>，说明该版本不可修改。包括：</p>
+<ul>
+<li>Docker 18.09.1</li>
+<li>Java 8 or Open JDK 8 <strong>必须</strong></li>
+<li>Scala 2.13.0</li>
+<li>Ansible 2.8.4</li>
+</ul>
+<p>这里，JDK版本之所以使用8，是因为<code>Scala 2.12</code>以上版本开启<code>JVM</code>时依赖的版本问题。目前<code>JDK11</code>无法通过编译，不建议安装。</p>
+<h3 id="安装HomeBrew"><a href="#安装HomeBrew" class="headerlink" title="安装HomeBrew"></a>安装HomeBrew</h3><p>Mac上应用/包/库管理最好用的工具。使用<code>HomeBrew</code>安装整个环境依赖是最方面的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;bin&#x2F;ruby -e &quot;$(curl -fsSL https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;Homebrew&#x2F;install&#x2F;master&#x2F;install)&quot;</span><br></pre></td></tr></table></figure>
+
+<p>后续的工作也基本依赖于此。童鞋们如何有其它途径也可补充说明。</p>
+<p>Linux平台也支持了，详细参考<a href="https://docs.brew.sh/Homebrew-on-Linux" target="_blank" rel="noopener">这篇文章</a>。</p>
+<h3 id="安装JDK8"><a href="#安装JDK8" class="headerlink" title="安装JDK8"></a>安装JDK8</h3><p>Mac系统中同时安装JDK8及其它版本，并切换维护的说明请参考<a href="https://lexiangla.com/teams/k100002/docs/87f7b8e2c89511e98f860a58ac1306e6?lxref=search-company&company_from=0afec89eb58611e8974552540005f435" target="_blank" rel="noopener">此文档</a>。</p>
+<h3 id="安装Scala"><a href="#安装Scala" class="headerlink" title="安装Scala"></a>安装Scala</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install scala</span><br><span class="line">brew install gnu-tar <span class="comment"># 方便后面解压缩tar包用</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="安装pip"><a href="#安装pip" class="headerlink" title="安装pip"></a>安装pip</h3><p>如果本地<code>pip</code>未安装，如Mac系统的2.7版本，并不会预先安装<code>pip</code>。</p>
+<p>则需要执行下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -m ensurepip --default-pip</span><br><span class="line"><span class="comment"># 查看当前pip的信息</span></span><br><span class="line">python -m pip -V</span><br></pre></td></tr></table></figure>
+
+<p><strong>如果之前使用过其它工具安装配置过<code>Python</code>，如<code>HomeBrew</code>、<code>pyenv</code>等，建议将其清理以确保系统Python路径不受到干扰。</strong></p>
+<h3 id="安装docker、ansible等工具和库"><a href="#安装docker、ansible等工具和库" class="headerlink" title="安装docker、ansible等工具和库"></a>安装docker、ansible等工具和库</h3><p>之所以不使用<code>python -m venv</code>创建个隔离环境来安装，是由于本人环境配置不当导致只能使用系统的<code>Python</code>路径。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python -m pip install docker --user</span><br><span class="line">python -m pip install ansible --user</span><br><span class="line">python -m pip install couchdb --user</span><br><span class="line">python -m pip install httplib2 --user</span><br></pre></td></tr></table></figure>
+
+<p>目前，并没有强制要求哪些指定版本，所以直接执行即可。</p>
+<p><strong>如果之前使用过其它<code>Python</code>版本（如3.x），并执行过<code>ansible-playbook</code>任务，需要到上次执行的<code>ansible</code>目录下，将已经编译过的<code>pyc</code>文件删除，才能正常运行。</strong></p>
+<hr>
+<h2 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h2><p>基本过程如下：</p>
+<ul>
+<li>编辑代码<ul>
+<li>包括完成编译、通过单元测试等。</li>
+</ul>
+</li>
+<li>打包镜像<ul>
+<li>进入项目根目录，执行<code>./gradlew distDocker</code>完成所有镜像打包。<ul>
+<li>目前科学上网环境下，<code>ow-utils</code>依然会打包失败，建议直接跳过，使用网络镜像即可。</li>
+<li><code>Gradle</code>编译的语法和结构又有不少的坑在里边，目前不做理会。</li>
+</ul>
+</li>
+<li>进入项目根目录，执行<code>./gradlew :core:invoker:distDocker</code>，则仅打包<code>Invoker</code>镜像。<ul>
+<li>具体的任务路径请参考项目<code>gradle</code>文件。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用<code>ansible</code>部署/替换镜像</li>
+</ul>
+<h3 id="从头开始部署"><a href="#从头开始部署" class="headerlink" title="从头开始部署"></a>从头开始部署</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export OPENWHISK_HOME&#x3D;$PWD # 可以不执行，因为项目已默认使用项目根目录设置为openwhisk_home</span><br><span class="line"></span><br><span class="line">cd ansible</span><br><span class="line">export ENVIRONMENT&#x3D;&quot;local&quot;</span><br><span class="line"></span><br><span class="line">sudo ifconfig lo0 alias 172.17.0.1&#x2F;24 # 每次电脑重启后必须执行，本地Docker的host都是指向该IP的</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>必须进入该目录，才能正常执行<code>ansible</code>任务。<ul>
+<li>如果添加了环境变量<code>OPENWHISK_HOME</code>，执行目录不受限制。</li>
+</ul>
+</li>
+<li>目前选择的环境是<code>local</code>，也是<code>ansible</code>默认环境。<ul>
+<li>如果选择的是<code>local</code>，后面所有指令中<code>-i environments/$ENVIRONMENT</code>都可以省略。</li>
+<li>其它环境的选择目前超出本文讨论范围。</li>
+</ul>
+</li>
+</ul>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>使用模板将本地配置环境部署好。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT setup.yml</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改部分配置"><a href="#修改部分配置" class="headerlink" title="修改部分配置"></a>修改部分配置</h4><ul>
+<li>不再下载本地已有Docker镜像，加快部署速度。<ul>
+<li>其中后面两项配置项需要使用<code>master</code>分支最新的内容才有效。——已提交PR并合入。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 新增内容：</span><br><span class="line"># ansible&#x2F;environments&#x2F;local&#x2F;group_vars&#x2F;all</span><br><span class="line">couchdb:</span><br><span class="line">  pull_couchdb: false</span><br><span class="line">apigateway_local_build: true</span><br><span class="line">kafka:</span><br><span class="line">  pull_kafka: false</span><br><span class="line">zookeeper:</span><br><span class="line">  pull_zookeeper: false</span><br><span class="line">skip_pull_runtimes: true # 不拉取运行时镜像</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>（只）使用本地已有的<code>RunTime</code>镜像，编辑个<code>runtimes.json</code>文件，<strong>放到仓库里</strong>，格式如下：<ul>
+<li>该文件路径要放到<code>ansible/files</code>目录，或者不在<code>ansible</code>目录下，否则会加载失败并警告（后续运行时环境无法启动）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;runtimes&quot;: &#123;</span><br><span class="line">    &quot;nodejs&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;kind&quot;: &quot;nodejs:10&quot;,</span><br><span class="line">        &quot;default&quot;: true,</span><br><span class="line">        &quot;image&quot;: &#123;</span><br><span class="line">          &quot;prefix&quot;: &quot;openwhisk&quot;,</span><br><span class="line">          &quot;name&quot;: &quot;action-nodejs-v10&quot;,</span><br><span class="line">          &quot;tag&quot;: &quot;local-v0.1&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;deprecated&quot;: false,</span><br><span class="line">        &quot;attached&quot;: &#123;</span><br><span class="line">          &quot;attachmentName&quot;: &quot;codefile&quot;,</span><br><span class="line">          &quot;attachmentType&quot;: &quot;text&#x2F;plain&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;stemCells&quot;: [</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;count&quot;: 2,</span><br><span class="line">            &quot;memory&quot;: &quot;128 MB&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;blackboxes&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;prefix&quot;: &quot;openwhisk&quot;,</span><br><span class="line">      &quot;name&quot;: &quot;dockerskeleton&quot;,</span><br><span class="line">      &quot;tag&quot;: &quot;local-v0.1&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在配置文件里修改<code>runtimes.json</code>的路径，使本地部署配置加载本地镜像，加快部署速度。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 新增内容：</span><br><span class="line"># ansible&#x2F;environments&#x2F;local&#x2F;group_vars&#x2F;all</span><br><span class="line">manifest_file: &quot;&#x2F;runtimes.json&quot; # 你刚刚保存的文件相对于项目根目录的路径</span><br></pre></td></tr></table></figure>
+
+<h4 id="继续安装"><a href="#继续安装" class="headerlink" title="继续安装"></a>继续安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT couchdb.yml</span><br><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT initdb.yml</span><br><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT wipe.yml</span><br><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT openwhisk.yml</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果需要新的CouchDB部署，我们每次需要执行<code>initdb.yml</code>。</li>
+<li>如果你只是想重启服务，并不打算重新创建CouchDB，可以不执行<code>wipe.yml</code>。</li>
+</ul>
+<p><em>使用<code>d4d7ceb6</code>及更早提交点的代码，部署期间有个任务存在问题，导致部署失败。修复完成，已提交PR并合入。</em></p>
+<h4 id="部署Catalog和APIGateway"><a href="#部署Catalog和APIGateway" class="headerlink" title="部署Catalog和APIGateway"></a>部署Catalog和APIGateway</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 一些“预安装”的package</span><br><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT postdeploy.yml</span><br><span class="line"></span><br><span class="line"># API Gateway 必备</span><br><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT apigateway.yml</span><br><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT routemgmt.yml</span><br></pre></td></tr></table></figure>
+
+<h3 id="更新部分组件"><a href="#更新部分组件" class="headerlink" title="更新部分组件"></a>更新部分组件</h3><p>我们在开发完<code>Controller</code>或者<code>Invoker</code>项目后，需要放到整个环境中查看一下执行情况是否跟预期吻合。因我们没有设置<code>CI</code>环境，目前需要手动编译打包部署。</p>
+<p>其流程基本如上描述。</p>
+<p>但是，在已启动了整个集群的本地环境中，我们只需要更新该组件即可，而不用将流程重新走一遍。</p>
+<h4 id="打包镜像"><a href="#打包镜像" class="headerlink" title="打包镜像"></a>打包镜像</h4><ul>
+<li>将改动相关的模块重新打包镜像，执行<code>Gradle</code>任务。<ul>
+<li>指定标签。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &lt;openwhisk_home&gt;</span><br><span class="line">gradle :core:invoker:distDocker -PdockerImageTag&#x3D;myNewInvoker</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将新打包好的镜像替换上去</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ansible</span><br><span class="line">ansible-playbook -i environments&#x2F;$ENVIRONMENT invoker.yml -e docker_image_tag&#x3D;myNewInvoker</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://github.com/apache/openwhisk/blob/master/tools/macos/README.md" target="_blank" rel="noopener">Setting up OpenWhisk with Docker for Mac</a></li>
+<li><a href="https://github.com/apache/openwhisk/blob/master/ansible/README.md" target="_blank" rel="noopener">Deploying OpenWhisk using Ansible</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/index.html" target="_blank" rel="noopener">Ansible Documentation</a></li>
+<li><a href="https://github.com/apache/openwhisk/tree/master/tests" target="_blank" rel="noopener">Running Tests</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/605dd585.html">PREV</a><a class="next" href="/post/b265443c.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

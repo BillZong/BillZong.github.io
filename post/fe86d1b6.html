@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Go语言指南拾遗 · 知易行难，一路向前</title><meta name="description" content="Go语言指南拾遗 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Go语言指南拾遗</h1><div class="post-info">2021-04-12</div><div class="post-content"><h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>本篇内容在于对Go的一些基础知识指南部分重点进行汇总，关注一些重要但容易忽略的地方。</p>
+<p>如果你已经对<code>Go</code>语言掌握地非常自如了，可以直接忽略本文。</p>
+<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><h3 id="array-slice-map"><a href="#array-slice-map" class="headerlink" title="array/slice/map"></a>array/slice/map</h3><p>非线程安全。需要并发使用时，用别的库替换它们，或者自己实现一套。</p>
+<h2 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h2><h3 id="整数溢出"><a href="#整数溢出" class="headerlink" title="整数溢出"></a>整数溢出</h3><p>编译器<strong>不会检查</strong>整数溢出，它是我们自己的责任。所以，我们也不能确定<code>x &lt; x + 1</code>永远为真。</p>
+<h3 id="浮点数精度"><a href="#浮点数精度" class="headerlink" title="浮点数精度"></a>浮点数精度</h3><p>当你指定浮点数精度时，编译器会给你在最大精度位上进行四舍五入，同时也限制了其浮点数操作的范围。</p>
+<p>所以多个未定义类型浮点数组合操作，是被允许的；但多个已定义类型、但精度不同的浮点数组合操作，是不允许的，因为精度丢失程度不同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">r  &#x3D; x*y + z &#x2F;&#x2F; OK</span><br><span class="line">r  &#x3D; float64(x*y) + z &#x2F;&#x2F; Fail</span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串拼接"><a href="#字符串拼接" class="headerlink" title="字符串拼接+"></a>字符串拼接<code>+</code></h3><p>除非你明确知道，这个操作仅使用有限次数，且拼接长度很短或连续拼接次数少。否则，可能会带来较大的性能瓶颈问题。</p>
+<h3 id="比较操作符"><a href="#比较操作符" class="headerlink" title="比较操作符=="></a>比较操作符<code>==</code></h3><p>当且仅当两个表达式可以进行比较时，才能使用它。</p>
+<p>Go语言未支持自定义操作符实现，也没有相应的<code>interface</code>让你完成该接口。</p>
+<p>对比指针数据时，你只能使用<code>reflect.DeepEqual()</code>。</p>
+<h3 id="取地址符-amp"><a href="#取地址符-amp" class="headerlink" title="取地址符&amp;"></a>取地址符<code>&amp;</code></h3><p>对<code>nil</code>取地址，或者其反向操作都会触发<code>panic</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var x *int &#x3D; nil</span><br><span class="line">*x   &#x2F;&#x2F; causes a run-time panic</span><br><span class="line">&amp;*x  &#x2F;&#x2F; causes a run-time panic</span><br></pre></td></tr></table></figure>
+
+<h3 id="接收操作符-lt"><a href="#接收操作符-lt" class="headerlink" title="接收操作符&lt;-"></a>接收操作符<code>&lt;-</code></h3><p>会阻塞，会阻塞，会阻塞。</p>
+<p>通道关闭时，会生成个0值和状态值，正确的做法应该是检查状态值。</p>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换()"></a>类型转换<code>()</code></h3><p>必须显示地做类型转换，不允许隐式操作。</p>
+<h2 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h2><h3 id="常量表达式"><a href="#常量表达式" class="headerlink" title="常量表达式"></a>常量表达式</h3><p><code>untyped const</code>常量可以自由地赋值成同类型变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const pi &#x3D; 3.14159265358979</span><br><span class="line">var fpi float &#x3D; pi</span><br><span class="line">var f64pi float64 &#x3D; pi</span><br></pre></td></tr></table></figure>
+
+<p><code>typed const</code>常量则仅能赋值给同一类型变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const pi float64 &#x3D; 3.14159265358979</span><br><span class="line">var fpi float &#x3D; pi &#x2F;&#x2F; compiler complains</span><br></pre></td></tr></table></figure>
+
+<h3 id="标签表达式"><a href="#标签表达式" class="headerlink" title="标签表达式"></a>标签表达式</h3><p>可考虑在多层判断、深层循环语句中使用<code>goto/break</code> + <code>Labeled 表达式</code>的方式，直接跳出，简洁明了。</p>
+<p>或者使用<code>continue</code> + <code>labeled 表达式</code>的方式，继续执行外层循环。</p>
+<h3 id="发送表达式-lt"><a href="#发送表达式-lt" class="headerlink" title="发送表达式&lt;-"></a>发送表达式<code>&lt;-</code></h3><p>给已经关闭的 chan 发送数据，会导致 panic。</p>
+<p>给一个 nil 的 chan 发送数据，会永远阻塞，而且非常难排查问题。所以，一定、一定、一定要给 chan 初始化，且赋值为nil后，要检查其相关接收和发送数据的逻辑。</p>
+<h3 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h3><p>有一些有趣的用法，以及一些注意事项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a, b &#x3D; b, a &#x2F;&#x2F; exchange</span><br><span class="line"></span><br><span class="line">x :&#x3D; []int&#123;1, 2, 3&#125;</span><br><span class="line">i :&#x3D; 0</span><br><span class="line">i, x[i] &#x3D; 1, 2  &#x2F;&#x2F; set i &#x3D; 1, x[0] &#x3D; 2, 注意赋值的顺序, 避免这种模糊的写法</span><br></pre></td></tr></table></figure>
+
+<h3 id="select表达式"><a href="#select表达式" class="headerlink" title="select表达式"></a>select表达式</h3><p>跟<code>switch</code>表达式很像，但因为其是对 chan 的操作，会阻塞等待，所以不支持<code>fallthrough</code>操作。</p>
+<h3 id="defer表达式"><a href="#defer表达式" class="headerlink" title="defer表达式"></a>defer表达式</h3><p>作用域范围内的多个 defer 表达式，是采用栈的数据结构存储，执行顺序是LIFO。</p>
+<p>最好避免在 defer 表达式里做太复杂的工作。如果出现这种情况，说明你的方法需要重构了。</p>
+<h2 id="内建函数"><a href="#内建函数" class="headerlink" title="内建函数"></a>内建函数</h2><h3 id="close"><a href="#close" class="headerlink" title="close"></a>close</h3><p>关闭带缓冲的 chan 时，不仅会收到关闭的状态，同时还会将已缓冲但未接收的数据。<strong>——待验证</strong></p>
+<h3 id="make"><a href="#make" class="headerlink" title="make"></a>make</h3><p>使用 make 内建函数，需要注意<code>make(T, n, m)</code>中，n值不能大于m，否则在运行时会报 panic。</p>
+<p>如果构建时不希望使用 T 的0值（如<code>Array</code>类型，你可能只希望初始值是个nil），那么在构建时，应该填入<code>make(T, 0, m)</code>或<code>make(T, 0)</code></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/37e0e416.html">PREV</a><a class="next" href="/post/6d4a1154.html">NEXT</a></div><div class="copyright"><p>© 2021 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
