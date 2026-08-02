@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> AI 开发者协议 (AI-First Oracle Monorepo Protocol) · 知易行难，一路向前</title><meta name="description" content="AI 开发者协议 (AI-First Oracle Monorepo Protocol) - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">AI 开发者协议 (AI-First Oracle Monorepo Protocol)</h1><div class="post-info">2026-04-16</div><div class="post-content"><h2 id="🎯-核心目标-Context-amp-Purpose"><a href="#🎯-核心目标-Context-amp-Purpose" class="headerlink" title="🎯 核心目标 (Context &amp; Purpose)"></a>🎯 核心目标 (Context &amp; Purpose)</h2><p>本仓库旨在构建高可用、防篡改的事件预言机系统，集成 <strong>UMA v3（乐观/争议机制）</strong> 与 <strong>Chainlink（确定性/推送机制）</strong>。</p>
+<p>作为 AI Agent，你的首要目标是：<strong>保持合约接口的绝对严谨，后端服务的并发安全（Golang），以及 100% 的关键状态测试覆盖率。</strong></p>
+<h2 id="🚦-强制执行法则-Hard-Operating-Directives"><a href="#🚦-强制执行法则-Hard-Operating-Directives" class="headerlink" title="🚦 强制执行法则 (Hard Operating Directives)"></a>🚦 强制执行法则 (Hard Operating Directives)</h2><ol>
+<li><strong>测试驱动 (TDD First):</strong> 在编写或修改任何 <code>contracts/</code> 或 <code>backend/</code> 逻辑前，<strong>必须</strong>先编写/更新对应的单元测试或 Fork 测试。</li>
+<li><strong>拒绝盲目假设:</strong> 如果跨模块接口 <code>packages/</code> 或 <code>contracts/interfaces/</code>) 发生改变，必须先更新 <code>docs/</code> 和接口定义，请求人类确认后，再进行实现。</li>
+<li><strong>收敛技术栈:</strong> 后端与 Indexer 逻辑默认使用 Golang，合约使用 Solidity (Foundry)。严禁引入任何未经许可的第三方框架或运行时。</li>
+<li><strong>上下文组装:</strong> 在编辑核心模块前，使用工具读取对应的 <code>docs/architecture/</code> 和上游接口文件。不要基于历史训练数据猜测内部业务逻辑。</li>
+</ol>
+<h2 id="🛡️-预言机特定安全基线-Oracle-Security-Baseline"><a href="#🛡️-预言机特定安全基线-Oracle-Security-Baseline" class="headerlink" title="🛡️ 预言机特定安全基线 (Oracle Security Baseline)"></a>🛡️ 预言机特定安全基线 (Oracle Security Baseline)</h2><p><em>无论任务是什么，涉及相关逻辑时必须默认遵守：</em></p>
+<ul>
+<li><strong>UMA v3 适配:</strong> 必须处理 <code>assertionId</code> 生命周期，强制实现并验证 <code>dispute</code>（争议）和 <code>settle</code>（结算）的回调与延迟逻辑。</li>
+<li><strong>Chainlink 适配:</strong> 必须检查 <code>answeredInRound</code>，处理 stale data（陈旧数据），并具备在 Chainlink 节点宕机时的 fallback（降级）或熔断机制。</li>
+<li><strong>重入与并发:</strong> - 合约层面：所有涉及外部调用的状态修改必须使用 <code>ReentrancyGuard</code> 并遵循 CEI (Checks-Effects-Interactions) 模式。<ul>
+<li>后端层面 (Golang)：所有并发 worker 必须通过 context 管理取消信号，避免 Goroutine 泄漏；操作数据库或缓存必须考虑分布式锁或原子操作。</li>
+</ul>
+</li>
+<li><strong>机密管理:</strong> 绝对禁止在代码、测试脚手架或 CI 配置中硬编码私钥、RPC URL 或 API Token。使用环境变量注入。</li>
+</ul>
+<h2 id="🏗️-架构与模块职责-Architecture-amp-Module-Contracts"><a href="#🏗️-架构与模块职责-Architecture-amp-Module-Contracts" class="headerlink" title="🏗️ 架构与模块职责 (Architecture &amp; Module Contracts)"></a>🏗️ 架构与模块职责 (Architecture &amp; Module Contracts)</h2><ul>
+<li><code>docs/</code>: 架构决议 (ADR)、协议规范和 Runbooks。（<strong>修改代码前，优先检索此目录</strong>）</li>
+<li><code>contracts/</code>:<ul>
+<li>核心要求：将 UMA 和 Chainlink 封装在统一的 <code>IOracleAdapter</code> 接口下。</li>
+<li>测试要求：必须包含针对主网状态的 Foundry Fork 测试。</li>
+</ul>
+</li>
+<li><code>backend/</code>: 预言机链下服务（监听器、数据聚合、喂价 Worker）。要求高并发、防抖和重试机制设计。</li>
+<li><code>packages/</code>: 前后端与合约共享的类型定义 (Types) 和 ABI 生成文件。</li>
+<li><code>scripts/ops/</code>: 自动化部署与监控告警（Grafana/Prometheus 配置）。</li>
+</ul>
+<h2 id="📝-提交与文档规范-Output-Expectations"><a href="#📝-提交与文档规范-Output-Expectations" class="headerlink" title="📝 提交与文档规范 (Output Expectations)"></a>📝 提交与文档规范 (Output Expectations)</h2><ul>
+<li><strong>PR/Commit 结构:</strong> 每次输出代码时，必须简明扼要地解释“为什么”做这个改动，而不是仅仅描述代码本身。文档应以中文编写，代码注释、Commit Message 和 CLI 输出保持英文。</li>
+<li><strong>Bootstrap 检查:</strong> 引入新功能时，必须自动核对并更新 <code>docs/PRD.md</code> 和对应的 <code>interfaces</code>。</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="next" href="/post/228615af.html">NEXT</a></div><div class="copyright"><p>© 2021 - 2026 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>

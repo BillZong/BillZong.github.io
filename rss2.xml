@@ -15,8 +15,47 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 05 Sep 2021 16:51:19 GMT</pubDate>
+    <pubDate>Sun, 02 Aug 2026 15:21:13 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>AI 开发者协议 (AI-First Oracle Monorepo Protocol)</title>
+      <link>https://billzong.github.io/post/30f5e2fa.html</link>
+      <guid>https://billzong.github.io/post/30f5e2fa.html</guid>
+      <pubDate>Thu, 16 Apr 2026 06:14:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;🎯-核心目标-Context-amp-Purpose&quot;&gt;&lt;a href=&quot;#🎯-核心目标-Context-amp-Purpose&quot; class=&quot;headerlink&quot; title=&quot;🎯 核心目标 (Context &amp;amp;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/AI/">AI</category>
+      
+      <category domain="https://billzong.github.io/tags/%E9%A2%84%E8%A8%80%E6%9C%BA/">预言机</category>
+      
+      <category domain="https://billzong.github.io/tags/Oracle/">Oracle</category>
+      
+      <category domain="https://billzong.github.io/tags/UMA/">UMA</category>
+      
+      <category domain="https://billzong.github.io/tags/Chainlink/">Chainlink</category>
+      
+      <category domain="https://billzong.github.io/tags/Agent/">Agent</category>
+      
+      <category domain="https://billzong.github.io/tags/%E5%8D%8F%E8%AE%AE/">协议</category>
+      
+      
+      <comments>https://billzong.github.io/post/30f5e2fa.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>《认知天性》阅读感悟</title>
@@ -491,6 +530,33 @@
     </item>
     
     <item>
+      <title>Go语言指南拾遗</title>
+      <link>https://billzong.github.io/post/fe86d1b6.html</link>
+      <guid>https://billzong.github.io/post/fe86d1b6.html</guid>
+      <pubDate>Mon, 12 Apr 2021 14:32:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/golang/">golang</category>
+      
+      
+      <comments>https://billzong.github.io/post/fe86d1b6.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
       <title>Practical TDD in Go</title>
       <link>https://billzong.github.io/post/37e0e416.html</link>
       <guid>https://billzong.github.io/post/37e0e416.html</guid>
@@ -517,33 +583,6 @@
       
       
       <comments>https://billzong.github.io/post/37e0e416.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>Go语言指南拾遗</title>
-      <link>https://billzong.github.io/post/fe86d1b6.html</link>
-      <guid>https://billzong.github.io/post/fe86d1b6.html</guid>
-      <pubDate>Mon, 12 Apr 2021 14:32:00 GMT</pubDate>
-      
-        
-        
-          
-          
-      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot;</description>
-          
-        
-      
-      
-      
-      
-      <category domain="https://billzong.github.io/categories/Golang/">Golang</category>
-      
-      
-      <category domain="https://billzong.github.io/tags/golang/">golang</category>
-      
-      
-      <comments>https://billzong.github.io/post/fe86d1b6.html#disqus_thread</comments>
       
     </item>
     
@@ -781,9 +820,9 @@
       
       <category domain="https://billzong.github.io/tags/ethereum/">ethereum</category>
       
-      <category domain="https://billzong.github.io/tags/source/">source</category>
-      
       <category domain="https://billzong.github.io/tags/RLPx/">RLPx</category>
+      
+      <category domain="https://billzong.github.io/tags/source/">source</category>
       
       
       <comments>https://billzong.github.io/post/5d25bab6.html#disqus_thread</comments>
