@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 秘钥安全管理设计方案 · 知易行难，一路向前</title><meta name="description" content="秘钥安全管理设计方案 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">秘钥安全管理设计方案</h1><div class="post-info">2025-10-10</div><div class="post-content"><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
+<li>预付卡整个系统中，依赖多个关键性第三方业务服务，并需要保存关键的 APIKey，但在生产环境部署时，开发、运维均有可能会接触到这些关键信息。</li>
+<li>所以，我们需要设计一整套的业务流程来防止关键信息泄露，防止内部人员获取或破坏这些关键信息，对业务造成不可挽回的影响。</li>
+</ul>
+<h2 id="词汇表"><a href="#词汇表" class="headerlink" title="词汇表"></a>词汇表</h2><ul>
+<li>Key Management Service (KMS)<ul>
+<li>一种基于云的加密和密钥管理服务，可以轻松创建和控制加密密钥，以加密跨 AWS 服务和应用程序中的数据 。 它使用 FIPS 140-3 验证的硬件安全模块 （HSM） 来保护密钥，并通过 AWS CloudTrail 提供详细的审计日志记录，从而集中控制密钥管理、权限和使用情况。</li>
+<li>关键特性：创建低风险存储的秘钥、AWS 存储中间件原生集成、高安全级别且丰富的秘钥管理、审计合规、即时告警等。</li>
+</ul>
+</li>
+<li>SecretManager (SM)<ul>
+<li>AWS 提供的私密信息存储系统。可帮助我们在整个生命周期内管理、检索和轮换数据库凭证、应用程序凭证、OAuth 令牌、API 密钥和其他密钥。许多 AWS 服务都已在 Secrets Manager 中存储和使用密钥。</li>
+</ul>
+</li>
+</ul>
+<h2 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h2><p><img src="/images/secret-management-architecture.png" alt="系统架构图"></p>
+<ul>
+<li>Broker 收敛敏感配置的访问，并使用业务客户端特有的 KMS Key 来获取敏感数据。</li>
+<li>Config Manager 需要定期访问并刷新 SM 的业务版本，确保分钟级的热加载，实现业务 APIKey 的自动轮转。</li>
+<li>KeyManager 使用离线工具加密对应的重要配置项，并将加密后的内容和加密用公钥提供给 Operator 配置。Operator 无法通过任何软件工程学的方式解密这些配置项。</li>
+<li>KeyManager、Operator 的任何修改，都会触发审计，并发布告警到对应的业务响应群。</li>
+<li>开发调试时，需要避免访问 SM 以及 KMS，要求配置管理能支持开发模式的配置加载。</li>
+</ul>
+<h2 id="风险点及方案"><a href="#风险点及方案" class="headerlink" title="风险点及方案"></a>风险点及方案</h2><ul>
+<li>开发轮转更新工具<ul>
+<li>Lamda + 限制授信 IAM</li>
+<li>MVP 阶段暂不考虑秘钥轮转。</li>
+</ul>
+</li>
+<li>数据库秘钥配置<ul>
+<li>可考虑定期轮转更新，但会造成更高的运维和审计成本。</li>
+<li>MVP 阶段暂时先不考虑更高级别的安全策略。</li>
+</ul>
+</li>
+<li>运维人员错误配置<ul>
+<li>SM 有完整的审计功能和 Hook，可通过告警及时发现错误情况，并实现快速回滚。</li>
+<li>明确不可使用的业务配置应停止应用并及时告警。</li>
+<li>MVP 阶段暂不考虑该业务功能。</li>
+</ul>
+</li>
+<li>核心管理人员错误配置<ul>
+<li>方案同上。</li>
+</ul>
+</li>
+<li>KeyManager 更换人员<ul>
+<li>即时更新 IAM 权限，并提供审计告警。</li>
+<li>MVP 阶段暂不考虑该业务功能。</li>
+</ul>
+</li>
+</ul>
+<h2 id="遗留问题"><a href="#遗留问题" class="headerlink" title="遗留问题"></a>遗留问题</h2><ul>
+<li>第三方服务后台审计监管<ul>
+<li>需要介入第三方的审计，确保即时监控到所有变更（创建、更新、删除等）。</li>
+<li>必须有备用账号，且明确所有状况的响应方案。</li>
+<li>MVP 阶段暂不考虑该业务功能。</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html</a></li>
+<li><a href="https://docs.aws.amazon.com/cli/latest/reference/secretsmanager/update-secret.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/cli/latest/reference/secretsmanager/update-secret.html</a></li>
+<li><a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_delete-secret.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_delete-secret.html</a></li>
+<li><a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_restore-secret.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_restore-secret.html</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hybrid_cryptosystem" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Hybrid_cryptosystem</a></li>
+<li><a href="https://aws.amazon.com/cn/blogs/security/how-to-use-aws-kms-rsa-keys-for-offline-encryption/" target="_blank" rel="noopener">https://aws.amazon.com/cn/blogs/security/how-to-use-aws-kms-rsa-keys-for-offline-encryption/</a></li>
+<li><a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/cloudformation.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/secretsmanager/latest/userguide/cloudformation.html</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/30f5e2fa.html">PREV</a><a class="next" href="/post/228615af.html">NEXT</a></div><div class="copyright"><p>© 2021 - 2026 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
