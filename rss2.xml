@@ -15,7 +15,7 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Sun, 02 Aug 2026 15:21:13 GMT</pubDate>
+    <pubDate>Mon, 03 Aug 2026 02:17:19 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -54,6 +54,87 @@
       
       
       <comments>https://billzong.github.io/post/30f5e2fa.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>授权参考码设计参考资料</title>
+      <link>https://billzong.github.io/post/6ffa1599.html</link>
+      <guid>https://billzong.github.io/post/6ffa1599.html</guid>
+      <pubDate>Sun, 07 Dec 2025 16:00:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;下面从 &lt;strong&gt;Twitter 已归档的 Snowflake 分布式 ID 生成算法&lt;/strong&gt;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%AE%89%E5%85%A8/">安全</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/%E6%8E%88%E6%9D%83%E5%8F%82%E8%80%83%E7%A0%81/">授权参考码</category>
+      
+      <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
+      
+      <category domain="https://billzong.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8FID/">分布式ID</category>
+      
+      <category domain="https://billzong.github.io/tags/Snowflake/">Snowflake</category>
+      
+      <category domain="https://billzong.github.io/tags/UUIDv7/">UUIDv7</category>
+      
+      <category domain="https://billzong.github.io/tags/KSUID/">KSUID</category>
+      
+      <category domain="https://billzong.github.io/tags/Sonyflake/">Sonyflake</category>
+      
+      <category domain="https://billzong.github.io/tags/%E9%80%89%E5%9E%8B/">选型</category>
+      
+      
+      <comments>https://billzong.github.io/post/6ffa1599.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>秘钥安全管理设计方案</title>
+      <link>https://billzong.github.io/post/e49981f1.html</link>
+      <guid>https://billzong.github.io/post/e49981f1.html</guid>
+      <pubDate>Thu, 09 Oct 2025 16:00:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;目标&quot;&gt;&lt;a href=&quot;#目标&quot; class=&quot;headerlink&quot; title=&quot;目标&quot;&gt;&lt;/a&gt;目标&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;预付卡整个系统中，依赖多个关键性第三方业务服务，并需要保存关键的</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%AE%89%E5%85%A8/">安全</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
+      
+      <category domain="https://billzong.github.io/tags/%E7%A7%98%E9%92%A5%E7%AE%A1%E7%90%86/">秘钥管理</category>
+      
+      <category domain="https://billzong.github.io/tags/%E5%AE%89%E5%85%A8/">安全</category>
+      
+      <category domain="https://billzong.github.io/tags/AWS/">AWS</category>
+      
+      <category domain="https://billzong.github.io/tags/KMS/">KMS</category>
+      
+      <category domain="https://billzong.github.io/tags/SecretsManager/">SecretsManager</category>
+      
+      <category domain="https://billzong.github.io/tags/%E9%A2%84%E4%BB%98%E5%8D%A1/">预付卡</category>
+      
+      
+      <comments>https://billzong.github.io/post/e49981f1.html#disqus_thread</comments>
       
     </item>
     

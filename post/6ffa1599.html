@@ -1,0 +1,140 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 授权参考码设计参考资料 · 知易行难，一路向前</title><meta name="description" content="授权参考码设计参考资料 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">授权参考码设计参考资料</h1><div class="post-info">2025-12-08</div><div class="post-content"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>下面从 <strong>Twitter 已归档的 Snowflake 分布式 ID 生成算法</strong> 出发，说明：</p>
+<ol>
+<li><strong>Snowflake 算法简介（Twitter 版本）</strong></li>
+<li><strong>Go 语言中的成熟平替方案</strong>（现成库 + 中间件）</li>
+<li><strong>当前主流/最新的分布式 ID 生成算法发展趋势</strong>（Snowflake 之后行业实践）</li>
+</ol>
+<hr>
+<h2 id="1-Twitter-Snowflake-算法回顾（经典版本）"><a href="#1-Twitter-Snowflake-算法回顾（经典版本）" class="headerlink" title="1. Twitter Snowflake 算法回顾（经典版本）"></a>1. Twitter Snowflake 算法回顾（经典版本）</h2><p>Twitter Snowflake 输出一个 <strong>64-bit 整数 ID</strong>，结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| 1bit 符号位 | 41bit 时间戳 | 10bit 机器&#x2F;节点 ID | 12bit 序列号 |</span><br></pre></td></tr></table></figure>
+
+<p>特点：</p>
+<ul>
+<li><strong>趋势递增</strong>（按时间）</li>
+<li><strong>全局唯一</strong></li>
+<li><strong>高吞吐、无中心依赖</strong></li>
+<li><strong>时间向前/回拨需处理</strong></li>
+</ul>
+<p>Twitter 官方仓库已归档，不再维护。</p>
+<hr>
+<h2 id="2-Snowflake-的-Golang-平替（成熟可用）"><a href="#2-Snowflake-的-Golang-平替（成熟可用）" class="headerlink" title="2. Snowflake 的 Golang 平替（成熟可用）"></a>2. Snowflake 的 Golang 平替（成熟可用）</h2><p>当前 <strong>Go 生态非常完善，有大量 Snowflake 的直接实现或增强版</strong>。最稳定和常用的包括：</p>
+<h3 id="2-1-Sonyflake（更适合云分布场景）"><a href="#2-1-Sonyflake（更适合云分布场景）" class="headerlink" title="2.1 Sonyflake（更适合云分布场景）"></a>2.1 Sonyflake（更适合云分布场景）</h3><ul>
+<li>GitHub: <code>github.com/sony/sonyflake</code></li>
+<li>日本 Sony 开源的 Snowflake 改良版</li>
+<li>结构类似但对云环境更友好</li>
+</ul>
+<p>设计改进点：</p>
+<ul>
+<li><strong>不依赖强的一致时钟</strong> —— 使用 39-bit 时间戳，但不是 Unix 毫秒，而是自定义 epoch</li>
+<li><strong>去掉”机器 ID 位数限制”</strong>（可自定义）</li>
+<li>更简洁，适合容器、云中机器频繁变动</li>
+</ul>
+<p>适用场景：✓ 多机房 ✓ 容器化（k8s） ✓ 不稳定时钟环境</p>
+<hr>
+<h3 id="2-2-go-snowflake（Twitter-Snowflake-的纯-Go-版）"><a href="#2-2-go-snowflake（Twitter-Snowflake-的纯-Go-版）" class="headerlink" title="2.2 go-snowflake（Twitter Snowflake 的纯 Go 版）"></a>2.2 go-snowflake（Twitter Snowflake 的纯 Go 版）</h3><ul>
+<li>GitHub: <code>github.com/bwmarrin/snowflake</code></li>
+</ul>
+<p>特点：</p>
+<ul>
+<li>功能最接近 Twitter Snowflake</li>
+<li>稳定、广泛使用</li>
+<li>支持集群中为每个节点设置 node number</li>
+</ul>
+<p>适用场景：✓ 你想要最原汁原味的 Snowflake</p>
+<hr>
+<h3 id="2-3-uid-ksuid-ulid（并非雪花，但-Go-社区热门替代）"><a href="#2-3-uid-ksuid-ulid（并非雪花，但-Go-社区热门替代）" class="headerlink" title="2.3 uid / ksuid / ulid（并非雪花，但 Go 社区热门替代）"></a>2.3 uid / ksuid / ulid（并非雪花，但 Go 社区热门替代）</h3><h4 id="KSUID（排序友好-更抗时间回拨）"><a href="#KSUID（排序友好-更抗时间回拨）" class="headerlink" title="KSUID（排序友好 + 更抗时间回拨）"></a>KSUID（排序友好 + 更抗时间回拨）</h4><ul>
+<li>GitHub: <code>github.com/segmentio/ksuid</code></li>
+</ul>
+<p>特点：</p>
+<ul>
+<li>128-bit，但 lexicographically sortable</li>
+<li>解决了 Snowflake 的时间回拨和 timestamp overflow 问题</li>
+</ul>
+<h4 id="ULID（大量云服务采用）"><a href="#ULID（大量云服务采用）" class="headerlink" title="ULID（大量云服务采用）"></a>ULID（大量云服务采用）</h4><ul>
+<li>GitHub: <code>github.com/ulid/spec</code></li>
+</ul>
+<p>特点：</p>
+<ul>
+<li>可排序</li>
+<li>32 字符编码</li>
+<li>随机位保证熵</li>
+</ul>
+<p>适用场景：✓ API 业务 ✓ 日志/对象存储 key ✓ 云原生应用</p>
+<hr>
+<h3 id="2-4-leaf-tinyid（完整-ID-服务，而非库）"><a href="#2-4-leaf-tinyid（完整-ID-服务，而非库）" class="headerlink" title="2.4 leaf + tinyid（完整 ID 服务，而非库）"></a>2.4 leaf + tinyid（完整 ID 服务，而非库）</h3><p>如果你需要<strong>中心化 ID 服务</strong>：</p>
+<ul>
+<li>美团 Leaf：支持 Snowflake + segment 号段模式（Java → 有 Go 社区实现）</li>
+<li>tinyid：美团开源的轻量级号段服务（Go 有移植版）</li>
+</ul>
+<p>适合：✓ 高一致性要求 ✓ 多语言统一 ID ✓ 大型企业系统</p>
+<hr>
+<h2 id="3-分布式-ID-生成算法的”新趋势”（Snowflake-之后）"><a href="#3-分布式-ID-生成算法的”新趋势”（Snowflake-之后）" class="headerlink" title="3. 分布式 ID 生成算法的”新趋势”（Snowflake 之后）"></a>3. 分布式 ID 生成算法的”新趋势”（Snowflake 之后）</h2><p>目前主流的发展方向可总结为 <strong>四大类</strong>：</p>
+<h3 id="趋势-1：基于”号段（segment）模式”成为企业主流"><a href="#趋势-1：基于”号段（segment）模式”成为企业主流" class="headerlink" title="趋势 1：基于”号段（segment）模式”成为企业主流"></a>趋势 1：基于”号段（segment）模式”成为企业主流</h3><p>代表：美团 Leaf Segment、滴滴 TinyID</p>
+<p>特点：</p>
+<ul>
+<li>ID 后端按批次分发 1k～10k 段号</li>
+<li>业务在内存中快速分配</li>
+<li>不依赖时钟</li>
+<li>高可靠（DB 仅需单写）</li>
+</ul>
+<p>优点：最稳定的企业级方案，高吞吐（百万级 QPS）</p>
+<p>缺点：需要中心服务</p>
+<h3 id="趋势-2：雪花-高可用节点分配（避免人工-NodeID）"><a href="#趋势-2：雪花-高可用节点分配（避免人工-NodeID）" class="headerlink" title="趋势 2：雪花 + 高可用节点分配（避免人工 NodeID）"></a>趋势 2：雪花 + 高可用节点分配（避免人工 NodeID）</h3><p>例如：</p>
+<ul>
+<li>Sonyflake（自动生成 machine ID）</li>
+<li>国产改良雪花：使用 Redis/ZK/etcd 来分配 workerID</li>
+</ul>
+<p>目的：防止 NodeID 冲突造成雪花重复</p>
+<h3 id="趋势-3：可排序-UUID（ULID-KSUID）强势崛起"><a href="#趋势-3：可排序-UUID（ULID-KSUID）强势崛起" class="headerlink" title="趋势 3：可排序 UUID（ULID / KSUID）强势崛起"></a>趋势 3：可排序 UUID（ULID / KSUID）强势崛起</h3><p>无中心、不依赖机器 ID、不受时间回拨影响、可排序、字符串更通用。</p>
+<p>目前 Cloudflare（ULID）、Segment（KSUID）、多数云服务接口都大量使用。</p>
+<h3 id="趋势-4：数据库-中间件原生-ID-生成（云厂商）"><a href="#趋势-4：数据库-中间件原生-ID-生成（云厂商）" class="headerlink" title="趋势 4：数据库/中间件原生 ID 生成（云厂商）"></a>趋势 4：数据库/中间件原生 ID 生成（云厂商）</h3><p>例如：</p>
+<ul>
+<li>MySQL 8 <code>UUID_TO_BIN()</code> + time-first UUID</li>
+<li>PostgreSQL <code>pg_uuidv7</code>（UUIDv7 是当前 IETF 标准草案）</li>
+<li>Snowflake（数据云）自带 SEQUENCE</li>
+<li>Redis 的 INCR / RedisCell</li>
+</ul>
+<p>UUIDv7 是最新的趋势，特性：基于时间排序、高熵、优于传统 UUIDv1/v4。</p>
+<hr>
+<h2 id="4-如何选择？"><a href="#4-如何选择？" class="headerlink" title="4. 如何选择？"></a>4. 如何选择？</h2><table>
+<thead>
+<tr>
+<th>需求</th>
+<th>推荐算法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>高吞吐、低延迟、强一致</td>
+<td>Leaf Segment / TinyID</td>
+</tr>
+<tr>
+<td>无中心、简单、与 Snowflake 行为一致</td>
+<td>go-snowflake</td>
+</tr>
+<tr>
+<td>云原生、抗时钟回拨</td>
+<td>Sonyflake</td>
+</tr>
+<tr>
+<td>分布式日志/对象存储/排序 ID</td>
+<td>KSUID / ULID</td>
+</tr>
+<tr>
+<td>API/前端友好</td>
+<td>KSUID / UUIDv7</td>
+</tr>
+<tr>
+<td>多语言、多系统统一 ID</td>
+<td>号段服务（Leaf Segment）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="5-进一步参考"><a href="#5-进一步参考" class="headerlink" title="5. 进一步参考"></a>5. 进一步参考</h2><ul>
+<li>Go 版本 Snowflake / Sonyflake 示例代码</li>
+<li>Go 语言对比：Snowflake / Sonyflake / KSUID / ULID 性能基准</li>
+<li>企业级”高可用分布式 ID 服务”架构设计图（含 HA 和扩缩容）</li>
+<li>不同业务选型建议</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/30f5e2fa.html">PREV</a><a class="next" href="/post/e49981f1.html">NEXT</a></div><div class="copyright"><p>© 2021 - 2026 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
