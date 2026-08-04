@@ -15,7 +15,7 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 03 Aug 2026 02:17:19 GMT</pubDate>
+    <pubDate>Mon, 03 Aug 2026 02:24:10 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -77,9 +77,9 @@
       <category domain="https://billzong.github.io/categories/%E5%AE%89%E5%85%A8/">安全</category>
       
       
-      <category domain="https://billzong.github.io/tags/%E6%8E%88%E6%9D%83%E5%8F%82%E8%80%83%E7%A0%81/">授权参考码</category>
-      
       <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
+      
+      <category domain="https://billzong.github.io/tags/%E6%8E%88%E6%9D%83%E5%8F%82%E8%80%83%E7%A0%81/">授权参考码</category>
       
       <category domain="https://billzong.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8FID/">分布式ID</category>
       
@@ -119,8 +119,6 @@
       <category domain="https://billzong.github.io/categories/%E5%AE%89%E5%85%A8/">安全</category>
       
       
-      <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
-      
       <category domain="https://billzong.github.io/tags/%E7%A7%98%E9%92%A5%E7%AE%A1%E7%90%86/">秘钥管理</category>
       
       <category domain="https://billzong.github.io/tags/%E5%AE%89%E5%85%A8/">安全</category>
@@ -132,6 +130,8 @@
       <category domain="https://billzong.github.io/tags/SecretsManager/">SecretsManager</category>
       
       <category domain="https://billzong.github.io/tags/%E9%A2%84%E4%BB%98%E5%8D%A1/">预付卡</category>
+      
+      <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
       
       
       <comments>https://billzong.github.io/post/e49981f1.html#disqus_thread</comments>
@@ -175,7 +175,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight jboss-cli&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span</description>
           
         
       
@@ -202,7 +202,7 @@
         
           
           
-      <description>&lt;h2 id=&quot;ntp服务端&quot;&gt;&lt;a href=&quot;#ntp服务端&quot; class=&quot;headerlink&quot; title=&quot;ntp服务端&quot;&gt;&lt;/a&gt;ntp服务端&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+      <description>&lt;h2 id=&quot;ntp服务端&quot;&gt;&lt;a href=&quot;#ntp服务端&quot; class=&quot;headerlink&quot; title=&quot;ntp服务端&quot;&gt;&lt;/a&gt;ntp服务端&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
           
         
       
@@ -233,7 +233,8 @@
         
           
           
-      <description>&lt;p&gt;rpm –import &lt;a href=&quot;https://www.elrepo.org/RPM-GPG-KEY-elrepo.org&quot; target=&quot;_blank&quot;</description>
+      <description>&lt;p&gt;rpm –import &lt;a href=&quot;https://www.elrepo.org/RPM-GPG-KEY-elrepo.org&quot;&gt;https://www.elrepo.org/RPM-GPG-KEY-elrepo.org&lt;/a&gt;&lt;/p&gt;
+&lt;h1</description>
           
         
       
@@ -262,7 +263,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
           
         
       
@@ -347,7 +348,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
           
         
       
@@ -378,7 +379,7 @@
         
           
           
-      <description>&lt;h2 id=&quot;别名命令补全功能&quot;&gt;&lt;a href=&quot;#别名命令补全功能&quot; class=&quot;headerlink&quot; title=&quot;别名命令补全功能&quot;&gt;&lt;/a&gt;别名命令补全功能&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+      <description>&lt;h2 id=&quot;别名命令补全功能&quot;&gt;&lt;a href=&quot;#别名命令补全功能&quot; class=&quot;headerlink&quot; title=&quot;别名命令补全功能&quot;&gt;&lt;/a&gt;别名命令补全功能&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
           
         
       
@@ -407,7 +408,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight livecodeserver&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span</description>
           
         
       
@@ -438,7 +439,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight routeros&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code</description>
           
         
       
@@ -469,7 +470,7 @@
           
       <description>&lt;p&gt;&lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;关闭root用户使用密码登陆&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
+&lt;figure class=&quot;highlight nginx&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
           
         
       
@@ -532,7 +533,6 @@
 &lt;!-- BEGIN MUNGE: GENERATED_TOC --&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#环境准备&quot;&gt;环境准备&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a</description>
           
         
@@ -677,7 +677,8 @@
         
           
           
-      <description>&lt;h1 id=&quot;系统日志库&quot;&gt;&lt;a href=&quot;#系统日志库&quot; class=&quot;headerlink&quot; title=&quot;系统日志库&quot;&gt;&lt;/a&gt;系统日志库&lt;/h1&gt;&lt;figure class=&quot;highlight</description>
+      <description>&lt;h1 id=&quot;系统日志库&quot;&gt;&lt;a href=&quot;#系统日志库&quot; class=&quot;headerlink&quot; title=&quot;系统日志库&quot;&gt;&lt;/a&gt;系统日志库&lt;/h1&gt;&lt;p&gt;&lt;code&gt;import &amp;quot;log&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&quot;基本配置&quot;&gt;&lt;a</description>
           
         
       
@@ -954,7 +955,7 @@
         
           
           
-      <description>&lt;h1 id=&quot;log15&quot;&gt;&lt;a href=&quot;#log15&quot; class=&quot;headerlink&quot; title=&quot;log15&quot;&gt;&lt;/a&gt;log15&lt;/h1&gt;&lt;figure class=&quot;highlight</description>
+      <description>&lt;h1 id=&quot;log15&quot;&gt;&lt;a href=&quot;#log15&quot; class=&quot;headerlink&quot; title=&quot;log15&quot;&gt;&lt;/a&gt;log15&lt;/h1&gt;&lt;p&gt;&lt;code&gt;import</description>
           
         
       
@@ -1014,7 +1015,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight cmake&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code</description>
           
         
       
@@ -1165,7 +1166,7 @@
           
           
       <description>&lt;h2 id=&quot;主流程&quot;&gt;&lt;a href=&quot;#主流程&quot; class=&quot;headerlink&quot; title=&quot;主流程&quot;&gt;&lt;/a&gt;主流程&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;拷贝&lt;a href=&quot;https://github.com/apache/incubator-openwhisk&quot;</description>
+&lt;li&gt;拷贝&lt;a</description>
           
         
       
@@ -1256,7 +1257,7 @@
         
           
           
-      <description>&lt;h2 id=&quot;文档链接地址&quot;&gt;&lt;a href=&quot;#文档链接地址&quot; class=&quot;headerlink&quot; title=&quot;文档链接地址&quot;&gt;&lt;/a&gt;文档链接地址&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://wenku.it168.com/d_001628826.shtml&quot;</description>
+      <description>&lt;h2 id=&quot;文档链接地址&quot;&gt;&lt;a href=&quot;#文档链接地址&quot; class=&quot;headerlink&quot; title=&quot;文档链接地址&quot;&gt;&lt;/a&gt;文档链接地址&lt;/h2&gt;&lt;p&gt;&lt;a</description>
           
         
       
@@ -1310,7 +1311,7 @@
         
           
           
-      <description>&lt;h2 id=&quot;文档链接地址&quot;&gt;&lt;a href=&quot;#文档链接地址&quot; class=&quot;headerlink&quot; title=&quot;文档链接地址&quot;&gt;&lt;/a&gt;文档链接地址&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://wenku.it168.com/d_001628827.shtml&quot;</description>
+      <description>&lt;h2 id=&quot;文档链接地址&quot;&gt;&lt;a href=&quot;#文档链接地址&quot; class=&quot;headerlink&quot; title=&quot;文档链接地址&quot;&gt;&lt;/a&gt;文档链接地址&lt;/h2&gt;&lt;p&gt;&lt;a</description>
           
         
       
@@ -1338,7 +1339,7 @@
           
           
       <description>&lt;p&gt;&lt;strong&gt;Generating the private key:&lt;/strong&gt;&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
+&lt;figure class=&quot;highlight pgsql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
           
         
       

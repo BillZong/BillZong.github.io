@@ -1,6 +1,400 @@
-<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Practical TDD in Go · 知易行难，一路向前</title><meta name="description" content="Practical TDD in Go - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Abstract  Abstract  Introduction  Premilinaries  The Three TDD Laws  Test-Driven Development  Tools Practice Basic TDD Show Code Coverage What if we write some race condition codes&#x2F;tests?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Practical TDD in Go">
+<meta property="og:url" content="https://billzong.github.io/post/37e0e416.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="Abstract  Abstract  Introduction  Premilinaries  The Three TDD Laws  Test-Driven Development  Tools Practice Basic TDD Show Code Coverage What if we write some race condition codes&#x2F;tests?">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lexiangla.com/assets/8c9cdf96164611e9b440525400ac2e73">
+<meta property="og:image" content="https://lexiangla.com/assets/ae070e72164611e996f05254004f9daa">
+<meta property="og:image" content="https://lexiangla.com/assets/b758040e164611e98bb452540089e328">
+<meta property="og:image" content="https://lexiangla.com/assets/bf6db67a164611e991e8525400a20cd4">
+<meta property="og:image" content="https://lexiangla.com/assets/ccf53016164611e9aedf5254002ec14d">
+<meta property="og:image" content="https://lexiangla.com/assets/d1e15e24164611e986885254004f9daa">
+<meta property="og:image" content="https://lexiangla.com/assets/dc09c166164611e99a0f525400b4d70f">
+<meta property="og:image" content="https://lexiangla.com/assets/e29f0086164611e9b89d525400dca728">
+<meta property="og:image" content="https://lexiangla.com/assets/ea1e8c6e164611e9954c525400177fdc">
+<meta property="article:published_time" content="2021-04-12T14:32:00.000Z">
+<meta property="article:modified_time" content="2026-08-03T02:24:10.145Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="TDD">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lexiangla.com/assets/8c9cdf96164611e9b440525400ac2e73">
+  
+  
+  
+  <title>Practical TDD in Go - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
-</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Practical TDD in Go</h1><div class="post-info">2021-04-12</div><div class="post-content"><!-- START doctoc generated TOC please keep comment here to allow auto update -->
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Practical TDD in Go"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-12 22:32" pubdate>
+          2021年4月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Practical TDD in Go</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 <ul>
@@ -20,7 +414,7 @@
 <li><a href="#practice">Practice</a><ul>
 <li><a href="#basic-tdd">Basic TDD</a></li>
 <li><a href="#show-code-coverage">Show Code Coverage</a></li>
-<li><a href="#what-if-we-write-some-race-condition-codestests">What if we write some race condition codes/tests?</a></li>
+<li><a href="#what-if-we-write-some-race-condition-codestests">What if we write some race condition codes&#x2F;tests?</a></li>
 </ul>
 </li>
 </ul>
@@ -40,18 +434,18 @@
 <p>We introduce the basic raws in TDD; introduce some usful tools in Go; show one practice using TDD. And we discuss the mocking in the final chapter.</p>
 <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This paragraph suppose that you are familiar with Go, and have already heard about TDD before.</p>
 <ul>
-<li>For those ones who hadn’t heard about TDD, read <a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank" rel="noopener">this wiki</a> first.</li>
+<li>For those ones who hadn’t heard about TDD, read <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Test-driven_development">this wiki</a> first.</li>
 <li>If you have already used TDD in Go before, all you need is reviewing <a href="">“The Three TDD Laws”</a>, and <a href="">the discussion on mocking</a>.</li>
 <li>If you’re an expert on TDD, skip this paragraph as you wish.</li>
 </ul>
 <h2 id="Premilinaries"><a href="#Premilinaries" class="headerlink" title="Premilinaries"></a>Premilinaries</h2><p>TDD is an exellent revolution on coding practice. Everyone should try it, no matter you like it or not.</p>
-<p>The “red/green/refactor” mandra makes you focusing on actual behavior of codes. That means your codes are easier to test, easier to refactor, and more robust.</p>
+<p>The “red&#x2F;green&#x2F;refactor” mandra makes you focusing on actual behavior of codes. That means your codes are easier to test, easier to refactor, and more robust.</p>
 <p>The first thing you need to do with TDD is to break down your programmer’s conventional thinking. You have to think as a user and a programmer, when you’re in different coding stage.</p>
 <ul>
 <li>You are a user when you are writing tests.</li>
 <li>You are a programmer when you are writing codes.</li>
 </ul>
-<p>There are lots of helpful details about TDD. Such as “Test structure”, “Best practices”, “Anti-patterns”, “Limitations”. For more details on those topic, read <a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank" rel="noopener">this wiki</a></p>
+<p>There are lots of helpful details about TDD. Such as “Test structure”, “Best practices”, “Anti-patterns”, “Limitations”. For more details on those topic, read <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Test-driven_development">this wiki</a></p>
 <h2 id="The-Three-TDD-Laws"><a href="#The-Three-TDD-Laws" class="headerlink" title="The Three TDD Laws"></a>The Three TDD Laws</h2><p>Although there are lots of rules to compiliance, the basic laws can be briefly described as the following three:</p>
 <ol>
 <li>You are not allowed to write any production code unless it is to make a failing unit test pass.</li>
@@ -84,21 +478,21 @@
 </ul>
 </li>
 </ul>
-<h3 id="Practice"><a href="#Practice" class="headerlink" title="Practice"></a>Practice</h3><p><strong>*”Talk is cheap, show me the data and images.”*</strong></p>
+<h3 id="Practice"><a href="#Practice" class="headerlink" title="Practice"></a>Practice</h3><p><em><strong>“Talk is cheap, show me the data and images.”</strong></em></p>
 <h4 id="Basic-TDD"><a href="#Basic-TDD" class="headerlink" title="Basic TDD"></a>Basic TDD</h4><ul>
-<li><p>Enable the <code>Golang TDD</code>.<br>  <img src="https://lexiangla.com/assets/8c9cdf96164611e9b440525400ac2e73" alt="001" title="001"></p>
+<li><p>Enable the <code>Golang TDD</code>.<br>  <img src="https://lexiangla.com/assets/8c9cdf96164611e9b440525400ac2e73" srcset="/img/loading.gif" lazyload alt="001" title="001"></p>
 <ul>
-<li>Enabled<br>  <img src="https://lexiangla.com/assets/ae070e72164611e996f05254004f9daa" alt="002"></li>
+<li>Enabled<br>  <img src="https://lexiangla.com/assets/ae070e72164611e996f05254004f9daa" srcset="/img/loading.gif" lazyload alt="002"></li>
 </ul>
 </li>
-<li><p>Create/Open any test file, and write some tests, save it.<br>  <img src="https://lexiangla.com/assets/b758040e164611e98bb452540089e328" alt="003" title="003"></p>
+<li><p>Create&#x2F;Open any test file, and write some tests, save it.<br>  <img src="https://lexiangla.com/assets/b758040e164611e98bb452540089e328" srcset="/img/loading.gif" lazyload alt="003" title="003"></p>
 <ul>
-<li>Fail<br>  <img src="https://lexiangla.com/assets/bf6db67a164611e991e8525400a20cd4" alt="004" title="004"></li>
+<li>Fail<br>  <img src="https://lexiangla.com/assets/bf6db67a164611e991e8525400a20cd4" srcset="/img/loading.gif" lazyload alt="004" title="004"></li>
 </ul>
 </li>
-<li><p>Write some codes to make test pass, save it.<br>  <img src="https://lexiangla.com/assets/ccf53016164611e9aedf5254002ec14d" alt="005" title="005"></p>
+<li><p>Write some codes to make test pass, save it.<br>  <img src="https://lexiangla.com/assets/ccf53016164611e9aedf5254002ec14d" srcset="/img/loading.gif" lazyload alt="005" title="005"></p>
 <ul>
-<li>Success<br>  <img src="https://lexiangla.com/assets/d1e15e24164611e986885254004f9daa" alt="006" title="006"></li>
+<li>Success<br>  <img src="https://lexiangla.com/assets/d1e15e24164611e986885254004f9daa" srcset="/img/loading.gif" lazyload alt="006" title="006"></li>
 </ul>
 </li>
 <li><p>Write more tests.</p>
@@ -111,18 +505,18 @@
 <h4 id="Show-Code-Coverage"><a href="#Show-Code-Coverage" class="headerlink" title="Show Code Coverage"></a>Show Code Coverage</h4><ul>
 <li>When we pass the tests, we could highlight codes haved been covered.</li>
 </ul>
-<p><img src="https://lexiangla.com/assets/dc09c166164611e99a0f525400b4d70f" alt="007" title="007"></p>
+<p><img src="https://lexiangla.com/assets/dc09c166164611e99a0f525400b4d70f" srcset="/img/loading.gif" lazyload alt="007" title="007"></p>
 <ul>
 <li>The results:</li>
 </ul>
-<p><img src="https://lexiangla.com/assets/e29f0086164611e9b89d525400dca728" alt="008" title="008"></p>
+<p><img src="https://lexiangla.com/assets/e29f0086164611e9b89d525400dca728" srcset="/img/loading.gif" lazyload alt="008" title="008"></p>
 <ul>
 <li>Rerun the toggle command to disabled highlight.</li>
 </ul>
-<h4 id="What-if-we-write-some-race-condition-codes-tests"><a href="#What-if-we-write-some-race-condition-codes-tests" class="headerlink" title="What if we write some race condition codes/tests?"></a>What if we write some race condition codes/tests?</h4><ul>
+<h4 id="What-if-we-write-some-race-condition-codes-x2F-tests"><a href="#What-if-we-write-some-race-condition-codes-x2F-tests" class="headerlink" title="What if we write some race condition codes&#x2F;tests?"></a>What if we write some race condition codes&#x2F;tests?</h4><ul>
 <li>We got the green failing status.</li>
 </ul>
-<p><img src="https://lexiangla.com/assets/ea1e8c6e164611e9954c525400177fdc" alt="009" title="009"></p>
+<p><img src="https://lexiangla.com/assets/ea1e8c6e164611e9954c525400177fdc" srcset="/img/loading.gif" lazyload alt="009" title="009"></p>
 <h2 id="Mocking"><a href="#Mocking" class="headerlink" title="Mocking"></a>Mocking</h2><p><strong>Mock</strong>: A mock is specified by an individual test case to validate test-specific behavior, checking parameter values and call sequencing.</p>
 <h3 id="Effectiveness"><a href="#Effectiveness" class="headerlink" title="Effectiveness"></a>Effectiveness</h3><ol>
 <li>Help the test process by always returning the same, realistic data that tests can rely upon.</li>
@@ -153,10 +547,444 @@
 <li>Mocking should not know too much about your implementation details.</li>
 </ol>
 <h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><ol>
-<li><a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank" rel="noopener">Test-driven development</a></li>
-<li><a href="https://medium.com/@pierreprinetti/test-driven-development-in-go-baeab5adb468" target="_blank" rel="noopener">Test-Driven Development in Go</a></li>
-<li><a href="https://github.com/quii/learn-go-with-tests/blob/master/dependency-injection.md" target="_blank" rel="noopener">Dependency Injection</a></li>
-<li><a href="https://github.com/quii/learn-go-with-tests/blob/master/mocking.md" target="_blank" rel="noopener">Mocking</a></li>
-<li><a href="https://leanpub.com/golang-tdd/read" target="_blank" rel="noopener">Test-driven development with Go</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Test-driven_development">Test-driven development</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@pierreprinetti/test-driven-development-in-go-baeab5adb468">Test-Driven Development in Go</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/quii/learn-go-with-tests/blob/master/dependency-injection.md">Dependency Injection</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/quii/learn-go-with-tests/blob/master/mocking.md">Mocking</a></li>
+<li><a target="_blank" rel="noopener" href="https://leanpub.com/golang-tdd/read">Test-driven development with Go</a></li>
 </ol>
-</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/fe86d1b6.html">PREV</a><a class="next" href="/post/6d4a1154.html">NEXT</a></div><div class="copyright"><p>© 2021 - 2026 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Golang/" class="category-chain-item">Golang</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+        <a href="/tags/TDD/" class="print-no-link">#TDD</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Practical TDD in Go</div>
+      <div>https://billzong.github.io/post/37e0e416.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Bill Zong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/post/fe86d1b6.html" title="Go语言指南拾遗">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Go语言指南拾遗</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/post/6d4a1154.html" title="go语言log库调研">
+                        <span class="hidden-mobile">go语言log库调研</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,61 +1,879 @@
-<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 基于cobra构建命令行 · 知易行难，一路向前</title><meta name="description" content="基于cobra构建命令行 - Bill Zong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico?v=2021"><link rel="stylesheet" href="/css/style.css"><link rel="search" type="application/opensearchdescription+xml" href="https://billzong.github.io/atom.xml" title="知易行难，一路向前"><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Table of Contents    环境准备 给root命令添加参数 添加子命令 多级命令 参考    从三个例子，来说明如何使用github.com&#x2F;spf13&#x2F;cobra，构造自己的命令行 环境准备1go get github.com&#x2F;spf13&#x2F;cobra&#x2F;cobra  会发现$GOPATH&#x2F;bin下生成了一个可执行文件cobra，利用可执行文件cobra来生成cobra_e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于cobra构建命令行">
+<meta property="og:url" content="https://billzong.github.io/post/89751058.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="Table of Contents    环境准备 给root命令添加参数 添加子命令 多级命令 参考    从三个例子，来说明如何使用github.com&#x2F;spf13&#x2F;cobra，构造自己的命令行 环境准备1go get github.com&#x2F;spf13&#x2F;cobra&#x2F;cobra  会发现$GOPATH&#x2F;bin下生成了一个可执行文件cobra，利用可执行文件cobra来生成cobra_e">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-12T14:36:00.000Z">
+<meta property="article:modified_time" content="2026-08-03T02:24:10.147Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="cobra">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>基于cobra构建命令行 - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
 <link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
-</head><body><div class="wrap"><header><h1 class="title">知易行难，一路向前</h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/" target="_self">主页</a></li><li class="nav-list-item"><a class="nav-list-link" href="/archives/" target="_self">归档</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://github.com/billzong" target="_blank">Github主页</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">基于cobra构建命令行</h1><div class="post-info">2021-04-12</div><div class="post-content"><p><strong>Table of Contents</strong></p>
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="基于cobra构建命令行"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-12 22:36" pubdate>
+          2021年4月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">基于cobra构建命令行</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><strong>Table of Contents</strong></p>
 <!-- BEGIN MUNGE: GENERATED_TOC -->
 
 <ul>
-<li><a href="#环境准备">环境准备</a></li>
-<li><a href="#给root命令添加参数">给root命令添加参数</a></li>
-<li><a href="#添加子命令">添加子命令</a></li>
-<li><a href="#多级命令">多级命令</a></li>
-<li><a href="#参考">参考</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">环境准备</a></li>
+<li><a href="#%E7%BB%99root%E5%91%BD%E4%BB%A4%E6%B7%BB%E5%8A%A0%E5%8F%82%E6%95%B0">给root命令添加参数</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E5%AD%90%E5%91%BD%E4%BB%A4">添加子命令</a></li>
+<li><a href="#%E5%A4%9A%E7%BA%A7%E5%91%BD%E4%BB%A4">多级命令</a></li>
+<li><a href="#%E5%8F%82%E8%80%83">参考</a></li>
 </ul>
 <!-- END MUNGE: GENERATED_TOC -->
 
 <p>从三个例子，来说明如何使用<code>github.com/spf13/cobra</code>，构造自己的命令行</p>
-<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/spf13/cobra/cobra</span><br></pre></td></tr></table></figure>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">go get github.com/spf13/cobra/cobra<br></code></pre></td></tr></table></figure>
 
-<p>会发现$GOPATH/bin下生成了一个可执行文件cobra，利用可执行文件cobra来生成cobra_example工程。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/cobra init cobra_example</span><br></pre></td></tr></table></figure>
+<p>会发现$GOPATH&#x2F;bin下生成了一个可执行文件cobra，利用可执行文件cobra来生成cobra_example工程。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./bin/cobra init cobra_example<br></code></pre></td></tr></table></figure>
 
-<p>会发现/src目录下自动生成cobra_example工程，目录如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">▾ cobra_example&#x2F;</span><br><span class="line">    ▾ cmd&#x2F;</span><br><span class="line">        root.go</span><br><span class="line">      main.go</span><br></pre></td></tr></table></figure>
+<p>会发现&#x2F;src目录下自动生成cobra_example工程，目录如下所示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs go">▾ cobra_example/<br>    ▾ cmd/<br>        root.<span class="hljs-keyword">go</span><br>      main.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="给root命令添加参数"><a href="#给root命令添加参数" class="headerlink" title="给root命令添加参数"></a>给root命令添加参数</h2><p>此时的代码如下：</p>
 <ul>
 <li>main.go</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"cobra_example/cmd"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	cmd.Execute()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;cobra_example/cmd&quot;</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	cmd.Execute()<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <ul>
-<li>cmd/root.go</li>
+<li>cmd&#x2F;root.go</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cmd</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/spf13/cobra"</span></span><br><span class="line">	<span class="comment">//  "github.com/spf13/viper"</span></span><br><span class="line">	<span class="string">"cobra_example/add"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//var cfgFile string</span></span><br><span class="line"><span class="keyword">var</span> name <span class="keyword">string</span></span><br><span class="line"><span class="keyword">var</span> age <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// RootCmd represents the base command when called without any subcommands</span></span><br><span class="line"><span class="keyword">var</span> RootCmd = &amp;cobra.Command&#123;</span><br><span class="line">	Use:   <span class="string">"demo"</span>,</span><br><span class="line">	Short: <span class="string">"A test demo"</span>,</span><br><span class="line">	Long:  <span class="string">`Demo is a test appcation for print things`</span>,</span><br><span class="line">	<span class="comment">// Uncomment the following line if your bare application</span></span><br><span class="line">	<span class="comment">// has an action associated with it:</span></span><br><span class="line">	Run: <span class="function"><span class="keyword">func</span><span class="params">(cmd *cobra.Command, args []<span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(name) == <span class="number">0</span> &#123;</span><br><span class="line">			cmd.Help()</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		add.Show(name, age)</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Execute adds all child commands to the root command sets flags appropriately.</span></span><br><span class="line"><span class="comment">// This is called by main.main(). It only needs to happen once to the rootCmd.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Execute</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> err := RootCmd.Execute(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		os.Exit(<span class="number">-1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">	RootCmd.Flags().StringVarP(&amp;name, <span class="string">"name"</span>, <span class="string">"n"</span>, <span class="string">""</span>, <span class="string">"person's name"</span>)</span><br><span class="line">	RootCmd.Flags().IntVarP(&amp;age, <span class="string">"age"</span>, <span class="string">"a"</span>, <span class="number">0</span>, <span class="string">"person's age"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> cmd<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;os&quot;</span><br><br>	<span class="hljs-string">&quot;github.com/spf13/cobra&quot;</span><br>	<span class="hljs-comment">//  &quot;github.com/spf13/viper&quot;</span><br>	<span class="hljs-string">&quot;cobra_example/add&quot;</span><br>)<br><br><span class="hljs-comment">//var cfgFile string</span><br><span class="hljs-keyword">var</span> name <span class="hljs-type">string</span><br><span class="hljs-keyword">var</span> age <span class="hljs-type">int</span><br><br><span class="hljs-comment">// RootCmd represents the base command when called without any subcommands</span><br><span class="hljs-keyword">var</span> RootCmd = &amp;cobra.Command&#123;<br>	Use:   <span class="hljs-string">&quot;demo&quot;</span>,<br>	Short: <span class="hljs-string">&quot;A test demo&quot;</span>,<br>	Long:  <span class="hljs-string">`Demo is a test appcation for print things`</span>,<br>	<span class="hljs-comment">// Uncomment the following line if your bare application</span><br>	<span class="hljs-comment">// has an action associated with it:</span><br>	Run: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(cmd *cobra.Command, args []<span class="hljs-type">string</span>)</span></span> &#123;<br>		<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(name) == <span class="hljs-number">0</span> &#123;<br>			cmd.Help()<br>			<span class="hljs-keyword">return</span><br>		&#125;<br>		add.Show(name, age)<br>	&#125;,<br>&#125;<br><br><span class="hljs-comment">// Execute adds all child commands to the root command sets flags appropriately.</span><br><span class="hljs-comment">// This is called by main.main(). It only needs to happen once to the rootCmd.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Execute</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">if</span> err := RootCmd.Execute(); err != <span class="hljs-literal">nil</span> &#123;<br>		fmt.Println(err)<br>		os.Exit(<span class="hljs-number">-1</span>)<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span> &#123;<br>	RootCmd.Flags().StringVarP(&amp;name, <span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;n&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;person&#x27;s name&quot;</span>)<br>	RootCmd.Flags().IntVarP(&amp;age, <span class="hljs-string">&quot;age&quot;</span>, <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;person&#x27;s age&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li>新建个add package</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">▾ cobra_example&#x2F;</span><br><span class="line">    ▾ add&#x2F;</span><br><span class="line">        add.go</span><br><span class="line">    ▾ cmd&#x2F;</span><br><span class="line">        root.go</span><br><span class="line">      main.go</span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs vim">▾ cobra_example/<br>    ▾ <span class="hljs-built_in">add</span>/<br>        <span class="hljs-built_in">add</span>.<span class="hljs-keyword">go</span><br>    ▾ cmd/<br>        root.<span class="hljs-keyword">go</span><br>      main.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
 
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> add</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Show</span><span class="params">(name <span class="keyword">string</span>, age <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    fmt.Printf(<span class="string">"My Name is %s, My age is %d\n"</span>, name, age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> add<br><br><span class="hljs-keyword">import</span>(<br>    <span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Show</span><span class="hljs-params">(name <span class="hljs-type">string</span>, age <span class="hljs-type">int</span>)</span></span> &#123;<br>    fmt.Printf(<span class="hljs-string">&quot;My Name is %s, My age is %d\n&quot;</span>, name, age)<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>然后go build 生成可执行文件，最后执行效果如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ./cobra_example -a 11 -n lining</span></span><br><span class="line">My Name is lining, My age is 11</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">./cobra_example -a 11 -n lining</span><br>My Name is lining, My age is 11<br></code></pre></td></tr></table></figure>
 
-<h2 id="添加子命令"><a href="#添加子命令" class="headerlink" title="添加子命令"></a>添加子命令</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ./cobra_example --<span class="built_in">help</span></span></span><br><span class="line">Demo is a test appcation for print things</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  demo [flags]</span><br><span class="line">  demo [command]</span><br><span class="line"></span><br><span class="line">Available Commands:</span><br><span class="line">  test        A brief description of your command</span><br><span class="line"></span><br><span class="line">Flags:</span><br><span class="line">  -a, --age int       person's age</span><br><span class="line">  -n, --name string   person's name</span><br><span class="line"></span><br><span class="line">Use "demo [command] --help" for more information about a command.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> ./cobra_example <span class="built_in">test</span>  </span></span><br><span class="line">test called</span><br><span class="line">My Name is , My age is 0</span><br></pre></td></tr></table></figure>
+<h2 id="添加子命令"><a href="#添加子命令" class="headerlink" title="添加子命令"></a>添加子命令</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">./cobra_example --<span class="hljs-built_in">help</span></span><br>Demo is a test appcation for print things<br><br>Usage:<br>  demo [flags]<br>  demo [command]<br><br>Available Commands:<br>  test        A brief description of your command<br><br>Flags:<br>  -a, --age int       person&#x27;s age<br>  -n, --name string   person&#x27;s name<br><br>Use &quot;demo [command] --help&quot; for more information about a command.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">./cobra_example <span class="hljs-built_in">test</span></span>  <br>test called<br>My Name is , My age is 0<br></code></pre></td></tr></table></figure>
 
 <p>我们在前面例子的基础上进行改进，目录结构如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">▾ cobra_example&#x2F;</span><br><span class="line">    ▾ add&#x2F;</span><br><span class="line">        add.go</span><br><span class="line">    ▾ cmd&#x2F;</span><br><span class="line">        root.go</span><br><span class="line">        test.go	</span><br><span class="line">      main.go</span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs vim">▾ cobra_example/<br>    ▾ <span class="hljs-built_in">add</span>/<br>        <span class="hljs-built_in">add</span>.<span class="hljs-keyword">go</span><br>    ▾ cmd/<br>        root.<span class="hljs-keyword">go</span><br>        test.<span class="hljs-keyword">go</span>	<br>      main.<span class="hljs-keyword">go</span><br></code></pre></td></tr></table></figure>
 
 <ul>
 <li>test.go文件内容如下</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cmd</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"cobra_example/add"</span></span><br><span class="line">	<span class="string">"github.com/spf13/cobra"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// testCmd represents the test command</span></span><br><span class="line"><span class="keyword">var</span> testCmd = &amp;cobra.Command&#123;</span><br><span class="line">	Use:   <span class="string">"test"</span>,</span><br><span class="line">	Short: <span class="string">"A brief description of your command"</span>,</span><br><span class="line">	Long: <span class="string">`A longer description that spans multiple lines and likely contains examples</span></span><br><span class="line"><span class="string">and usage of using your command. For example:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Cobra is a CLI library for Go that empowers applications.</span></span><br><span class="line"><span class="string">This application is a tool to generate the needed files</span></span><br><span class="line"><span class="string">to quickly create a Cobra application.`</span>,</span><br><span class="line">	Run: <span class="function"><span class="keyword">func</span><span class="params">(cmd *cobra.Command, args []<span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"test called"</span>)</span><br><span class="line">		add.Show(name, age)</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">	RootCmd.AddCommand(testCmd)</span><br><span class="line"></span><br><span class="line">	testCmd.Flags().StringVarP(&amp;name, <span class="string">"name"</span>, <span class="string">"n"</span>, <span class="string">""</span>, <span class="string">"person's name"</span>)</span><br><span class="line">	testCmd.Flags().IntVarP(&amp;age, <span class="string">"age"</span>, <span class="string">"a"</span>, <span class="number">0</span>, <span class="string">"person's age"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> cmd<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br><br>	<span class="hljs-string">&quot;cobra_example/add&quot;</span><br>	<span class="hljs-string">&quot;github.com/spf13/cobra&quot;</span><br>)<br><br><span class="hljs-comment">// testCmd represents the test command</span><br><span class="hljs-keyword">var</span> testCmd = &amp;cobra.Command&#123;<br>	Use:   <span class="hljs-string">&quot;test&quot;</span>,<br>	Short: <span class="hljs-string">&quot;A brief description of your command&quot;</span>,<br>	Long: <span class="hljs-string">`A longer description that spans multiple lines and likely contains examples</span><br><span class="hljs-string">and usage of using your command. For example:</span><br><span class="hljs-string"></span><br><span class="hljs-string">Cobra is a CLI library for Go that empowers applications.</span><br><span class="hljs-string">This application is a tool to generate the needed files</span><br><span class="hljs-string">to quickly create a Cobra application.`</span>,<br>	Run: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(cmd *cobra.Command, args []<span class="hljs-type">string</span>)</span></span> &#123;<br>		fmt.Println(<span class="hljs-string">&quot;test called&quot;</span>)<br>		add.Show(name, age)<br>	&#125;,<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span> &#123;<br>	RootCmd.AddCommand(testCmd)<br><br>	testCmd.Flags().StringVarP(&amp;name, <span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;n&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;person&#x27;s name&quot;</span>)<br>	testCmd.Flags().IntVarP(&amp;age, <span class="hljs-string">&quot;age&quot;</span>, <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;person&#x27;s age&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="多级命令"><a href="#多级命令" class="headerlink" title="多级命令"></a>多级命令</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">	<span class="string">"github.com/spf13/cobra"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"><span class="keyword">var</span> echoTimes <span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> cmdPrint = &amp;cobra.Command&#123;</span><br><span class="line">		Use:   <span class="string">"print [string to print]"</span>,</span><br><span class="line">		Short: <span class="string">"Print anything to the screen"</span>,</span><br><span class="line">		Long: <span class="string">`print is for printing anything back to the screen.</span></span><br><span class="line"><span class="string">            For many years people have printed back to the screen.</span></span><br><span class="line"><span class="string">            `</span>,</span><br><span class="line">		Run: <span class="function"><span class="keyword">func</span><span class="params">(cmd *cobra.Command, args []<span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"Print: "</span> + strings.Join(args, <span class="string">" "</span>))</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">var</span> cmdEcho = &amp;cobra.Command&#123;</span><br><span class="line">		Use:   <span class="string">"echo [string to echo]"</span>,</span><br><span class="line">		Short: <span class="string">"Echo anything to the screen"</span>,</span><br><span class="line">		Long: <span class="string">`echo is for echoing anything back.</span></span><br><span class="line"><span class="string">            Echo works a lot like print, except it has a child command.</span></span><br><span class="line"><span class="string">            `</span>,</span><br><span class="line">		Run: <span class="function"><span class="keyword">func</span><span class="params">(cmd *cobra.Command, args []<span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"Print: "</span> + strings.Join(args, <span class="string">" "</span>))</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">var</span> cmdTimes = &amp;cobra.Command&#123;</span><br><span class="line">		Use:   <span class="string">"times [# times] [string to echo]"</span>,</span><br><span class="line">		Short: <span class="string">"Echo anything to the screen more times"</span>,</span><br><span class="line">		Long: <span class="string">`echo things multiple times back to the user by providing</span></span><br><span class="line"><span class="string">            a count and a string.`</span>,</span><br><span class="line">		Run: <span class="function"><span class="keyword">func</span><span class="params">(cmd *cobra.Command, args []<span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">			<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; echoTimes; i++ &#123;</span><br><span class="line">				fmt.Println(<span class="string">"Echo: "</span> + strings.Join(args, <span class="string">" "</span>))</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">cmdTimes.Flags().IntVarP(&amp;echoTimes, <span class="string">"times"</span>, <span class="string">"t"</span>, <span class="number">1</span>, <span class="string">"times to echo the input"</span>)</span><br><span class="line"><span class="keyword">var</span> rootCmd = &amp;cobra.Command&#123;Use: <span class="string">"app"</span>&#125;</span><br><span class="line">	rootCmd.AddCommand(cmdPrint, cmdEcho)</span><br><span class="line">	cmdEcho.AddCommand(cmdTimes)</span><br><span class="line">	rootCmd.Execute()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="多级命令"><a href="#多级命令" class="headerlink" title="多级命令"></a>多级命令</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;strings&quot;</span><br>	<span class="hljs-string">&quot;github.com/spf13/cobra&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br><span class="hljs-keyword">var</span> echoTimes <span class="hljs-type">int</span><br><span class="hljs-keyword">var</span> cmdPrint = &amp;cobra.Command&#123;<br>		Use:   <span class="hljs-string">&quot;print [string to print]&quot;</span>,<br>		Short: <span class="hljs-string">&quot;Print anything to the screen&quot;</span>,<br>		Long: <span class="hljs-string">`print is for printing anything back to the screen.</span><br><span class="hljs-string">            For many years people have printed back to the screen.</span><br><span class="hljs-string">            `</span>,<br>		Run: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(cmd *cobra.Command, args []<span class="hljs-type">string</span>)</span></span> &#123;<br>			fmt.Println(<span class="hljs-string">&quot;Print: &quot;</span> + strings.Join(args, <span class="hljs-string">&quot; &quot;</span>))<br>		&#125;,<br>	&#125;<br><span class="hljs-keyword">var</span> cmdEcho = &amp;cobra.Command&#123;<br>		Use:   <span class="hljs-string">&quot;echo [string to echo]&quot;</span>,<br>		Short: <span class="hljs-string">&quot;Echo anything to the screen&quot;</span>,<br>		Long: <span class="hljs-string">`echo is for echoing anything back.</span><br><span class="hljs-string">            Echo works a lot like print, except it has a child command.</span><br><span class="hljs-string">            `</span>,<br>		Run: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(cmd *cobra.Command, args []<span class="hljs-type">string</span>)</span></span> &#123;<br>			fmt.Println(<span class="hljs-string">&quot;Print: &quot;</span> + strings.Join(args, <span class="hljs-string">&quot; &quot;</span>))<br>		&#125;,<br>	&#125;<br><span class="hljs-keyword">var</span> cmdTimes = &amp;cobra.Command&#123;<br>		Use:   <span class="hljs-string">&quot;times [# times] [string to echo]&quot;</span>,<br>		Short: <span class="hljs-string">&quot;Echo anything to the screen more times&quot;</span>,<br>		Long: <span class="hljs-string">`echo things multiple times back to the user by providing</span><br><span class="hljs-string">            a count and a string.`</span>,<br>		Run: <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(cmd *cobra.Command, args []<span class="hljs-type">string</span>)</span></span> &#123;<br>			<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; echoTimes; i++ &#123;<br>				fmt.Println(<span class="hljs-string">&quot;Echo: &quot;</span> + strings.Join(args, <span class="hljs-string">&quot; &quot;</span>))<br>			&#125;<br>		&#125;,<br>	&#125;<br>cmdTimes.Flags().IntVarP(&amp;echoTimes, <span class="hljs-string">&quot;times&quot;</span>, <span class="hljs-string">&quot;t&quot;</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&quot;times to echo the input&quot;</span>)<br><span class="hljs-keyword">var</span> rootCmd = &amp;cobra.Command&#123;Use: <span class="hljs-string">&quot;app&quot;</span>&#125;<br>	rootCmd.AddCommand(cmdPrint, cmdEcho)<br>	cmdEcho.AddCommand(cmdTimes)<br>	rootCmd.Execute()<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://github.com/urfave/cli" target="_blank" rel="noopener">urfave/cli</a>，这是另外一个构造命令行工具cli</p>
-<p><a href="https://github.com/spf13/cobra" target="_blank" rel="noopener">cobra</a></p>
-</div></article></div></main><footer><div class="paginator"><a class="prev" href="/post/5574d8a6.html">PREV</a><a class="next" href="/post/9c69c716.html">NEXT</a></div><div class="copyright"><p>© 2021 - 2026 PEACE & LOVE</p><p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>, <a href="https://github.com/jeremyfan/hexo-theme-still" target="_blank">theme</a> by <a href="https://github.com/jeremyfan" target="_blank">Bill Zong</a>.</p></div></footer></div></body></html>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://github.com/urfave/cli">urfave&#x2F;cli</a>，这是另外一个构造命令行工具cli</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/spf13/cobra">cobra</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Golang/" class="category-chain-item">Golang</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+        <a href="/tags/cobra/" class="print-no-link">#cobra</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>基于cobra构建命令行</div>
+      <div>https://billzong.github.io/post/89751058.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Bill Zong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/post/5574d8a6.html" title="curl发送multipart文件的命令">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">curl发送multipart文件的命令</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/post/9c69c716.html" title="Context用法">
+                        <span class="hidden-mobile">Context用法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
