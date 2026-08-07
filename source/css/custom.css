@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Custom CSS - 关闭 Fluid 主题所有动画效果
+   ========================================================================== */
+
+/* 关闭 navbar 背景色/内边距的 transition */
+.navbar {
+  -webkit-transition: none !important;
+  transition: none !important;
+}
+
+/* 关闭 navbar 菜单项的 transition */
+@media (min-width: 600px) {
+  .navbar.scrolling-navbar .navbar-nav > li {
+    -webkit-transition-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+}
+
+/* 关闭 .fade-in-up 等所有元素动画，直接显示 */
+.fade-in-up,
+[class*="fade-in"],
+[class*="animation"] {
+  -webkit-animation: none !important;
+  animation: none !important;
+  -webkit-transition: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+
+/* 全局兜底：关闭所有元素的 transition 和 animation */
+*,
+*::before,
+*::after {
+  -webkit-transition: none !important;
+  transition: none !important;
+  -webkit-animation: none !important;
+  animation: none !important;
+}
+
+/* 隐藏 about 页面 banner 里的 slogan (typed.js 渲染的 "关于" 副标题) */
+#subtitle[data-typed-text="关于"] {
+  display: none !important;
+}
