@@ -27,7 +27,7 @@
 <meta property="og:description" content="概要本文只关注go 1.11版本新添加的modules编译方式，说明本次PR合入后项目依赖管理和编译方式的变化，以及其中具体的一些坑。 以下操作仅提供相对简便的方式，更复杂、专业的操作内容，请参考相关文档和指令说明。 背景go 1.11版本发布了大量改动，其中就包括我们关注的modules。 官方放出的Release Note中，将moduels描述为包版本管理、依赖管理。 从此代码不必再放到GO">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-12T14:27:00.000Z">
-<meta property="article:modified_time" content="2026-08-07T07:59:20.150Z">
+<meta property="article:modified_time" content="2026-08-07T08:03:30.915Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="golang">
 <meta property="article:tag" content="module">
@@ -66,7 +66,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -299,7 +299,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">go111module编译实践说明</span>
+            <span id="subtitle" data-typed-text="go111module编译实践说明"></span>
           
         </div>
 
@@ -373,7 +373,7 @@
 <li>将代码拉到本地缓存，解决依赖问题并更新go.mod。同时，还会做代码编译，生成<code>.a</code>文件</li>
 </ul>
 <blockquote>
-<p>go get github.com&#x2F;author&#x2F;<a href="mailto:&#114;&#101;&#x70;&#x6f;&#x5f;&#x6e;&#97;&#x6d;&#x65;&#64;&#118;&#x31;&#x2e;&#x30;&#x2e;&#48;">&#114;&#101;&#x70;&#x6f;&#x5f;&#x6e;&#97;&#x6d;&#x65;&#64;&#118;&#x31;&#x2e;&#x30;&#x2e;&#48;</a></p>
+<p>go get github.com&#x2F;author&#x2F;<a href="mailto:&#x72;&#x65;&#112;&#111;&#x5f;&#110;&#97;&#x6d;&#101;&#x40;&#x76;&#49;&#x2e;&#48;&#x2e;&#48;">&#x72;&#x65;&#112;&#111;&#x5f;&#110;&#97;&#x6d;&#101;&#x40;&#x76;&#49;&#x2e;&#48;&#x2e;&#48;</a></p>
 </blockquote>
 <ul>
 <li>将本地下载缓存的代码更新vendor（<strong>可不执行，甚至可以完全不依赖此文件夹，但不使用vendor意味着每次缓存失效后都要从网络重新下载</strong>）</li>
@@ -401,7 +401,7 @@
 <li>直接拉取指定版本的代码</li>
 </ul>
 <blockquote>
-<p>go get github.com&#x2F;author&#x2F;<a href="mailto:&#114;&#x65;&#x70;&#x6f;&#95;&#x6e;&#97;&#109;&#x65;&#x40;&#x76;&#49;&#x2e;&#x31;&#x2e;&#x30;">&#114;&#x65;&#x70;&#x6f;&#95;&#x6e;&#97;&#109;&#x65;&#x40;&#x76;&#49;&#x2e;&#x31;&#x2e;&#x30;</a></p>
+<p>go get github.com&#x2F;author&#x2F;<a href="mailto:&#x72;&#x65;&#112;&#x6f;&#x5f;&#x6e;&#97;&#x6d;&#x65;&#64;&#x76;&#49;&#46;&#49;&#x2e;&#x30;">&#x72;&#x65;&#112;&#x6f;&#x5f;&#x6e;&#97;&#x6d;&#x65;&#64;&#x76;&#49;&#46;&#49;&#x2e;&#x30;</a></p>
 </blockquote>
 <ul>
 <li>执行更新动作。<strong>注意！</strong>该操作除了更新未下载的<code>module</code>，将<code>go.mod</code>的版本信息更新到<code>go.sum</code>，还会删除<code>go.mod</code>中未被引用的<code>module</code>。</li>
@@ -599,6 +599,21 @@
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
 
 
