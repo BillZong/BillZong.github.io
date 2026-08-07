@@ -83,6 +83,11 @@ if [[ $SKIP_MASTER -eq 0 ]]; then
   if [[ $DRY_RUN -eq 0 ]]; then
     git checkout master
     cp -a public/. .
+    # 清理 dev checkout master 时可能残留的源文件
+    # (master 是部署分支，不应包含 _config.yml / package.json / yarn.lock 等)
+    mavis-trash _config.yml _config.fluid.yml _config.landscape.yml _admin-config.yml \
+                package.json yarn.lock package-lock.json 2>/dev/null || true
+    find . -maxdepth 1 \( -name "*.bak" -o -name "*.original" \) -exec mavis-trash {} + 2>/dev/null || true
     git add -A
     # 忽略掉不该 commit 的
     git reset HEAD public/ node_modules/ package-lock.json db.json source/ \
