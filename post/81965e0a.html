@@ -27,7 +27,7 @@
 <meta property="og:description" content="背景目的本地开发调试用，非此目的不建议轻易尝试入坑。 另外，执行测试必须将环境部署起来。 系统说明本人使用的是 MacOS 10.15 Beta 系统。其它系统暂未测试，未确定实际效果。 背景知识建议阅读少量Ansible的文档，了解一些基本的概念。  环境准备本地需要的一些工具和环境。其中版本参考的是本地的，部分标注必须，说明该版本不可修改。包括：  Docker 18.09.1 Java 8">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-11T08:31:00.000Z">
-<meta property="article:modified_time" content="2026-08-03T02:24:10.144Z">
+<meta property="article:modified_time" content="2026-08-07T07:59:20.146Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="OpenWhisk">
 <meta property="article:tag" content="ansible">
@@ -46,8 +46,6 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -63,18 +61,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -307,7 +300,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Ansible在Mac本地部署OpenWhisk填坑记"></span>
+            <span id="subtitle">Ansible在Mac本地部署OpenWhisk填坑记</span>
           
         </div>
 
@@ -316,34 +309,11 @@
   <div class="mt-3">
     
     
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-04-11 16:31" pubdate>
-          2021年4月11日 下午
-        </time>
-      </span>
-    
   </div>
 
   <div class="mt-1">
     
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          4.1k 字
-        
-      </span>
-    
 
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          35 分钟
-        
-      </span>
     
 
     
@@ -399,20 +369,20 @@
 </ul>
 <p>这里，JDK版本之所以使用8，是因为<code>Scala 2.12</code>以上版本开启<code>JVM</code>时依赖的版本问题。目前<code>JDK11</code>无法通过编译，不建议安装。</p>
 <h3 id="安装HomeBrew"><a href="#安装HomeBrew" class="headerlink" title="安装HomeBrew"></a>安装HomeBrew</h3><p>Mac上应用&#x2F;包&#x2F;库管理最好用的工具。使用<code>HomeBrew</code>安装整个环境依赖是最方面的。</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/ruby -e &quot;$(curl -fsSL https:/</span><span class="hljs-regexp">/raw.githubusercontent.com/</span>Homebrew<span class="hljs-regexp">/install/m</span>aster/install)<span class="hljs-string">&quot;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span><br></pre></td></tr></table></figure>
 
 <p>后续的工作也基本依赖于此。童鞋们如何有其它途径也可补充说明。</p>
 <p>Linux平台也支持了，详细参考<a target="_blank" rel="noopener" href="https://docs.brew.sh/Homebrew-on-Linux">这篇文章</a>。</p>
 <h3 id="安装JDK8"><a href="#安装JDK8" class="headerlink" title="安装JDK8"></a>安装JDK8</h3><p>Mac系统中同时安装JDK8及其它版本，并切换维护的说明请参考<a target="_blank" rel="noopener" href="https://lexiangla.com/teams/k100002/docs/87f7b8e2c89511e98f860a58ac1306e6?lxref=search-company&company_from=0afec89eb58611e8974552540005f435">此文档</a>。</p>
-<h3 id="安装Scala"><a href="#安装Scala" class="headerlink" title="安装Scala"></a>安装Scala</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">brew install scala<br>brew install gnu-tar <span class="hljs-comment"># 方便后面解压缩tar包用</span><br></code></pre></td></tr></table></figure>
+<h3 id="安装Scala"><a href="#安装Scala" class="headerlink" title="安装Scala"></a>安装Scala</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install scala</span><br><span class="line">brew install gnu-tar <span class="comment"># 方便后面解压缩tar包用</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="安装pip"><a href="#安装pip" class="headerlink" title="安装pip"></a>安装pip</h3><p>如果本地<code>pip</code>未安装，如Mac系统的2.7版本，并不会预先安装<code>pip</code>。</p>
 <p>则需要执行下面的命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">python -m ensurepip --default-pip<br><span class="hljs-comment"># 查看当前pip的信息</span><br>python -m pip -V<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -m ensurepip --default-pip</span><br><span class="line"><span class="comment"># 查看当前pip的信息</span></span><br><span class="line">python -m pip -V</span><br></pre></td></tr></table></figure>
 
 <p><strong>如果之前使用过其它工具安装配置过<code>Python</code>，如<code>HomeBrew</code>、<code>pyenv</code>等，建议将其清理以确保系统Python路径不受到干扰。</strong></p>
 <h3 id="安装docker、ansible等工具和库"><a href="#安装docker、ansible等工具和库" class="headerlink" title="安装docker、ansible等工具和库"></a>安装docker、ansible等工具和库</h3><p>之所以不使用<code>python -m venv</code>创建个隔离环境来安装，是由于本人环境配置不当导致只能使用系统的<code>Python</code>路径。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">python -m pip install docker --user<br>python -m pip install ansible --user<br>python -m pip install couchdb --user<br>python -m pip install httplib2 --user<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python -m pip install docker --user</span><br><span class="line">python -m pip install ansible --user</span><br><span class="line">python -m pip install couchdb --user</span><br><span class="line">python -m pip install httplib2 --user</span><br></pre></td></tr></table></figure>
 
 <p>目前，并没有强制要求哪些指定版本，所以直接执行即可。</p>
 <p><strong>如果之前使用过其它<code>Python</code>版本（如3.x），并执行过<code>ansible-playbook</code>任务，需要到上次执行的<code>ansible</code>目录下，将已经编译过的<code>pyc</code>文件删除，才能正常运行。</strong></p>
@@ -437,7 +407,7 @@
 </li>
 <li>使用<code>ansible</code>部署&#x2F;替换镜像</li>
 </ul>
-<h3 id="从头开始部署"><a href="#从头开始部署" class="headerlink" title="从头开始部署"></a>从头开始部署</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> OPENWHISK_HOME=<span class="hljs-variable">$PWD</span> <span class="hljs-comment"># 可以不执行，因为项目已默认使用项目根目录设置为openwhisk_home</span><br><br><span class="hljs-built_in">cd</span> ansible<br><span class="hljs-built_in">export</span> ENVIRONMENT=<span class="hljs-string">&quot;local&quot;</span><br><br><span class="hljs-built_in">sudo</span> ifconfig lo0 <span class="hljs-built_in">alias</span> 172.17.0.1/24 <span class="hljs-comment"># 每次电脑重启后必须执行，本地Docker的host都是指向该IP的</span><br></code></pre></td></tr></table></figure>
+<h3 id="从头开始部署"><a href="#从头开始部署" class="headerlink" title="从头开始部署"></a>从头开始部署</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export OPENWHISK_HOME=$PWD # 可以不执行，因为项目已默认使用项目根目录设置为openwhisk_home</span><br><span class="line"></span><br><span class="line">cd ansible</span><br><span class="line">export ENVIRONMENT=&quot;local&quot;</span><br><span class="line"></span><br><span class="line">sudo ifconfig lo0 alias 172.17.0.1/24 # 每次电脑重启后必须执行，本地Docker的host都是指向该IP的</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>必须进入该目录，才能正常执行<code>ansible</code>任务。<ul>
@@ -451,7 +421,7 @@
 </li>
 </ul>
 <h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>使用模板将本地配置环境部署好。</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">ansible-playbook -<span class="hljs-selector-tag">i</span> environments/<span class="hljs-variable">$ENVIRONMENT</span> setup.yml<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -i environments/$ENVIRONMENT setup.yml</span><br></pre></td></tr></table></figure>
 
 <h4 id="修改部分配置"><a href="#修改部分配置" class="headerlink" title="修改部分配置"></a>修改部分配置</h4><ul>
 <li>不再下载本地已有Docker镜像，加快部署速度。<ul>
@@ -459,7 +429,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-comment"># 新增内容：</span><br><span class="hljs-comment"># ansible/environments/local/group_vars/all</span><br><span class="hljs-params">couchdb:</span><br>  <span class="hljs-params">pull_couchdb:</span> <span class="hljs-literal">false</span><br><span class="hljs-params">apigateway_local_build:</span> <span class="hljs-literal">true</span><br><span class="hljs-params">kafka:</span><br>  <span class="hljs-params">pull_kafka:</span> <span class="hljs-literal">false</span><br><span class="hljs-params">zookeeper:</span><br>  <span class="hljs-params">pull_zookeeper:</span> <span class="hljs-literal">false</span><br><span class="hljs-params">skip_pull_runtimes:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 不拉取运行时镜像</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 新增内容：</span><br><span class="line"># ansible/environments/local/group_vars/all</span><br><span class="line">couchdb:</span><br><span class="line">  pull_couchdb: false</span><br><span class="line">apigateway_local_build: true</span><br><span class="line">kafka:</span><br><span class="line">  pull_kafka: false</span><br><span class="line">zookeeper:</span><br><span class="line">  pull_zookeeper: false</span><br><span class="line">skip_pull_runtimes: true # 不拉取运行时镜像</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>（只）使用本地已有的<code>RunTime</code>镜像，编辑个<code>runtimes.json</code>文件，<strong>放到仓库里</strong>，格式如下：<ul>
@@ -467,21 +437,21 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs prolog">&#123;<br>  <span class="hljs-string">&quot;runtimes&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;nodejs&quot;</span>: [<br>      &#123;<br>        <span class="hljs-string">&quot;kind&quot;</span>: <span class="hljs-string">&quot;nodejs:10&quot;</span>,<br>        <span class="hljs-string">&quot;default&quot;</span>: true,<br>        <span class="hljs-string">&quot;image&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;prefix&quot;</span>: <span class="hljs-string">&quot;openwhisk&quot;</span>,<br>          <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;action-nodejs-v10&quot;</span>,<br>          <span class="hljs-string">&quot;tag&quot;</span>: <span class="hljs-string">&quot;local-v0.1&quot;</span><br>        &#125;,<br>        <span class="hljs-string">&quot;deprecated&quot;</span>: false,<br>        <span class="hljs-string">&quot;attached&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;attachmentName&quot;</span>: <span class="hljs-string">&quot;codefile&quot;</span>,<br>          <span class="hljs-string">&quot;attachmentType&quot;</span>: <span class="hljs-string">&quot;text/plain&quot;</span><br>        &#125;,<br>        <span class="hljs-string">&quot;stemCells&quot;</span>: [<br>          &#123;<br>            <span class="hljs-string">&quot;count&quot;</span>: <span class="hljs-number">2</span>,<br>            <span class="hljs-string">&quot;memory&quot;</span>: <span class="hljs-string">&quot;128 MB&quot;</span><br>          &#125;<br>        ]<br>      &#125;<br>    ]<br>  &#125;,<br>  <span class="hljs-string">&quot;blackboxes&quot;</span>: [<br>    &#123;<br>      <span class="hljs-string">&quot;prefix&quot;</span>: <span class="hljs-string">&quot;openwhisk&quot;</span>,<br>      <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;dockerskeleton&quot;</span>,<br>      <span class="hljs-string">&quot;tag&quot;</span>: <span class="hljs-string">&quot;local-v0.1&quot;</span><br>    &#125;<br>  ]<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;runtimes&quot;: &#123;</span><br><span class="line">    &quot;nodejs&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;kind&quot;: &quot;nodejs:10&quot;,</span><br><span class="line">        &quot;default&quot;: true,</span><br><span class="line">        &quot;image&quot;: &#123;</span><br><span class="line">          &quot;prefix&quot;: &quot;openwhisk&quot;,</span><br><span class="line">          &quot;name&quot;: &quot;action-nodejs-v10&quot;,</span><br><span class="line">          &quot;tag&quot;: &quot;local-v0.1&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;deprecated&quot;: false,</span><br><span class="line">        &quot;attached&quot;: &#123;</span><br><span class="line">          &quot;attachmentName&quot;: &quot;codefile&quot;,</span><br><span class="line">          &quot;attachmentType&quot;: &quot;text/plain&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;stemCells&quot;: [</span><br><span class="line">          &#123;</span><br><span class="line">            &quot;count&quot;: 2,</span><br><span class="line">            &quot;memory&quot;: &quot;128 MB&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;blackboxes&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;prefix&quot;: &quot;openwhisk&quot;,</span><br><span class="line">      &quot;name&quot;: &quot;dockerskeleton&quot;,</span><br><span class="line">      &quot;tag&quot;: &quot;local-v0.1&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>在配置文件里修改<code>runtimes.json</code>的路径，使本地部署配置加载本地镜像，加快部署速度。</li>
 </ul>
-<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-meta"># 新增内容：</span><br><span class="hljs-meta"># ansible/environments/local/group_vars/all</span><br><span class="hljs-symbol">manifest_file:</span> <span class="hljs-string">&quot;/runtimes.json&quot;</span> <span class="hljs-meta"># 你刚刚保存的文件相对于项目根目录的路径</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 新增内容：</span><br><span class="line"># ansible/environments/local/group_vars/all</span><br><span class="line">manifest_file: &quot;/runtimes.json&quot; # 你刚刚保存的文件相对于项目根目录的路径</span><br></pre></td></tr></table></figure>
 
-<h4 id="继续安装"><a href="#继续安装" class="headerlink" title="继续安装"></a>继续安装</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stylus">ansible-playbook -<span class="hljs-selector-tag">i</span> environments/<span class="hljs-variable">$ENVIRONMENT</span> couchdb<span class="hljs-selector-class">.yml</span><br>ansible-playbook -<span class="hljs-selector-tag">i</span> environments/<span class="hljs-variable">$ENVIRONMENT</span> initdb<span class="hljs-selector-class">.yml</span><br>ansible-playbook -<span class="hljs-selector-tag">i</span> environments/<span class="hljs-variable">$ENVIRONMENT</span> wipe<span class="hljs-selector-class">.yml</span><br>ansible-playbook -<span class="hljs-selector-tag">i</span> environments/<span class="hljs-variable">$ENVIRONMENT</span> openwhisk.yml<br></code></pre></td></tr></table></figure>
+<h4 id="继续安装"><a href="#继续安装" class="headerlink" title="继续安装"></a>继续安装</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -i environments/$ENVIRONMENT couchdb.yml</span><br><span class="line">ansible-playbook -i environments/$ENVIRONMENT initdb.yml</span><br><span class="line">ansible-playbook -i environments/$ENVIRONMENT wipe.yml</span><br><span class="line">ansible-playbook -i environments/$ENVIRONMENT openwhisk.yml</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>如果需要新的CouchDB部署，我们每次需要执行<code>initdb.yml</code>。</li>
 <li>如果你只是想重启服务，并不打算重新创建CouchDB，可以不执行<code>wipe.yml</code>。</li>
 </ul>
 <p><em>使用<code>d4d7ceb6</code>及更早提交点的代码，部署期间有个任务存在问题，导致部署失败。修复完成，已提交PR并合入。</em></p>
-<h4 id="部署Catalog和APIGateway"><a href="#部署Catalog和APIGateway" class="headerlink" title="部署Catalog和APIGateway"></a>部署Catalog和APIGateway</h4><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs autoit"><span class="hljs-meta"># 一些“预安装”的package</span><br>ansible-playbook -i environments/$ENVIRONMENT postdeploy.yml<br><br><span class="hljs-meta"># API Gateway 必备</span><br>ansible-playbook -i environments/$ENVIRONMENT apigateway.yml<br>ansible-playbook -i environments/$ENVIRONMENT routemgmt.yml<br></code></pre></td></tr></table></figure>
+<h4 id="部署Catalog和APIGateway"><a href="#部署Catalog和APIGateway" class="headerlink" title="部署Catalog和APIGateway"></a>部署Catalog和APIGateway</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 一些“预安装”的package</span><br><span class="line">ansible-playbook -i environments/$ENVIRONMENT postdeploy.yml</span><br><span class="line"></span><br><span class="line"># API Gateway 必备</span><br><span class="line">ansible-playbook -i environments/$ENVIRONMENT apigateway.yml</span><br><span class="line">ansible-playbook -i environments/$ENVIRONMENT routemgmt.yml</span><br></pre></td></tr></table></figure>
 
 <h3 id="更新部分组件"><a href="#更新部分组件" class="headerlink" title="更新部分组件"></a>更新部分组件</h3><p>我们在开发完<code>Controller</code>或者<code>Invoker</code>项目后，需要放到整个环境中查看一下执行情况是否跟预期吻合。因我们没有设置<code>CI</code>环境，目前需要手动编译打包部署。</p>
 <p>其流程基本如上描述。</p>
@@ -492,12 +462,12 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs elixir">cd &lt;openwhisk_home&gt;<br>gradle <span class="hljs-symbol">:core</span><span class="hljs-symbol">:invoker</span><span class="hljs-symbol">:distDocker</span> -<span class="hljs-title class_">PdockerImageTag</span>=myNewInvoker<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &lt;openwhisk_home&gt;</span><br><span class="line">gradle :core:invoker:distDocker -PdockerImageTag=myNewInvoker</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>将新打包好的镜像替换上去</li>
 </ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">cd ansible<br>ansible-playbook -i environments/<span class="hljs-variable">$ENVIRONMENT</span> invoker.yml -e <span class="hljs-attribute">docker_image_tag</span>=myNewInvoker<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ansible</span><br><span class="line">ansible-playbook -i environments/$ENVIRONMENT invoker.yml -e docker_image_tag=myNewInvoker</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
@@ -551,73 +521,7 @@
 
 
               
-  
 
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>Ansible在Mac本地部署OpenWhisk填坑记</div>
-      <div>https://billzong.github.io/post/81965e0a.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Bill Zong</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2021年4月11日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-cc-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/post/605dd585.html" title="Helm部署OpenWhisk全流程分析">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Helm部署OpenWhisk全流程分析</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/post/b265443c.html" title="OpenWhisk当前监控指标详细说明">
-                        <span class="hidden-mobile">OpenWhisk当前监控指标详细说明</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
               
             </div>
 
@@ -629,19 +533,6 @@
 
     <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
 
     </div>
   </div>
@@ -651,23 +542,12 @@
 
 
 
-  
-
-
 
   
 
 
 
-  
 
-
-
-  
-
-
-
-  
 
 
 
@@ -725,38 +605,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 
@@ -768,162 +622,10 @@
 
 
 
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    function isExpandAllEnabled() {
-      return CONFIG.toc && CONFIG.toc.expand_all === true;
-    }
-    function expandAllToc() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
-    }
-    function updateTocToggle($li, $childList) {
-      var $toggle = $li.children('.toc-toggle');
-      if ($toggle.length === 0) { return; }
-      var collapsed = $childList.hasClass('tocbot-is-collapsed');
-      $toggle
-        .toggleClass('toc-toggle-collapsed', collapsed)
-        .toggleClass('toc-toggle-expanded', !collapsed);
-    }
-    function bindTocToggle() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .toc-list-item').each(function() {
-        var $li = jQuery(this);
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) {
-          if ($li.children('.toc-toggle').length === 0) {
-            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
-          }
-          return;
-        }
-
-        if ($li.children('.toc-toggle').length === 0) {
-          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
-        }
-        updateTocToggle($li, $childList);
-      });
-      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var $li = jQuery(this).parent('.toc-list-item');
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
-        updateTocToggle($li, $childList);
-      });
-      if (!window.__tocToggleObserver) {
-        window.__tocToggleObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
-            var $list = jQuery(mutation.target);
-            var $li = $list.parent('.toc-list-item');
-            if ($li.length === 0) { return; }
-            updateTocToggle($li, $list);
-          });
-        });
-        jQuery('#toc-body ol').each(function() {
-          window.__tocToggleObserver.observe(this, { attributes: true });
-        });
-      }
-    }
-    var tocConfig = Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc);
-    if (isExpandAllEnabled()) {
-      tocConfig.collapseDepth = 6;
-    }
-    window.tocbot.init(tocConfig);
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-    expandAllToc();
-    bindTocToggle();
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-        expandAllToc();
-        bindTocToggle();
-      }
-    });
-  });
-</script>
-
-
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

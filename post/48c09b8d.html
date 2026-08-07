@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://lexiangla.com/assets/ace97c80d36811e8b8f15254004f9daa">
 <meta property="og:image" content="https://lexiangla.com/assets/611813fcd36811e8983c5254004f9daa">
 <meta property="article:published_time" content="2021-04-12T14:21:00.000Z">
-<meta property="article:modified_time" content="2026-08-03T02:24:10.146Z">
+<meta property="article:modified_time" content="2026-08-07T07:59:20.151Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="ethereum">
 <meta property="article:tag" content="docker">
@@ -54,8 +54,6 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -71,18 +69,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -315,7 +308,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="使用docker调试以太坊多节点通讯功能"></span>
+            <span id="subtitle">使用docker调试以太坊多节点通讯功能</span>
           
         </div>
 
@@ -324,34 +317,11 @@
   <div class="mt-3">
     
     
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-04-12 22:21" pubdate>
-          2021年4月12日 晚上
-        </time>
-      </span>
-    
   </div>
 
   <div class="mt-1">
     
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          4.7k 字
-        
-      </span>
-    
 
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          40 分钟
-        
-      </span>
     
 
     
@@ -493,14 +463,14 @@
 <li><p>docker pull</p>
 <ul>
 <li>用于获取镜像</li>
-<li>默认从 <a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a> 获取image  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull <span class="hljs-variable">$&#123;image_name&#125;</span>:<span class="hljs-variable">$&#123;tag_name&#125;</span><br><span class="hljs-comment"># eg: </span><br>dcoker pull kirklandatdocker/godev<br></code></pre></td></tr></table></figure></li>
+<li>默认从 <a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a> 获取image  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull $&#123;image_name&#125;:$&#123;tag_name&#125;</span><br><span class="line"># eg: </span><br><span class="line">dcoker pull kirklandatdocker/godev</span><br></pre></td></tr></table></figure></li>
 <li>tag用于控制版本，可以省略，默认为latest</li>
 </ul>
 </li>
 <li><p>docker images</p>
 <ul>
 <li><p>用于列出本地的所有镜像</p>
-  <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">docker images</span><br></code></pre></td></tr></table></figure></li>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure></li>
 <li><p>示例输出<br>  <img src="https://lexiangla.com/assets/a793fc3cd36411e88a73525400a20cd4" srcset="/img/loading.gif" lazyload alt="图片" title="图片"></p>
 </li>
 <li><p>可以看到image的名字(REPOSITYORY的部分) 、TAG 和 ID</p>
@@ -511,7 +481,7 @@
 </li>
 <li><p>docker run</p>
 <ul>
-<li>用于运行一个新的容器  <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros">docker <span class="hljs-built_in">run</span> <span class="hljs-variable">$&#123;options&#125;</span> <span class="hljs-variable">$&#123;image_name&#125;</span> <span class="hljs-variable">$&#123;comamnd&#125;</span> <span class="hljs-variable">$&#123;command_args&#125;</span><br><span class="hljs-comment"># eg:</span><br>docker <span class="hljs-built_in">run</span> -p 2349:2349 <span class="hljs-attribute">--security-opt</span>=seccomp:unconfined --name <span class="hljs-string">&quot;p2pserver_debug&quot;</span> -it -v /Users/you/go/src:/root/go/src kirklandatdocker/godev<br></code></pre></td></tr></table></figure></li>
+<li>用于运行一个新的容器  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run $&#123;options&#125; $&#123;image_name&#125; $&#123;comamnd&#125; $&#123;command_args&#125;</span><br><span class="line"># eg:</span><br><span class="line">docker run -p 2349:2349 --security-opt=seccomp:unconfined --name &quot;p2pserver_debug&quot; -it -v /Users/you/go/src:/root/go/src kirklandatdocker/godev</span><br></pre></td></tr></table></figure></li>
 <li>重要的options<ul>
 <li>–name&#x3D;${name} 表示container的名字，后续可以使用这个名字来操作此container</li>
 <li>-it 其实是 -i -t 的简写，用于表示我们需要一个终端(tty)并且要进行交互操作</li>
@@ -536,7 +506,7 @@
 <li><p>docker ps</p>
 <ul>
 <li><p>用于列出系统中所有的container</p>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">docker ps -<span class="hljs-selector-tag">a</span><br></code></pre></td></tr></table></figure></li>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure></li>
 <li><p>示例输出<br>  <img src="https://lexiangla.com/assets/a6c2f4a4d36211e8a0ce5254009b631d" srcset="/img/loading.gif" lazyload alt="图片" title="图片"></p>
 </li>
 <li><p>可以看到cotainer的id和name，他们都可以用于标识一个container</p>
@@ -553,7 +523,7 @@
 </li>
 <li><p>docker start</p>
 <ul>
-<li>可以用于重启一个已经停止(Exited)的container  <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs powershell">docker <span class="hljs-built_in">start</span> <span class="hljs-variable">$</span>&#123;options&#125; <span class="hljs-variable">$</span>&#123;container_identifier&#125;<br><span class="hljs-comment"># eg</span><br>docker <span class="hljs-built_in">start</span> <span class="hljs-literal">-ai</span> p2pserver_test<br></code></pre></td></tr></table></figure></li>
+<li>可以用于重启一个已经停止(Exited)的container  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker start $&#123;options&#125; $&#123;container_identifier&#125;</span><br><span class="line"># eg</span><br><span class="line">docker start -ai p2pserver_test</span><br></pre></td></tr></table></figure></li>
 <li>重要的options<ul>
 <li>-a 表示将标准输入输出attach到container上</li>
 <li>-i 表示需要进行交互操作<br>  *问题： run的是什么命令呢？</li>
@@ -563,7 +533,7 @@
 </li>
 <li><p>docker rm</p>
 <ul>
-<li>表示彻底删除一个container  <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs powershell">docker <span class="hljs-built_in">rm</span> <span class="hljs-variable">$</span>&#123;options&#125; <span class="hljs-variable">$</span>&#123;container_identifier&#125;<br><span class="hljs-comment"># eg</span><br>docker <span class="hljs-built_in">rm</span> <span class="hljs-operator">-f</span> p2pserver_test<br></code></pre></td></tr></table></figure></li>
+<li>表示彻底删除一个container  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rm $&#123;options&#125; $&#123;container_identifier&#125;</span><br><span class="line"># eg</span><br><span class="line">docker rm -f p2pserver_test</span><br></pre></td></tr></table></figure></li>
 <li>重要的options <ul>
 <li>-f 强制删除，即使container还在运行中</li>
 </ul>
@@ -583,7 +553,7 @@
 <ol>
 <li>先获取image</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull kirklandatdocker/godev<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull kirklandatdocker/godev</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>将获取我打包好的一个image，里面包含了go的开发环境、git命令等</li>
@@ -591,7 +561,7 @@
 </ul>
 <ol start="2">
 <li><p>启动一个container</p>
- <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">docker run --security-opt=seccomp:unconfined --name <span class="hljs-string">&quot;p2pserver_debug&quot;</span> -it -v <span class="hljs-regexp">/Users/y</span>ou<span class="hljs-regexp">/workspace/g</span>o<span class="hljs-regexp">/src:/</span>root<span class="hljs-regexp">/go/</span>src kirklandatdocker/godev<br></code></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --security-opt=seccomp:unconfined --name &quot;p2pserver_debug&quot; -it -v /Users/you/workspace/go/src:/root/go/src kirklandatdocker/godev</span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>如命令，我们启动一个名为p2pserver_debug的container</p>
 </li>
@@ -607,7 +577,7 @@
 <li><p>示例输出<br> <img src="https://lexiangla.com/assets/ace97c80d36811e8b8f15254004f9daa" srcset="/img/loading.gif" lazyload alt="图片" title="图片"></p>
 </li>
 <li><p>执行相关命令，编译程序并进行运行</p>
- <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">cd <span class="hljs-regexp">/root/g</span>o<span class="hljs-regexp">/src/</span>bitbucket.org<span class="hljs-regexp">/oudmondev/g</span>o-blockcloud-transaction-chain<br>make &amp;&amp; .<span class="hljs-regexp">/build/</span>bin/gbloc --verbosity=<span class="hljs-number">10</span><br></code></pre></td></tr></table></figure></li>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /root/go/src/bitbucket.org/oudmondev/go-blockcloud-transaction-chain</span><br><span class="line">make &amp;&amp; ./build/bin/gbloc --verbosity=10</span><br></pre></td></tr></table></figure></li>
 <li><p>示例输出<br> <img src="https://lexiangla.com/assets/611813fcd36811e8983c5254004f9daa" srcset="/img/loading.gif" lazyload alt="图片" title="图片"></p>
 </li>
 <li><p>请注意保留 self&#x3D;”enode:&#x2F;&#x2F;…” 的输出，后续我们需要通过这个标识来连接到这个gbloc节点</p>
@@ -615,18 +585,18 @@
 </ul>
 </li>
 <li><p>启动另一个container</p>
- <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">docker run -p <span class="hljs-number">2349</span>:<span class="hljs-number">2349</span> --security-opt=seccomp:unconfined --name <span class="hljs-string">&quot;p2pclient1_debug&quot;</span> -it -v <span class="hljs-regexp">/Users/y</span>ou<span class="hljs-regexp">/workspace/g</span>o<span class="hljs-regexp">/src:/</span>root<span class="hljs-regexp">/go/</span>src kirklandatdocker/godev<br></code></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 2349:2349 --security-opt=seccomp:unconfined --name &quot;p2pclient1_debug&quot; -it -v /Users/you/workspace/go/src:/root/go/src kirklandatdocker/godev</span><br></pre></td></tr></table></figure>
 <ul>
 <li>启动了一个名为 p2pclient1_debug 的container，并且暴露了端口2349，这个端口将用于远程debug</li>
-<li>需要进行dubug，我们首先要安装dlv程序(请先自行下载好相关源代码) <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">cd</span> /root/<span class="hljs-keyword">go</span>/src/github.<span class="hljs-keyword">com</span>/derekparker/delve<br><span class="hljs-keyword">make</span> install<br></code></pre></td></tr></table></figure></li>
-<li>执行debug命令，启动debug服务端 <figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">cd</span> <span class="hljs-string">/root/go/src/bitbucket.org/oudmondev/go-blockcloud-transaction-chain/cmd/gbloc</span><br>dlv debug <span class="hljs-params">--headless</span> <span class="hljs-params">--listen=</span><span class="hljs-function">:2349</span> <span class="hljs-params">--log</span> -- <span class="hljs-params">--bootnodes</span> <span class="hljs-string">&quot;enode://...@$&#123;p2p_server_ip&#125;:30303&quot;</span> <span class="hljs-params">--verbosity=10</span><br><span class="hljs-comment"># 请注意，如果ide需要dlv version 2的支持，那么需要添加一个执行参数 dlv debug --api-version=2 ...</span><br></code></pre></td></tr></table></figure></li>
+<li>需要进行dubug，我们首先要安装dlv程序(请先自行下载好相关源代码) <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /root/go/src/github.com/derekparker/delve</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></li>
+<li>执行debug命令，启动debug服务端 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /root/go/src/bitbucket.org/oudmondev/go-blockcloud-transaction-chain/cmd/gbloc</span><br><span class="line">dlv debug --headless --listen=:2349 --log -- --bootnodes &quot;enode://...@$&#123;p2p_server_ip&#125;:30303&quot; --verbosity=10</span><br><span class="line"># 请注意，如果ide需要dlv version 2的支持，那么需要添加一个执行参数 dlv debug --api-version=2 ...</span><br></pre></td></tr></table></figure></li>
 <li>enode参数和p2p_server_ip都是上一步骤上获取到的相关参数，请进行相关替换</li>
 <li>–listen&#x3D;:2349 表示dlv debugger会监听2349端口，远端的程序可以发送debug命令道这个端口，然后被debugger接收并执行</li>
 </ul>
 </li>
 <li><p>打开ide，设置好相关断点，配置好远端调试命令，然后就可以执行debug了</p>
 <ul>
-<li>以下为vscode的一个远程调试的配置 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">&#123;<br>       <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;remote debug&quot;</span>,<br>       <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;go&quot;</span>,<br>       <span class="hljs-string">&quot;request&quot;</span>: <span class="hljs-string">&quot;launch&quot;</span>,<br>       <span class="hljs-string">&quot;mode&quot;</span>: <span class="hljs-string">&quot;remote&quot;</span>,<br>       <span class="hljs-string">&quot;remotePath&quot;</span>: <span class="hljs-string">&quot;/root/go/src/bitbucket.org/oudmondev/go-blockcloud-transaction-chain/cmd/gbloc/main.go&quot;</span>,<br>       <span class="hljs-string">&quot;port&quot;</span>: 2350,<br>       <span class="hljs-string">&quot;host&quot;</span>: <span class="hljs-string">&quot;127.0.0.1&quot;</span>,<br>       <span class="hljs-string">&quot;program&quot;</span>: <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;workspaceRoot&#125;</span>/cmd/gbloc/main.go&quot;</span>,<br>       <span class="hljs-string">&quot;env&quot;</span>: &#123;&#125;<br>   &#125;<br></code></pre></td></tr></table></figure></li>
+<li>以下为vscode的一个远程调试的配置 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">       &quot;name&quot;: &quot;remote debug&quot;,</span><br><span class="line">       &quot;type&quot;: &quot;go&quot;,</span><br><span class="line">       &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">       &quot;mode&quot;: &quot;remote&quot;,</span><br><span class="line">       &quot;remotePath&quot;: &quot;/root/go/src/bitbucket.org/oudmondev/go-blockcloud-transaction-chain/cmd/gbloc/main.go&quot;,</span><br><span class="line">       &quot;port&quot;: 2350,</span><br><span class="line">       &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">       &quot;program&quot;: &quot;$&#123;workspaceRoot&#125;/cmd/gbloc/main.go&quot;,</span><br><span class="line">       &quot;env&quot;: &#123;&#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></li>
 <li>配置完毕后就可以在vscode中像调试本地程序一样调试container中的程序了</li>
 </ul>
 </li>
@@ -676,73 +646,7 @@
 
 
               
-  
 
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>使用docker调试以太坊多节点通讯功能</div>
-      <div>https://billzong.github.io/post/48c09b8d.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Bill Zong</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2021年4月12日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-cc-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/post/8d8620.html" title="创世区块账户预挖机制">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">创世区块账户预挖机制</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/post/5d25bab6.html" title="RLPx阅读笔记">
-                        <span class="hidden-mobile">RLPx阅读笔记</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
               
             </div>
 
@@ -754,19 +658,6 @@
 
     <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
 
     </div>
   </div>
@@ -776,23 +667,12 @@
 
 
 
-  
-
-
 
   
 
 
 
-  
 
-
-
-  
-
-
-
-  
 
 
 
@@ -850,38 +730,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 
@@ -893,162 +747,10 @@
 
 
 
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    function isExpandAllEnabled() {
-      return CONFIG.toc && CONFIG.toc.expand_all === true;
-    }
-    function expandAllToc() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
-    }
-    function updateTocToggle($li, $childList) {
-      var $toggle = $li.children('.toc-toggle');
-      if ($toggle.length === 0) { return; }
-      var collapsed = $childList.hasClass('tocbot-is-collapsed');
-      $toggle
-        .toggleClass('toc-toggle-collapsed', collapsed)
-        .toggleClass('toc-toggle-expanded', !collapsed);
-    }
-    function bindTocToggle() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .toc-list-item').each(function() {
-        var $li = jQuery(this);
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) {
-          if ($li.children('.toc-toggle').length === 0) {
-            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
-          }
-          return;
-        }
-
-        if ($li.children('.toc-toggle').length === 0) {
-          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
-        }
-        updateTocToggle($li, $childList);
-      });
-      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var $li = jQuery(this).parent('.toc-list-item');
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
-        updateTocToggle($li, $childList);
-      });
-      if (!window.__tocToggleObserver) {
-        window.__tocToggleObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
-            var $list = jQuery(mutation.target);
-            var $li = $list.parent('.toc-list-item');
-            if ($li.length === 0) { return; }
-            updateTocToggle($li, $list);
-          });
-        });
-        jQuery('#toc-body ol').each(function() {
-          window.__tocToggleObserver.observe(this, { attributes: true });
-        });
-      }
-    }
-    var tocConfig = Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc);
-    if (isExpandAllEnabled()) {
-      tocConfig.collapseDepth = 6;
-    }
-    window.tocbot.init(tocConfig);
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-    expandAllToc();
-    bindTocToggle();
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-        expandAllToc();
-        bindTocToggle();
-      }
-    });
-  });
-</script>
-
-
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

@@ -27,7 +27,7 @@
 <meta property="og:description" content="简介在 Go http包的Server中，每一个请求在都有一个对应的 goroutine 去处理。 请求处理函数通常会启动额外的 goroutine 用来访问后端服务，比如数据库和RPC服务。 用来处理一个请求的 goroutine 通常需要访问一些与请求特定的数据，比如终端用户的身份认证信息、验证相关的token、请求的截止时间。 当一个请求被取消或超时时，所有用来处理该请求的 goroutin">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-12T14:34:00.000Z">
-<meta property="article:modified_time" content="2026-08-03T02:24:10.145Z">
+<meta property="article:modified_time" content="2026-08-07T07:59:20.147Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="golang">
 <meta property="article:tag" content="context">
@@ -45,8 +45,6 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -62,18 +60,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -306,7 +299,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Context用法"></span>
+            <span id="subtitle">Context用法</span>
           
         </div>
 
@@ -315,34 +308,11 @@
   <div class="mt-3">
     
     
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-04-12 22:34" pubdate>
-          2021年4月12日 晚上
-        </time>
-      </span>
-    
   </div>
 
   <div class="mt-1">
     
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          5.2k 字
-        
-      </span>
-    
 
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          44 分钟
-        
-      </span>
     
 
     
@@ -398,21 +368,21 @@
 <li><p>一个 Context 不能拥有 Cancel() 方法，同时我们也只能使用 Done channel 来接收数据。 原因是：接收取消信号的函数和发送取消信号的函数通常不是一个。 一个典型的场景是：父操作为子操作操作启动 goroutine，子操作也就不能取消父操作。 作为一个折中，WithCancel() 函数提供了一种取消新的 Context 的方法。</p>
 </li>
 </ol>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// A Context carries a deadline, a cancelation signal, and other values across</span><br><span class="hljs-comment">// API boundaries.</span><br><span class="hljs-comment">//</span><br><span class="hljs-comment">// Context&#x27;s methods may be called by multiple goroutines simultaneously.</span><br><br><span class="hljs-keyword">type</span> Context <span class="hljs-keyword">interface</span> &#123;<br>	<span class="hljs-comment">// Deadline returns the time when work done on behalf of this context</span><br>	<span class="hljs-comment">// should be canceled. Deadline returns ok==false when no deadline is</span><br>	<span class="hljs-comment">// set. Successive calls to Deadline return the same results.</span><br>	Deadline() (deadline time.Time, ok <span class="hljs-type">bool</span>)<br><br>	<span class="hljs-comment">// Done returns a channel that&#x27;s closed when work done on behalf of this</span><br>	<span class="hljs-comment">// context should be canceled. Done may return nil if this context can</span><br>	<span class="hljs-comment">// never be canceled. Successive calls to Done return the same value.</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// WithCancel arranges for Done to be closed when cancel is called;</span><br>	<span class="hljs-comment">// WithDeadline arranges for Done to be closed when the deadline</span><br>	<span class="hljs-comment">// expires; WithTimeout arranges for Done to be closed when the timeout</span><br>	<span class="hljs-comment">// elapses.</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// Done is provided for use in select statements:</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">//  // Stream generates values with DoSomething and sends them to out</span><br>	<span class="hljs-comment">//  // until DoSomething returns an error or ctx.Done is closed.</span><br>	<span class="hljs-comment">//  func Stream(ctx context.Context, out chan&lt;- Value) error &#123;</span><br>	<span class="hljs-comment">//  	for &#123;</span><br>	<span class="hljs-comment">//  		v, err := DoSomething(ctx)</span><br>	<span class="hljs-comment">//  		if err != nil &#123;</span><br>	<span class="hljs-comment">//  			return err</span><br>	<span class="hljs-comment">//  		&#125;</span><br>	<span class="hljs-comment">//  		select &#123;</span><br>	<span class="hljs-comment">//  		case &lt;-ctx.Done():</span><br>	<span class="hljs-comment">//  			return ctx.Err()</span><br>	<span class="hljs-comment">//  		case out &lt;- v:</span><br>	<span class="hljs-comment">//  		&#125;</span><br>	<span class="hljs-comment">//  	&#125;</span><br>	<span class="hljs-comment">//  &#125;</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// See http://blog.golang.org/pipelines for more examples of how to use</span><br>	<span class="hljs-comment">// a Done channel for cancelation.</span><br>	Done() &lt;-<span class="hljs-keyword">chan</span> <span class="hljs-keyword">struct</span>&#123;&#125;<br><br>	<span class="hljs-comment">// Err returns a non-nil error value after Done is closed. Err returns</span><br>	<span class="hljs-comment">// Canceled if the context was canceled or DeadlineExceeded if the</span><br>	<span class="hljs-comment">// context&#x27;s deadline passed. No other values for Err are defined.</span><br>	<span class="hljs-comment">// After Done is closed, successive calls to Err return the same value.</span><br>	Err() <span class="hljs-type">error</span><br><br>	<span class="hljs-comment">// Value returns the value associated with this context for key, or nil</span><br>	<span class="hljs-comment">// if no value is associated with key. Successive calls to Value with</span><br>	<span class="hljs-comment">// the same key returns the same result.</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// Use context values only for request-scoped data that transits</span><br>	<span class="hljs-comment">// processes and API boundaries, not for passing optional parameters to</span><br>	<span class="hljs-comment">// functions.</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// A key identifies a specific value in a Context. Functions that wish</span><br>	<span class="hljs-comment">// to store values in Context typically allocate a key in a global</span><br>	<span class="hljs-comment">// variable then use that key as the argument to context.WithValue and</span><br>	<span class="hljs-comment">// Context.Value. A key can be any type that supports equality;</span><br>	<span class="hljs-comment">// packages should define keys as an unexported type to avoid</span><br>	<span class="hljs-comment">// collisions.</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// Packages that define a Context key should provide type-safe accessors</span><br>	<span class="hljs-comment">// for the values stores using that key:</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// 	// Package user defines a User type that&#x27;s stored in Contexts.</span><br>	<span class="hljs-comment">// 	package user</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// 	import &quot;golang.org/x/net/context&quot;</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// 	// User is the type of value stored in the Contexts.</span><br>	<span class="hljs-comment">// 	type User struct &#123;...&#125;</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// 	// key is an unexported type for keys defined in this package.</span><br>	<span class="hljs-comment">// 	// This prevents collisions with keys defined in other packages.</span><br>	<span class="hljs-comment">// 	type key int</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// 	// userKey is the key for user.User values in Contexts. It is</span><br>	<span class="hljs-comment">// 	// unexported; clients use user.NewContext and user.FromContext</span><br>	<span class="hljs-comment">// 	// instead of using this key directly.</span><br>	<span class="hljs-comment">// 	var userKey key = 0</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// 	// NewContext returns a new Context that carries value u.</span><br>	<span class="hljs-comment">// 	func NewContext(ctx context.Context, u *User) context.Context &#123;</span><br>	<span class="hljs-comment">// 		return context.WithValue(ctx, userKey, u)</span><br>	<span class="hljs-comment">// 	&#125;</span><br>	<span class="hljs-comment">//</span><br>	<span class="hljs-comment">// 	// FromContext returns the User value stored in ctx, if any.</span><br>	<span class="hljs-comment">// 	func FromContext(ctx context.Context) (*User, bool) &#123;</span><br>	<span class="hljs-comment">// 		u, ok := ctx.Value(userKey).(*User)</span><br>	<span class="hljs-comment">// 		return u, ok</span><br>	<span class="hljs-comment">// 	&#125;</span><br>	Value(key <span class="hljs-keyword">interface</span>&#123;&#125;) <span class="hljs-keyword">interface</span>&#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A Context carries a deadline, a cancelation signal, and other values across</span></span><br><span class="line"><span class="comment">// API boundaries.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Context&#x27;s methods may be called by multiple goroutines simultaneously.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Context <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="comment">// Deadline returns the time when work done on behalf of this context</span></span><br><span class="line">	<span class="comment">// should be canceled. Deadline returns ok==false when no deadline is</span></span><br><span class="line">	<span class="comment">// set. Successive calls to Deadline return the same results.</span></span><br><span class="line">	Deadline() (deadline time.Time, ok <span class="type">bool</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Done returns a channel that&#x27;s closed when work done on behalf of this</span></span><br><span class="line">	<span class="comment">// context should be canceled. Done may return nil if this context can</span></span><br><span class="line">	<span class="comment">// never be canceled. Successive calls to Done return the same value.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// WithCancel arranges for Done to be closed when cancel is called;</span></span><br><span class="line">	<span class="comment">// WithDeadline arranges for Done to be closed when the deadline</span></span><br><span class="line">	<span class="comment">// expires; WithTimeout arranges for Done to be closed when the timeout</span></span><br><span class="line">	<span class="comment">// elapses.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// Done is provided for use in select statements:</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">//  // Stream generates values with DoSomething and sends them to out</span></span><br><span class="line">	<span class="comment">//  // until DoSomething returns an error or ctx.Done is closed.</span></span><br><span class="line">	<span class="comment">//  func Stream(ctx context.Context, out chan&lt;- Value) error &#123;</span></span><br><span class="line">	<span class="comment">//  	for &#123;</span></span><br><span class="line">	<span class="comment">//  		v, err := DoSomething(ctx)</span></span><br><span class="line">	<span class="comment">//  		if err != nil &#123;</span></span><br><span class="line">	<span class="comment">//  			return err</span></span><br><span class="line">	<span class="comment">//  		&#125;</span></span><br><span class="line">	<span class="comment">//  		select &#123;</span></span><br><span class="line">	<span class="comment">//  		case &lt;-ctx.Done():</span></span><br><span class="line">	<span class="comment">//  			return ctx.Err()</span></span><br><span class="line">	<span class="comment">//  		case out &lt;- v:</span></span><br><span class="line">	<span class="comment">//  		&#125;</span></span><br><span class="line">	<span class="comment">//  	&#125;</span></span><br><span class="line">	<span class="comment">//  &#125;</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// See http://blog.golang.org/pipelines for more examples of how to use</span></span><br><span class="line">	<span class="comment">// a Done channel for cancelation.</span></span><br><span class="line">	Done() &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Err returns a non-nil error value after Done is closed. Err returns</span></span><br><span class="line">	<span class="comment">// Canceled if the context was canceled or DeadlineExceeded if the</span></span><br><span class="line">	<span class="comment">// context&#x27;s deadline passed. No other values for Err are defined.</span></span><br><span class="line">	<span class="comment">// After Done is closed, successive calls to Err return the same value.</span></span><br><span class="line">	Err() <span class="type">error</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Value returns the value associated with this context for key, or nil</span></span><br><span class="line">	<span class="comment">// if no value is associated with key. Successive calls to Value with</span></span><br><span class="line">	<span class="comment">// the same key returns the same result.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// Use context values only for request-scoped data that transits</span></span><br><span class="line">	<span class="comment">// processes and API boundaries, not for passing optional parameters to</span></span><br><span class="line">	<span class="comment">// functions.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// A key identifies a specific value in a Context. Functions that wish</span></span><br><span class="line">	<span class="comment">// to store values in Context typically allocate a key in a global</span></span><br><span class="line">	<span class="comment">// variable then use that key as the argument to context.WithValue and</span></span><br><span class="line">	<span class="comment">// Context.Value. A key can be any type that supports equality;</span></span><br><span class="line">	<span class="comment">// packages should define keys as an unexported type to avoid</span></span><br><span class="line">	<span class="comment">// collisions.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// Packages that define a Context key should provide type-safe accessors</span></span><br><span class="line">	<span class="comment">// for the values stores using that key:</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// 	// Package user defines a User type that&#x27;s stored in Contexts.</span></span><br><span class="line">	<span class="comment">// 	package user</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// 	import &quot;golang.org/x/net/context&quot;</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// 	// User is the type of value stored in the Contexts.</span></span><br><span class="line">	<span class="comment">// 	type User struct &#123;...&#125;</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// 	// key is an unexported type for keys defined in this package.</span></span><br><span class="line">	<span class="comment">// 	// This prevents collisions with keys defined in other packages.</span></span><br><span class="line">	<span class="comment">// 	type key int</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// 	// userKey is the key for user.User values in Contexts. It is</span></span><br><span class="line">	<span class="comment">// 	// unexported; clients use user.NewContext and user.FromContext</span></span><br><span class="line">	<span class="comment">// 	// instead of using this key directly.</span></span><br><span class="line">	<span class="comment">// 	var userKey key = 0</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// 	// NewContext returns a new Context that carries value u.</span></span><br><span class="line">	<span class="comment">// 	func NewContext(ctx context.Context, u *User) context.Context &#123;</span></span><br><span class="line">	<span class="comment">// 		return context.WithValue(ctx, userKey, u)</span></span><br><span class="line">	<span class="comment">// 	&#125;</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// 	// FromContext returns the User value stored in ctx, if any.</span></span><br><span class="line">	<span class="comment">// 	func FromContext(ctx context.Context) (*User, bool) &#123;</span></span><br><span class="line">	<span class="comment">// 		u, ok := ctx.Value(userKey).(*User)</span></span><br><span class="line">	<span class="comment">// 		return u, ok</span></span><br><span class="line">	<span class="comment">// 	&#125;</span></span><br><span class="line">	Value(key <span class="keyword">interface</span>&#123;&#125;) <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="创建根context"><a href="#创建根context" class="headerlink" title="创建根context"></a>创建根context</h2><p>context 包提供了一些函数，协助用户从现有的 Context 对象创建新的 Context 对象。 这些 Context 对象形成一棵树：当一个 Context 对象被取消时，继承自它的所有 Context 都会被取消。</p>
 <p>Background()是所有 Context 对象树的根，它不能被取消。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Background</span><span class="hljs-params">()</span></span> Context &#123;<br>	<span class="hljs-keyword">return</span> background<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Background</span><span class="params">()</span></span> Context &#123;</span><br><span class="line">	<span class="keyword">return</span> background</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="创建子context"><a href="#创建子context" class="headerlink" title="创建子context"></a>创建子context</h2><p>WithCancel 和 WithTimeout 函数会返回继承的 Context 对象，这些对象可以比它们的父 Context 更早地取消。 当请求处理函数返回时，与该请求关联的 Context 会被取消。</p>
 <ul>
 <li>当使用多个副本发送请求时，可以使用 WithCancel 取消多余的请求。</li>
-<li>WithTimeout 在设置对后端服务器请求截止时间时非常有用。<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">WithCancel</span><span class="hljs-params">(parent Context)</span></span> (ctx Context, cancel CancelFunc) &#123;<br>	ctx, f := context.WithCancel(parent)<br>	<span class="hljs-keyword">return</span> ctx, CancelFunc(f)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">WithTimeout</span><span class="hljs-params">(parent Context, timeout time.Duration)</span></span> (Context, CancelFunc) &#123;<br>	<span class="hljs-keyword">return</span> WithDeadline(parent, time.Now().Add(timeout))<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>WithTimeout 在设置对后端服务器请求截止时间时非常有用。<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WithCancel</span><span class="params">(parent Context)</span></span> (ctx Context, cancel CancelFunc) &#123;</span><br><span class="line">	ctx, f := context.WithCancel(parent)</span><br><span class="line">	<span class="keyword">return</span> ctx, CancelFunc(f)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WithTimeout</span><span class="params">(parent Context, timeout time.Duration)</span></span> (Context, CancelFunc) &#123;</span><br><span class="line">	<span class="keyword">return</span> WithDeadline(parent, time.Now().Add(timeout))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="WithTimeout例子"><a href="#WithTimeout例子" class="headerlink" title="WithTimeout例子"></a>WithTimeout例子</h2><p>以下是官方提供的例子，子context ctx会在30Second后被关闭，从而触发了<code>ctx.Done()</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	ctx, cancel := context.WithTimeout(context.Background(), <span class="hljs-number">30</span>*time.Second)<br>	<span class="hljs-keyword">defer</span> cancel()<br><br>	<span class="hljs-keyword">select</span> &#123;<br>	<span class="hljs-keyword">case</span> &lt;-time.After(<span class="hljs-number">2</span> * time.Minute):<br>		fmt.Println(<span class="hljs-string">&quot;overslept&quot;</span>)<br>	<span class="hljs-keyword">case</span> &lt;-ctx.Done():<br>		fmt.Println(ctx.Err()) <span class="hljs-comment">// prints &quot;context deadline exceeded&quot;</span><br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ctx, cancel := context.WithTimeout(context.Background(), <span class="number">30</span>*time.Second)</span><br><span class="line">	<span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> &lt;-time.After(<span class="number">2</span> * time.Minute):</span><br><span class="line">		fmt.Println(<span class="string">&quot;overslept&quot;</span>)</span><br><span class="line">	<span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">		fmt.Println(ctx.Err()) <span class="comment">// prints &quot;context deadline exceeded&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这里输出结果是</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">context deadline exceeded<br></code></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context deadline exceeded</span><br></pre></td></tr></table></figure>
 
 <h2 id="context的使用规范"><a href="#context的使用规范" class="headerlink" title="context的使用规范"></a>context的使用规范</h2><ol>
 <li>context包里的方法是线程安全的，可以被多个线程使用</li>
@@ -466,73 +436,7 @@
 
 
               
-  
 
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>Context用法</div>
-      <div>https://billzong.github.io/post/9c69c716.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Bill Zong</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2021年4月12日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-cc-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/post/89751058.html" title="基于cobra构建命令行">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">基于cobra构建命令行</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/post/107a8b74.html" title="golang项目编码规范">
-                        <span class="hidden-mobile">golang项目编码规范</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
               
             </div>
 
@@ -544,19 +448,6 @@
 
     <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
 
     </div>
   </div>
@@ -566,23 +457,12 @@
 
 
 
-  
-
-
 
   
 
 
 
-  
 
-
-
-  
-
-
-
-  
 
 
 
@@ -640,38 +520,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 
@@ -683,162 +537,10 @@
 
 
 
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    function isExpandAllEnabled() {
-      return CONFIG.toc && CONFIG.toc.expand_all === true;
-    }
-    function expandAllToc() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
-    }
-    function updateTocToggle($li, $childList) {
-      var $toggle = $li.children('.toc-toggle');
-      if ($toggle.length === 0) { return; }
-      var collapsed = $childList.hasClass('tocbot-is-collapsed');
-      $toggle
-        .toggleClass('toc-toggle-collapsed', collapsed)
-        .toggleClass('toc-toggle-expanded', !collapsed);
-    }
-    function bindTocToggle() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .toc-list-item').each(function() {
-        var $li = jQuery(this);
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) {
-          if ($li.children('.toc-toggle').length === 0) {
-            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
-          }
-          return;
-        }
-
-        if ($li.children('.toc-toggle').length === 0) {
-          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
-        }
-        updateTocToggle($li, $childList);
-      });
-      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var $li = jQuery(this).parent('.toc-list-item');
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
-        updateTocToggle($li, $childList);
-      });
-      if (!window.__tocToggleObserver) {
-        window.__tocToggleObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
-            var $list = jQuery(mutation.target);
-            var $li = $list.parent('.toc-list-item');
-            if ($li.length === 0) { return; }
-            updateTocToggle($li, $list);
-          });
-        });
-        jQuery('#toc-body ol').each(function() {
-          window.__tocToggleObserver.observe(this, { attributes: true });
-        });
-      }
-    }
-    var tocConfig = Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc);
-    if (isExpandAllEnabled()) {
-      tocConfig.collapseDepth = 6;
-    }
-    window.tocbot.init(tocConfig);
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-    expandAllToc();
-    bindTocToggle();
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-        expandAllToc();
-        bindTocToggle();
-      }
-    });
-  });
-</script>
-
-
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

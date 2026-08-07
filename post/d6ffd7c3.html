@@ -27,7 +27,7 @@
 <meta property="og:description" content="在云上购买机器 命名master为 btc-001  命令worker为 eth-001 eth-002 eth-003  这些机器全部使用了私网ip  前端部署负载均衡，ip为 10.1.2.3  文中涉及到这个ip的地方都需要替换   这里购买了一个nfs，地址为 259ae4bcd9-gos35.cn-shenzhen.nas.aliyuncs.com  文中涉及到这个nfs地址的地方都需要">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-11T08:36:00.000Z">
-<meta property="article:modified_time" content="2026-08-03T02:24:10.147Z">
+<meta property="article:modified_time" content="2026-08-07T07:59:20.151Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="OpenWhisk">
 <meta property="article:tag" content="deploy">
@@ -45,8 +45,6 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -62,18 +60,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -306,7 +299,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="搭建OpenWhisk"></span>
+            <span id="subtitle">搭建OpenWhisk</span>
           
         </div>
 
@@ -315,34 +308,11 @@
   <div class="mt-3">
     
     
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-04-11 16:36" pubdate>
-          2021年4月11日 下午
-        </time>
-      </span>
-    
   </div>
 
   <div class="mt-1">
     
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          4.1k 字
-        
-      </span>
-    
 
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          34 分钟
-        
-      </span>
     
 
     
@@ -402,74 +372,74 @@
 </ul>
 </li>
 </ul>
-<h1 id="登录每台机器，关闭swap分区，安装工具软件"><a href="#登录每台机器，关闭swap分区，安装工具软件" class="headerlink" title="登录每台机器，关闭swap分区，安装工具软件"></a>登录每台机器，关闭swap分区，安装工具软件</h1><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment">#!/bin/bash</span><br><span class="hljs-comment"># turnoff swap (no need to reboot)</span><br><span class="hljs-attribute">swapoff</span> -a &amp;&amp; sed -i.bak &#x27;/ swap / s/^\(.*\)$/#\<span class="hljs-number">1</span>/g&#x27; /etc/fstab<br><br><span class="hljs-comment"># prepare install utils</span><br><span class="hljs-attribute">apt</span>-get -y update<br><span class="hljs-attribute">apt</span>-get install -y apt-transport-https ca-certificates curl software-properties-common<br><br><span class="hljs-comment"># install docker ce</span><br><span class="hljs-attribute">curl</span> -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add -<br><span class="hljs-attribute">add</span>-apt-repository <span class="hljs-string">&quot;deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable&quot;</span><br><span class="hljs-attribute">apt</span>-get -y update<br><span class="hljs-attribute">apt</span>-get install -y docker-ce=<span class="hljs-number">5</span>:<span class="hljs-number">18</span>.<span class="hljs-number">09</span>.<span class="hljs-number">2</span>~<span class="hljs-number">3</span>-<span class="hljs-number">0</span>~ubuntu-bionic<br><br><span class="hljs-comment"># install kubeadm</span><br><span class="hljs-attribute">curl</span> https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -<br><span class="hljs-attribute">add</span>-apt-repository <span class="hljs-string">&quot;deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main&quot;</span><br><span class="hljs-attribute">apt</span>-get -y update<br><span class="hljs-attribute">apt</span>-get install -y kubernetes-cni=<span class="hljs-number">0</span>.<span class="hljs-number">6</span>.<span class="hljs-number">0</span>-<span class="hljs-number">00</span><br><span class="hljs-attribute">apt</span>-get install -y kubelet=<span class="hljs-number">1</span>.<span class="hljs-number">13</span>.<span class="hljs-number">3</span>-<span class="hljs-number">00</span><br><span class="hljs-attribute">apt</span>-get install -y kubectl=<span class="hljs-number">1</span>.<span class="hljs-number">13</span>.<span class="hljs-number">3</span>-<span class="hljs-number">00</span><br><span class="hljs-attribute">apt</span>-get install -y kubeadm=<span class="hljs-number">1</span>.<span class="hljs-number">13</span>.<span class="hljs-number">3</span>-<span class="hljs-number">00</span> <br></code></pre></td></tr></table></figure>
+<h1 id="登录每台机器，关闭swap分区，安装工具软件"><a href="#登录每台机器，关闭swap分区，安装工具软件" class="headerlink" title="登录每台机器，关闭swap分区，安装工具软件"></a>登录每台机器，关闭swap分区，安装工具软件</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"># turnoff swap (no need to reboot)</span><br><span class="line">swapoff -a &amp;&amp; sed -i.bak &#x27;/ swap / s/^\(.*\)$/#\1/g&#x27; /etc/fstab</span><br><span class="line"></span><br><span class="line"># prepare install utils</span><br><span class="line">apt-get -y update</span><br><span class="line">apt-get install -y apt-transport-https ca-certificates curl software-properties-common</span><br><span class="line"></span><br><span class="line"># install docker ce</span><br><span class="line">curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add -</span><br><span class="line">add-apt-repository &quot;deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable&quot;</span><br><span class="line">apt-get -y update</span><br><span class="line">apt-get install -y docker-ce=5:18.09.2~3-0~ubuntu-bionic</span><br><span class="line"></span><br><span class="line"># install kubeadm</span><br><span class="line">curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -</span><br><span class="line">add-apt-repository &quot;deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main&quot;</span><br><span class="line">apt-get -y update</span><br><span class="line">apt-get install -y kubernetes-cni=0.6.0-00</span><br><span class="line">apt-get install -y kubelet=1.13.3-00</span><br><span class="line">apt-get install -y kubectl=1.13.3-00</span><br><span class="line">apt-get install -y kubeadm=1.13.3-00 </span><br></pre></td></tr></table></figure>
 
 <h1 id="trick：-可能需要手动下载镜像（因为墙的关系，可能无法下载到k8s的所有的image）"><a href="#trick：-可能需要手动下载镜像（因为墙的关系，可能无法下载到k8s的所有的image）" class="headerlink" title="trick： 可能需要手动下载镜像（因为墙的关系，可能无法下载到k8s的所有的image）"></a>trick： 可能需要手动下载镜像（因为墙的关系，可能无法下载到k8s的所有的image）</h1><ul>
 <li>这里跳过</li>
 </ul>
-<h1 id="在master上通过kubeadm初始化集群"><a href="#在master上通过kubeadm初始化集群" class="headerlink" title="在master上通过kubeadm初始化集群"></a>在master上通过kubeadm初始化集群</h1><figure class="highlight plaintext"><figcaption><span>kubeadm-config.yaml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs 保存为配置文件">apiVersion: kubeadm.k8s.io/v1beta1<br>kind: ClusterConfiguration<br>kubernetesVersion: 1.13.3<br>networking:<br>  podSubnet: &quot;10.244.0.0/16&quot;<br>apiServer:<br>  certSANs:<br>  - 10.1.2.3<br></code></pre></td></tr></table></figure>
+<h1 id="在master上通过kubeadm初始化集群"><a href="#在master上通过kubeadm初始化集群" class="headerlink" title="在master上通过kubeadm初始化集群"></a>在master上通过kubeadm初始化集群</h1><figure class="highlight plaintext"><figcaption><span>kubeadm-config.yaml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: kubeadm.k8s.io/v1beta1</span><br><span class="line">kind: ClusterConfiguration</span><br><span class="line">kubernetesVersion: 1.13.3</span><br><span class="line">networking:</span><br><span class="line">  podSubnet: &quot;10.244.0.0/16&quot;</span><br><span class="line">apiServer:</span><br><span class="line">  certSANs:</span><br><span class="line">  - 10.1.2.3</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>注意上面的podSubnet无需修改，certSANs需要修改为你的前端负载均衡ip</li>
 </ul>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">kubeadm init --<span class="hljs-built_in">config</span>=kubeadm-<span class="hljs-built_in">config</span>.yaml<br><span class="hljs-comment"># 注意此命令运行完毕后会打印出一条加入命令，这条加入命令将在worker上执行（后续步骤中提示）</span><br><span class="hljs-comment"># 打印出来的命令格式如下： kubeadm join ... --token ... --discovery-token-ca-cert-hash ...</span><br><span class="hljs-comment"># 请将此命令保存好</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init --config=kubeadm-config.yaml</span><br><span class="line"># 注意此命令运行完毕后会打印出一条加入命令，这条加入命令将在worker上执行（后续步骤中提示）</span><br><span class="line"># 打印出来的命令格式如下： kubeadm join ... --token ... --discovery-token-ca-cert-hash ...</span><br><span class="line"># 请将此命令保存好</span><br></pre></td></tr></table></figure>
 
-<h1 id="在master上配置kubectl"><a href="#在master上配置kubectl" class="headerlink" title="在master上配置kubectl"></a>在master上配置kubectl</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 执行以下命令后，就可以在master上直接执行kubectl命令了</span><br><span class="hljs-built_in">mkdir</span> -p <span class="hljs-variable">$&#123;HOME&#125;</span>/.kube &amp;&amp; <span class="hljs-built_in">cp</span> -i /etc/kubernetes/admin.conf <span class="hljs-variable">$&#123;HOME&#125;</span>/.kube/config &amp;&amp; <span class="hljs-built_in">chown</span> $(<span class="hljs-built_in">id</span> -u):$(<span class="hljs-built_in">id</span> -g) <span class="hljs-variable">$&#123;HOME&#125;</span>/.kube/config<br></code></pre></td></tr></table></figure>
+<h1 id="在master上配置kubectl"><a href="#在master上配置kubectl" class="headerlink" title="在master上配置kubectl"></a>在master上配置kubectl</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 执行以下命令后，就可以在master上直接执行kubectl命令了</span><br><span class="line">mkdir -p $&#123;HOME&#125;/.kube &amp;&amp; cp -i /etc/kubernetes/admin.conf $&#123;HOME&#125;/.kube/config &amp;&amp; chown $(id -u):$(id -g) $&#123;HOME&#125;/.kube/config</span><br></pre></td></tr></table></figure>
 
-<h1 id="配置网络，在master上执行以下命令"><a href="#配置网络，在master上执行以下命令" class="headerlink" title="配置网络，在master上执行以下命令"></a>配置网络，在master上执行以下命令</h1><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">kubectl apply -f https:<span class="hljs-regexp">//</span>docs.projectcalico.org<span class="hljs-regexp">/v3.3/g</span>etting-started<span class="hljs-regexp">/kubernetes/i</span>nstallation<span class="hljs-regexp">/hosted/</span>canal/rbac.yaml<br>kubectl apply -f https:<span class="hljs-regexp">//</span>docs.projectcalico.org<span class="hljs-regexp">/v3.3/g</span>etting-started<span class="hljs-regexp">/kubernetes/i</span>nstallation<span class="hljs-regexp">/hosted/</span>canal/canal.yaml<br></code></pre></td></tr></table></figure>
+<h1 id="配置网络，在master上执行以下命令"><a href="#配置网络，在master上执行以下命令" class="headerlink" title="配置网络，在master上执行以下命令"></a>配置网络，在master上执行以下命令</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/canal/rbac.yaml</span><br><span class="line">kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/canal/canal.yaml</span><br></pre></td></tr></table></figure>
 
-<h1 id="在worker节点上执行命令，加入master初始化好的k8s集群"><a href="#在worker节点上执行命令，加入master初始化好的k8s集群" class="headerlink" title="在worker节点上执行命令，加入master初始化好的k8s集群"></a>在worker节点上执行命令，加入master初始化好的k8s集群</h1><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-comment"># 执行上文中“在master上通过kubeadm初始化集群”输出的命令</span><br>kubeadm join <span class="hljs-string">...</span> <span class="hljs-params">--token</span> <span class="hljs-string">...</span> <span class="hljs-params">--discovery-token-ca-cert-hash</span> <span class="hljs-string">...</span><br></code></pre></td></tr></table></figure>
+<h1 id="在worker节点上执行命令，加入master初始化好的k8s集群"><a href="#在worker节点上执行命令，加入master初始化好的k8s集群" class="headerlink" title="在worker节点上执行命令，加入master初始化好的k8s集群"></a>在worker节点上执行命令，加入master初始化好的k8s集群</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 执行上文中“在master上通过kubeadm初始化集群”输出的命令</span><br><span class="line">kubeadm join ... --token ... --discovery-token-ca-cert-hash ...</span><br></pre></td></tr></table></figure>
 
-<h1 id="至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态"><a href="#至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态" class="headerlink" title="至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态"></a>至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">kubectl <span class="hljs-built_in">get</span> nodes<br><span class="hljs-comment"># 如果看到全部ready，则说明集群已经初始化完毕</span><br></code></pre></td></tr></table></figure>
+<h1 id="至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态"><a href="#至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态" class="headerlink" title="至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态"></a>至此，集群安装结束，等待若干分钟后，在master上通过命令可以查看各个节点状态</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br><span class="line"># 如果看到全部ready，则说明集群已经初始化完毕</span><br></pre></td></tr></table></figure>
 
 <h1 id="接下里的操作全部是在本地上执行的"><a href="#接下里的操作全部是在本地上执行的" class="headerlink" title="接下里的操作全部是在本地上执行的"></a>接下里的操作全部是在本地上执行的</h1><h1 id="安装helm"><a href="#安装helm" class="headerlink" title="安装helm"></a>安装helm</h1><ul>
 <li>注意helm需要一个配置好的kubectl，我们可以选在在本地配置好kubectl。</li>
 </ul>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs arduino"># 把master上的 ~/.kube/config 拷贝到本地 ~/.kube/config即可<br>scp btc:~/.kube/config ~/.kube/config<br># 注意同时还需要将负载均衡的<span class="hljs-number">6443</span>端口转发到master的<span class="hljs-number">6443</span>端口<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 把master上的 ~/.kube/config 拷贝到本地 ~/.kube/config即可</span><br><span class="line">scp btc:~/.kube/config ~/.kube/config</span><br><span class="line"># 注意同时还需要将负载均衡的6443端口转发到master的6443端口</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>下载helm</li>
 </ul>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">wget</span> https://storage.googleapis.com/kubernetes-helm/helm-v2.<span class="hljs-number">12</span>.<span class="hljs-number">3</span>-darwin-amd64.tar.gz<br><span class="hljs-comment"># 加压缩并添加到path中</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://storage.googleapis.com/kubernetes-helm/helm-v2.12.3-darwin-amd64.tar.gz</span><br><span class="line"># 加压缩并添加到path中</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>配置helm，执行以下命令（请注意这里需要翻墙）<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mel">helm init<br>kubectl create clusterrolebinding tiller-<span class="hljs-keyword">cluster</span>-admin --clusterrole=<span class="hljs-keyword">cluster</span>-admin --serviceaccount=kube-<span class="hljs-keyword">system</span>:<span class="hljs-keyword">default</span><br></code></pre></td></tr></table></figure></li>
+<li>配置helm，执行以下命令（请注意这里需要翻墙）<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helm init</span><br><span class="line">kubectl create clusterrolebinding tiller-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h1 id="通过helm来搭建openwhisk集群"><a href="#通过helm来搭建openwhisk集群" class="headerlink" title="通过helm来搭建openwhisk集群"></a>通过helm来搭建openwhisk集群</h1><ul>
 <li>首先需要配置worker角色</li>
 </ul>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">kubectl label nodes eth<span class="hljs-number">-001</span> openwhisk-<span class="hljs-keyword">role</span>=<span class="hljs-keyword">invoker</span><br>kubectl label nodes eth<span class="hljs-number">-002</span> openwhisk-<span class="hljs-keyword">role</span>=<span class="hljs-keyword">invoker</span><br>kubectl label nodes eth<span class="hljs-number">-003</span> openwhisk-<span class="hljs-keyword">role</span>=<span class="hljs-keyword">invoker</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl label nodes eth-001 openwhisk-role=invoker</span><br><span class="line">kubectl label nodes eth-002 openwhisk-role=invoker</span><br><span class="line">kubectl label nodes eth-003 openwhisk-role=invoker</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>配置持久化存储（这里需要在云服务商处购买nfs存储）</li>
 </ul>
-<figure class="highlight plaintext"><figcaption><span>openwhisk-nfs-client-provisioner.yaml，注意修改server地址的配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs 编写配置文件，命令为">nfs:<br>   server: 259ae4bcd9-gos35.cn-shenzhen.nas.aliyuncs.com<br>   path: /<br><br>storageClass:<br>   name: openwhisk-nfs<br>   reclaimPolicy: Delete<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><figcaption><span>openwhisk-nfs-client-provisioner.yaml，注意修改server地址的配置</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">nfs:</span><br><span class="line">   server: 259ae4bcd9-gos35.cn-shenzhen.nas.aliyuncs.com</span><br><span class="line">   path: /</span><br><span class="line"></span><br><span class="line">storageClass:</span><br><span class="line">   name: openwhisk-nfs</span><br><span class="line">   reclaimPolicy: Delete</span><br></pre></td></tr></table></figure>
 
 <h1 id="通过helm在k8s中安装存储的storage-class"><a href="#通过helm在k8s中安装存储的storage-class" class="headerlink" title="通过helm在k8s中安装存储的storage class"></a>通过helm在k8s中安装存储的storage class</h1><ul>
 <li><p>注意，我们首先需要在所有的worker机器上安装mount nfs的命令</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">apt</span>-<span class="hljs-meta">get</span> install -y nfs-<span class="hljs-meta">common</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install -y nfs-common</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>然后继续安装</p>
 </li>
 </ul>
-<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta">helm install --<span class="hljs-keyword">namespace</span> openwhisk --values openwhisk-nfs-<span class="hljs-keyword">client</span>-provisioner.yaml stable/nfs-<span class="hljs-keyword">client</span>-provisioner<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install --namespace openwhisk --values openwhisk-nfs-client-provisioner.yaml stable/nfs-client-provisioner</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>获取openwhisk的部署配置文件</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/apache/incubator-openwhisk-deploy-kube<br><span class="hljs-built_in">cd</span> incubator-openwhisk-deploy-kube<br><span class="hljs-comment"># 注意这里我们使用给一个老的版本的openwhisk部署</span><br>git checkout 89f1787<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/apache/incubator-openwhisk-deploy-kube</span><br><span class="line">cd incubator-openwhisk-deploy-kube</span><br><span class="line"># 注意这里我们使用给一个老的版本的openwhisk部署</span><br><span class="line">git checkout 89f1787</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>编写openwhisk helm部署的配置文件</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs 保存为owdev.yaml">whisk:<br>  ingress:<br>    apiHostName: 10.1.2.3<br>  limits:<br>    actionsInvokesPerminute: 999999<br>    actionsInvokesConcurrent: 999999<br>    triggersFiresPerminute: 999999<br>    actionsSequenceMaxlength: 999999<br><br>k8s:<br>  persistence:<br>    enabled: true<br>    hasDefaultStorageClass: false<br>    explicitStorageClass: openwhisk-nfs<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">whisk:</span><br><span class="line">  ingress:</span><br><span class="line">    apiHostName: 10.1.2.3</span><br><span class="line">  limits:</span><br><span class="line">    actionsInvokesPerminute: 999999</span><br><span class="line">    actionsInvokesConcurrent: 999999</span><br><span class="line">    triggersFiresPerminute: 999999</span><br><span class="line">    actionsSequenceMaxlength: 999999</span><br><span class="line"></span><br><span class="line">k8s:</span><br><span class="line">  persistence:</span><br><span class="line">    enabled: true</span><br><span class="line">    hasDefaultStorageClass: false</span><br><span class="line">    explicitStorageClass: openwhisk-nfs</span><br></pre></td></tr></table></figure>
 
-<h1 id="执行helm部署命令"><a href="#执行helm部署命令" class="headerlink" title="执行helm部署命令"></a>执行helm部署命令</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">helm install ./helm/openwhisk <span class="hljs-attribute">--namespace</span>=openwhisk <span class="hljs-attribute">--name</span>=owdev -f owdev.yaml<br></code></pre></td></tr></table></figure>
+<h1 id="执行helm部署命令"><a href="#执行helm部署命令" class="headerlink" title="执行helm部署命令"></a>执行helm部署命令</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install ./helm/openwhisk --namespace=openwhisk --name=owdev -f owdev.yaml</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>等到所有的pod完成执行即可</li>
 </ul>
-<h1 id="部署ingress"><a href="#部署ingress" class="headerlink" title="部署ingress"></a>部署ingress</h1><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk">kubectl apply -f https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/kubernetes/i</span>ngress-nginx<span class="hljs-regexp">/master/</span>deploy/mandatory.yaml<br>kubectl apply -f https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/kubernetes/i</span>ngress-nginx<span class="hljs-regexp">/master/</span>deploy<span class="hljs-regexp">/provider/</span>baremetal/service-nodeport.yaml<br><br><span class="hljs-comment"># 通过 kubectl -ningress-nginx get pods 来查看nginx是否正常启动</span><br></code></pre></td></tr></table></figure>
+<h1 id="部署ingress"><a href="#部署ingress" class="headerlink" title="部署ingress"></a>部署ingress</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml</span><br><span class="line">kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/baremetal/service-nodeport.yaml</span><br><span class="line"></span><br><span class="line"># 通过 kubectl -ningress-nginx get pods 来查看nginx是否正常启动</span><br></pre></td></tr></table></figure>
                 
               </div>
             
@@ -512,73 +482,7 @@
 
 
               
-  
 
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>搭建OpenWhisk</div>
-      <div>https://billzong.github.io/post/d6ffd7c3.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Bill Zong</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2021年4月11日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-cc-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/post/d13f2d70.html" title="阿里云腾讯云OpenWhisk性能测试方案">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">阿里云腾讯云OpenWhisk性能测试方案</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/post/3e321d5a.html" title="如何缩短K8S部署固定版本OpenWhisk集群的时长">
-                        <span class="hidden-mobile">如何缩短K8S部署固定版本OpenWhisk集群的时长</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
               
             </div>
 
@@ -590,19 +494,6 @@
 
     <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
 
     </div>
   </div>
@@ -612,23 +503,12 @@
 
 
 
-  
-
-
 
   
 
 
 
-  
 
-
-
-  
-
-
-
-  
 
 
 
@@ -686,38 +566,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 
@@ -729,162 +583,10 @@
 
 
 
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    function isExpandAllEnabled() {
-      return CONFIG.toc && CONFIG.toc.expand_all === true;
-    }
-    function expandAllToc() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
-    }
-    function updateTocToggle($li, $childList) {
-      var $toggle = $li.children('.toc-toggle');
-      if ($toggle.length === 0) { return; }
-      var collapsed = $childList.hasClass('tocbot-is-collapsed');
-      $toggle
-        .toggleClass('toc-toggle-collapsed', collapsed)
-        .toggleClass('toc-toggle-expanded', !collapsed);
-    }
-    function bindTocToggle() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .toc-list-item').each(function() {
-        var $li = jQuery(this);
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) {
-          if ($li.children('.toc-toggle').length === 0) {
-            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
-          }
-          return;
-        }
-
-        if ($li.children('.toc-toggle').length === 0) {
-          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
-        }
-        updateTocToggle($li, $childList);
-      });
-      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var $li = jQuery(this).parent('.toc-list-item');
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
-        updateTocToggle($li, $childList);
-      });
-      if (!window.__tocToggleObserver) {
-        window.__tocToggleObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
-            var $list = jQuery(mutation.target);
-            var $li = $list.parent('.toc-list-item');
-            if ($li.length === 0) { return; }
-            updateTocToggle($li, $list);
-          });
-        });
-        jQuery('#toc-body ol').each(function() {
-          window.__tocToggleObserver.observe(this, { attributes: true });
-        });
-      }
-    }
-    var tocConfig = Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc);
-    if (isExpandAllEnabled()) {
-      tocConfig.collapseDepth = 6;
-    }
-    window.tocbot.init(tocConfig);
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-    expandAllToc();
-    bindTocToggle();
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-        expandAllToc();
-        bindTocToggle();
-      }
-    });
-  });
-</script>
-
-
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

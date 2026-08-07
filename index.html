@@ -50,18 +50,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -85,7 +80,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 100vh;">
+<div class="header-inner" style="height: 0vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -294,17 +289,13 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="An elegant Material-Design theme for Hexo"></span>
+            <span id="subtitle"></span>
           
         </div>
 
         
       </div>
 
-      
-        <div class="scroll-down-bar">
-          <i class="iconfont icon-arrowdown"></i>
-        </div>
       
     </div>
   </div>
@@ -320,7 +311,7 @@
     
       <div class="container nopadding-x-md">
         <div id="board"
-          style="margin-top: 0">
+          >
           
           <div class="container">
             <div class="row">
@@ -343,7 +334,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/30f5e2fa.html" target="_self">
         <div>
-          🎯 核心目标 (Context &amp; Purpose)本仓库旨在构建高可用、防篡改的事件预言机系统，集成 UMA v3（乐观&#x2F;争议机制） 与 Chainlink（确定性&#x2F;推送机制）。 作为 AI Agent，你的首要目标是：保持合约接口的绝对严谨，后端服务的并发安全（Golang），以及 100% 的关键状态测试覆盖率。 🚦 强制执行法则 (Hard Operatin
+          
         </div>
       </a>
 
@@ -416,7 +407,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/6ffa1599.html" target="_self">
         <div>
-          背景下面从 Twitter 已归档的 Snowflake 分布式 ID 生成算法 出发，说明：  Snowflake 算法简介（Twitter 版本） Go 语言中的成熟平替方案（现成库 + 中间件） 当前主流&#x2F;最新的分布式 ID 生成算法发展趋势（Snowflake 之后行业实践）   1. Twitter Snowflake 算法回顾（经典版本）Twitter Snowflake 输
+          
         </div>
       </a>
 
@@ -455,9 +446,9 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/ucard/">#ucard</a>
-            
               <a href="/tags/%E6%8E%88%E6%9D%83%E5%8F%82%E8%80%83%E7%A0%81/">#授权参考码</a>
+            
+              <a href="/tags/ucard/">#ucard</a>
             
               <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8FID/">#分布式ID</a>
             
@@ -491,7 +482,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/e49981f1.html" target="_self">
         <div>
-          目标 预付卡整个系统中，依赖多个关键性第三方业务服务，并需要保存关键的 APIKey，但在生产环境部署时，开发、运维均有可能会接触到这些关键信息。 所以，我们需要设计一整套的业务流程来防止关键信息泄露，防止内部人员获取或破坏这些关键信息，对业务造成不可挽回的影响。  词汇表 Key Management Service (KMS) 一种基于云的加密和密钥管理服务，可以轻松创建和控制加密密钥，以加密
+          
         </div>
       </a>
 
@@ -530,6 +521,8 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
+              <a href="/tags/ucard/">#ucard</a>
+            
               <a href="/tags/%E7%A7%98%E9%92%A5%E7%AE%A1%E7%90%86/">#秘钥管理</a>
             
               <a href="/tags/%E5%AE%89%E5%85%A8/">#安全</a>
@@ -541,8 +534,6 @@
               <a href="/tags/SecretsManager/">#SecretsManager</a>
             
               <a href="/tags/%E9%A2%84%E4%BB%98%E5%8D%A1/">#预付卡</a>
-            
-              <a href="/tags/ucard/">#ucard</a>
             
           </div>
         
@@ -564,7 +555,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/228615af.html" target="_self">
         <div>
-          什么是学习？以下概念来自维基百科。  学习又称研习，是透过外界教授或从自身经验提高能力的过程。  学习分为狭义与广义两种：  狭义：通过阅读、听讲、研究、观察、理解、探索、实验、实践等手段获得知识或技能的过程，是一种使个体可以得到持续变化（知识和技能，方法与过程，情感与价值的改善和升华）的行为方式。例如通过学校教育获得知识的过程。 广义：是人在生活过程中，通过获得经验而产生的行为或行为潜能的相对持
+          
         </div>
       </a>
 
@@ -625,7 +616,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/e9025282.html" target="_self">
         <div>
-          12swapoff -ased -i &#x27;/^\/dev\/mapper\/centos-swap*/d&#x27; /etc/fstab
+          
         </div>
       </a>
 
@@ -686,7 +677,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/c9a962b3.html" target="_self">
         <div>
-          ntp服务端123# 将所有节点设置为中国时区echo &quot;Asia/shanghai&quot; &gt; /etc/timezoneln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime  1234# 设置系统时间date -s &#x27;2021-01-11 15:20:00&#x27;# 写入硬件时间hwclock -w
+          
         </div>
       </a>
 
@@ -751,7 +742,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/2a353e7b.html" target="_self">
         <div>
-          rpm –import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org 安装Redhat内核仓库#rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm 或者如上指定版本，目前版本为7.0-5yum install https://www.elrepo.org/e
+          
         </div>
       </a>
 
@@ -814,7 +805,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/87c46404.html" target="_self">
         <div>
-          12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210
+          
         </div>
       </a>
 
@@ -877,7 +868,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/4cf4d379.html" target="_self">
         <div>
-          Linux二进制文件安全资料 工具推荐使用vmp 网址 网上应该有不少破解版本   书单 暂无   技术路线 ELF文件系统 &#x3D;&gt; 目标操作系统原理，至少应用层原理 &#x3D;&gt; 反调试、调试原理 多参考Windows的，资料比较多   论坛 春雪 我爱破解
+          
         </div>
       </a>
 
@@ -938,7 +929,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/4c3910cf.html" target="_self">
         <div>
-          修改Server端1234# etc/ssh/sshd_configClientAliveInterval 60 ＃server每隔60秒发送一次请求给client，然后client响应，从而保持连接ClientAliveCountMax 3 ＃server发出请求后，客户端没有响应得次数达到3，就自动断开连接，正常情况下，client不会不响应  修改Client端在没有权限改server配置的
+          
         </div>
       </a>
 
@@ -1052,38 +1043,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 

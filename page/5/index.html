@@ -50,18 +50,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -85,7 +80,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 100vh;">
+<div class="header-inner" style="height: 0vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -294,17 +289,13 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="An elegant Material-Design theme for Hexo"></span>
+            <span id="subtitle"></span>
           
         </div>
 
         
       </div>
 
-      
-        <div class="scroll-down-bar">
-          <i class="iconfont icon-arrowdown"></i>
-        </div>
       
     </div>
   </div>
@@ -320,7 +311,7 @@
     
       <div class="container nopadding-x-md">
         <div id="board"
-          style="margin-top: 0">
+          >
           
           <div class="container">
             <div class="row">
@@ -343,7 +334,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/1c6c86cc.html" target="_self">
         <div>
-          文档链接地址168文库 CDN 要件分布式存储、负载均衡、网络请求的重定向、内容管理。 内容管理和全局的网络流量管理（traffic management）是CDN的核心所在。 内容服务基于缓存服务器，也称作代理缓存（Surrogate）。它位于网络的“边缘”，同时是内容提供商源服务器的一个透明镜像。 CDN 关键技术 内容发布 它借助于建立索引、缓存、流分裂、组播等技术，将内容发布或投递到距离用
+          
         </div>
       </a>
 
@@ -404,7 +395,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/afdd4898.html" target="_self">
         <div>
-          CDN 技术概述边缘计算的概念对于当前日益丰富的动态内容加速，需要在 CDN 上复制和缓存业务逻辑层和后台数据访问层。其中，业务逻辑层在 CDN Cache 上的复制使之能够承担用户请求处理、应用数据计算、动态内容生成等工作，因此这类方法也被称为“边缘计算”。 CDN 动态内容加速在某些应用场景中，动态内容的生成需要大量的数据支持，比如目录服务、交易数据等，仅仅将业务逻辑复制到边缘服务器中还不足以
+          
         </div>
       </a>
 
@@ -465,7 +456,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/3363d042.html" target="_self">
         <div>
-          文档链接地址168文库 CDN 服务模式纵观整个宽带服务的价值链，内容提供商和用户位于整个价值链的两端，中间依靠网络服务提供商将其串联起来。 随着互联网工业的成熟和商业模式的变革，在这条价值链上的角色越来越多也越来越细分，比如内容、应用的运营商、托管服务提供商、骨干网络服务提供商、接入服务提供商等等。 在这一条价值链上的每一个角色都要分工合作、各司其职才能为客户提供良好的服务，从而带来多赢的局面。
+          
         </div>
       </a>
 
@@ -526,7 +517,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/e4cf1ff8.html" target="_self">
         <div>
-          Generating the private key: 1openssl genrsa -des3 -out server.key 1024  output: 123456Generating RSA private key, 1024 bit long modulus.........................................................++++++..
+          
         </div>
       </a>
 
@@ -589,7 +580,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/1eec93ef.html" target="_self">
         <div>
-          查看CSR信息 openssl req -noout -text -in myCert.crt # 或者 openssl req -noout -text -in myCert.csr  其中，要关注的重点包括 X509v3 Subject Alternative Name X509v3 Certificate Policies Signed Certificate Timestamp
+          
         </div>
       </a>
 
@@ -650,7 +641,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/12d311d1.html" target="_self">
         <div>
-          背景Web 框架的基本诉求：接收 HTTP 请求 -&gt; 处理 HTTP 各项参数 -&gt; 路由 -&gt; 自定义控制器 -&gt;   获取返回结果 -&gt; 返回 HTTP 响应。如下图所示： 同时，因为业务场景多变，需要框架能支持复杂的配置。例如：端口、传输文件大小、日志、本地化&#x2F;国际化。 另外，服务端层面需要较高的单机性能，以提供可行的经济效益。 iris框架核心组件
+          
         </div>
       </a>
 
@@ -705,15 +696,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/post/f80ec8a1.html" target="_self">
-          GraphQL API构建示例(2)
+        <a href="/post/d3239b62.html" target="_self">
+          GraphQL API构建示例(1)
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/post/f80ec8a1.html" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/post/d3239b62.html" target="_self">
         <div>
-          概要 设计一个GraphQL schema方案 设计并实现一个存储数据的后端数据方案 实现一个从1翻译到2的解析器  实现API的授权  前文已经提了基本的示例需求描述，以及基本数据结构和方案。 当前这篇文章会从后端数据存储切入，更详细的剖析如何构建这个示例的 GraphQL 解决方案。 数据库选择GraphQL 的查询内容，往往决定了后端的存储方式。所以找到一个合适的可以支持所有（尽可能全面的）
+          
         </div>
       </a>
 
@@ -770,15 +761,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/post/d3239b62.html" target="_self">
-          GraphQL API构建示例(1)
+        <a href="/post/f80ec8a1.html" target="_self">
+          GraphQL API构建示例(2)
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/post/d3239b62.html" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/post/f80ec8a1.html" target="_self">
         <div>
-          概要前文提到过GraphQL API的优点和一些粗浅介绍。然而知道怎么回事，不代表我们能正确地使用它，特别是一些新的技术思路。 本文的绝大部分内容来自Medium一位AWS移动端知名博主。作者通过一个简单的示例来描述如何正确地构建GraphQL API服务，并尝试说明其步骤和一般性的原则。 因为文章很长，所以我们也会分段进行叙述。 老生常谈为什么反复提及GrapthQL API？ 这门技术可以减少
+          
         </div>
       </a>
 
@@ -843,7 +834,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/facd8695.html" target="_self">
         <div>
-          GraphQL API 是什么GraphQL 是一个用于 API 的查询语言，是一个使用基于类型系统来执行查询的服务端运行时（类型系统由你的数据定义）。GraphQL 并没有和任何特定数据库或者存储引擎绑定，而是依靠你现有的代码和数据支撑。 优势：  不多不少，只请求你所要的数据 只用一个请求，获取多个资源 类型系统，描述所有的可能  有需要的童鞋可以了解一下详细的语法规范。 关于 GraphQL
+          
         </div>
       </a>
 
@@ -908,7 +899,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/beb9dd3.html" target="_self">
         <div>
-          介绍一些重要概念 BNF Backus-Naur Form   ABNF Augumented BNF   SNI Server Name Indication   ESNI Encrypted SNI    WebSocket设计哲学Conceptually, WebSocket is really just a layer on top of TCP that does the followi
+          
         </div>
       </a>
 
@@ -1024,38 +1015,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 

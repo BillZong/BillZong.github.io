@@ -15,7 +15,7 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 03 Aug 2026 02:24:10 GMT</pubDate>
+    <pubDate>Fri, 07 Aug 2026 07:59:20 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -77,9 +77,9 @@
       <category domain="https://billzong.github.io/categories/%E5%AE%89%E5%85%A8/">安全</category>
       
       
-      <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
-      
       <category domain="https://billzong.github.io/tags/%E6%8E%88%E6%9D%83%E5%8F%82%E8%80%83%E7%A0%81/">授权参考码</category>
+      
+      <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
       
       <category domain="https://billzong.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8FID/">分布式ID</category>
       
@@ -119,6 +119,8 @@
       <category domain="https://billzong.github.io/categories/%E5%AE%89%E5%85%A8/">安全</category>
       
       
+      <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
+      
       <category domain="https://billzong.github.io/tags/%E7%A7%98%E9%92%A5%E7%AE%A1%E7%90%86/">秘钥管理</category>
       
       <category domain="https://billzong.github.io/tags/%E5%AE%89%E5%85%A8/">安全</category>
@@ -130,8 +132,6 @@
       <category domain="https://billzong.github.io/tags/SecretsManager/">SecretsManager</category>
       
       <category domain="https://billzong.github.io/tags/%E9%A2%84%E4%BB%98%E5%8D%A1/">预付卡</category>
-      
-      <category domain="https://billzong.github.io/tags/ucard/">ucard</category>
       
       
       <comments>https://billzong.github.io/post/e49981f1.html#disqus_thread</comments>
@@ -175,7 +175,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight jboss-cli&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span</description>
           
         
       
@@ -202,7 +202,7 @@
         
           
           
-      <description>&lt;h2 id=&quot;ntp服务端&quot;&gt;&lt;a href=&quot;#ntp服务端&quot; class=&quot;headerlink&quot; title=&quot;ntp服务端&quot;&gt;&lt;/a&gt;ntp服务端&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+      <description>&lt;h2 id=&quot;ntp服务端&quot;&gt;&lt;a href=&quot;#ntp服务端&quot; class=&quot;headerlink&quot; title=&quot;ntp服务端&quot;&gt;&lt;/a&gt;ntp服务端&lt;/h2&gt;&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
           
         
       
@@ -263,7 +263,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
           
         
       
@@ -348,7 +348,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
           
         
       
@@ -379,7 +379,7 @@
         
           
           
-      <description>&lt;h2 id=&quot;别名命令补全功能&quot;&gt;&lt;a href=&quot;#别名命令补全功能&quot; class=&quot;headerlink&quot; title=&quot;别名命令补全功能&quot;&gt;&lt;/a&gt;别名命令补全功能&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</description>
+      <description>&lt;h2 id=&quot;别名命令补全功能&quot;&gt;&lt;a href=&quot;#别名命令补全功能&quot; class=&quot;headerlink&quot; title=&quot;别名命令补全功能&quot;&gt;&lt;/a&gt;别名命令补全功能&lt;/h2&gt;&lt;figure class=&quot;highlight</description>
           
         
       
@@ -408,7 +408,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight livecodeserver&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span</description>
+      <description>&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span</description>
           
         
       
@@ -439,7 +439,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight routeros&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code</description>
+      <description>&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td</description>
           
         
       
@@ -470,7 +470,7 @@
           
       <description>&lt;p&gt;&lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;关闭root用户使用密码登陆&lt;/p&gt;
-&lt;figure class=&quot;highlight nginx&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
           
         
       
@@ -1015,7 +1015,7 @@
         
           
           
-      <description>&lt;figure class=&quot;highlight cmake&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;code</description>
+      <description>&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td</description>
           
         
       
@@ -1339,7 +1339,7 @@
           
           
       <description>&lt;p&gt;&lt;strong&gt;Generating the private key:&lt;/strong&gt;&lt;/p&gt;
-&lt;figure class=&quot;highlight pgsql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span</description>
           
         
       
@@ -1416,6 +1416,37 @@
     </item>
     
     <item>
+      <title>GraphQL API构建示例(1)</title>
+      <link>https://billzong.github.io/post/d3239b62.html</link>
+      <guid>https://billzong.github.io/post/d3239b62.html</guid>
+      <pubDate>Thu, 08 Apr 2021 14:52:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;./facd8695.html&quot;&gt;前文&lt;/a&gt;提到过&lt;code&gt;GraphQL</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
+      
+      <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
+      
+      <category domain="https://billzong.github.io/tags/network/">network</category>
+      
+      
+      <comments>https://billzong.github.io/post/d3239b62.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
       <title>GraphQL API构建示例(2)</title>
       <link>https://billzong.github.io/post/f80ec8a1.html</link>
       <guid>https://billzong.github.io/post/f80ec8a1.html</guid>
@@ -1444,37 +1475,6 @@
       
       
       <comments>https://billzong.github.io/post/f80ec8a1.html#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>GraphQL API构建示例(1)</title>
-      <link>https://billzong.github.io/post/d3239b62.html</link>
-      <guid>https://billzong.github.io/post/d3239b62.html</guid>
-      <pubDate>Thu, 08 Apr 2021 14:52:00 GMT</pubDate>
-      
-        
-        
-          
-          
-      <description>&lt;h2 id=&quot;概要&quot;&gt;&lt;a href=&quot;#概要&quot; class=&quot;headerlink&quot; title=&quot;概要&quot;&gt;&lt;/a&gt;概要&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;./facd8695.html&quot;&gt;前文&lt;/a&gt;提到过&lt;code&gt;GraphQL</description>
-          
-        
-      
-      
-      
-      
-      <category domain="https://billzong.github.io/categories/%E7%BD%91%E7%BB%9C/">网络</category>
-      
-      
-      <category domain="https://billzong.github.io/tags/GraphQL/">GraphQL</category>
-      
-      <category domain="https://billzong.github.io/tags/protocol/">protocol</category>
-      
-      <category domain="https://billzong.github.io/tags/network/">network</category>
-      
-      
-      <comments>https://billzong.github.io/post/d3239b62.html#disqus_thread</comments>
       
     </item>
     

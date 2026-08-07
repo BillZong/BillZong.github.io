@@ -50,18 +50,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -85,7 +80,7 @@
   <header>
     
 
-<div class="header-inner" style="height: 100vh;">
+<div class="header-inner" style="height: 0vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -294,17 +289,13 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="An elegant Material-Design theme for Hexo"></span>
+            <span id="subtitle"></span>
           
         </div>
 
         
       </div>
 
-      
-        <div class="scroll-down-bar">
-          <i class="iconfont icon-arrowdown"></i>
-        </div>
       
     </div>
   </div>
@@ -320,7 +311,7 @@
     
       <div class="container nopadding-x-md">
         <div id="board"
-          style="margin-top: 0">
+          >
           
           <div class="container">
             <div class="row">
@@ -343,7 +334,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/410d6a4b.html" target="_self">
         <div>
-          log15import &quot;github.com/inconshreveable/log15&quot; 特性 KV对方式的结构化日志 通过继承+自定义上下文的方式达成定制化 允许懒加载(日志内容可不提前分配内存和运算, 但仅限于value, key上使用Lazy无效) 处理接口配置简单自定义 (不同等级)终端输出颜色支持 文件日志&#x2F;流日志&#x2F;系统日志&#x2F;网络日志
+          
         </div>
       </a>
 
@@ -406,7 +397,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/7742e199.html" target="_self">
         <div>
-          balance-attack相关说明 什么是Balance Attack 如何执行 对GHOST的影响 攻击实验 R3 Ethereum私网   攻击防范 其它攻击简介 结论 词汇表 参考资料：  什么是Balance Attack 攻击者暂时破坏了近似算力的网络子组之间的通信。 在此期间，攻击者在其中一个子组（交易子组）发布交易。 攻击者在另一个子组中挖掘足够多的区块，以确保另一个子组的子树很可
+          
         </div>
       </a>
 
@@ -471,7 +462,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/d13f2d70.html" target="_self">
         <div>
-          1python3 -m pip install vitualenv  阿里云-独享1locust --host=https://172.16.2.34:31001 --no-web -t 5m -r 10 -c 1  阿里云1locust --host=https://10.0.2.37:32387 --no-web -t 5m -r 10 -c 1  腾讯云1locust --host=http
+          
         </div>
       </a>
 
@@ -534,7 +525,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/d6ffd7c3.html" target="_self">
         <div>
-          在云上购买机器 命名master为 btc-001  命令worker为 eth-001 eth-002 eth-003  这些机器全部使用了私网ip  前端部署负载均衡，ip为 10.1.2.3  文中涉及到这个ip的地方都需要替换   这里购买了一个nfs，地址为 259ae4bcd9-gos35.cn-shenzhen.nas.aliyuncs.com  文中涉及到这个nfs地址的地方都需要
+          
         </div>
       </a>
 
@@ -597,7 +588,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/3e321d5a.html" target="_self">
         <div>
-          概述本文主要描述当前OpenWhisk部署项目的代码修改、配置修改及生产环境下的配置说明。 版本说明部署仓库初始版本。master分支，节点89f1787ed58228063ae813ff85acfa9824ea045b，缩减描述为89f1787。其对应的代码仓库，master分支，节点5a2bf810dc5fda2f0d184c022e5931ac65de9721，缩减描述为5a2bf810。
+          
         </div>
       </a>
 
@@ -660,7 +651,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/b854b9de.html" target="_self">
         <div>
-          概述本文主要描述当前OpenWhisk部署项目的代码修改、配置修改及生产环境下的配置说明。 版本说明部署仓库初始版本。master分支，节点89f1787ed58228063ae813ff85acfa9824ea045b，缩减描述为89f1787。其对应的代码仓库，master分支，节点5a2bf810dc5fda2f0d184c022e5931ac65de9721，缩减描述为5a2bf810。
+          
         </div>
       </a>
 
@@ -723,7 +714,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/73ccc9b4.html" target="_self">
         <div>
-          这里描述的内容为本人自测通过的信息，其它平台建议在社区或者其它渠道查找。  开发环境 系统  Mac 10.15 beta   Java  下载JDK 8，并安装到本地机器。 使用HomeBrew安装管理 Java 版本。    123456789101112131415161718brew install jenv# 添加这部分内容到你使用的 shell rc 或者 profile 文件中，如
+          
         </div>
       </a>
 
@@ -786,7 +777,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/605dd585.html" target="_self">
         <div>
-          主流程 拷贝incubator-openwhisk仓库 删除默认的授权配置文件   执行installRouteMgmt.sh脚本 进入目录$OPENWHISK_HOME/ansible/roles/routemgmt/file   installRouteMgmt.sh脚本主要内容 分别进入目录$OPENWHISK_HOME/core/routemgmt/getApi，$OPENWHISK_HO
+          
         </div>
       </a>
 
@@ -851,7 +842,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/81965e0a.html" target="_self">
         <div>
-          背景目的本地开发调试用，非此目的不建议轻易尝试入坑。 另外，执行测试必须将环境部署起来。 系统说明本人使用的是 MacOS 10.15 Beta 系统。其它系统暂未测试，未确定实际效果。 背景知识建议阅读少量Ansible的文档，了解一些基本的概念。  环境准备本地需要的一些工具和环境。其中版本参考的是本地的，部分标注必须，说明该版本不可修改。包括：  Docker 18.09.1 Java 8
+          
         </div>
       </a>
 
@@ -916,7 +907,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/post/b265443c.html" target="_self">
         <div>
-          背景系统指标是通过Kamon的方式收集，其中Controller包含了Kamon-Prometheus后端和Kamon System Metrics等模块，所以数据可以直接汇集到Prometheus服务上。 当前 OpenWhisk 集群并没有集成 Prometheus 服务，仅在standalone模式下（jar包）集成了本地的Prometheus服务。其上报模式是通过启动 Docker 打包好
+          
         </div>
       </a>
 
@@ -1030,38 +1021,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 

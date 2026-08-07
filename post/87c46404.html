@@ -27,7 +27,7 @@
 <meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-25T14:08:00.000Z">
-<meta property="article:modified_time" content="2026-08-03T02:24:10.146Z">
+<meta property="article:modified_time" content="2026-08-07T07:59:20.151Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="upgrade">
 <meta property="article:tag" content="OpenSSH">
@@ -45,8 +45,6 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -62,18 +60,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -306,7 +299,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="一次OpenSSH升级记录"></span>
+            <span id="subtitle">一次OpenSSH升级记录</span>
           
         </div>
 
@@ -315,34 +308,11 @@
   <div class="mt-3">
     
     
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-04-25 22:08" pubdate>
-          2021年4月25日 晚上
-        </time>
-      </span>
-    
   </div>
 
   <div class="mt-1">
     
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          4.6k 字
-        
-      </span>
-    
 
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          39 分钟
-        
-      </span>
     
 
     
@@ -384,10 +354,10 @@
             
               <div class="markdown-body">
                 
-                <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh -V<br><br><br><span class="hljs-comment"># 安装telnet 防止无法登陆。完成后记得关闭telnet服务</span><br>apt-get install openbsd-inetd telnetd telnet -y<br>/etc/init.d/openbsd-inetd restart<br><br><br><span class="hljs-comment"># 修改配置以使root用户可以登录。完成后记得恢复</span><br><span class="hljs-comment">## 修改 /etc/inetd.conf文件，只需取消下面一行注释掉即可。</span><br><span class="hljs-comment">#telnet          stream  tcp     nowait  telnetd /usr/sbin/tcpd  /usr/sbin/in.telnetd</span><br><span class="hljs-comment">## 允许root用户telnet登录。记得恢复</span><br><span class="hljs-comment">### 有两种方法：</span><br><span class="hljs-comment">### (1)输入命令：mv /etc/securetty /etc/securetty.bak</span><br><span class="hljs-comment">### (2)修改/etc/pam.d/login这个文件。只需将下面一行注释一下即可。 </span><br><span class="hljs-comment">#auth required lib/security/pam_securetty.so </span><br><span class="hljs-built_in">mv</span> /etc/securetty /etc/securetty.bak<br><br><br><span class="hljs-comment"># 从其它机器进行telnet登陆</span><br>telnet 10.1.1.10<br><br><span class="hljs-built_in">mkdir</span> -p /root/workspace<br><br><br><span class="hljs-comment"># 安装 gcc, make 等工具</span><br>apt install gcc make -y<br><br><br><span class="hljs-comment"># 更新（安装）zlib</span><br><span class="hljs-built_in">cd</span> /root/workspace<br>wget http://zlib.net/zlib-1.2.11.tar.gz<br>tar xvf zlib-1.2.11.tar.gz<br><span class="hljs-built_in">cd</span> /root/workspace/zlib-1.2.11<br>./configure --shared<br>make -j 8<br>make install<br><br><span class="hljs-comment"># 后面安装openssl错误时，需要回来执行这个，所以先进行执行</span><br>make clean<br>./configure --shared<br>make <span class="hljs-built_in">test</span><br>make install<br><span class="hljs-built_in">cp</span> zutil.h /usr/local/include<br><span class="hljs-built_in">cp</span> zutil.c /usr/local/include<br><br><br><span class="hljs-comment"># 更新（安装）openssl</span><br><span class="hljs-built_in">cd</span> /root/workspace<br>wget https://www.openssl.org/source/openssl-1.1.1h.tar.gz<br>tar zxvf openssl-1.1.1h.tar.gz<br><span class="hljs-built_in">cd</span> /root/workspace/openssl-1.1.1h<br>./config shared zlib<br>make -j 8<br>make install<br><br><br><span class="hljs-comment"># 备份原来的openssl,创建软链接到系统位置</span><br><span class="hljs-built_in">mv</span> /usr/bin/openssl /usr/bin/openssl.bak <br><span class="hljs-built_in">mv</span> /usr/include/openssl /usr/include/openssl.bak <br><span class="hljs-built_in">ln</span> -s /usr/local/bin/openssl /usr/bin/openssl<br><span class="hljs-built_in">ln</span> -s /usr/local/include/openssl /usr/include/openssl<br><br><br><span class="hljs-comment"># 将openssl 的lib 库添加到系统，并使用</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;/usr/local/lib&quot;</span> &gt; /etc/ld.so.conf.d/openssl.conf<br>ldconfig  <br><br><br><span class="hljs-comment"># 查看 openssl 版本</span><br>openssl version -a<br><br><br><span class="hljs-comment"># 更新 openssh</span><br><span class="hljs-comment"># 备份原openssh文件,卸载原openssh</span><br><span class="hljs-built_in">mv</span> /etc/init.d/ssh /etc/init.d/ssh.old<br><span class="hljs-built_in">cp</span> -r /etc/ssh /etc/ssh.old<br>apt-get remove openssh-server openssh-client -y<br><br><br><span class="hljs-comment"># 安装新版本</span><br>apt-get install libpam0g-dev -y<br><span class="hljs-built_in">cd</span> /root/workspace<br>wget --no-check-certificate https://fastly.cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.4p1.tar.gz<br>tar zxvf openssh-8.4p1.tar.gz<br><span class="hljs-built_in">cd</span> openssh-8.4p1<br><br>./configure --prefix=/usr \<br>--sysconfdir=/etc/ssh \<br>--with-md5-passwords \<br>--with-pam --with-zlib \<br>--with-ssl-dir=/usr/local \<br>--with-privsep-path=/var/lib/sshd <span class="hljs-comment">#需要指定openssl的安装路径 </span><br><br>make -j 8<br>make install <br><br><br><span class="hljs-comment"># 查看安装更新效果</span><br>ssh -V<br><br><br><span class="hljs-comment"># 还原配置文件</span><br><span class="hljs-built_in">cd</span> /etc/ssh<br><span class="hljs-built_in">mv</span> sshd_config sshd_config.default<br><span class="hljs-built_in">cp</span> ../ssh.old/sshd_config ./<br>systemctl unmask sshd<br>systemctl restart sshd<br><br><br><span class="hljs-comment"># 使用ssh重新登陆设备，并进行其它恢复</span><br>sed -i <span class="hljs-string">&#x27;/^.*GSSAPIAuthentication/d&#x27;</span> /etc/ssh/ssh_config<br>systemctl stop openbsd-inetd<br>systemctl <span class="hljs-built_in">disable</span> openbsd-inetd<br><span class="hljs-built_in">mv</span> /etc/securetty.bak /etc/securetty<br>apt-get remove openbsd-inetd -y<br><br></code></pre></td></tr></table></figure>
+                <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line">ssh -V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 安装telnet 防止无法登陆。完成后记得关闭telnet服务</span><br><span class="line">apt-get install openbsd-inetd telnetd telnet -y</span><br><span class="line">/etc/init.d/openbsd-inetd restart</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 修改配置以使root用户可以登录。完成后记得恢复</span><br><span class="line">## 修改 /etc/inetd.conf文件，只需取消下面一行注释掉即可。</span><br><span class="line">#telnet          stream  tcp     nowait  telnetd /usr/sbin/tcpd  /usr/sbin/in.telnetd</span><br><span class="line">## 允许root用户telnet登录。记得恢复</span><br><span class="line">### 有两种方法：</span><br><span class="line">### (1)输入命令：mv /etc/securetty /etc/securetty.bak</span><br><span class="line">### (2)修改/etc/pam.d/login这个文件。只需将下面一行注释一下即可。 </span><br><span class="line">#auth required lib/security/pam_securetty.so </span><br><span class="line">mv /etc/securetty /etc/securetty.bak</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 从其它机器进行telnet登陆</span><br><span class="line">telnet 10.1.1.10</span><br><span class="line"></span><br><span class="line">mkdir -p /root/workspace</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 安装 gcc, make 等工具</span><br><span class="line">apt install gcc make -y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 更新（安装）zlib</span><br><span class="line">cd /root/workspace</span><br><span class="line">wget http://zlib.net/zlib-1.2.11.tar.gz</span><br><span class="line">tar xvf zlib-1.2.11.tar.gz</span><br><span class="line">cd /root/workspace/zlib-1.2.11</span><br><span class="line">./configure --shared</span><br><span class="line">make -j 8</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># 后面安装openssl错误时，需要回来执行这个，所以先进行执行</span><br><span class="line">make clean</span><br><span class="line">./configure --shared</span><br><span class="line">make test</span><br><span class="line">make install</span><br><span class="line">cp zutil.h /usr/local/include</span><br><span class="line">cp zutil.c /usr/local/include</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 更新（安装）openssl</span><br><span class="line">cd /root/workspace</span><br><span class="line">wget https://www.openssl.org/source/openssl-1.1.1h.tar.gz</span><br><span class="line">tar zxvf openssl-1.1.1h.tar.gz</span><br><span class="line">cd /root/workspace/openssl-1.1.1h</span><br><span class="line">./config shared zlib</span><br><span class="line">make -j 8</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 备份原来的openssl,创建软链接到系统位置</span><br><span class="line">mv /usr/bin/openssl /usr/bin/openssl.bak </span><br><span class="line">mv /usr/include/openssl /usr/include/openssl.bak </span><br><span class="line">ln -s /usr/local/bin/openssl /usr/bin/openssl</span><br><span class="line">ln -s /usr/local/include/openssl /usr/include/openssl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 将openssl 的lib 库添加到系统，并使用</span><br><span class="line">echo &quot;/usr/local/lib&quot; &gt; /etc/ld.so.conf.d/openssl.conf</span><br><span class="line">ldconfig  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看 openssl 版本</span><br><span class="line">openssl version -a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 更新 openssh</span><br><span class="line"># 备份原openssh文件,卸载原openssh</span><br><span class="line">mv /etc/init.d/ssh /etc/init.d/ssh.old</span><br><span class="line">cp -r /etc/ssh /etc/ssh.old</span><br><span class="line">apt-get remove openssh-server openssh-client -y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 安装新版本</span><br><span class="line">apt-get install libpam0g-dev -y</span><br><span class="line">cd /root/workspace</span><br><span class="line">wget --no-check-certificate https://fastly.cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.4p1.tar.gz</span><br><span class="line">tar zxvf openssh-8.4p1.tar.gz</span><br><span class="line">cd openssh-8.4p1</span><br><span class="line"></span><br><span class="line">./configure --prefix=/usr \</span><br><span class="line">--sysconfdir=/etc/ssh \</span><br><span class="line">--with-md5-passwords \</span><br><span class="line">--with-pam --with-zlib \</span><br><span class="line">--with-ssl-dir=/usr/local \</span><br><span class="line">--with-privsep-path=/var/lib/sshd #需要指定openssl的安装路径 </span><br><span class="line"></span><br><span class="line">make -j 8</span><br><span class="line">make install </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看安装更新效果</span><br><span class="line">ssh -V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 还原配置文件</span><br><span class="line">cd /etc/ssh</span><br><span class="line">mv sshd_config sshd_config.default</span><br><span class="line">cp ../ssh.old/sshd_config ./</span><br><span class="line">systemctl unmask sshd</span><br><span class="line">systemctl restart sshd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 使用ssh重新登陆设备，并进行其它恢复</span><br><span class="line">sed -i &#x27;/^.*GSSAPIAuthentication/d&#x27; /etc/ssh/ssh_config</span><br><span class="line">systemctl stop openbsd-inetd</span><br><span class="line">systemctl disable openbsd-inetd</span><br><span class="line">mv /etc/securetty.bak /etc/securetty</span><br><span class="line">apt-get remove openbsd-inetd -y</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>以上脚本为Ubuntu使用，后面的脚本为CentOS7使用：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 安装telnet服务器</span><br>yum install xinetd telnet-server telnet -y<br><br><span class="hljs-comment"># 添加root用户访问权限</span><br><span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOT &gt;&gt;/etc/securetty</span><br><span class="hljs-string">pts/0</span><br><span class="hljs-string">pts/1</span><br><span class="hljs-string">pts/2</span><br><span class="hljs-string">pts/3</span><br><span class="hljs-string">EOT</span><br><br><span class="hljs-comment"># 启动telnet服务</span><br>systemctl start telnet.socket<br>systemctl start xinetd<br><br><br><br><br><span class="hljs-comment"># 使用telnet连接并升级OpenSSH</span><br>telnet 10.1.1.10<br><br><span class="hljs-comment"># 升级安装工具</span><br>yum install  -y gcc gcc-c++ glibc make autoconf pcre-devel<br><br><span class="hljs-comment"># 安装pam</span><br>yum install pam* -y<br><br><br><span class="hljs-comment"># 更新（安装）zlib</span><br><span class="hljs-built_in">cd</span> /root/workspace<br>wget http://zlib.net/zlib-1.2.11.tar.gz<br>tar xvf zlib-1.2.11.tar.gz<br><span class="hljs-built_in">cd</span> /root/workspace/zlib-1.2.11<br>./configure --prefix=/usr/local/zlib --shared<br>make -j 8<br>make install<br><br><span class="hljs-comment"># 后面安装openssl错误时，需要回来执行这个，所以先进行执行</span><br>make clean<br>./configure --shared<br>make <span class="hljs-built_in">test</span><br>make install<br><span class="hljs-built_in">cp</span> zutil.h /usr/local/include<br><span class="hljs-built_in">cp</span> zutil.c /usr/local/include<br><br><br><span class="hljs-comment"># 更新（安装）openssl</span><br><span class="hljs-built_in">cd</span> /root/workspace<br>wget https://www.openssl.org/source/openssl-1.1.1h.tar.gz<br>tar zxvf openssl-1.1.1h.tar.gz<br><span class="hljs-built_in">cd</span> /root/workspace/openssl-1.1.1h<br>./config -fPIC enable-shared<br>make -j 8<br>make install<br><br><br><span class="hljs-comment"># 备份原来的openssl,创建软链接到系统位置</span><br><span class="hljs-built_in">mv</span> /usr/bin/openssl /usr/bin/openssl.bak <br><span class="hljs-built_in">mv</span> /usr/include/openssl /usr/include/openssl.bak <br><span class="hljs-built_in">ln</span> -s /usr/local/bin/openssl /usr/bin/openssl<br><span class="hljs-built_in">ln</span> -s /usr/local/include/openssl /usr/include/openssl<br><br><br><span class="hljs-comment"># 将openssl 的lib 库添加到系统，并使用</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;/usr/local/lib&quot;</span> &gt; /etc/ld.so.conf.d/openssl.conf<br>ldconfig  <br><br><br><span class="hljs-comment"># 查看 openssl 版本</span><br>openssl version -a<br><br><br><span class="hljs-comment"># 更新 openssh</span><br><span class="hljs-comment"># 备份原openssh文件,卸载原openssh</span><br><span class="hljs-built_in">cp</span> -r /etc/ssh /etc/ssh.old<br><span class="hljs-comment"># 不应该删除sshd服务，否则会导致无法使用</span><br><span class="hljs-comment">#yum remove openssh-server -y</span><br><br><br><span class="hljs-comment"># 安装新版本</span><br><span class="hljs-built_in">cd</span> /root/workspace<br>wget --no-check-certificate https://fastly.cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.4p1.tar.gz<br>tar zxvf openssh-8.4p1.tar.gz<br><span class="hljs-built_in">cd</span> /root/workspace/openssh-8.4p1<br>./configure --prefix=/usr \<br>--sysconfdir=/etc/ssh \<br>--with-md5-passwords \<br>--with-pam --with-zlib \<br>--with-ssl-dir=/usr/local \<br>--with-privsep-path=/var/lib/sshd<br>make -j 8<br>make install <br><br><span class="hljs-comment"># 查看安装更新效果</span><br>ssh -V<br><br><br><span class="hljs-comment"># 还原配置文件</span><br><span class="hljs-built_in">cd</span> /etc/ssh<br><span class="hljs-built_in">mv</span> sshd_config sshd_config.default<br><span class="hljs-built_in">cp</span> ../ssh.old/sshd_config ./<br>systemctl unmask sshd<br>systemctl restart sshd<br><br><br><br><span class="hljs-comment"># 使用ssh登陆目标设备并恢复环境</span><br>systemctl stop telnet.socket<br>systemctl stop xinetd<br>sed -i <span class="hljs-string">&#x27;/^pts\/.*/d&#x27;</span> /etc/securetty<br>yum remove telnet-server xinetd -y<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"># 安装telnet服务器</span><br><span class="line">yum install xinetd telnet-server telnet -y</span><br><span class="line"></span><br><span class="line"># 添加root用户访问权限</span><br><span class="line">cat &lt;&lt;EOT &gt;&gt;/etc/securetty</span><br><span class="line">pts/0</span><br><span class="line">pts/1</span><br><span class="line">pts/2</span><br><span class="line">pts/3</span><br><span class="line">EOT</span><br><span class="line"></span><br><span class="line"># 启动telnet服务</span><br><span class="line">systemctl start telnet.socket</span><br><span class="line">systemctl start xinetd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 使用telnet连接并升级OpenSSH</span><br><span class="line">telnet 10.1.1.10</span><br><span class="line"></span><br><span class="line"># 升级安装工具</span><br><span class="line">yum install  -y gcc gcc-c++ glibc make autoconf pcre-devel</span><br><span class="line"></span><br><span class="line"># 安装pam</span><br><span class="line">yum install pam* -y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 更新（安装）zlib</span><br><span class="line">cd /root/workspace</span><br><span class="line">wget http://zlib.net/zlib-1.2.11.tar.gz</span><br><span class="line">tar xvf zlib-1.2.11.tar.gz</span><br><span class="line">cd /root/workspace/zlib-1.2.11</span><br><span class="line">./configure --prefix=/usr/local/zlib --shared</span><br><span class="line">make -j 8</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># 后面安装openssl错误时，需要回来执行这个，所以先进行执行</span><br><span class="line">make clean</span><br><span class="line">./configure --shared</span><br><span class="line">make test</span><br><span class="line">make install</span><br><span class="line">cp zutil.h /usr/local/include</span><br><span class="line">cp zutil.c /usr/local/include</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 更新（安装）openssl</span><br><span class="line">cd /root/workspace</span><br><span class="line">wget https://www.openssl.org/source/openssl-1.1.1h.tar.gz</span><br><span class="line">tar zxvf openssl-1.1.1h.tar.gz</span><br><span class="line">cd /root/workspace/openssl-1.1.1h</span><br><span class="line">./config -fPIC enable-shared</span><br><span class="line">make -j 8</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 备份原来的openssl,创建软链接到系统位置</span><br><span class="line">mv /usr/bin/openssl /usr/bin/openssl.bak </span><br><span class="line">mv /usr/include/openssl /usr/include/openssl.bak </span><br><span class="line">ln -s /usr/local/bin/openssl /usr/bin/openssl</span><br><span class="line">ln -s /usr/local/include/openssl /usr/include/openssl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 将openssl 的lib 库添加到系统，并使用</span><br><span class="line">echo &quot;/usr/local/lib&quot; &gt; /etc/ld.so.conf.d/openssl.conf</span><br><span class="line">ldconfig  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看 openssl 版本</span><br><span class="line">openssl version -a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 更新 openssh</span><br><span class="line"># 备份原openssh文件,卸载原openssh</span><br><span class="line">cp -r /etc/ssh /etc/ssh.old</span><br><span class="line"># 不应该删除sshd服务，否则会导致无法使用</span><br><span class="line">#yum remove openssh-server -y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 安装新版本</span><br><span class="line">cd /root/workspace</span><br><span class="line">wget --no-check-certificate https://fastly.cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.4p1.tar.gz</span><br><span class="line">tar zxvf openssh-8.4p1.tar.gz</span><br><span class="line">cd /root/workspace/openssh-8.4p1</span><br><span class="line">./configure --prefix=/usr \</span><br><span class="line">--sysconfdir=/etc/ssh \</span><br><span class="line">--with-md5-passwords \</span><br><span class="line">--with-pam --with-zlib \</span><br><span class="line">--with-ssl-dir=/usr/local \</span><br><span class="line">--with-privsep-path=/var/lib/sshd</span><br><span class="line">make -j 8</span><br><span class="line">make install </span><br><span class="line"></span><br><span class="line"># 查看安装更新效果</span><br><span class="line">ssh -V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 还原配置文件</span><br><span class="line">cd /etc/ssh</span><br><span class="line">mv sshd_config sshd_config.default</span><br><span class="line">cp ../ssh.old/sshd_config ./</span><br><span class="line">systemctl unmask sshd</span><br><span class="line">systemctl restart sshd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 使用ssh登陆目标设备并恢复环境</span><br><span class="line">systemctl stop telnet.socket</span><br><span class="line">systemctl stop xinetd</span><br><span class="line">sed -i &#x27;/^pts\/.*/d&#x27; /etc/securetty</span><br><span class="line">yum remove telnet-server xinetd -y</span><br></pre></td></tr></table></figure>
 
 
 
@@ -441,73 +411,7 @@
 
 
               
-  
 
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>一次OpenSSH升级记录</div>
-      <div>https://billzong.github.io/post/87c46404.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Bill Zong</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2021年4月25日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-cc-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/post/2a353e7b.html" title="CentOS7升级内核全流程">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CentOS7升级内核全流程</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/post/4cf4d379.html" title="Linux二进制文件安全资料">
-                        <span class="hidden-mobile">Linux二进制文件安全资料</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
               
             </div>
 
@@ -519,19 +423,6 @@
 
     <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
 
     </div>
   </div>
@@ -541,23 +432,12 @@
 
 
 
-  
-
-
 
   
 
 
 
-  
 
-
-
-  
-
-
-
-  
 
 
 
@@ -615,38 +495,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 
@@ -658,162 +512,10 @@
 
 
 
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    function isExpandAllEnabled() {
-      return CONFIG.toc && CONFIG.toc.expand_all === true;
-    }
-    function expandAllToc() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
-    }
-    function updateTocToggle($li, $childList) {
-      var $toggle = $li.children('.toc-toggle');
-      if ($toggle.length === 0) { return; }
-      var collapsed = $childList.hasClass('tocbot-is-collapsed');
-      $toggle
-        .toggleClass('toc-toggle-collapsed', collapsed)
-        .toggleClass('toc-toggle-expanded', !collapsed);
-    }
-    function bindTocToggle() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .toc-list-item').each(function() {
-        var $li = jQuery(this);
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) {
-          if ($li.children('.toc-toggle').length === 0) {
-            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
-          }
-          return;
-        }
-
-        if ($li.children('.toc-toggle').length === 0) {
-          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
-        }
-        updateTocToggle($li, $childList);
-      });
-      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var $li = jQuery(this).parent('.toc-list-item');
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
-        updateTocToggle($li, $childList);
-      });
-      if (!window.__tocToggleObserver) {
-        window.__tocToggleObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
-            var $list = jQuery(mutation.target);
-            var $li = $list.parent('.toc-list-item');
-            if ($li.length === 0) { return; }
-            updateTocToggle($li, $list);
-          });
-        });
-        jQuery('#toc-body ol').each(function() {
-          window.__tocToggleObserver.observe(this, { attributes: true });
-        });
-      }
-    }
-    var tocConfig = Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc);
-    if (isExpandAllEnabled()) {
-      tocConfig.collapseDepth = 6;
-    }
-    window.tocbot.init(tocConfig);
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-    expandAllToc();
-    bindTocToggle();
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-        expandAllToc();
-        bindTocToggle();
-      }
-    });
-  });
-</script>
-
-
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

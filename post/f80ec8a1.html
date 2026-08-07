@@ -27,7 +27,7 @@
 <meta property="og:description" content="概要 设计一个GraphQL schema方案 设计并实现一个存储数据的后端数据方案 实现一个从1翻译到2的解析器  实现API的授权  前文已经提了基本的示例需求描述，以及基本数据结构和方案。 当前这篇文章会从后端数据存储切入，更详细的剖析如何构建这个示例的 GraphQL 解决方案。 数据库选择GraphQL 的查询内容，往往决定了后端的存储方式。所以找到一个合适的可以支持所有（尽可能全面的）">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-08T14:52:00.000Z">
-<meta property="article:modified_time" content="2026-08-03T02:24:10.145Z">
+<meta property="article:modified_time" content="2026-08-07T07:59:20.148Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="GraphQL">
 <meta property="article:tag" content="protocol">
@@ -46,8 +46,6 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -63,18 +61,13 @@
 <link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -307,7 +300,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="GraphQL API构建示例(2)"></span>
+            <span id="subtitle">GraphQL API构建示例(2)</span>
           
         </div>
 
@@ -316,34 +309,11 @@
   <div class="mt-3">
     
     
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2021-04-08 22:52" pubdate>
-          2021年4月8日 晚上
-        </time>
-      </span>
-    
   </div>
 
   <div class="mt-1">
     
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          4.1k 字
-        
-      </span>
-    
 
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          35 分钟
-        
-      </span>
     
 
     
@@ -431,14 +401,14 @@
 <p>至于其他的技术，暂时未调研可行性。但基本的参考思路是一致的。</p>
 <p><code>amplify-cli</code>的功能可以节约我们大量的开发工作。</p>
 <p>以下是配置文件<code>serverless.yaml</code>，内容较长，故分段说明。</p>
-<h3 id="Amazon-Dynamo-数据库服务配置"><a href="#Amazon-Dynamo-数据库服务配置" class="headerlink" title="Amazon Dynamo 数据库服务配置"></a>Amazon Dynamo 数据库服务配置</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">DynamoDBTable:</span><br> <span class="hljs-params">Type:</span> AWS::DynamoDB::Table<br> <span class="hljs-params">Properties:</span><br>   <span class="hljs-params">TableName:</span> $&#123;self:custom.api&#125;<br>   <span class="hljs-params">KeySchema:</span><br>     <span class="hljs-operator">-</span> <span class="hljs-params">AttributeName:</span> id<br>       <span class="hljs-params">KeyType:</span> HASH<br>     <span class="hljs-operator">-</span> <span class="hljs-params">AttributeName:</span> typeName<br>       <span class="hljs-params">KeyType:</span> RANGE<br>   <span class="hljs-params">AttributeDefinitions:</span><br>     <span class="hljs-operator">-</span> <span class="hljs-params">AttributeName:</span> id<br>       <span class="hljs-params">AttributeType:</span> S<br>     <span class="hljs-operator">-</span> <span class="hljs-params">AttributeName:</span> typeName<br>       <span class="hljs-params">AttributeType:</span> S<br>   <span class="hljs-params">ProvisionedThroughput:</span><br>     <span class="hljs-params">ReadCapacityUnits:</span> $&#123;self:custom.ddb_readIOPS&#125;<br>     <span class="hljs-params">WriteCapacityUnits:</span> $&#123;self:custom.ddb_writeIOPS&#125;<br>   <span class="hljs-params">StreamSpecification:</span> <span class="hljs-comment"># 这个流配置是重要的触发器，即数据新增、更新、删除时，会触发并发送给流</span><br>     <span class="hljs-params">StreamViewType:</span> NEW_AND_OLD_IMAGES<br></code></pre></td></tr></table></figure>
+<h3 id="Amazon-Dynamo-数据库服务配置"><a href="#Amazon-Dynamo-数据库服务配置" class="headerlink" title="Amazon Dynamo 数据库服务配置"></a>Amazon Dynamo 数据库服务配置</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">DynamoDBTable:</span><br><span class="line"> Type: AWS::DynamoDB::Table</span><br><span class="line"> Properties:</span><br><span class="line">   TableName: $&#123;self:custom.api&#125;</span><br><span class="line">   KeySchema:</span><br><span class="line">     - AttributeName: id</span><br><span class="line">       KeyType: HASH</span><br><span class="line">     - AttributeName: typeName</span><br><span class="line">       KeyType: RANGE</span><br><span class="line">   AttributeDefinitions:</span><br><span class="line">     - AttributeName: id</span><br><span class="line">       AttributeType: S</span><br><span class="line">     - AttributeName: typeName</span><br><span class="line">       AttributeType: S</span><br><span class="line">   ProvisionedThroughput:</span><br><span class="line">     ReadCapacityUnits: $&#123;self:custom.ddb_readIOPS&#125;</span><br><span class="line">     WriteCapacityUnits: $&#123;self:custom.ddb_writeIOPS&#125;</span><br><span class="line">   StreamSpecification: # 这个流配置是重要的触发器，即数据新增、更新、删除时，会触发并发送给流</span><br><span class="line">     StreamViewType: NEW_AND_OLD_IMAGES</span><br></pre></td></tr></table></figure>
 
-<h3 id="自定义配置项"><a href="#自定义配置项" class="headerlink" title="自定义配置项"></a>自定义配置项</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">custom:</span><br>  <span class="hljs-comment"># The base name of the API for resource generation - can&#x27;t include dashes</span><br>  <span class="hljs-comment"># [a-zA-Z0-9]+ only</span><br>  <span class="hljs-attr">api:</span> <span class="hljs-string">$&#123;self:provider.stage&#125;RestaurantReviews</span><br>  <span class="hljs-comment"># ES Domain, must match [a-z][a-z0-9\-]+</span><br>  <span class="hljs-attr">es_domain:</span> <span class="hljs-string">$&#123;self:provider.stage&#125;-restaurant-reviews</span><br>  <span class="hljs-comment"># The number of instances to launch into the ElasticSearch domain</span><br>  <span class="hljs-attr">es_instanceCount:</span> <span class="hljs-number">1</span><br>  <span class="hljs-comment"># The type of instance to launch into the ElasticSearch domain</span><br>  <span class="hljs-attr">es_instanceType:</span> <span class="hljs-string">&quot;t2.small.elasticsearch&quot;</span><br>  <span class="hljs-comment"># The size in GB of the EBS volumes that contain the data</span><br>  <span class="hljs-attr">es_ebsVolumeGB:</span> <span class="hljs-number">20</span><br>  <span class="hljs-comment"># The number of read IOPS the DynamoDB table should support.</span><br>  <span class="hljs-attr">ddb_readIOPS:</span> <span class="hljs-number">5</span><br>  <span class="hljs-comment"># The number of write IOPS the DynamoDB table should support.</span><br>  <span class="hljs-attr">ddb_writeIOPS:</span> <span class="hljs-number">5</span><br></code></pre></td></tr></table></figure>
+<h3 id="自定义配置项"><a href="#自定义配置项" class="headerlink" title="自定义配置项"></a>自定义配置项</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">custom:</span><br><span class="line">  # The base name of the API for resource generation - can&#x27;t include dashes</span><br><span class="line">  # [a-zA-Z0-9]+ only</span><br><span class="line">  api: $&#123;self:provider.stage&#125;RestaurantReviews</span><br><span class="line">  # ES Domain, must match [a-z][a-z0-9\-]+</span><br><span class="line">  es_domain: $&#123;self:provider.stage&#125;-restaurant-reviews</span><br><span class="line">  # The number of instances to launch into the ElasticSearch domain</span><br><span class="line">  es_instanceCount: 1</span><br><span class="line">  # The type of instance to launch into the ElasticSearch domain</span><br><span class="line">  es_instanceType: &quot;t2.small.elasticsearch&quot;</span><br><span class="line">  # The size in GB of the EBS volumes that contain the data</span><br><span class="line">  es_ebsVolumeGB: 20</span><br><span class="line">  # The number of read IOPS the DynamoDB table should support.</span><br><span class="line">  ddb_readIOPS: 5</span><br><span class="line">  # The number of write IOPS the DynamoDB table should support.</span><br><span class="line">  ddb_writeIOPS: 5</span><br></pre></td></tr></table></figure>
 
-<h3 id="ElasticSearch配置项"><a href="#ElasticSearch配置项" class="headerlink" title="ElasticSearch配置项"></a>ElasticSearch配置项</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">ElasticSearchStreamingLambdaIAMRole:</span><br>      <span class="hljs-params">Type:</span> AWS::IAM::Role <span class="hljs-comment"># 授权服务</span><br>      <span class="hljs-params">Properties:</span><br>        <span class="hljs-params">RoleName:</span> $&#123;self:custom.api&#125;-ESStreamingLambdaRole<br>        <span class="hljs-params">AssumeRolePolicyDocument:</span><br>          <span class="hljs-params">Version:</span> <span class="hljs-string">&quot;2012-10-17&quot;</span><br>          <span class="hljs-params">Statement:</span><br>            <span class="hljs-operator">-</span> <span class="hljs-params">Effect:</span> Allow<br>              <span class="hljs-params">Principal:</span><br>                <span class="hljs-params">Service:</span> <span class="hljs-string">&quot;lambda.amazonaws.com&quot;</span><br>              <span class="hljs-params">Action:</span> <span class="hljs-string">&quot;sts:AssumeRole&quot;</span><br>        <span class="hljs-params">Policies:</span><br>          <span class="hljs-operator">-</span> <span class="hljs-params">PolicyName:</span> ElasticSearchAccess<br>            <span class="hljs-params">PolicyDocument:</span><br>              <span class="hljs-params">Version:</span> <span class="hljs-string">&quot;2012-10-17&quot;</span><br>              <span class="hljs-params">Statement:</span><br>                <span class="hljs-operator">-</span> <span class="hljs-params">Action:</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;es:ESHttpPost&quot;</span><br>                  <span class="hljs-params">Effect:</span> Allow<br>                  <span class="hljs-params">Resource:</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;arn:aws:es:#&#123;AWS::Region&#125;:#&#123;AWS::AccountId&#125;:domain/<span class="hljs-subst">$&#123;self:custom.es_domain&#125;</span>/_bulk&quot;</span><br>          <span class="hljs-operator">-</span> <span class="hljs-params">PolicyName:</span> DynamoDBStreamAccess<br>            <span class="hljs-params">PolicyDocument:</span><br>              <span class="hljs-params">Version:</span> <span class="hljs-string">&quot;2012-10-17&quot;</span><br>              <span class="hljs-params">Statement:</span><br>                <span class="hljs-operator">-</span> <span class="hljs-params">Action:</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;dynamodb:DescribeStream&quot;</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;dynamodb:GetRecords&quot;</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;dynamodb:GetShardIterator&quot;</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;dynamodb:ListStreams&quot;</span><br>                  <span class="hljs-params">Effect:</span> Allow<br>                  <span class="hljs-params">Resource:</span><br>                    <span class="hljs-operator">-</span> &#123; Fn::<span class="hljs-params">GetAtt:</span> [ DynamoDBTable, StreamArn ]&#125;<br>          <span class="hljs-operator">-</span> <span class="hljs-params">PolicyName:</span> CloudWatchLogsAccess<br>            <span class="hljs-params">PolicyDocument:</span><br>              <span class="hljs-params">Version:</span> <span class="hljs-string">&quot;2012-10-17&quot;</span><br>              <span class="hljs-params">Statement:</span><br>                <span class="hljs-operator">-</span> <span class="hljs-params">Action:</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;logs:CreateLogGroup&quot;</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;logs:CreateLogStream&quot;</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;logs:PutLogEvents&quot;</span><br>                  <span class="hljs-params">Effect:</span> Allow<br>                  <span class="hljs-params">Resource:</span><br>                    <span class="hljs-operator">-</span> <span class="hljs-string">&quot;arn:aws:logs:#&#123;AWS::Region&#125;:#&#123;AWS::AccountId&#125;:*&quot;</span><br></code></pre></td></tr></table></figure>
+<h3 id="ElasticSearch配置项"><a href="#ElasticSearch配置项" class="headerlink" title="ElasticSearch配置项"></a>ElasticSearch配置项</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">ElasticSearchStreamingLambdaIAMRole:</span><br><span class="line">      Type: AWS::IAM::Role # 授权服务</span><br><span class="line">      Properties:</span><br><span class="line">        RoleName: $&#123;self:custom.api&#125;-ESStreamingLambdaRole</span><br><span class="line">        AssumeRolePolicyDocument:</span><br><span class="line">          Version: &quot;2012-10-17&quot;</span><br><span class="line">          Statement:</span><br><span class="line">            - Effect: Allow</span><br><span class="line">              Principal:</span><br><span class="line">                Service: &quot;lambda.amazonaws.com&quot;</span><br><span class="line">              Action: &quot;sts:AssumeRole&quot;</span><br><span class="line">        Policies:</span><br><span class="line">          - PolicyName: ElasticSearchAccess</span><br><span class="line">            PolicyDocument:</span><br><span class="line">              Version: &quot;2012-10-17&quot;</span><br><span class="line">              Statement:</span><br><span class="line">                - Action:</span><br><span class="line">                    - &quot;es:ESHttpPost&quot;</span><br><span class="line">                  Effect: Allow</span><br><span class="line">                  Resource:</span><br><span class="line">                    - &quot;arn:aws:es:#&#123;AWS::Region&#125;:#&#123;AWS::AccountId&#125;:domain/$&#123;self:custom.es_domain&#125;/_bulk&quot;</span><br><span class="line">          - PolicyName: DynamoDBStreamAccess</span><br><span class="line">            PolicyDocument:</span><br><span class="line">              Version: &quot;2012-10-17&quot;</span><br><span class="line">              Statement:</span><br><span class="line">                - Action:</span><br><span class="line">                    - &quot;dynamodb:DescribeStream&quot;</span><br><span class="line">                    - &quot;dynamodb:GetRecords&quot;</span><br><span class="line">                    - &quot;dynamodb:GetShardIterator&quot;</span><br><span class="line">                    - &quot;dynamodb:ListStreams&quot;</span><br><span class="line">                  Effect: Allow</span><br><span class="line">                  Resource:</span><br><span class="line">                    - &#123; Fn::GetAtt: [ DynamoDBTable, StreamArn ]&#125;</span><br><span class="line">          - PolicyName: CloudWatchLogsAccess</span><br><span class="line">            PolicyDocument:</span><br><span class="line">              Version: &quot;2012-10-17&quot;</span><br><span class="line">              Statement:</span><br><span class="line">                - Action:</span><br><span class="line">                    - &quot;logs:CreateLogGroup&quot;</span><br><span class="line">                    - &quot;logs:CreateLogStream&quot;</span><br><span class="line">                    - &quot;logs:PutLogEvents&quot;</span><br><span class="line">                  Effect: Allow</span><br><span class="line">                  Resource:</span><br><span class="line">                    - &quot;arn:aws:logs:#&#123;AWS::Region&#125;:#&#123;AWS::AccountId&#125;:*&quot;</span><br></pre></td></tr></table></figure>
 
 <h3 id="Amazon-Lambda-function-配置"><a href="#Amazon-Lambda-function-配置" class="headerlink" title="Amazon Lambda function 配置"></a>Amazon Lambda function 配置</h3><p>对应到OpenWhisk则是trigger</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">functions:</span><br>  <span class="hljs-params">dynamodb_stream:</span><br>    <span class="hljs-params">handler:</span> elasticsearch.lambda_handler <span class="hljs-comment"># 回调方法</span><br>    <span class="hljs-params">name:</span> $&#123;self:custom.api&#125;-dynamodb_stream_handler<br>    <span class="hljs-params">description:</span> Stream data from DynamoDB to ElasticSearch<br>    <span class="hljs-params">runtime:</span> python3.<span class="hljs-number">6</span><br>    <span class="hljs-params">memorySize:</span> <span class="hljs-number">128</span><br>    <span class="hljs-params">role:</span> ElasticSearchStreamingLambdaIAMRole <span class="hljs-comment"># 授权角色</span><br>    <span class="hljs-params">environment:</span><br>      <span class="hljs-params">ES_ENDPOINT:</span> &#123; Fn::<span class="hljs-params">GetAtt:</span> [ ElasticSearchDomain, DomainEndpoint ]&#125;<br>      <span class="hljs-params">DEBUG:</span> <span class="hljs-number">1</span><br>    <span class="hljs-params">events:</span><br>      <span class="hljs-operator">-</span> <span class="hljs-params">stream:</span><br>          <span class="hljs-params">type:</span> dynamodb<br>          <span class="hljs-params">arn:</span> &#123; Fn::<span class="hljs-params">GetAtt:</span> [ DynamoDBTable, StreamArn ]&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">functions:</span><br><span class="line">  dynamodb_stream:</span><br><span class="line">    handler: elasticsearch.lambda_handler # 回调方法</span><br><span class="line">    name: $&#123;self:custom.api&#125;-dynamodb_stream_handler</span><br><span class="line">    description: Stream data from DynamoDB to ElasticSearch</span><br><span class="line">    runtime: python3.6</span><br><span class="line">    memorySize: 128</span><br><span class="line">    role: ElasticSearchStreamingLambdaIAMRole # 授权角色</span><br><span class="line">    environment:</span><br><span class="line">      ES_ENDPOINT: &#123; Fn::GetAtt: [ ElasticSearchDomain, DomainEndpoint ]&#125;</span><br><span class="line">      DEBUG: 1</span><br><span class="line">    events:</span><br><span class="line">      - stream:</span><br><span class="line">          type: dynamodb</span><br><span class="line">          arn: &#123; Fn::GetAtt: [ DynamoDBTable, StreamArn ]&#125;</span><br></pre></td></tr></table></figure>
 
 
                 
@@ -485,73 +455,7 @@
 
 
               
-  
 
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>GraphQL API构建示例(2)</div>
-      <div>https://billzong.github.io/post/f80ec8a1.html</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Bill Zong</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2021年4月8日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-cc-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/post/12d311d1.html" title="iris框架概览">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">iris框架概览</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/post/d3239b62.html" title="GraphQL API构建示例(1)">
-                        <span class="hidden-mobile">GraphQL API构建示例(1)</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
               
             </div>
 
@@ -563,19 +467,6 @@
 
     <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
 
     </div>
   </div>
@@ -585,23 +476,12 @@
 
 
 
-  
-
-
 
   
 
 
 
-  
 
-
-
-  
-
-
-
-  
 
 
 
@@ -659,38 +539,12 @@
 
   <!-- Scripts -->
   
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
 
 <script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 
@@ -702,162 +556,10 @@
 
 
 
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    function isExpandAllEnabled() {
-      return CONFIG.toc && CONFIG.toc.expand_all === true;
-    }
-    function expandAllToc() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
-    }
-    function updateTocToggle($li, $childList) {
-      var $toggle = $li.children('.toc-toggle');
-      if ($toggle.length === 0) { return; }
-      var collapsed = $childList.hasClass('tocbot-is-collapsed');
-      $toggle
-        .toggleClass('toc-toggle-collapsed', collapsed)
-        .toggleClass('toc-toggle-expanded', !collapsed);
-    }
-    function bindTocToggle() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .toc-list-item').each(function() {
-        var $li = jQuery(this);
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) {
-          if ($li.children('.toc-toggle').length === 0) {
-            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
-          }
-          return;
-        }
-
-        if ($li.children('.toc-toggle').length === 0) {
-          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
-        }
-        updateTocToggle($li, $childList);
-      });
-      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var $li = jQuery(this).parent('.toc-list-item');
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
-        updateTocToggle($li, $childList);
-      });
-      if (!window.__tocToggleObserver) {
-        window.__tocToggleObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
-            var $list = jQuery(mutation.target);
-            var $li = $list.parent('.toc-list-item');
-            if ($li.length === 0) { return; }
-            updateTocToggle($li, $list);
-          });
-        });
-        jQuery('#toc-body ol').each(function() {
-          window.__tocToggleObserver.observe(this, { attributes: true });
-        });
-      }
-    }
-    var tocConfig = Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc);
-    if (isExpandAllEnabled()) {
-      tocConfig.collapseDepth = 6;
-    }
-    window.tocbot.init(tocConfig);
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-    expandAllToc();
-    bindTocToggle();
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-        expandAllToc();
-        bindTocToggle();
-      }
-    });
-  });
-</script>
-
-
   <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
 
   <script>Fluid.plugins.codeWidget();</script>
 
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 
