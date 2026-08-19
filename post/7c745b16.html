@@ -1,0 +1,1117 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Pi Agent Harness — 系统架构总览 仓库根目录：&#x2F;Users&#x2F;bill&#x2F;go&#x2F;src&#x2F;github.com&#x2F;earendil-works&#x2F;pi文档版本：v1（基于 main @ cd6852a12）文档目的：给后续阅读源码、做修改、Review PR 的人一个统一的地图   1. 项目定位Pi 是一个可扩展的终端 Coding Agent 框架，核心卖点：  极简内核：不内置 su">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pi Agent Harness 系统架构总览">
+<meta property="og:url" content="https://billzong.github.io/post/7c745b16.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="Pi Agent Harness — 系统架构总览 仓库根目录：&#x2F;Users&#x2F;bill&#x2F;go&#x2F;src&#x2F;github.com&#x2F;earendil-works&#x2F;pi文档版本：v1（基于 main @ cd6852a12）文档目的：给后续阅读源码、做修改、Review PR 的人一个统一的地图   1. 项目定位Pi 是一个可扩展的终端 Coding Agent 框架，核心卖点：  极简内核：不内置 su">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-08-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-13T09:36:50.989Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Pi">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="架构">
+<meta property="article:tag" content="Monorepo">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Pi Agent Harness 系统架构总览 - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 25vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Pi Agent Harness 系统架构总览"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Pi Agent Harness 系统架构总览</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Pi-Agent-Harness-—-系统架构总览"><a href="#Pi-Agent-Harness-—-系统架构总览" class="headerlink" title="Pi Agent Harness — 系统架构总览"></a>Pi Agent Harness — 系统架构总览</h1><blockquote>
+<p>仓库根目录：<code>/Users/bill/go/src/github.com/earendil-works/pi</code><br>文档版本：v1（基于 <code>main @ cd6852a12</code>）<br>文档目的：给后续阅读源码、做修改、Review PR 的人一个统一的地图</p>
+</blockquote>
+<hr>
+<h2 id="1-项目定位"><a href="#1-项目定位" class="headerlink" title="1. 项目定位"></a>1. 项目定位</h2><p>Pi 是一个<strong>可扩展的终端 Coding Agent 框架</strong>，核心卖点：</p>
+<ul>
+<li><strong>极简内核</strong>：不内置 sub-agent &#x2F; plan-mode &#x2F; 权限弹窗；这些能力通过 <a href="#74-extensions--skills--prompt-templates--pi-packages">Extensions</a> 按需加载。</li>
+<li><strong>Provider-agnostic</strong>：内置 30+ LLM 提供商（Anthropic &#x2F; OpenAI &#x2F; Google &#x2F; Bedrock &#x2F; 国产模型 等）。</li>
+<li><strong>多运行模式</strong>：同一份核心支持 Interactive TUI、Print、JSON Lines、RPC、SDK 五种入口。</li>
+<li><strong>远程化可选</strong>：通过 <code>pi-server</code> + 长度前缀 CBOR 协议将会话放到远端，本地用 <code>pi-client</code> 接入。</li>
+<li><strong>可观测性</strong>：与厂商无关的 <code>pi-telemetry</code> 适配器接口，能挂 OpenTelemetry &#x2F; Sentry。</li>
+</ul>
+<hr>
+<h2 id="2-Monorepo-总览"><a href="#2-Monorepo-总览" class="headerlink" title="2. Monorepo 总览"></a>2. Monorepo 总览</h2><h3 id="2-1-Workspace-布局"><a href="#2-1-Workspace-布局" class="headerlink" title="2.1 Workspace 布局"></a>2.1 Workspace 布局</h3><p><code>package.json</code> 的 <code>workspaces</code> 字段声明如下分组：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>packages/*</code></td>
+<td>11 个核心包（详见 §2.2）</td>
+</tr>
+<tr>
+<td><code>packages/session-backends/*</code></td>
+<td>会话持久化后端（目前只有 <code>sqlite-node</code>）</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/examples/extensions/*</code></td>
+<td>示例扩展（with-deps、custom-provider-anthropic、gitlab-duo、sandbox、gondolin）</td>
+</tr>
+</tbody></table>
+<p>构建顺序由 <code>scripts.build</code> 显式串联（<strong>强依赖，不可乱序</strong>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tui → telemetry → ai → agent → session-backends/sqlite-node</span><br><span class="line">     → protocol → client → server → coding-agent</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-11-个核心包"><a href="#2-2-11-个核心包" class="headerlink" title="2.2 11 个核心包"></a>2.2 11 个核心包</h3><table>
+<thead>
+<tr>
+<th>包</th>
+<th>作用</th>
+<th>关键导出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@earendil-works/pi-tui</code></td>
+<td>终端 UI 原语（差分渲染、组件库、键位）</td>
+<td><code>TUI</code>、<code>Editor</code>、<code>Box</code>、<code>SelectList</code>、<code>ScrollView</code></td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-telemetry</code></td>
+<td>厂商无关 telemetry 契约 + 参考实现 + 类型化 schema</td>
+<td><code>TelemetryContext</code>、<code>NOOP_TELEMETRY_CONTEXT</code>、<code>InMemoryTelemetryContext</code>、<code>defineTelemetrySchema</code></td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-ai</code></td>
+<td>统一多 Provider LLM API（流式 + 一次性 + 图像生成）</td>
+<td><code>createModels</code>、<code>builtinModels</code>、<code>createProvider</code>、<code>Context</code>、<code>Tool</code>、<code>fauxProvider</code></td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-agent-core</code></td>
+<td>Agent 运行时（状态机 + 事件流 + 工具调度）</td>
+<td><code>Agent</code>、<code>agentLoop</code>、<code>agentLoopContinue</code>、<code>streamProxy</code></td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-session-backend-sqlite-node</code></td>
+<td>基于 <code>node:sqlite</code> 的会话后端（repository + 物化视图 + FTS）</td>
+<td><code>SqliteSessionRepository</code>、<code>createSqliteSessionSearch</code></td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-protocol</code></td>
+<td>远程会话的 CBOR 消息协议 + 字节流分帧</td>
+<td><code>PROTOCOL_VERSION</code>、<code>encodeClientMessage</code>、<code>ServerMessageDecoder</code></td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-client</code></td>
+<td>远程会话客户端（transport-neutral，Node 独立 subpath 提供 unix socket）</td>
+<td><code>PiClient</code>、<code>SessionLease</code>、<code>createUnixTransportFactory</code></td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-server</code></td>
+<td>远程会话服务端（依赖 Pi 应用提供 <code>PiServerService</code> 实现）</td>
+<td><code>PiServer</code>、<code>createUnixServer</code>、<code>toProtocol*</code> 桥接器</td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-coding-agent</code></td>
+<td>终端 Agent 完整实现：CLI、TUI、Print、JSON、RPC、SDK</td>
+<td><code>createAgentSession</code>、<code>AgentSession</code>、<code>InteractiveMode</code>、<code>runPrintMode</code>、<code>runRpcMode</code></td>
+</tr>
+<tr>
+<td><code>@earendil-works/pi-evals</code></td>
+<td>行为级评估（适配 vitest-evals，运行真实 <code>AgentSession</code>）</td>
+<td><code>createPiCodingAgentHarness</code>、<code>evalHarnessTable</code></td>
+</tr>
+</tbody></table>
+<p>补充说明：</p>
+<ul>
+<li><code>pi-ai</code> 的兼容入口 <code>@earendil-works/pi-ai/compat</code> 保留旧版全局 API（<code>getModel</code> &#x2F; <code>complete</code> &#x2F; <code>streamAnthropic</code> …），仅用于平滑迁移。</li>
+<li><code>pi-protocol</code> 的协议版本字段叫 <code>PROTOCOL_VERSION</code>，目前为 <code>1</code>；语义是 experimental，不保证兼容。</li>
+<li><code>pi-server</code> 在 README 顶部标注 “Experimental. May change or be removed without notice.”</li>
+</ul>
+<hr>
+<h2 id="3-模块分层图"><a href="#3-模块分层图" class="headerlink" title="3. 模块分层图"></a>3. 模块分层图</h2><h3 id="3-1-自顶向下的依赖关系"><a href="#3-1-自顶向下的依赖关系" class="headerlink" title="3.1 自顶向下的依赖关系"></a>3.1 自顶向下的依赖关系</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">┌────────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        应用/嵌入式入口                               │</span><br><span class="line">│   pi-coding-agent (CLI/TUI/Print/JSON/RPC/SDK)                      │</span><br><span class="line">│   examples/extensions/* (扩展开发示例)                              │</span><br><span class="line">└────────────────────────────────┬───────────────────────────────────┘</span><br><span class="line">                                 │ 依赖</span><br><span class="line">┌────────────────────────────────▼───────────────────────────────────┐</span><br><span class="line">│             远程会话 / 协议层                                       │</span><br><span class="line">│   pi-server ──┐                                                    │</span><br><span class="line">│   pi-client ──┴── pi-protocol (CBOR + 分帧)                       │</span><br><span class="line">└────────────────────────────────┬───────────────────────────────────┘</span><br><span class="line">                                 │</span><br><span class="line">┌────────────────────────────────▼───────────────────────────────────┐</span><br><span class="line">│                      Agent 运行时层                                 │</span><br><span class="line">│   pi-agent-core (Agent 类 + agentLoop + tools 协议 + 事件流)       │</span><br><span class="line">│   ├─ harness/session  (JSONL session 持久化)                       │</span><br><span class="line">│   ├─ harness/compaction (上下文压缩 / 分支摘要)                    │</span><br><span class="line">│   └─ harness/tools (read/write/edit/bash 内置工具集)               │</span><br><span class="line">└──────┬──────────────────────────────────────────────┬──────────────┘</span><br><span class="line">       │                                              │</span><br><span class="line">┌──────▼────────────────────┐         ┌───────────────▼──────────────┐</span><br><span class="line">│   Provider/LLM 层          │         │   可观测性 &amp; 持久化层        │</span><br><span class="line">│   pi-ai                    │         │   pi-telemetry              │</span><br><span class="line">│   ├─ api/* (9 个 API 实现)  │         │   session-backends/sqlite   │</span><br><span class="line">│   ├─ providers/* (30+ 厂商)│         └──────────────────────────────┘</span><br><span class="line">│   ├─ auth (API key + OAuth)│</span><br><span class="line">│   └─ compat (旧全局 API)   │</span><br><span class="line">└────────────────────────────┘</span><br><span class="line">                                 ▲</span><br><span class="line">                                 │ 渲染</span><br><span class="line">┌────────────────────────────────┴───────────────────────────────────┐</span><br><span class="line">│                          UI 渲染层                                  │</span><br><span class="line">│   pi-tui (差分渲染、组件库、键位、原义)                             │</span><br><span class="line">│   + pi-coding-agent/modes/interactive (TUI 模式专用组件)            │</span><br><span class="line">└────────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-单包内部模块分层（以-pi-coding-agent-为例）"><a href="#3-2-单包内部模块分层（以-pi-coding-agent-为例）" class="headerlink" title="3.2 单包内部模块分层（以 pi-coding-agent 为例）"></a>3.2 单包内部模块分层（以 <code>pi-coding-agent</code> 为例）</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">pi-coding-agent</span><br><span class="line">├── cli/                      # 参数解析、auth 命令、子命令实现</span><br><span class="line">├── core/</span><br><span class="line">│   ├── agent-session.ts      # AgentSession：跨模式共享的核心抽象</span><br><span class="line">│   ├── agent-session-runtime.ts / -services.ts  # 高级 SDK 工厂</span><br><span class="line">│   ├── agent-session-services.ts                # 服务容器化注入</span><br><span class="line">│   ├── model-registry.ts / model-resolver.ts    # 模型解析</span><br><span class="line">│   ├── model-runtime.ts                          # Model 工厂（catalog + auth）</span><br><span class="line">│   ├── session-manager.ts                        # JSONL 会话持久化</span><br><span class="line">│   ├── settings-manager.ts                       # 全局/项目设置</span><br><span class="line">│   ├── extensions/&#123;loader,runner,types,wrapper&#125;  # 扩展加载与执行</span><br><span class="line">│   ├── compaction/&#123;compaction,branch-summarization,utils&#125;.ts</span><br><span class="line">│   ├── tools/&#123;read,write,edit,bash,grep,find,ls,...&#125;.ts</span><br><span class="line">│   ├── auth-storage.ts / auth-guidance.ts</span><br><span class="line">│   ├── bash-executor.ts                          # BashExecutionMessage 处理</span><br><span class="line">│   ├── http-dispatcher.ts                        # 全局 HTTP 代理/路由</span><br><span class="line">│   ├── output-guard.ts / output-accumulator.ts</span><br><span class="line">│   └── telemetry.ts</span><br><span class="line">├── modes/</span><br><span class="line">│   ├── interactive/                           # TUI 模式</span><br><span class="line">│   │   ├── interactive-mode.ts</span><br><span class="line">│   │   ├── components/ (44 个 TUI 组件)</span><br><span class="line">│   │   └── theme/ (theme schema + dark/light)</span><br><span class="line">│   ├── print-mode.ts                          # -p 单次输出</span><br><span class="line">│   ├── json-event.ts                          # --mode json</span><br><span class="line">│   └── rpc/                                   # --mode rpc (LF-delimited JSONL)</span><br><span class="line">│       ├── rpc-mode.ts / rpc-client.ts</span><br><span class="line">│       └── rpc-types.ts</span><br><span class="line">├── extensions/&#123;index,llama&#125;/                  # 内置扩展（llama.cpp 管理器）</span><br><span class="line">├── server/create-harness.ts                   # 嵌入式 PiServer 入口</span><br><span class="line">├── client/&#123;index,remote-session,transcript&#125;.ts</span><br><span class="line">├── core/export-html/                          # 会话导出为 HTML</span><br><span class="line">├── core/extensions                            # 扩展机制（与上层同 path）</span><br><span class="line">├── cli/experimental/                          # 实验 CLI（auth 子命令、运输地址）</span><br><span class="line">├── bun/&#123;cli,register-bedrock,restore-sandbox-env&#125;.ts</span><br><span class="line">├── utils/                                     # 杂项工具（child-process、git、图像、HTML...）</span><br><span class="line">└── main.ts / cli.ts / rpc-entry.ts / sdk.ts    # 入口分流</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-依赖规则（总结）"><a href="#3-3-依赖规则（总结）" class="headerlink" title="3.3 依赖规则（总结）"></a>3.3 依赖规则（总结）</h3><ul>
+<li>底层包<strong>不依赖</strong>上层包（单向 DAG），build 顺序即编译顺序。</li>
+<li><code>pi-agent-core</code> 不直接 import <code>pi-ai/compat</code>（这是显式约定，见 <code>core/sdk.ts:33-36</code> 注释）；通过 <code>streamFn</code> 参数注入。</li>
+<li><code>pi-ai</code> 是唯一一个含 Provider SDK 的包；它的体积取决于注册的 providers（可树摇）。</li>
+<li>跨包共享类型用 <code>^workspace:*</code> version range（npm workspace）。</li>
+</ul>
+<hr>
+<h2 id="4-数据流程图"><a href="#4-数据流程图" class="headerlink" title="4. 数据流程图"></a>4. 数据流程图</h2><h3 id="4-1-一次交互式-turn-的全链路"><a href="#4-1-一次交互式-turn-的全链路" class="headerlink" title="4.1 一次交互式 turn 的全链路"></a>4.1 一次交互式 turn 的全链路</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────┐</span><br><span class="line">│ 用户在 TUI 编辑器输入 Enter │</span><br><span class="line">└──────────────┬───────────┘</span><br><span class="line">               │ AgentSession.steer() / prompt()</span><br><span class="line">               ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│ AgentSession (coding-agent/core/agent-session.ts)    │</span><br><span class="line">│ ── 1. 写入 SessionManager JSONL（持久化）             │</span><br><span class="line">│ ── 2. 触发 Agent 运行时                                │</span><br><span class="line">└──────────────┬───────────────────────────────────────┘</span><br><span class="line">               │ agent.prompt(msg)</span><br><span class="line">               ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│ Agent (agent-core/agent.ts)                           │</span><br><span class="line">│ ── 状态机：pending → streaming → tool-running → …     │</span><br><span class="line">│ ── 事件总线：agent_start/turn_start/message_*          │</span><br><span class="line">│   /tool_execution_*/turn_end/agent_end               │</span><br><span class="line">└──────────────┬───────────────────────────────────────┘</span><br><span class="line">               │ agentLoop(prompts, context, config, …)</span><br><span class="line">               ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│ AgentLoop (agent-core/agent-loop.ts)                  │</span><br><span class="line">│  ┌─────────────────────────────────────────────────┐ │</span><br><span class="line">│  │ 1) transformContext  (可选)：裁剪/压缩旧消息      │ │</span><br><span class="line">│  │ 2) convertToLlm      (必需)：AgentMessage→Message│ │</span><br><span class="line">│  │ 3) streamFn(model, context, opts)  ← pi-ai      │ │</span><br><span class="line">│  └─────────────────────────────────────────────────┘ │</span><br><span class="line">│  ┌─────────────────────────────────────────────────┐ │</span><br><span class="line">│  │ 4) 解析流事件（text/thinking/toolcall）           │ │</span><br><span class="line">│  │ 5) beforeToolCall 钩子（可拦截）                 │ │</span><br><span class="line">│  │ 6) 执行工具：parallel / sequential               │ │</span><br><span class="line">│  │ 7) afterToolCall 钩子（可改写）                  │ │</span><br><span class="line">│  │ 8) 产出 toolResult 消息                          │ │</span><br><span class="line">│  └─────────────────────────────────────────────────┘ │</span><br><span class="line">└──────────────┬───────────────────────────────────────┘</span><br><span class="line">               │ Models.stream / complete</span><br><span class="line">               ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│ pi-ai (Models 集合)                                    │</span><br><span class="line">│ ── 1. 解析 auth（存储凭据 → env var → OAuth）          │</span><br><span class="line">│ ── 2. transformHeaders（最终头部合并）                │</span><br><span class="line">│ ── 3. 派发到 Provider.streamSimple                    │</span><br><span class="line">└──────────────┬───────────────────────────────────────┘</span><br><span class="line">               │ Provider 持有 API 实现（anthropic-messages /</span><br><span class="line">               │ openai-responses / google-generative-ai / ...）</span><br><span class="line">               ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│ HTTP → 厂商 API → SSE/Stream → 反向解析为 EventStream │</span><br><span class="line">│   事件：start/text_delta/toolcall_delta/done/error    │</span><br><span class="line">└──────────────┬───────────────────────────────────────┘</span><br><span class="line">               │ 事件回流到 AgentLoop</span><br><span class="line">               ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│ Agent 处理 toolCall → 调用内置工具 / 扩展工具          │</span><br><span class="line">│   bash-executor → 子进程                              │</span><br><span class="line">│   read/write/edit/grep/find/ls → 文件系统              │</span><br><span class="line">│   扩展工具 → ExtensionRunner.invoke()                 │</span><br><span class="line">└──────────────┬───────────────────────────────────────┘</span><br><span class="line">               │ 工具结果回写到 context.messages</span><br><span class="line">               ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│ 回到 AgentSession → 触发 compaction（必要时）            │</span><br><span class="line">│   → SessionManager 持久化新条目 → 触发下一轮          │</span><br><span class="line">└──────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-RPC-模式的数据流"><a href="#4-2-RPC-模式的数据流" class="headerlink" title="4.2 RPC 模式的数据流"></a>4.2 RPC 模式的数据流</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">外部进程</span><br><span class="line">   │ JSONL（每条 LF 分隔，禁 readline）</span><br><span class="line">   ▼</span><br><span class="line">pi-coding-agent/modes/rpc/rpc-mode.ts</span><br><span class="line">   │ RpcClient.parseCommand(stdin)</span><br><span class="line">   ▼</span><br><span class="line">AgentSession（共享核心）</span><br><span class="line">   │ 与交互模式完全相同</span><br><span class="line">   ▼</span><br><span class="line">JSONL 输出（RpcResponse / RpcEventListener）</span><br><span class="line">   │ 通过 stdout 回写</span><br><span class="line">   ▼</span><br><span class="line">外部进程</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-远程模式的数据流（实验性）"><a href="#4-3-远程模式的数据流（实验性）" class="headerlink" title="4.3 远程模式的数据流（实验性）"></a>4.3 远程模式的数据流（实验性）</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Pi 客户端进程</span><br><span class="line">   │</span><br><span class="line">   ├─ PiClient (transport-neutral)</span><br><span class="line">   │     └─ 字节流：Unix socket / WebSocket / 自定义</span><br><span class="line">   ▼</span><br><span class="line">encodeClientMessage() → [uint32-be 长度][CBOR 负载]</span><br><span class="line">   │</span><br><span class="line">   ▼</span><br><span class="line">Pi 服务端进程</span><br><span class="line">   │ decode → ServerMessageDecoder.push(chunk)</span><br><span class="line">   ▼</span><br><span class="line">PiServer.handle() → PiServerService 实现（由应用注入）</span><br><span class="line">   │</span><br><span class="line">   ▼</span><br><span class="line">AgentSession 集群（多个独立 lease）</span><br><span class="line">   │</span><br><span class="line">   ▼</span><br><span class="line">ServerMessage 回包（含 SessionSnapshot authoritative 状态）</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>协议规则要点（来自 <code>pi-protocol/README.md</code>）：</p>
+<ul>
+<li>协议版本 1；wire layout &#x3D; 4 字节大端长度 + 一个 definite-length CBOR item。</li>
+<li>客户端首条必须是 <code>hello</code>。</li>
+<li>服务器 snapshot 是 authoritative；progress event 是瞬时提示，不得被客户端乐观地合并到 snapshot。</li>
+<li>所有 transport 视为 untrusted；配 frame limit；socket 走文件系统权限、网络走握手期鉴权。</li>
+</ul>
+</blockquote>
+<h3 id="4-4-持久化数据流（SessionManager）"><a href="#4-4-持久化数据流（SessionManager）" class="headerlink" title="4.4 持久化数据流（SessionManager）"></a>4.4 持久化数据流（SessionManager）</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">AgentSession.subscribe(event)</span><br><span class="line">   │</span><br><span class="line">   ▼</span><br><span class="line">EventBus → SessionManager.append(SessionEntry)</span><br><span class="line">   │</span><br><span class="line">   ├─ JSONL 文件：~/.pi/agent/sessions/&lt;cwd-hash&gt;/&lt;sessionId&gt;.jsonl</span><br><span class="line">   │     每条 Entry = &#123; id, parentId, role, ... &#125;，支持树形 / 分支 / fork</span><br><span class="line">   │</span><br><span class="line">   └─ 可选 SQLite 后端（pi-session-backend-sqlite-node）</span><br><span class="line">         ├─ SqliteSessionRepository：ACID</span><br><span class="line">         └─ createSqliteSessionSearch：FTS 投影</span><br></pre></td></tr></table></figure>
+
+<p>每个 entry 通过 <code>id</code> + <code>parentId</code> 链接，<strong>单文件即支持 in-place branching</strong>，不需要单独建文件。</p>
+<h3 id="4-5-Telemetry-数据流（可观测）"><a href="#4-5-Telemetry-数据流（可观测）" class="headerlink" title="4.5 Telemetry 数据流（可观测）"></a>4.5 Telemetry 数据流（可观测）</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Agent / Tools / Provider</span><br><span class="line">   │ 显式传 TelemetryContext 参数（无 AsyncLocalStorage）</span><br><span class="line">   ▼</span><br><span class="line">TelemetryContext.startSpan(&#123; name, attributes &#125;, cb)</span><br><span class="line">   │</span><br><span class="line">   ├─ NOOP_TELEMETRY_CONTEXT（默认）</span><br><span class="line">   ├─ InMemoryTelemetryContext（参考实现、测试用）</span><br><span class="line">   └─ 应用注入的适配器（OpenTelemetry / Sentry / 自定义）</span><br><span class="line">         │</span><br><span class="line">         ▼</span><br><span class="line">         后端 exporter</span><br></pre></td></tr></table></figure>
+
+<p>Schema 维度：pi 自有 <code>pi.ai.*</code>、<code>pi.harness.*</code>、<code>pi.session.*</code> 命名空间；schema 元数据用于类型化 span starter；属性值限定为 scalar &#x2F; scalar[]，并标记 <code>sensitive</code> &#x2F; <code>cardinality</code>。</p>
+<hr>
+<h2 id="5-关键抽象与数据契约"><a href="#5-关键抽象与数据契约" class="headerlink" title="5. 关键抽象与数据契约"></a>5. 关键抽象与数据契约</h2><h3 id="5-1-AgentMessage-x2F-Message（双层消息模型）"><a href="#5-1-AgentMessage-x2F-Message（双层消息模型）" class="headerlink" title="5.1 AgentMessage &#x2F; Message（双层消息模型）"></a>5.1 AgentMessage &#x2F; Message（双层消息模型）</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 顶层 AgentMessage：可携带 UI 专用类型</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">AgentMessage</span> =</span><br><span class="line">  | <span class="title class_">UserMessage</span></span><br><span class="line">  | <span class="title class_">AssistantMessage</span></span><br><span class="line">  | <span class="title class_">ToolResultMessage</span></span><br><span class="line">  | (自定义声明合并类型，例 <span class="title class_">BashExecutionMessage</span>、<span class="title class_">SkillInvocationMessage</span>...)</span><br><span class="line"></span><br><span class="line"><span class="comment">// LLM 边界：只接受 user / assistant / toolResult</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">Message</span> = <span class="title class_">UserMessage</span> | <span class="title class_">AssistantMessage</span> | <span class="title class_">ToolResultMessage</span>;</span><br></pre></td></tr></table></figure>
+
+<p>转换路径：<code>AgentMessage[] → transformContext() → AgentMessage[] → convertToLlm() → Message[] → LLM</code></p>
+<p><code>transformContext</code> 可选（用于上下文压缩、<code>/compact</code>），<code>convertToLlm</code> 必选（即使只是 filter 默认类型）。</p>
+<h3 id="5-2-AgentState"><a href="#5-2-AgentState" class="headerlink" title="5.2 AgentState"></a>5.2 AgentState</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">AgentState</span> &#123;</span><br><span class="line">  <span class="attr">systemPrompt</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">model</span>: <span class="title class_">Model</span>&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">  <span class="attr">thinkingLevel</span>: <span class="title class_">ThinkingLevel</span>;       <span class="comment">// &#x27;off&#x27; | &#x27;minimal&#x27; | &#x27;low&#x27; | &#x27;medium&#x27; | &#x27;high&#x27; | &#x27;xhigh&#x27; | &#x27;max&#x27;</span></span><br><span class="line">  <span class="attr">tools</span>: <span class="title class_">AgentTool</span>&lt;<span class="built_in">any</span>&gt;[];</span><br><span class="line">  <span class="attr">messages</span>: <span class="title class_">AgentMessage</span>[];</span><br><span class="line">  <span class="keyword">readonly</span> <span class="attr">isStreaming</span>: <span class="built_in">boolean</span>;</span><br><span class="line">  <span class="keyword">readonly</span> <span class="attr">streamingMessage</span>?: <span class="title class_">AgentMessage</span>;</span><br><span class="line">  <span class="keyword">readonly</span> <span class="attr">pendingToolCalls</span>: <span class="title class_">ReadonlySet</span>&lt;<span class="built_in">string</span>&gt;;</span><br><span class="line">  <span class="keyword">readonly</span> <span class="attr">errorMessage</span>?: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Agent.state.tools = [...]</code> 与 <code>Agent.state.messages = [...]</code> 在 setter 中 <code>slice()</code> 复制顶层数组（防引用泄漏），但<strong>内部数组仍可变</strong>。</p>
+<h3 id="5-3-事件类型（AgentEvent）"><a href="#5-3-事件类型（AgentEvent）" class="headerlink" title="5.3 事件类型（AgentEvent）"></a>5.3 事件类型（AgentEvent）</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">agent_start</span><br><span class="line">turn_start</span><br><span class="line">message_start | message_update | message_end    // message_update 仅 assistant</span><br><span class="line">tool_execution_start | tool_execution_update | tool_execution_end</span><br><span class="line">turn_end</span><br><span class="line">agent_end</span><br></pre></td></tr></table></figure>
+
+<p><code>agent_end</code> 是 barrier：<code>agent.waitForIdle()</code> 与 <code>agent.prompt()</code> 等到所有订阅者的 <code>agent_end</code> handler 完成后才 settle。</p>
+<h3 id="5-4-工具执行模式"><a href="#5-4-工具执行模式" class="headerlink" title="5.4 工具执行模式"></a>5.4 工具执行模式</h3><ul>
+<li><code>parallel</code>（默认）：同批次工具并发执行；事件按完成顺序发出，<strong>持久化顺序</strong>仍按 assistant 源码顺序。</li>
+<li><code>sequential</code>：整批串行。</li>
+<li>单个工具可设 <code>executionMode: &quot;sequential&quot;</code>，<strong>只要批次里有一个即整批降级为 sequential</strong>。</li>
+<li><code>beforeToolCall</code> &#x2F; <code>afterToolCall</code> 可返回 <code>terminate: true</code> 阻止后续 LLM 调用（仅当整批都 terminate 时生效）。</li>
+<li><code>shouldStopAfterTurn</code>：在 <code>turn_end</code> 之后、轮询 steering&#x2F;follow-up 队列之前调用，可用于触发 compaction。</li>
+</ul>
+<h3 id="5-5-Provider-x2F-Auth-x2F-Models-集合"><a href="#5-5-Provider-x2F-Auth-x2F-Models-集合" class="headerlink" title="5.5 Provider &#x2F; Auth &#x2F; Models 集合"></a>5.5 Provider &#x2F; Auth &#x2F; Models 集合</h3><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Provider 是运行时单元（catalog + auth + API 实现）</span></span><br><span class="line"><span class="keyword">const</span> anthropic = <span class="title function_">anthropicProvider</span>();   <span class="comment">// 工厂：仅导入该厂商目录 + lazy API 包装</span></span><br><span class="line"><span class="keyword">const</span> models = <span class="title function_">createModels</span>();           <span class="comment">// 集合</span></span><br><span class="line">models.<span class="title function_">setProvider</span>(anthropic);           <span class="comment">// 注册</span></span><br><span class="line">models.<span class="title function_">setProvider</span>(openai);              <span class="comment">// 可多个</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Auth 解析优先级（在 Provider 内部）</span></span><br><span class="line"><span class="number">1</span>) 显式 options.<span class="property">apiKey</span> / options.<span class="property">headers</span></span><br><span class="line"><span class="number">2</span>) <span class="title class_">ProviderAuth</span>.<span class="property">apiKey</span>.<span class="title function_">resolve</span>() → env <span class="keyword">var</span> / stored credential</span><br><span class="line"><span class="number">3</span>) <span class="title class_">ProviderAuth</span>.<span class="property">oauth</span>.<span class="title function_">refresh</span>() → 自动刷新过期 <span class="title class_">OAuth</span></span><br><span class="line"><span class="number">4</span>) <span class="title class_">Ambient</span>（<span class="variable constant_">AWS</span> profile、gcloud <span class="variable constant_">ADC</span>、<span class="title class_">Azure</span> 资源名 ...）</span><br></pre></td></tr></table></figure>
+
+<p>工具调用一致性：所有厂商在 <code>models.stream*()</code> 暴露<strong>相同的 EventStream 形状</strong>（<code>text_*</code> &#x2F; <code>thinking_*</code> &#x2F; <code>toolcall_*</code> &#x2F; <code>done</code> &#x2F; <code>error</code>）；<code>toolcall_delta</code> 携带 partial JSON，可渐进式 UI 更新。</p>
+<p>跨 Provider 切换：<code>Context</code> 是可 JSON 序列化的；从 Anthropic 切到 OpenAI 时，对方的 <code>thinking</code> block 自动转换为 <code>&lt;thinking&gt;</code> 标签文本。</p>
+<h3 id="5-6-协议层（pi-protocol）契约"><a href="#5-6-协议层（pi-protocol）契约" class="headerlink" title="5.6 协议层（pi-protocol）契约"></a>5.6 协议层（pi-protocol）契约</h3><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议版本</td>
+<td><code>PROTOCOL_VERSION = 1</code></td>
+</tr>
+<tr>
+<td>wire layout</td>
+<td><code>[uint32-be 长度][CBOR]</code></td>
+</tr>
+<tr>
+<td>默认限制</td>
+<td>单帧 ≤ 16 MiB、数组 ≤ 1,000,000 项、嵌套 ≤ 64 层</td>
+</tr>
+<tr>
+<td>客户端首条</td>
+<td><code>hello</code>（携带版本号）</td>
+</tr>
+<tr>
+<td>鉴权</td>
+<td>transport 层完成后再交换协议字节</td>
+</tr>
+<tr>
+<td>服务器 snapshot</td>
+<td>authoritative</td>
+</tr>
+<tr>
+<td>progress event</td>
+<td>非 authoritative（不可被乐观合并）</td>
+</tr>
+</tbody></table>
+<h3 id="5-7-pi-telemetry-Schema-维度"><a href="#5-7-pi-telemetry-Schema-维度" class="headerlink" title="5.7 pi-telemetry Schema 维度"></a>5.7 pi-telemetry Schema 维度</h3><table>
+<thead>
+<tr>
+<th>Schema</th>
+<th>Span 名空间</th>
+<th>拥有者</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>AI_TELEMETRY_SCHEMA</code></td>
+<td><code>pi.ai.*</code></td>
+<td><code>pi-agent-core</code>（按 telemetry 章节划分）</td>
+</tr>
+<tr>
+<td><code>HARNESS_TELEMETRY_SCHEMA</code></td>
+<td><code>pi.harness.*</code></td>
+<td><code>pi-agent-core</code></td>
+</tr>
+<tr>
+<td>Session 相关</td>
+<td><code>pi.session.*</code></td>
+<td><code>pi-agent-core</code></td>
+</tr>
+</tbody></table>
+<p><code>createTypedSpanStarter(ctx, [...schemas])</code> 暴露<strong>强类型</strong>的 <code>startSpan(&#39;pi.ai.stream&#39;, &#123; &#39;pi.ai.provider&#39;: &#39;openai&#39; &#125;, cb)</code>，回调里的 <code>span.setAttributes</code> 仅接受当前 span 的 end-attribute schema。</p>
+<hr>
+<h2 id="6-运行模式切换矩阵"><a href="#6-运行模式切换矩阵" class="headerlink" title="6. 运行模式切换矩阵"></a>6. 运行模式切换矩阵</h2><p><code>pi-coding-agent/src/main.ts</code> 中通过 <code>resolveAppMode(parsed, stdinIsTTY, stdoutIsTTY)</code> 分流：</p>
+<table>
+<thead>
+<tr>
+<th>触发</th>
+<th>模式</th>
+<th>入口模块</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>默认（无参数、TTY）</td>
+<td>Interactive</td>
+<td><code>modes/interactive/interactive-mode.ts</code></td>
+<td>TUI 渲染</td>
+</tr>
+<tr>
+<td><code>-p</code> &#x2F; <code>--print</code></td>
+<td>Print</td>
+<td><code>modes/print-mode.ts</code></td>
+<td>stdout 一次性回复</td>
+</tr>
+<tr>
+<td><code>--mode json</code></td>
+<td>JSON Event</td>
+<td><code>modes/json-event.ts</code> + AgentSession</td>
+<td>stdout JSON Lines</td>
+</tr>
+<tr>
+<td><code>--mode rpc</code></td>
+<td>RPC</td>
+<td><code>modes/rpc/rpc-mode.ts</code></td>
+<td>stdin&#x2F;stdout JSONL（LF-only）</td>
+</tr>
+<tr>
+<td>嵌入式（<code>createAgentSession</code>）</td>
+<td>SDK</td>
+<td><code>core/sdk.ts</code> → <code>AgentSession</code></td>
+<td>由调用方处理事件</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>关键不变量</strong>：所有模式共用同一个 <code>AgentSession</code>（<code>coding-agent/src/core/agent-session.ts</code>），仅 I&#x2F;O 层不同。改 Agent 行为只需改一处。</p>
+</blockquote>
+<hr>
+<h2 id="7-代码阅读重点"><a href="#7-代码阅读重点" class="headerlink" title="7. 代码阅读重点"></a>7. 代码阅读重点</h2><p>按”投入产出比”排序，<strong>先看</strong>这些文件能让你建立 80% 的认知：</p>
+<h3 id="7-1-一级必读（建立心智模型）"><a href="#7-1-一级必读（建立心智模型）" class="headerlink" title="7.1 一级必读（建立心智模型）"></a>7.1 一级必读（建立心智模型）</h3><table>
+<thead>
+<tr>
+<th>路径</th>
+<th>行数(估)</th>
+<th>重点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>packages/agent/README.md</code></td>
+<td>510</td>
+<td>事件流、tool 协议、steering&#x2F;follow-up、terminate 语义</td>
+</tr>
+<tr>
+<td><code>packages/ai/README.md</code></td>
+<td>1670</td>
+<td>Provider 工厂、Models 集合、Auth 解析、Tool 流式事件、跨 Provider handoff</td>
+</tr>
+<tr>
+<td><code>packages/agent/src/agent.ts</code></td>
+<td>~700</td>
+<td><code>Agent</code> 类：状态机、订阅、steer&#x2F;followUp、<code>toolExecution</code> 模式</td>
+</tr>
+<tr>
+<td><code>packages/agent/src/agent-loop.ts</code></td>
+<td>~500</td>
+<td><code>agentLoop</code> &#x2F; <code>agentLoopContinue</code> 底层循环实现</td>
+</tr>
+<tr>
+<td><code>packages/agent/src/harness/agent-harness.ts</code></td>
+<td>~300</td>
+<td><code>RunOutcome</code> &#x2F; 错误类型 &#x2F; LaneBusy 等核心错误模型</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/src/core/agent-session.ts</code></td>
+<td>~1500+</td>
+<td>跨模式共享核心：事件订阅 + 自动保存 + 模型&#x2F;思维管理 + 分支</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/src/main.ts</code></td>
+<td>~400</td>
+<td>CLI 参数 → <code>createAgentSession</code> 的翻译层、模式选择</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/src/core/sdk.ts</code></td>
+<td>~300</td>
+<td>公开 SDK：<code>createAgentSession</code> 工厂签名与默认值</td>
+</tr>
+</tbody></table>
+<h3 id="7-2-二级推荐（深入子系统）"><a href="#7-2-二级推荐（深入子系统）" class="headerlink" title="7.2 二级推荐（深入子系统）"></a>7.2 二级推荐（深入子系统）</h3><table>
+<thead>
+<tr>
+<th>路径</th>
+<th>关注点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>packages/ai/src/index.ts</code> &amp; <code>compat.ts</code></td>
+<td>新旧 API 边界</td>
+</tr>
+<tr>
+<td><code>packages/ai/src/providers/*.ts</code></td>
+<td>任选一家（如 <code>anthropic.ts</code>、<code>openai.ts</code>），看清工厂注册流程</td>
+</tr>
+<tr>
+<td><code>packages/ai/src/api/anthropic-messages.ts</code></td>
+<td>一个 API 实现的样例：消息转换、thinking 字段、prompt cache</td>
+</tr>
+<tr>
+<td><code>packages/agent/src/harness/session/jsonl.ts</code></td>
+<td>JSONL 文件格式；与 <code>types.ts</code> 配合看 entry 类型</td>
+</tr>
+<tr>
+<td><code>packages/agent/src/harness/compaction/compaction.ts</code></td>
+<td>上下文压缩策略、<code>findCutPoint</code>、<code>shouldCompact</code></td>
+</tr>
+<tr>
+<td><code>packages/agent/src/harness/session/search.ts</code></td>
+<td>会话搜索接口</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/src/core/extensions/&#123;loader,runner,types&#125;.ts</code></td>
+<td>扩展加载与执行模型</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/src/core/tools/&#123;read,write,edit,bash&#125;.ts</code></td>
+<td>内置工具的实现套路（用 <code>AgentTool</code> 而非 <code>Tool</code>）</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/src/modes/rpc/rpc-mode.ts</code></td>
+<td>LF-delimited JSONL framing（与 <code>docs/rpc.md</code> 对照）</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/src/modes/interactive/interactive-mode.ts</code></td>
+<td>TUI 启动序列、组件挂载</td>
+</tr>
+</tbody></table>
+<h3 id="7-3-三级（专题）"><a href="#7-3-三级（专题）" class="headerlink" title="7.3 三级（专题）"></a>7.3 三级（专题）</h3><table>
+<thead>
+<tr>
+<th>主题</th>
+<th>入口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>加新 Provider</td>
+<td><code>packages/ai/README.md</code> “Adding a New Provider” 章节（8 步 checklist）</td>
+</tr>
+<tr>
+<td>加新内置工具</td>
+<td>参考 <code>core/tools/read.ts</code>，套用 <code>AgentTool</code> + <code>tools/tool-definition-wrapper.ts</code></td>
+</tr>
+<tr>
+<td>加新远程协议消息</td>
+<td><code>packages/protocol/src/schemas.ts</code>（CBOR 严格子集）</td>
+</tr>
+<tr>
+<td>加新 telemetry span</td>
+<td><code>packages/agent/src/harness/telemetry.ts</code>（扩展 <code>AGENT_TELEMETRY_SCHEMAS</code>）</td>
+</tr>
+<tr>
+<td>加新 Extension 钩子</td>
+<td><code>packages/coding-agent/src/core/extensions/types.ts</code> 中的 <code>ExtensionAPI</code> 形状</td>
+</tr>
+<tr>
+<td>自定义 Session Backend</td>
+<td>实现 <code>packages/agent/src/harness/session/index.ts</code> 中导出的 <code>SessionBackend</code> 接口</td>
+</tr>
+</tbody></table>
+<h3 id="7-4-文档侧必读"><a href="#7-4-文档侧必读" class="headerlink" title="7.4 文档侧必读"></a>7.4 文档侧必读</h3><table>
+<thead>
+<tr>
+<th>文档</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>packages/agent/README.md</code></td>
+<td>事件时序图（<code>prompt()</code> &#x2F; <code>continue()</code> &#x2F; With Tool Calls）</td>
+</tr>
+<tr>
+<td><code>packages/ai/README.md</code></td>
+<td>Provider 表 + Auth 解析表 + Tool 事件参考</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/README.md</code></td>
+<td>Interactive 模式 UI、slash 命令、键盘快捷键、消息队列</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/docs/sdk.md</code></td>
+<td>嵌入式调用范式</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/docs/extensions.md</code></td>
+<td>Extension API 全量钩子</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/docs/sessions.md</code> &amp; <code>session-format.md</code></td>
+<td>会话持久化格式</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/docs/compaction.md</code></td>
+<td>自动&#x2F;手动压缩算法</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/docs/rpc.md</code></td>
+<td>RPC 协议消息列表</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/docs/containerization.md</code></td>
+<td>Gondolin &#x2F; Docker &#x2F; OpenShell 三种沙箱方案</td>
+</tr>
+<tr>
+<td><code>packages/coding-agent/docs/security.md</code></td>
+<td>已知威胁与隔离建议</td>
+</tr>
+<tr>
+<td><code>packages/evals/README.md</code></td>
+<td>评估 harness 适配与对比矩阵</td>
+</tr>
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>仓库协作规则（提交格式、并发会话、tmux 测试流程）</td>
+</tr>
+<tr>
+<td><code>tui-plan.md</code></td>
+<td>TUI 历史决策与未来演进方向（背景知识，非实现细节）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="8-常见陷阱-amp-设计约束"><a href="#8-常见陷阱-amp-设计约束" class="headerlink" title="8. 常见陷阱 &amp; 设计约束"></a>8. 常见陷阱 &amp; 设计约束</h2><p>阅读源码时务必注意以下几点，否则容易被坑：</p>
+<ol>
+<li><strong>单向构建顺序</strong>：<code>npm run build</code> 中 <code>cd packages/&lt;x&gt; &amp;&amp; npm run build</code> 的顺序是硬约束，修改包后必须从底层开始重建。</li>
+<li>**<code>pi-agent-core</code> 不依赖 <code>pi-ai/compat</code>**：<code>Agent</code> 类需要外部注入 <code>streamFn</code>；<code>core/sdk.ts</code> 通过 <code>setDefaultStreamFn(streamSimple)</code> 提供全局兜底。</li>
+<li><strong>锁步版本（lockstep versioning）</strong>：所有 11 个包共享同一版本号；<code>patch</code>&#x2F;<code>minor</code> 二选一，无 <code>major</code>。改动跨包 API 必须同步 <code>CHANGELOG.md</code> 的 <code>[Unreleased]</code>。</li>
+<li><strong>Erasable TypeScript only</strong>：<code>packages/*/src</code>、<code>test</code>、<code>coding-agent/examples</code> 禁用 <code>enum</code> &#x2F; <code>namespace</code> &#x2F; <code>parameter properties</code> &#x2F; <code>import =</code> 等需要 JS emit 的构造（Node strip-only）。</li>
+<li><strong>直接编辑 <code>packages/ai/src/models.generated.ts</code> 被禁止</strong>：必须改 <code>packages/ai/scripts/generate-models.ts</code> 后重新生成；生成差异即使混入无关上游 metadata 也可提交。</li>
+<li><strong>不允许 inline imports</strong>（<code>await import()</code>、<code>import(&quot;pkg&quot;).Type</code>）：只用顶层 <code>import</code>。</li>
+<li>**任何 <code>npm install</code> 都带 <code>--ignore-scripts</code>**：<code>.npmrc</code> 设 <code>min-release-age=2</code> 防同日新依赖；CI 用 <code>npm ci --ignore-scripts</code>。</li>
+<li><strong>pi-protocol 是 experimental</strong>：无兼容承诺，新增字段需同时改 <code>schemas.ts</code> 与 <code>pi-server</code> 的 <code>toProtocol*</code> 桥接。</li>
+<li><strong>TUI 启动测试用 tmux</strong>：<code>AGENTS.md</code> 给出了 <code>tmux new-session / send-keys / capture-pane</code> 的标准流程。</li>
+<li><strong>OAuth 是 Provider-owned</strong>：Anthropic &#x2F; OpenAI Codex &#x2F; GitHub Copilot &#x2F; OpenRouter 自带 OAuth；其他厂商走 <code>envApiKeyAuth</code>。</li>
+<li><strong><code>fauxProvider</code> 仅用于单测</strong>：并发流需要多个独立 <code>fauxProvider</code>（不同 provider id）。</li>
+<li><strong><code>/compact</code> 与自动 compaction 是有损操作</strong>：完整历史仍在 JSONL，可用 <code>/tree</code> 找回。</li>
+<li><strong>steering &#x2F; follow-up 模式（<code>one-at-a-time</code> vs <code>all</code>）</strong> 在 settings.json 中可配，影响队列消费行为。</li>
+<li><strong><code>transformHeaders</code> 由 <code>Models</code> 而非 <code>Provider</code> 处理</strong>：providers 不感知这个钩子；调用前 <code>Models</code> 实现负责消费并删除该字段再下发。</li>
+</ol>
+<hr>
+<h2 id="9-进一步阅读索引（按场景）"><a href="#9-进一步阅读索引（按场景）" class="headerlink" title="9. 进一步阅读索引（按场景）"></a>9. 进一步阅读索引（按场景）</h2><table>
+<thead>
+<tr>
+<th>你想做的事</th>
+<th>看哪里</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>加新 LLM Provider</td>
+<td><code>packages/ai/README.md</code> “Adding a New Provider”</td>
+</tr>
+<tr>
+<td>写自定义 Extension</td>
+<td><code>packages/coding-agent/docs/extensions.md</code> + <code>packages/coding-agent/examples/extensions/</code></td>
+</tr>
+<tr>
+<td>接入 MCP（社区做法）</td>
+<td><code>packages/coding-agent/docs/extensions.md</code>（无官方实现，社区用 Extension 桥接）</td>
+</tr>
+<tr>
+<td>把 Pi 嵌入自己应用</td>
+<td><code>packages/coding-agent/docs/sdk.md</code> + <code>core/sdk.ts</code></td>
+</tr>
+<tr>
+<td>远程化 Pi session</td>
+<td><code>packages/server/README.md</code> + <code>packages/client/README.md</code> + <code>packages/protocol/README.md</code></td>
+</tr>
+<tr>
+<td>跑模型评估</td>
+<td><code>packages/evals/README.md</code></td>
+</tr>
+<tr>
+<td>把 Pi 沙箱化</td>
+<td><code>packages/coding-agent/docs/containerization.md</code>（Gondolin &#x2F; Docker &#x2F; OpenShell）</td>
+</tr>
+<tr>
+<td>让模型跨 Provider 接力</td>
+<td><code>packages/ai/README.md</code> “Cross-Provider Handoffs”</td>
+</tr>
+<tr>
+<td>自定义 telemetry 后端</td>
+<td><code>packages/telemetry/README.md</code> “Adapter Contract”</td>
+</tr>
+<tr>
+<td>优化 TUI 性能</td>
+<td><code>packages/tui/README.md</code> + <code>tui-plan.md</code> + <code>scripts/profile-coding-agent-node.mjs --mode tui</code></td>
+</tr>
+<tr>
+<td>调 RPC 性能</td>
+<td><code>scripts/profile-coding-agent-node.mjs --mode rpc</code></td>
+</tr>
+<tr>
+<td>发版流程</td>
+<td><code>AGENTS.md</code> “Releasing” 章节 + <code>scripts/release.mjs</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="10-文档维护"><a href="#10-文档维护" class="headerlink" title="10. 文档维护"></a>10. 文档维护</h2><ul>
+<li>文档位置：<code>/Users/bill/Library/Mobile Documents/com~apple~CloudDocs/DebugRecords/agents/pi/</code></li>
+<li>配套文件建议：<ul>
+<li><code>architecture-overview.md</code>（本文）</li>
+<li><code>data-flow-pi-coding-agent.md</code>（聚焦 <code>AgentSession</code> 事件流的更详细时序图，可在后续 review 时补充）</li>
+<li><code>extension-author-guide.md</code>（如团队要做扩展开发，可把钩子清单搬到独立文档）</li>
+<li><code>release-checklist.md</code>（从 <code>AGENTS.md</code> 提炼的发版 SOP）</li>
+</ul>
+</li>
+<li>建议在以下时机更新本文档：<ol>
+<li>新增 &#x2F; 移除包（修改 §2.2）；</li>
+<li>新增 &#x2F; 重命名运行模式（修改 §6）；</li>
+<li>升级 <code>PROTOCOL_VERSION</code>（修改 §5.6）；</li>
+<li>变更 telemetry schema 命名空间（修改 §5.7）；</li>
+<li>变更构建顺序脚本（修改 §2.1）。</li>
+</ol>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/Pi/" class="print-no-link">#Pi</a>
+      
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
+      
+        <a href="/tags/%E6%9E%B6%E6%9E%84/" class="print-no-link">#架构</a>
+      
+        <a href="/tags/Monorepo/" class="print-no-link">#Monorepo</a>
+      
+        <a href="/tags/TypeScript/" class="print-no-link">#TypeScript</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

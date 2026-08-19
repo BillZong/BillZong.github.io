@@ -1,0 +1,605 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="🎯 核心目标 (Context &amp; Purpose)本仓库旨在构建高可用、防篡改的事件预言机系统，集成 UMA v3（乐观&#x2F;争议机制） 与 Chainlink（确定性&#x2F;推送机制）。 作为 AI Agent，你的首要目标是：保持合约接口的绝对严谨，后端服务的并发安全（Golang），以及 100% 的关键状态测试覆盖率。 🚦 强制执行法则 (Hard Operatin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI 开发者协议 (AI-First Oracle Monorepo Protocol)">
+<meta property="og:url" content="https://billzong.github.io/post/30f5e2fa.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="🎯 核心目标 (Context &amp; Purpose)本仓库旨在构建高可用、防篡改的事件预言机系统，集成 UMA v3（乐观&#x2F;争议机制） 与 Chainlink（确定性&#x2F;推送机制）。 作为 AI Agent，你的首要目标是：保持合约接口的绝对严谨，后端服务的并发安全（Golang），以及 100% 的关键状态测试覆盖率。 🚦 强制执行法则 (Hard Operatin">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-16T06:14:00.000Z">
+<meta property="article:modified_time" content="2026-08-13T09:36:50.990Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="预言机">
+<meta property="article:tag" content="Oracle">
+<meta property="article:tag" content="UMA">
+<meta property="article:tag" content="Chainlink">
+<meta property="article:tag" content="协议">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>AI 开发者协议 (AI-First Oracle Monorepo Protocol) - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 25vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AI 开发者协议 (AI-First Oracle Monorepo Protocol)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AI 开发者协议 (AI-First Oracle Monorepo Protocol)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="🎯-核心目标-Context-amp-Purpose"><a href="#🎯-核心目标-Context-amp-Purpose" class="headerlink" title="🎯 核心目标 (Context &amp; Purpose)"></a>🎯 核心目标 (Context &amp; Purpose)</h2><p>本仓库旨在构建高可用、防篡改的事件预言机系统，集成 <strong>UMA v3（乐观&#x2F;争议机制）</strong> 与 <strong>Chainlink（确定性&#x2F;推送机制）</strong>。</p>
+<p>作为 AI Agent，你的首要目标是：<strong>保持合约接口的绝对严谨，后端服务的并发安全（Golang），以及 100% 的关键状态测试覆盖率。</strong></p>
+<h2 id="🚦-强制执行法则-Hard-Operating-Directives"><a href="#🚦-强制执行法则-Hard-Operating-Directives" class="headerlink" title="🚦 强制执行法则 (Hard Operating Directives)"></a>🚦 强制执行法则 (Hard Operating Directives)</h2><ol>
+<li><strong>测试驱动 (TDD First):</strong> 在编写或修改任何 <code>contracts/</code> 或 <code>backend/</code> 逻辑前，<strong>必须</strong>先编写&#x2F;更新对应的单元测试或 Fork 测试。</li>
+<li><strong>拒绝盲目假设:</strong> 如果跨模块接口 <code>packages/</code> 或 <code>contracts/interfaces/</code>) 发生改变，必须先更新 <code>docs/</code> 和接口定义，请求人类确认后，再进行实现。</li>
+<li><strong>收敛技术栈:</strong> 后端与 Indexer 逻辑默认使用 Golang，合约使用 Solidity (Foundry)。严禁引入任何未经许可的第三方框架或运行时。</li>
+<li><strong>上下文组装:</strong> 在编辑核心模块前，使用工具读取对应的 <code>docs/architecture/</code> 和上游接口文件。不要基于历史训练数据猜测内部业务逻辑。</li>
+</ol>
+<h2 id="🛡️-预言机特定安全基线-Oracle-Security-Baseline"><a href="#🛡️-预言机特定安全基线-Oracle-Security-Baseline" class="headerlink" title="🛡️ 预言机特定安全基线 (Oracle Security Baseline)"></a>🛡️ 预言机特定安全基线 (Oracle Security Baseline)</h2><p><em>无论任务是什么，涉及相关逻辑时必须默认遵守：</em></p>
+<ul>
+<li><strong>UMA v3 适配:</strong> 必须处理 <code>assertionId</code> 生命周期，强制实现并验证 <code>dispute</code>（争议）和 <code>settle</code>（结算）的回调与延迟逻辑。</li>
+<li><strong>Chainlink 适配:</strong> 必须检查 <code>answeredInRound</code>，处理 stale data（陈旧数据），并具备在 Chainlink 节点宕机时的 fallback（降级）或熔断机制。</li>
+<li><strong>重入与并发:</strong> - 合约层面：所有涉及外部调用的状态修改必须使用 <code>ReentrancyGuard</code> 并遵循 CEI (Checks-Effects-Interactions) 模式。<ul>
+<li>后端层面 (Golang)：所有并发 worker 必须通过 context 管理取消信号，避免 Goroutine 泄漏；操作数据库或缓存必须考虑分布式锁或原子操作。</li>
+</ul>
+</li>
+<li><strong>机密管理:</strong> 绝对禁止在代码、测试脚手架或 CI 配置中硬编码私钥、RPC URL 或 API Token。使用环境变量注入。</li>
+</ul>
+<h2 id="🏗️-架构与模块职责-Architecture-amp-Module-Contracts"><a href="#🏗️-架构与模块职责-Architecture-amp-Module-Contracts" class="headerlink" title="🏗️ 架构与模块职责 (Architecture &amp; Module Contracts)"></a>🏗️ 架构与模块职责 (Architecture &amp; Module Contracts)</h2><ul>
+<li><code>docs/</code>: 架构决议 (ADR)、协议规范和 Runbooks。（<strong>修改代码前，优先检索此目录</strong>）</li>
+<li><code>contracts/</code>:<ul>
+<li>核心要求：将 UMA 和 Chainlink 封装在统一的 <code>IOracleAdapter</code> 接口下。</li>
+<li>测试要求：必须包含针对主网状态的 Foundry Fork 测试。</li>
+</ul>
+</li>
+<li><code>backend/</code>: 预言机链下服务（监听器、数据聚合、喂价 Worker）。要求高并发、防抖和重试机制设计。</li>
+<li><code>packages/</code>: 前后端与合约共享的类型定义 (Types) 和 ABI 生成文件。</li>
+<li><code>scripts/ops/</code>: 自动化部署与监控告警（Grafana&#x2F;Prometheus 配置）。</li>
+</ul>
+<h2 id="📝-提交与文档规范-Output-Expectations"><a href="#📝-提交与文档规范-Output-Expectations" class="headerlink" title="📝 提交与文档规范 (Output Expectations)"></a>📝 提交与文档规范 (Output Expectations)</h2><ul>
+<li><strong>PR&#x2F;Commit 结构:</strong> 每次输出代码时，必须简明扼要地解释“为什么”做这个改动，而不是仅仅描述代码本身。文档应以中文编写，代码注释、Commit Message 和 CLI 输出保持英文。</li>
+<li><strong>Bootstrap 检查:</strong> 引入新功能时，必须自动核对并更新 <code>docs/PRD.md</code> 和对应的 <code>interfaces</code>。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/" class="category-chain-item">区块链</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
+      
+        <a href="/tags/%E9%A2%84%E8%A8%80%E6%9C%BA/" class="print-no-link">#预言机</a>
+      
+        <a href="/tags/Oracle/" class="print-no-link">#Oracle</a>
+      
+        <a href="/tags/UMA/" class="print-no-link">#UMA</a>
+      
+        <a href="/tags/Chainlink/" class="print-no-link">#Chainlink</a>
+      
+        <a href="/tags/%E5%8D%8F%E8%AE%AE/" class="print-no-link">#协议</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

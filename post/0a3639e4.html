@@ -1,0 +1,794 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在当前的 AI 大模型（LLM）与 AI Agent 工程落地中，业界已经沉淀出了一套专门应对 LLM 非确定性、高延迟、幻觉和上下文限制的“新一代设计模式”。 以下是经过微软（Autogen&#x2F;Semantic Kernel）、LangChain、吴恩达（Andrew Ng）以及一线大厂工程验证的 9 大核心 AI 大模型与 Agent 工程设计模式。 AI 大模型与 Agent 工程设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI 大模型与 Agent 工程设计模式概览">
+<meta property="og:url" content="https://billzong.github.io/post/0a3639e4.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="在当前的 AI 大模型（LLM）与 AI Agent 工程落地中，业界已经沉淀出了一套专门应对 LLM 非确定性、高延迟、幻觉和上下文限制的“新一代设计模式”。 以下是经过微软（Autogen&#x2F;Semantic Kernel）、LangChain、吴恩达（Andrew Ng）以及一线大厂工程验证的 9 大核心 AI 大模型与 Agent 工程设计模式。 AI 大模型与 Agent 工程设">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-08-19T04:30:00.000Z">
+<meta property="article:modified_time" content="2026-08-19T04:38:26.009Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="设计模式">
+<meta property="article:tag" content="Multi-Agent">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>AI 大模型与 Agent 工程设计模式概览 - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 25vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="AI 大模型与 Agent 工程设计模式概览"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">AI 大模型与 Agent 工程设计模式概览</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在当前的 AI 大模型（LLM）与 AI Agent 工程落地中，业界已经沉淀出了一套专门应对 LLM <strong>非确定性、高延迟、幻觉和上下文限制</strong>的“新一代设计模式”。</p>
+<p>以下是经过微软（Autogen&#x2F;Semantic Kernel）、LangChain、吴恩达（Andrew Ng）以及一线大厂工程验证的 <strong>9 大核心 AI 大模型与 Agent 工程设计模式</strong>。</p>
+<h2 id="AI-大模型与-Agent-工程设计模式全景表"><a href="#AI-大模型与-Agent-工程设计模式全景表" class="headerlink" title="AI 大模型与 Agent 工程设计模式全景表"></a>AI 大模型与 Agent 工程设计模式全景表</h2><table>
+<thead>
+<tr>
+<th align="left">设计模式名</th>
+<th align="left">模式分类</th>
+<th align="left">意图 (Intent)</th>
+<th align="left">实现方式与技术栈 (Implementation)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="#Prompt-Chaining-提示词链模式"><strong>Prompt Chaining</strong></a> (提示词链模式)</td>
+<td align="left"><strong>工作流模式</strong> (Workflow)</td>
+<td align="left">将复杂任务拆分为一系列连续的、单一职责的子任务。</td>
+<td align="left"><strong>实现</strong>：利用 LangChain Expression Language (LCEL) 或原生 Python 循环，通过 JSON Schema 传递中间变量。</td>
+</tr>
+<tr>
+<td align="left"><a href="#Routing-x2F-Classifier-路由-x2F-分类器模式"><strong>Routing &#x2F; Classifier</strong></a> (路由&#x2F;分类器模式)</td>
+<td align="left"><strong>架构&#x2F;分流模式</strong> (Architecture)</td>
+<td align="left">根据输入语义，动态将请求分流到不同的下游工作流或模型。</td>
+<td align="left"><strong>实现</strong>：使用 <code>Semantic Router</code> 库（基于向量检索）或小模型（如 ModernBERT）输出结构化 Tag 进行 <code>if-else</code> 分流。</td>
+</tr>
+<tr>
+<td align="left"><a href="#Parallelization-并行化模式"><strong>Parallelization</strong></a> (并行化模式)</td>
+<td align="left"><strong>工作流模式</strong> (Workflow)</td>
+<td align="left">让 LLM 同时并行处理多个独立子任务，最后进行结果聚合。</td>
+<td align="left"><strong>实现</strong>：利用 Python <code>asyncio</code> 并发调用 API，配合 <code>Promise.all</code>（JS）或 LangGraph 的 <code>Fan-out/Fan-in</code> 节点。</td>
+</tr>
+<tr>
+<td align="left"><a href="#Orchestrator-Workers-中心编排-执行器模式"><strong>Orchestrator-Workers</strong></a> (中心编排-执行器模式)</td>
+<td align="left"><strong>团队协作模式</strong> (Team Multi-Agent)</td>
+<td align="left">由一个中心 LLM 负责拆解任务、分配任务给多个 Worker，并审查最终结果。</td>
+<td align="left"><strong>实现</strong>：通过 LangGraph、AutoGen 或 CrewAI 框架，将 Orchestrator 配置为支持 Tool Call 的高级推理模型（如 o1&#x2F;o3&#x2F;Claude 3.5 Sonnet）。</td>
+</tr>
+<tr>
+<td align="left"><a href="#Self-Correction-x2F-Reflection-自我修正-x2F-反思模式"><strong>Self-Correction &#x2F; Reflection</strong></a> (自我修正&#x2F;反思模式)</td>
+<td align="left"><strong>质量控制模式</strong> (Quality Control)</td>
+<td align="left">引入独立的评估环节，让模型检查并纠正自己或他人生成的输出。</td>
+<td align="left"><strong>实现</strong>：在 Prompt 中设计专门的评估人角色（Critique），在工程中设置最大重试上限（如 <code>max_retries=3</code>）防止 Token 熔断。</td>
+</tr>
+<tr>
+<td align="left"><a href="#Tool-Execution-Layer-工具执行层隔离模式"><strong>Tool Execution Layer</strong></a> (工具执行层隔离模式)</td>
+<td align="left"><strong>安全与控制模式</strong> (Security&#x2F;Control)</td>
+<td align="left">将大模型的“工具调用决策”与“工具实际执行”剥离开来，放入沙箱或代码控制层。</td>
+<td align="left"><strong>实现</strong>：使用 Docker 隔离执行环境（如 E2B Sandbox），在 Tool 包装函数中加入硬编码的参数解析验证与安全 ACL（访问控制列表）。</td>
+</tr>
+<tr>
+<td align="left"><a href="#Dynamic-Memory-Management-动态记忆管理模式"><strong>Dynamic Memory Management</strong></a> (动态记忆管理模式)</td>
+<td align="left"><strong>上下文控制模式</strong> (Context Control)</td>
+<td align="left">将历史对话动态划分为短期、长久和实体记忆，按需注入上下文。</td>
+<td align="left"><strong>实现</strong>：结合 Redis 进行短期 Session 缓存，利用 Mem0 或 LangGraph 的 Memory Store 自动提取 “User Profile” 写入图数据库或向量库。</td>
+</tr>
+<tr>
+<td align="left"><a href="#Evaluator-Optimizer-评估-优化器循环模式"><strong>Evaluator-Optimizer</strong></a> (评估-优化器循环模式)</td>
+<td align="left"><strong>生成迭代模式</strong> (Generation Iteration)</td>
+<td align="left">通过一个专门的评测器提供反馈，驱动优化器不断迭代输出，直至满足客观指标。</td>
+<td align="left"><strong>实现</strong>：例如在 AI 写代码任务中，将 Python 脚本在沙箱运行，抓取 <code>traceback</code> 错误信息并作为新输入塞给大模型继续修改。</td>
+</tr>
+<tr>
+<td align="left"><a href="#RAG-Router-Fusion-知识检索融合模式"><strong>RAG-Router Fusion</strong></a> (知识检索融合模式)</td>
+<td align="left"><strong>检索增强模式</strong> (Retrieval-Augmented)</td>
+<td align="left">根据问题难度，动态决定是不检索、常规向量检索，还是启动多步骤深度图检索。</td>
+<td align="left"><strong>实现</strong>：结合 LlamaIndex 或 LangChain，一级索引采用简单的 BGE-M3 混合检索，复杂意图触发基于 Neo4j 的 GraphRAG 模式。</td>
+</tr>
+</tbody></table>
+<h2 id="Prompt-Chaining-提示词链模式"><a href="#Prompt-Chaining-提示词链模式" class="headerlink" title="Prompt Chaining (提示词链模式)"></a>Prompt Chaining (提示词链模式)</h2><h3 id="经典要素定义"><a href="#经典要素定义" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><ul>
+<li><strong>分类</strong>：工作流模式 (Workflow Pattern)</li>
+<li><strong>意图</strong>：将一个复杂的、多步骤的生成任务，分解为一组串行的、职责单一的提示词执行链，前一步的输出作为后一步的输入。</li>
+<li><strong>动机</strong>：大模型在单次调用中处理过多业务逻辑或长流程时，容易出现注意力分散、指令违背和幻觉。通过微观解耦，可以显著提升每一步的确定性。</li>
+<li><strong>适用性</strong>：<ul>
+<li>任务可明确拆解为前后依赖的线性步骤（如：数据提取 $\rightarrow$ 翻译 $\rightarrow$ 格式化）。</li>
+<li>步骤间需要进行中间状态拦截、验证或清洗。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[输入] -&gt; (LLM 步骤 A) -&gt; [中间输出] -&gt; (数据转换/清洗) -&gt; (LLM 步骤 B) -&gt; [最终输出]</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：提高复杂指令遵循率；便于工程化调试与单点问题定位。</li>
+<li><em>缺点</em>：端到端延迟随步骤呈线性叠加；中间步骤出错会产生误差传递。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例"><a href="#伪代码示例" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PromptChainingWorkflow</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, llm_client</span>):</span><br><span class="line">        <span class="variable language_">self</span>.llm = llm_client</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">step_1_extract_facts</span>(<span class="params">self, raw_text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;步骤 1：仅负责从长文中提取核心事实清单&quot;&quot;&quot;</span></span><br><span class="line">        prompt = <span class="string">f&quot;Extract all key facts as a bulleted list from this text: <span class="subst">&#123;raw_text&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.llm.generate(prompt)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">step_2_classify_sentiment</span>(<span class="params">self, facts: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;步骤 2：仅负责基于事实，判定结构化的情感极性&quot;&quot;&quot;</span></span><br><span class="line">        prompt = <span class="string">f&quot;Analyze the sentiment of these facts. Return ONLY a JSON object like &#123;&#123;&#x27;sentiment&#x27;: &#x27;positive/negative&#x27;&#125;&#125;: <span class="subst">&#123;facts&#125;</span>&quot;</span></span><br><span class="line">        <span class="comment"># 确保输出符合 JSON 格式</span></span><br><span class="line">        response = <span class="variable language_">self</span>.llm.generate(prompt)</span><br><span class="line">        <span class="keyword">return</span> json.loads(response)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self, raw_input: <span class="built_in">str</span></span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">        <span class="comment"># 串行执行链</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            facts = <span class="variable language_">self</span>.step_1_extract_facts(raw_input)</span><br><span class="line">            <span class="comment"># 工程控制：可在此处加入中间数据拦截验证 (Data Guardrail)</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> facts.strip():</span><br><span class="line">                <span class="keyword">return</span> &#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Failed to extract facts&quot;</span>&#125;</span><br><span class="line">                </span><br><span class="line">            result = <span class="variable language_">self</span>.step_2_classify_sentiment(facts)</span><br><span class="line">            <span class="keyword">return</span> &#123;<span class="string">&quot;facts&quot;</span>: facts, <span class="string">&quot;analysis&quot;</span>: result&#125;</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">return</span> &#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;failed&quot;</span>, <span class="string">&quot;reason&quot;</span>: <span class="built_in">str</span>(e)&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># workflow = PromptChainingWorkflow(llm_client)</span></span><br><span class="line"><span class="comment"># final_report = workflow.run(&quot;用户投诉长文本...&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Routing-x2F-Classifier-路由-x2F-分类器模式"><a href="#Routing-x2F-Classifier-路由-x2F-分类器模式" class="headerlink" title="Routing &#x2F; Classifier (路由&#x2F;分类器模式)"></a>Routing &#x2F; Classifier (路由&#x2F;分类器模式)</h2><h3 id="经典要素定义-1"><a href="#经典要素定义-1" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><ul>
+<li><strong>分类</strong>：架构&#x2F;分流模式 (Architecture&#x2F;Dispatching Pattern)</li>
+<li><strong>意图</strong>：在工作流入口处通过一个前置分类器识别用户意图，从而动态地将请求分流（路由）到最匹配的特定后端模型、工具或定制化子提示词（Prompt）中。</li>
+<li><strong>动机</strong>：一揽子提示词（One-size-fits-all）无法兼顾各类差异巨大的输入。将所有工具或上下文塞给单个大模型会导致模型注意力失焦、回答准确率骤降，同时造成高昂的 Token 算力浪费。</li>
+<li><strong>适用性</strong>：<ul>
+<li>系统包含多个独立、互斥的业务分支（如 FAQ、代码编写、数据分析）。</li>
+<li>需要根据任务复杂度实现模型降级与成本控制（简单任务走小模型，复杂任务走推理大模型）。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[用户输入] -&gt; (前置分类器: 规则/向量/小LLM) -&gt; [选择路由分支] -&gt; (对应特定子工作流) -&gt; [输出]</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：隔离复杂性，显著提升特定分支的指令精准度；通过小模型拦截简单请求，最高可降低 70% 的 Token 成本。</li>
+<li><em>缺点</em>：前置分类带来额外的首字延迟（TTFT）；若分类器判断失误，会导致后续工作流完全不可用（级联错误）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例-1"><a href="#伪代码示例-1" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RoutingWorkflow</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, classifier_model, fast_llm, reasoning_llm</span>):</span><br><span class="line">        <span class="variable language_">self</span>.router = classifier_model</span><br><span class="line">        <span class="variable language_">self</span>.fast_model = fast_llm          <span class="comment"># 经济高效的小模型</span></span><br><span class="line">        <span class="variable language_">self</span>.reasoning_model = reasoning_llm  <span class="comment"># 高成本的深度推理模型</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_classify_intent</span>(<span class="params">self, user_input: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;前置路由：利用低延迟小模型或向量相似度判断用户意图类别&quot;&quot;&quot;</span></span><br><span class="line">        prompt = <span class="string">f&quot;Classify the input into one category: &#x27;chitchat&#x27;, &#x27;math_problem&#x27;, &#x27;general&#x27;. Return only the category name. Input: <span class="subst">&#123;user_input&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.router.generate(prompt).strip().lower()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_handle_chitchat</span>(<span class="params">self, user_input: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.fast_model.generate(<span class="string">f&quot;Respond to this casual greeting: <span class="subst">&#123;user_input&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_handle_math</span>(<span class="params">self, user_input: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.reasoning_model.generate(<span class="string">f&quot;Solve this math puzzle step-by-step: <span class="subst">&#123;user_input&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_handle_general</span>(<span class="params">self, user_input: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.fast_model.generate(<span class="string">f&quot;Answer this general question: <span class="subst">&#123;user_input&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">route</span>(<span class="params">self, user_input: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="comment"># 执行分类</span></span><br><span class="line">        intent = <span class="variable language_">self</span>._classify_intent(user_input)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 动态路由分流</span></span><br><span class="line">        <span class="keyword">if</span> intent == <span class="string">&quot;chitchat&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>._handle_chitchat(user_input)</span><br><span class="line">        <span class="keyword">elif</span> intent == <span class="string">&quot;math_problem&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>._handle_math(user_input)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>._handle_general(user_input)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># workflow = RoutingWorkflow(classifier_model, fast_llm, reasoning_llm)</span></span><br><span class="line"><span class="comment"># response = workflow.route(&quot;12345 * 6789 等于多少？&quot;) # 自动路由至深度推理模型</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Parallelization-并行化模式"><a href="#Parallelization-并行化模式" class="headerlink" title="Parallelization (并行化模式)"></a>Parallelization (并行化模式)</h2><h3 id="经典要素定义-2"><a href="#经典要素定义-2" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><p>- </p>
+<ul>
+<li><strong>分类</strong>：工作流模式 (Workflow Pattern)</li>
+<li><strong>意图</strong>：将多个互不依赖的 LLM 任务进行并行化调用，最后通过代码或聚合大模型将各个子结果合并，以大幅降低多任务执行的总耗时。</li>
+<li><strong>动机</strong>：对于需要从多角度分析、生成多方案、或执行多个独立子任务的场景，若采用串行（提示词链）处理，端到端延迟会随着任务增加而线性暴增，严重影响用户体验。</li>
+<li><strong>适用性</strong>：<ul>
+<li>子任务之间完全解耦，不需要彼此的中间输出作为上下文。</li>
+<li>主要分为两种变体：<strong>Sectioning（分块并行）</strong>（如同时进行翻译、法律审核与情感分析）和 <strong>Voting（投票并行）</strong>（如同一个 Prompt 并行生成 3 次取最优解）。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[用户输入] -&gt; (异步分发) -&gt; [LLM 任务 A / LLM 任务 B / LLM 任务 C] -&gt; (结果聚合器) -&gt; [最终输出]</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：显著降低整体端到端延迟，总耗时仅取决于执行最慢的那个子任务。</li>
+<li><em>缺点</em>：在极短时间内产生高并发调用，极易触发服务商的频率限制 (Rate Limit)；Token 消耗量倍增。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例-2"><a href="#伪代码示例-2" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ParallelizationWorkflow</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, llm_client</span>):</span><br><span class="line">        <span class="variable language_">self</span>.llm = llm_client</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_task_grammar_check</span>(<span class="params">self, text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;异步子任务 1：语法与拼写检查&quot;&quot;&quot;</span></span><br><span class="line">        prompt = <span class="string">f&quot;Identify and fix grammar errors in this text, return corrected text only: <span class="subst">&#123;text&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable language_">self</span>.llm.generate_async(prompt)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_task_tone_analysis</span>(<span class="params">self, text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;异步子任务 2：语气偏向分析&quot;&quot;&quot;</span></span><br><span class="line">        prompt = <span class="string">f&quot;Analyze the tone of this text (e.g., formal, aggressive, polite): <span class="subst">&#123;text&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable language_">self</span>.llm.generate_async(prompt)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_task_seo_keywords</span>(<span class="params">self, text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;异步子任务 3：提取 SEO 关键词&quot;&quot;&quot;</span></span><br><span class="line">        prompt = <span class="string">f&quot;Extract top 3 SEO keywords from this text: <span class="subst">&#123;text&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable language_">self</span>.llm.generate_async(prompt)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self, raw_text: <span class="built_in">str</span></span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">        <span class="comment"># 并行分发三个独立的 LLM 任务</span></span><br><span class="line">        tasks = [</span><br><span class="line">            <span class="variable language_">self</span>._task_grammar_check(raw_text),</span><br><span class="line">            <span class="variable language_">self</span>._task_tone_analysis(raw_text),</span><br><span class="line">            <span class="variable language_">self</span>._task_seo_keywords(raw_text)</span><br><span class="line">        ]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 使用 asyncio.gather 同时并发执行</span></span><br><span class="line">        results: <span class="type">List</span>[<span class="built_in">str</span>] = <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 聚合器：将并行结果组装为最终结构化报告（此处通过代码直接组装，亦可调用 LLM 聚合）</span></span><br><span class="line">        summary_report = &#123;</span><br><span class="line">            <span class="string">&quot;corrected_text&quot;</span>: results[<span class="number">0</span>],</span><br><span class="line">            <span class="string">&quot;detected_tone&quot;</span>: results[<span class="number">1</span>],</span><br><span class="line">            <span class="string">&quot;seo_keywords&quot;</span>: results[<span class="number">2</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> summary_report</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># workflow = ParallelizationWorkflow(llm_client)</span></span><br><span class="line"><span class="comment"># report = asyncio.run(workflow.run(&quot;原始待处理长文本...&quot;))</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Orchestrator-Workers-中心编排-执行器模式"><a href="#Orchestrator-Workers-中心编排-执行器模式" class="headerlink" title="Orchestrator-Workers (中心编排-执行器模式)"></a>Orchestrator-Workers (中心编排-执行器模式)</h2><h3 id="经典要素定义-3"><a href="#经典要素定义-3" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><ul>
+<li><strong>分类</strong>：团队协作模式 (Team Multi-Agent Pattern)</li>
+<li><strong>意图</strong>：由一个中心大模型（Orchestrator）负责动态拆解复杂任务、按需分发给多个专属的子执行器（Workers），并在回收执行结果后进行统一审查、补充或汇总。</li>
+<li><strong>动机</strong>：对于边界模糊、无法在工程开发期硬编码固定步骤的复杂任务（如：根据一句话需求编写一份行业竞品分析报告），传统的线性链或并行化无法应对过程中的动态变化，需要 AI 具备自主规划和结果质检的能力。</li>
+<li><strong>适用性</strong>：<ul>
+<li>任务高度复杂，需要涉及多个不同领域的专业工具或子技能。</li>
+<li>子任务的数量和执行顺序无法提前预知，必须依赖上一步的结果动态决定下一步。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[用户输入] -&gt; (Orchestrator 规划与决策) &lt;-&gt; [分发/回收] &lt;-&gt; [Worker 1 / Worker 2 / Worker 3] -&gt; (Orchestrator 质检汇总) -&gt; [最终输出]</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：具备极强的任务弹性和自适应能力，能够自主解决不可预测的复杂业务流。</li>
+<li><em>缺点</em>：极度依赖中心模型（如 GPT-4o 或 Claude 3.5 Sonnet）的极高智商，容易陷入“反复无休止规划”的死循环（Planning Loop），导致成本剧增。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例-3"><a href="#伪代码示例-3" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">OrchestratorWorkersWorkflow</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, orchestrator_llm, worker_llm</span>):</span><br><span class="line">        <span class="variable language_">self</span>.orchestrator = orchestrator_llm</span><br><span class="line">        <span class="variable language_">self</span>.worker = worker_llm</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_call_worker</span>(<span class="params">self, worker_type: <span class="built_in">str</span>, sub_task: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;根据类型调用特定的专家 Worker&quot;&quot;&quot;</span></span><br><span class="line">        prompt = <span class="string">f&quot;You are a specialist in <span class="subst">&#123;worker_type&#125;</span>. Execute this sub-task: <span class="subst">&#123;sub_task&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.worker.generate(prompt)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">execute_task</span>(<span class="params">self, main_goal: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="comment"># 1. Orchestrator 负责拆解总任务</span></span><br><span class="line">        plan_prompt = <span class="string">f&quot;Break down this main goal into a list of specific sub-tasks with worker types (&#x27;search&#x27;, &#x27;writer&#x27;). Goal: <span class="subst">&#123;main_goal&#125;</span>&quot;</span></span><br><span class="line">        <span class="comment"># 假设返回结构化的任务列表 [&#123;&#x27;type&#x27;: &#x27;search&#x27;, &#x27;task&#x27;: &#x27;...&#x27;&#125;, &#123;&#x27;type&#x27;: &#x27;writer&#x27;, &#x27;task&#x27;: &#x27;...&#x27;&#125;]</span></span><br><span class="line">        sub_tasks: <span class="type">List</span>[<span class="type">Dict</span>[<span class="built_in">str</span>, <span class="built_in">str</span>]] = <span class="variable language_">self</span>.orchestrator.generate_json(plan_prompt)</span><br><span class="line">        </span><br><span class="line">        worker_results = []</span><br><span class="line">        <span class="comment"># 2. 动态分发并执行子任务</span></span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> sub_tasks:</span><br><span class="line">            result = <span class="variable language_">self</span>._call_worker(worker_type=item[<span class="string">&#x27;type&#x27;</span>], sub_task=item[<span class="string">&#x27;task&#x27;</span>])</span><br><span class="line">            worker_results.append(result)</span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 3. Orchestrator 汇总结聚并进行质量审查</span></span><br><span class="line">        summary_prompt = <span class="string">f&quot;Review and synthesize these worker results into a comprehensive final report for the goal &#x27;<span class="subst">&#123;main_goal&#125;</span>&#x27;. Results: <span class="subst">&#123;worker_results&#125;</span>&quot;</span></span><br><span class="line">        final_report = <span class="variable language_">self</span>.orchestrator.generate(summary_prompt)</span><br><span class="line">        <span class="keyword">return</span> final_report</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># manager = OrchestratorWorkersWorkflow(orchestrator_llm, worker_llm)</span></span><br><span class="line"><span class="comment"># report = manager.execute_task(&quot;编写一份新能源汽车2026年市场出海分析报告&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Self-Correction-x2F-Reflection-自我修正-x2F-反思模式"><a href="#Self-Correction-x2F-Reflection-自我修正-x2F-反思模式" class="headerlink" title="Self-Correction &#x2F; Reflection (自我修正&#x2F;反思模式)"></a>Self-Correction &#x2F; Reflection (自我修正&#x2F;反思模式)</h2><h3 id="经典要素定义-4"><a href="#经典要素定义-4" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><ul>
+<li><strong>分类</strong>：质量控制模式 (Quality Control Pattern)</li>
+<li><strong>意图</strong>：构建一个“生成-评估-修正”的闭环，让模型在正式输出前，通过独立的评估环节检查自身初始输出的缺陷（如语法、逻辑、格式错误），并利用错误反馈指导下一次迭代生成。</li>
+<li><strong>动机</strong>：大模型往往存在“直觉性单向输出”的致命缺陷（即想到哪写到哪），直接生成复杂代码或结构化文本时极易包含低级错误。引入反思机制类似于人类“写稿-校对-修改”的纠错机制。</li>
+<li><strong>适用性</strong>：<ul>
+<li>对输出质量有严苛要求（如自动化代码生成、必须严格符合指定 Schema 的 JSON 输出）。</li>
+<li>存在明确的评估准则（可以是另一个 Agent 的 Prompt，也可以是确定性的代码验证）。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[生成器 LLM] -&gt; (初始输出) -&gt; [评估器 LLM/代码] -&gt; &#123;通过? -&gt; 输出&#125; / &#123;未通过? -&gt; 带有错误上下文的 Prompt -&gt; 重新输入生成器 LLM&#125;</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：显著提升复杂任务的单次出厂成功率，有效抑制幻觉和格式溃散。</li>
+<li><em>缺点</em>：成倍消耗 Token 资源，若纠错逻辑不够鲁棒，极易在死胡同里陷入死循环。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例-4"><a href="#伪代码示例-4" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SelfCorrectionWorkflow</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, generator_llm, evaluator_llm, max_retries: <span class="built_in">int</span> = <span class="number">3</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.generator = generator_llm</span><br><span class="line">        <span class="variable language_">self</span>.evaluator = evaluator_llm</span><br><span class="line">        <span class="variable language_">self</span>.max_retries = max_retries</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self, user_request: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        current_output = <span class="string">&quot;&quot;</span></span><br><span class="line">        feedback = <span class="string">&quot;None&quot;</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> attempt <span class="keyword">in</span> <span class="built_in">range</span>(<span class="variable language_">self</span>.max_retries):</span><br><span class="line">            <span class="comment"># 1. 生成器参考上一次的反馈（若有）进行生成或修正</span></span><br><span class="line">            gen_prompt = <span class="string">f&quot;Task: <span class="subst">&#123;user_request&#125;</span>. Previous Feedback: <span class="subst">&#123;feedback&#125;</span>. Generate the response now:&quot;</span></span><br><span class="line">            current_output = <span class="variable language_">self</span>.generator.generate(gen_prompt)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 2. 评估器独立对输出进行审查</span></span><br><span class="line">            eval_prompt = <span class="string">f&quot;Evaluate this output against the task &#x27;<span class="subst">&#123;user_request&#125;</span>&#x27;. Is it correct? Return JSON with &#123;&#123;&#x27;is_valid&#x27;: true/false, &#x27;critique&#x27;: &#x27;...&#x27;&#125;&#125;. Output: <span class="subst">&#123;current_output&#125;</span>&quot;</span></span><br><span class="line">            eval_result: <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>] = <span class="variable language_">self</span>.evaluator.generate_json(eval_prompt)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 3. 检查是否通过</span></span><br><span class="line">            <span class="keyword">if</span> eval_result.get(<span class="string">&quot;is_valid&quot;</span>) <span class="keyword">is</span> <span class="literal">True</span>:</span><br><span class="line">                <span class="keyword">return</span> current_output  <span class="comment"># 质检通过，提前终止并返回</span></span><br><span class="line">                </span><br><span class="line">            <span class="comment"># 未通过，记录反馈进入下一轮循环</span></span><br><span class="line">            feedback = eval_result.get(<span class="string">&quot;critique&quot;</span>, <span class="string">&quot;Output does not meet requirements.&quot;</span>)</span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 达到最大重试次数，安全熔断，返回最后一次的尝试（或抛出异常）</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Max retries reached. Best effort output: <span class="subst">&#123;current_output&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># workflow = SelfCorrectionWorkflow(generator_llm, evaluator_llm)</span></span><br><span class="line"><span class="comment"># safe_json_output = workflow.run(&quot;生成一个包含10个字段的复杂用户配置 JSON 字符串&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Tool-Execution-Layer-工具执行层隔离模式"><a href="#Tool-Execution-Layer-工具执行层隔离模式" class="headerlink" title="Tool Execution Layer (工具执行层隔离模式)"></a>Tool Execution Layer (工具执行层隔离模式)</h2><h3 id="经典要素定义-5"><a href="#经典要素定义-5" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><ul>
+<li><strong>分类</strong>：安全与控制模式 (Security&#x2F;Control Pattern)</li>
+<li><strong>意图</strong>：将大模型的“工具调用决策（Tool Call Decision）”与“工具的实际执行（Tool Execution）”在物理或逻辑上完全剥离开来，放入安全的沙箱或硬编码的代码控制层中执行。</li>
+<li><strong>动机</strong>：大模型生成的 API 参数或生成的代码存在不确定性，且容易受到“提示词注入攻击（Prompt Injection）”。若直接赋予大模型在底层服务器上写数据库、运行 shell 脚本的权限，会导致系统被恶意操控或引发逻辑灾难。</li>
+<li><strong>适用性</strong>：<ul>
+<li>生产环境中允许 AI 智能体调用外部具有副作用的 API（如：扣款、删除、发送邮件）。</li>
+<li>需要对 AI 自动生成的代码（如 Python、SQL）进行动态运行和结果抓取的场景。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[LLM] -&gt; (输出包含参数的 Tool Call JSON) -&gt; [拦截验证层 (安全 ACL / 人工审查)] -&gt; [隔离沙箱环境执行 (如 Docker)] -&gt; (返回清洗后的结果) -&gt; [LLM]</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：保障主机系统的绝对安全，支持在执行前切入“人工介入（HITL）”审批，提供完美的审计边界。</li>
+<li><em>缺点</em>：增加了系统工程的开发和运维复杂度，涉及沙箱环境的管理。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例-5"><a href="#伪代码示例-5" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SecureSandbox</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;安全的独立执行层，与外部网络和核心主机隔离&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">execute_python_code</span>(<span class="params">self, code: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="comment"># 在受限的沙箱（如 Docker 容器）中实际执行代码并捕获 stdout/stderr</span></span><br><span class="line">        <span class="comment"># 此处简化为模拟行为</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;os.system&quot;</span> <span class="keyword">in</span> code <span class="keyword">or</span> <span class="string">&quot;subprocess&quot;</span> <span class="keyword">in</span> code:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Security Error: Malicious code detected.&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Executed successfully. Result: 42&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ToolExecutionLayerWorkflow</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, llm_client, sandbox: SecureSandbox</span>):</span><br><span class="line">        <span class="variable language_">self</span>.llm = llm_client</span><br><span class="line">        <span class="variable language_">self</span>.sandbox = sandbox</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run_user_query</span>(<span class="params">self, user_query: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="comment"># 1. 大模型仅负责“决策”，输出结构化的工具调用意图</span></span><br><span class="line">        prompt = <span class="string">f&quot;Based on user query &#x27;<span class="subst">&#123;user_query&#125;</span>&#x27;, output a JSON with &#x27;tool&#x27; and &#x27;code_to_run&#x27; if needed.&quot;</span></span><br><span class="line">        tool_call_json = <span class="variable language_">self</span>.llm.generate_json(prompt)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 2. 隔离层拦截并验证参数</span></span><br><span class="line">        <span class="keyword">if</span> tool_call_json.get(<span class="string">&quot;tool&quot;</span>) == <span class="string">&quot;python_interpreter&quot;</span>:</span><br><span class="line">            raw_code = tool_call_json.get(<span class="string">&quot;code_to_run&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 工程风控拦截与沙箱安全执行</span></span><br><span class="line">            execution_result = <span class="variable language_">self</span>.sandbox.execute_python_code(raw_code)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 3. 将执行结果安全喂回给大模型进行最终润色</span></span><br><span class="line">            final_prompt = <span class="string">f&quot;The user asked &#x27;<span class="subst">&#123;user_query&#125;</span>&#x27;. The sandbox tool returned: <span class="subst">&#123;execution_result&#125;</span>. Summarize the answer:&quot;</span></span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>.llm.generate(final_prompt)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;No tool needed.&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># workflow = ToolExecutionLayerWorkflow(llm_client, SecureSandbox())</span></span><br><span class="line"><span class="comment"># response = workflow.run_user_query(&quot;帮我计算斐波那契数列第10项&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Dynamic-Memory-Management-动态记忆管理模式"><a href="#Dynamic-Memory-Management-动态记忆管理模式" class="headerlink" title="Dynamic Memory Management (动态记忆管理模式)"></a>Dynamic Memory Management (动态记忆管理模式)</h2><h3 id="经典要素定义-6"><a href="#经典要素定义-6" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><ul>
+<li><strong>分类</strong>：上下文控制模式 (Context Control Pattern)</li>
+<li><strong>意图</strong>：将复杂的历史交互数据动态划分为短期缓存（Session）、长期结构化实体（Vector&#x2F;Graph）以及核心人设（User Profile），根据当前对话语义按需提取并注入上下文窗口，实现长效且经济的记忆管理。</li>
+<li><strong>动机</strong>：大模型的上下文窗口（Context Window）是有限且昂贵的。如果将几十轮对话完完整整地作为 Prompt 丢给大模型，会导致严重的“迷失在中间（Lost in the Middle）”现象，大幅拉低召回准确率，并造成 Token 费用的指数级暴增。</li>
+<li><strong>适用性</strong>：<ul>
+<li>需要超长会话（如长达数月的陪伴式 AI、高频交互的个人助理）。</li>
+<li>跨会话（Cross-session）场景，AI 需要在明天的对话中记住用户今天的偏好和特定事实。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[用户新输入] -&gt; (实体/意图提取) -&gt; [查短期缓存 + 查向量库/图数据库] -&gt; (动态压缩与修剪) -&gt; [组装精简 Prompt] -&gt; (LLM 推理)</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：打破大模型原生上下文长度限制，保持长期人格与信息的一致性，有效控本。</li>
+<li><em>缺点</em>：后台需要频繁触发额外的总结（Summarization）和异步写入操作，增加了系统的后台 Token 开销。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例-6"><a href="#伪代码示例-6" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MockVectorDb</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, query: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]: <span class="keyword">return</span> [<span class="string">&quot;用户在3天前提到过他有一只猫叫喵喵&quot;</span>]</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">upsert</span>(<span class="params">self, text: <span class="built_in">str</span></span>): <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DynamicMemoryManager</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, llm_client, vector_db: MockVectorDb</span>):</span><br><span class="line">        <span class="variable language_">self</span>.llm = llm_client</span><br><span class="line">        <span class="variable language_">self</span>.db = vector_db</span><br><span class="line">        <span class="variable language_">self</span>.short_term_buffer = [] <span class="comment"># 短期缓存，仅保留最近3轮对话</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_async_background_extract</span>(<span class="params">self, user_input: <span class="built_in">str</span>, ai_response: <span class="built_in">str</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;异步后台任务：提取核心长期事实并写入长期记忆&quot;&quot;&quot;</span></span><br><span class="line">        extract_prompt = <span class="string">f&quot;Extract permanent user facts (like hobbies, pets) from this chat: User: <span class="subst">&#123;user_input&#125;</span>, AI: <span class="subst">&#123;ai_response&#125;</span>. Return None if empty.&quot;</span></span><br><span class="line">        fact = <span class="variable language_">self</span>.llm.generate(extract_prompt)</span><br><span class="line">        <span class="keyword">if</span> fact <span class="keyword">and</span> <span class="string">&quot;none&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> fact.lower():</span><br><span class="line">            <span class="variable language_">self</span>.db.upsert(fact)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">chat</span>(<span class="params">self, user_input: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="comment"># 1. 动态召回：根据当前输入从长期记忆库检索相关上下文</span></span><br><span class="line">        long_term_contexts = <span class="variable language_">self</span>.db.search(user_input)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 2. 动态组装：将长期记忆、短期缓存和新输入融合</span></span><br><span class="line">        context_str = <span class="string">&quot;\n&quot;</span>.join(long_term_contexts)</span><br><span class="line">        history_str = <span class="string">&quot;\n&quot;</span>.join(<span class="variable language_">self</span>.short_term_buffer[-<span class="number">6</span>:]) <span class="comment"># 只取近期几轮</span></span><br><span class="line">        </span><br><span class="line">        final_prompt = <span class="string">f&quot;Long-term memory:\n<span class="subst">&#123;context_str&#125;</span>\n\nRecent chat:\n<span class="subst">&#123;history_str&#125;</span>\n\nUser: <span class="subst">&#123;user_input&#125;</span>\nAI:&quot;</span></span><br><span class="line">        response = <span class="variable language_">self</span>.llm.generate(final_prompt)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 3. 记忆更新：更新短期缓存</span></span><br><span class="line">        <span class="variable language_">self</span>.short_term_buffer.append(<span class="string">f&quot;User: <span class="subst">&#123;user_input&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.short_term_buffer.append(<span class="string">f&quot;AI: <span class="subst">&#123;response&#125;</span>&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 4. 异步触发长期记忆沉淀（防止阻塞主流程）</span></span><br><span class="line">        <span class="variable language_">self</span>._async_background_extract(user_input, response)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># memory_agent = DynamicMemoryManager(llm_client, MockVectorDb())</span></span><br><span class="line"><span class="comment"># reply = memory_agent.chat(&quot;给我的宠物买点什么零食好？&quot;) # 自动唤醒关于“猫叫喵喵”的记忆</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Evaluator-Optimizer-评估-优化器循环模式"><a href="#Evaluator-Optimizer-评估-优化器循环模式" class="headerlink" title="Evaluator-Optimizer (评估-优化器循环模式)"></a>Evaluator-Optimizer (评估-优化器循环模式)</h2><h3 id="经典要素定义-7"><a href="#经典要素定义-7" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><ul>
+<li><strong>分类</strong>：生成迭代模式 (Generation Iteration Pattern)</li>
+<li><strong>意图</strong>：通过一个专属的评估器对生成器的输出进行可量化的客观测试（如编译测试、单元测试或指标打分），并将测试崩溃日志或不达标数据作为负反馈喂给优化器，驱动系统通过多轮循环迭代直至通过全部硬性指标。</li>
+<li><strong>动机</strong>：反思模式（Reflection）通常依赖于大模型主观的语义评估，而许多技术场景需要严格的客观事实支撑。例如编写代码时，代码是否能跑通、测试用例是否全过，无法靠模型“看一眼”保证，必须依赖真实的测试反馈。</li>
+<li><strong>适用性</strong>：<ul>
+<li>自动化软件工程（AI Coding），需要通过编译器检查或通过特定测试用例。</li>
+<li>可以通过代码或客观工具定义出清晰、非模糊的成功指标（如：通过率达 100%、文件格式完全合法、计算结果匹配）。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[优化器 LLM] -&gt; (生成内容) -&gt; [自动化测试/硬编码评测环境] -&gt; &#123;全部通过 -&gt; 输出&#125; / &#123;失败 -&gt; 抓取真实报错/Traceback 丢回优化器 LLM 重新调整&#125;</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：能突破模型原生能力的上限，产出符合生产级可用标准的、经过验证的高质量技术成果。</li>
+<li><em>缺点</em>：高度依赖完备的自动化测试沙箱；由于存在真实运行和多轮循环，整体耗时较长。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例-7"><a href="#伪代码示例-7" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LocalTestRunner</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;真实的本地测试环境，用于执行代码并捕获客观报错&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run_tests</span>(<span class="params">self, code: <span class="built_in">str</span></span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">        <span class="comment"># 模拟将代码写入临时文件并运行 pytest</span></span><br><span class="line">        <span class="comment"># 实际工程中需在沙箱内运行</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;def test_sum():&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> code:</span><br><span class="line">            <span class="keyword">return</span> &#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;failed&quot;</span>, <span class="string">&quot;error&quot;</span>: <span class="string">&quot;NameError: test_sum is not defined&quot;</span>&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;return a + b&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> code:</span><br><span class="line">            <span class="keyword">return</span> &#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;failed&quot;</span>, <span class="string">&quot;error&quot;</span>: <span class="string">&quot;AssertionError: 1 + 1 != 3&quot;</span>&#125;</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;passed&quot;</span>, <span class="string">&quot;error&quot;</span>: <span class="string">&quot;&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EvaluatorOptimizerWorkflow</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, optimizer_llm, test_runner: LocalTestRunner, max_iterations: <span class="built_in">int</span> = <span class="number">4</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.optimizer = optimizer_llm</span><br><span class="line">        <span class="variable language_">self</span>.runner = test_runner</span><br><span class="line">        <span class="variable language_">self</span>.max_iter = max_iterations</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">generate_verified_code</span>(<span class="params">self, requirements: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        current_code = <span class="string">&quot;&quot;</span></span><br><span class="line">        error_logs = <span class="string">&quot;None (Initial Attempt)&quot;</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="variable language_">self</span>.max_iter):</span><br><span class="line">            <span class="comment"># 1. 优化器基于客观错误日志重新调整并生成代码</span></span><br><span class="line">            prompt = <span class="string">f&quot;Write Python code for: <span class="subst">&#123;requirements&#125;</span>. Previous test execution error logs: <span class="subst">&#123;error_logs&#125;</span>. Output code only.&quot;</span></span><br><span class="line">            current_code = <span class="variable language_">self</span>.optimizer.generate(prompt)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 2. 评估器（客观测试运行层）执行并捕获真实反馈</span></span><br><span class="line">            test_result = <span class="variable language_">self</span>.runner.run_tests(current_code)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 3. 检查是否通过客观指标</span></span><br><span class="line">            <span class="keyword">if</span> test_result[<span class="string">&quot;status&quot;</span>] == <span class="string">&quot;passed&quot;</span>:</span><br><span class="line">                <span class="keyword">return</span> current_code <span class="comment"># 客观验证通过，安全出厂</span></span><br><span class="line">                </span><br><span class="line">            <span class="comment"># 未通过，抓取真实报错日志进入下一轮循环优化</span></span><br><span class="line">            error_logs = test_result[<span class="string">&quot;error&quot;</span>]</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Optimization failed within limits. Last code: <span class="subst">&#123;current_code&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># workflow = EvaluatorOptimizerWorkflow(optimizer_llm, LocalTestRunner())</span></span><br><span class="line"><span class="comment"># verified_code = workflow.generate_verified_code(&quot;编写一个加法函数并包含它的单元测试&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="RAG-Router-Fusion-知识检索融合模式"><a href="#RAG-Router-Fusion-知识检索融合模式" class="headerlink" title="RAG-Router Fusion (知识检索融合模式)"></a>RAG-Router Fusion (知识检索融合模式)</h2><h3 id="经典要素定义-8"><a href="#经典要素定义-8" class="headerlink" title="经典要素定义"></a>经典要素定义</h3><ul>
+<li><strong>分类</strong>：检索增强模式 (Retrieval-Augmented Pattern)</li>
+<li><strong>意图</strong>：在知识检索的入口处对查询本身的知识跨度和复杂度进行前置评估，动态融合多种级别的检索机制（不检索、向量 RAG、混合检索或多跳图检索），以兼顾企业知识库的响应效率与深度关联性。</li>
+<li><strong>动机</strong>：简单的知识问答（如“公司几号发工资”）直接回答或使用简单的向量匹配即可，启动复杂的全局检索纯属浪费；而复杂的跨部门关联分析（如“结合近三年财报分析供应链风险”）靠简单的向量相似度召回极易漏掉关键上下文。</li>
+<li><strong>适用性</strong>：<ul>
+<li>企业级海量知识库系统，同时面临轻量 FAQ 和跨文档复杂深度关联查询。</li>
+<li>需要对大规模高并发检索请求进行服务分级、降低向量数据库并发压力的生产环境。</li>
+</ul>
+</li>
+<li><strong>结构</strong>：<code>[用户查询] -&gt; (检索路由器) -&gt; [无需检索直接答 / 向量检索密集召回 / GraphRAG 跨文档多跳检索] -&gt; (上下文重排/融合) -&gt; [LLM 推理输出]</code></li>
+<li><strong>效果</strong>：<ul>
+<li><em>优点</em>：在高并发、低复杂度的请求中省去重度检索，极大地降低了端到端延迟和服务器开销；对复杂长尾查询提供了极高的信息召回完整度。</li>
+<li><em>缺点</em>：需要同时构建、维护多套索引体系（如密集向量索引与 Neo4j 图索引），工程复杂度极高。</li>
+</ul>
+</li>
+</ul>
+<h3 id="伪代码示例-8"><a href="#伪代码示例-8" class="headerlink" title="伪代码示例"></a>伪代码示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MockMultiIndexStore</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">vector_search</span>(<span class="params">self, query: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]: <span class="keyword">return</span> [<span class="string">&quot;匹配到规章制度第3条：10号发工资&quot;</span>]</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">graph_rag_search</span>(<span class="params">self, query: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]: <span class="keyword">return</span> [<span class="string">&quot;实体A与实体B关系关联&quot;</span>, <span class="string">&quot;财报数据链路汇总&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RagRouterFusionWorkflow</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, router_llm, generator_llm, store: MockMultiIndexStore</span>):</span><br><span class="line">        <span class="variable language_">self</span>.router = router_llm</span><br><span class="line">        <span class="variable language_">self</span>.generator = generator_llm</span><br><span class="line">        <span class="variable language_">self</span>.store = store</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">answer_question</span>(<span class="params">self, query: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="comment"># 1. 检索路由器：前置评估查询所需的知识密集度与检索类型</span></span><br><span class="line">        route_prompt = <span class="string">f&quot;Analyze the query: &#x27;<span class="subst">&#123;query&#125;</span>&#x27;. Choose retrieval type: &#x27;direct&#x27; (no data needed), &#x27;dense&#x27; (simple factual lookup), &#x27;graph&#x27; (complex relationship analysis). Return only the type word.&quot;</span></span><br><span class="line">        strategy = <span class="variable language_">self</span>.router.generate(route_prompt).strip().lower()</span><br><span class="line">        </span><br><span class="line">        contexts = []</span><br><span class="line">        <span class="comment"># 2. 动态路由融合检索</span></span><br><span class="line">        <span class="keyword">if</span> strategy == <span class="string">&quot;direct&quot;</span>:</span><br><span class="line">            <span class="comment"># 无需检索，模型内置常识即可作答</span></span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>.generator.generate(<span class="string">f&quot;Answer directly: <span class="subst">&#123;query&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">elif</span> strategy == <span class="string">&quot;dense&quot;</span>:</span><br><span class="line">            <span class="comment"># 触发常规高并发、低延迟的向量检索</span></span><br><span class="line">            contexts = <span class="variable language_">self</span>.store.vector_search(query)</span><br><span class="line">        <span class="keyword">elif</span> strategy == <span class="string">&quot;graph&quot;</span>:</span><br><span class="line">            <span class="comment"># 触发深度多跳的 GraphRAG（图检索）挖掘深层关联</span></span><br><span class="line">            contexts = <span class="variable language_">self</span>.store.graph_rag_search(query)</span><br><span class="line">            </span><br><span class="line">        <span class="comment"># 3. 融合召回的上下文生成最终回复</span></span><br><span class="line">        context_str = <span class="string">&quot;\n&quot;</span>.join(contexts)</span><br><span class="line">        final_prompt = <span class="string">f&quot;Answer the query based on retrieved contexts.\nContexts:\n<span class="subst">&#123;context_str&#125;</span>\n\nQuery: <span class="subst">&#123;query&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.generator.generate(final_prompt)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="comment"># rag_system = RagRouterFusionWorkflow(router_llm, generator_llm, MockMultiIndexStore())</span></span><br><span class="line"><span class="comment"># answer = rag_system.answer_question(&quot;分析去年的供应链波动对今年三季度利润的潜在链式影响&quot;) # 自动触发 graph 路由</span></span><br></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
+      
+        <a href="/tags/LLM/" class="print-no-link">#LLM</a>
+      
+        <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="print-no-link">#设计模式</a>
+      
+        <a href="/tags/Multi-Agent/" class="print-no-link">#Multi-Agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

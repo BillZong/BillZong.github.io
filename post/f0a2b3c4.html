@@ -1,0 +1,650 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="告警系统流程 告警消息协议AlertManager消息协议-V1 123456789101112131415161718192021222324&amp;#123;    &quot;status&quot;: &quot;firing&quot;, &#x2F;&#x2F; resolved 目前会被忽略    &quot;groupLabels&quot;: &amp;#123;        &quot;fingerprint">
+<meta property="og:type" content="article">
+<meta property="og:title" content="告警方案说明">
+<meta property="og:url" content="https://billzong.github.io/post/f0a2b3c4.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="告警系统流程 告警消息协议AlertManager消息协议-V1 123456789101112131415161718192021222324&amp;#123;    &quot;status&quot;: &quot;firing&quot;, &#x2F;&#x2F; resolved 目前会被忽略    &quot;groupLabels&quot;: &amp;#123;        &quot;fingerprint">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://billzong.github.io/images/oncall/whiteboard_exported_image.png">
+<meta property="article:published_time" content="2025-08-11T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-14T03:45:05.836Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="安全">
+<meta property="article:tag" content="PagerDuty">
+<meta property="article:tag" content="告警">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="告警方案">
+<meta property="article:tag" content="AlertManager">
+<meta property="article:tag" content="WebHook">
+<meta property="article:tag" content="PD-CEF">
+<meta property="article:tag" content="oncall">
+<meta property="article:tag" content="升级策略">
+<meta property="article:tag" content="值班">
+<meta property="article:tag" content="紧急响应">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://billzong.github.io/images/oncall/whiteboard_exported_image.png">
+  
+  
+  
+  <title>告警方案说明 - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 25vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="告警方案说明"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">告警方案说明</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="告警系统流程"><a href="#告警系统流程" class="headerlink" title="告警系统流程"></a>告警系统流程</h2><p><img src="/images/oncall/whiteboard_exported_image.png" srcset="/img/loading.gif" lazyload alt="whiteboard_exported_image"></p>
+<h2 id="告警消息协议"><a href="#告警消息协议" class="headerlink" title="告警消息协议"></a>告警消息协议</h2><p>AlertManager消息协议-V1</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;firing&quot;</span><span class="punctuation">,</span> <span class="comment">// resolved 目前会被忽略</span></span><br><span class="line">    <span class="attr">&quot;groupLabels&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;fingerprint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;告警的组指纹&quot;</span> <span class="comment">// 可选。如果设置 alert.labels.use_group_fingerprint = &quot;true&quot;，则会使用组的finger_print作为告警dedup_key</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;alerts&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;firing&quot;</span><span class="punctuation">,</span> <span class="comment">// resolved 目前会被忽略</span></span><br><span class="line">        <span class="attr">&quot;labels&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;response_team&quot;</span><span class="punctuation">:</span> <span class="string">&quot;swap:backend&quot;</span><span class="punctuation">,</span> <span class="comment">// 必须。服务响应团队名，告警服务会以此命名。接入需要找运维团队注册。告警必须带上相应的标签。否则，会转到Default服务中（有可能被忽略）</span></span><br><span class="line">            <span class="attr">&quot;dedup_key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;swap:backend:api-crash:20250813&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。如果设置了，则会使用该字段作为 dedup_key</span></span><br><span class="line">            <span class="attr">&quot;use_group_fingerprint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;true&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。如果没有设置dedup_key，并设置了该字段，则使用 groupLabels.fingerprint 作为 dedup_key，否则会使用 fingerprint 作为 dedup_key</span></span><br><span class="line">            <span class="attr">&quot;project&quot;</span><span class="punctuation">:</span> <span class="string">&quot;proj01&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选</span></span><br><span class="line">            <span class="attr">&quot;application&quot;</span><span class="punctuation">:</span> <span class="string">&quot;app01&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选</span></span><br><span class="line">            <span class="attr">&quot;environment&quot;</span><span class="punctuation">:</span> <span class="string">&quot;release&quot;</span> <span class="comment">// 可选</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;annotations&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;summary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;告警标题&quot;</span> <span class="comment">// 可选</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;startsAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;开始时间&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选</span></span><br><span class="line">        <span class="attr">&quot;endsAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;结束时间&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选</span></span><br><span class="line">        <span class="attr">&quot;generatorURL&quot;</span><span class="punctuation">:</span> <span class="string">&quot;告警的反向链接&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选</span></span><br><span class="line">        <span class="attr">&quot;fingerprint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;告警的label指纹&quot;</span> <span class="comment">// 可选</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>参考 PagerDuty 的 PD-CEF 模板<br><a target="_blank" rel="noopener" href="https://developer.pagerduty.com/docs/send-alert-event#example-request-payloads">https://developer.pagerduty.com/docs/send-alert-event#example-request-payloads</a></p>
+<p>WebHook消息模板 -V1</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;response_team&quot;</span><span class="punctuation">:</span> <span class="string">&quot;swap:backend&quot;</span> <span class="comment">// 必须。服务响应团队名，告警服务会以此命名。接入需要找运维团队注册。告警必须带上相应的标签。否则，会转到Default服务中（有可能被忽略）</span></span><br><span class="line">  <span class="attr">&quot;dedup_key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;swap:backend:api-crash:20250813&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。业务告警的唯一ID，不同ID会视为不同告警，不填会认为每次都是不同的告警，慎重填入。</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;告警标题&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。告警标题</span></span><br><span class="line">  <span class="attr">&quot;project&quot;</span><span class="punctuation">:</span> <span class="string">&quot;proj01&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。</span></span><br><span class="line">  <span class="attr">&quot;application&quot;</span><span class="punctuation">:</span> <span class="string">&quot;app01&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。</span></span><br><span class="line">  <span class="attr">&quot;environment&quot;</span><span class="punctuation">:</span> <span class="string">&quot;release&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。debug, test, stage, release</span></span><br><span class="line">  <span class="attr">&quot;source&quot;</span><span class="punctuation">:</span> <span class="string">&quot;monitoringtool:cloudvendor:central-region-dc-01:852559987:cluster/api-stats-prod-003&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。具体标记由运维完成，或者AlertManager的generatorURL</span></span><br><span class="line">  <span class="attr">&quot;severity&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warning&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选，不填默认为 warning。 warning -&gt; P3, error -&gt; P2, critical -&gt; P1</span></span><br><span class="line">  <span class="attr">&quot;urgency&quot;</span><span class="punctuation">:</span> <span class="string">&quot;low&quot;</span><span class="punctuation">,</span> <span class="comment">// 可选。告警紧急性。不填，则会根据 severity 自动生成 (warning -&gt; low, error -&gt; high, critical -&gt; high)</span></span><br><span class="line">  ... <span class="comment">// 其余业务告警字段和内容可自行组织，但不要和已有的字段冲突</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="组织策略说明"><a href="#组织策略说明" class="headerlink" title="组织策略说明"></a>组织策略说明</h2><ul>
+<li><p>优先级配置和说明</p>
+<ul>
+<li><p>管理员创建团队后，默认会有5个级别，严重性从高到低分别为 P1-P5，只有管理员有权限进行相关配置。</p>
+</li>
+<li><p>优先级 ID 在接口调用时可不填入，配置服务时可提供默认优先级。但在需要手动升级告警或明确高优先级告警时，应填入对应的优先级ID。</p>
+</li>
+<li><p>优先级 ID 可以通过接口查看</p>
+</li>
+<li><pre><code class="bash">curl -X GET \
+  -H &#39;Authorization: Token token=你的API_KEY&#39; \
+  -H &#39;Accept: application/vnd.pagerduty+json;version=2&#39; \
+  &#39;https://api.pagerduty.com/priorities&#39;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 返回结果为</span><br><span class="line"></span><br><span class="line">* ```json</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;priorities&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;id&quot;: &quot;PLABC123&quot;, // 这个就是需要使用的优先级ID</span><br><span class="line">        &quot;name&quot;: &quot;P1&quot;,</span><br><span class="line">        &quot;description&quot;: &quot;&quot;, // 全局配置后生效</span><br><span class="line">        &quot;self&quot;: &quot;https://&lt;your-subdomain&gt;.pagerduty.com/priorities/PLABC123&quot; // 对应的页面上也可以找到其ID</span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>按业务线拆分不同的 Service</p>
+<ul>
+<li>一个 Service 只对应一个主责团队，避免多人模糊响应。</li>
+<li>每个主责团队负责人必须留电话，以避免告警升级后通知不及时。</li>
+</ul>
+</li>
+<li><p>告警应按严重性分流</p>
+<ul>
+<li>P1（致命故障） → 直接打电话 &#x2F; App 推送 → 一级值班 → 立即升级<ul>
+<li>立即电话通知，10 分钟内响应</li>
+</ul>
+</li>
+<li>P2（重大功能异常） → 常规值班 → 超时升级到二级值班<ul>
+<li>值班表内 30 分钟响应</li>
+</ul>
+</li>
+<li>P3（非紧急） → 仅 邮件提醒，不打扰值班<ul>
+<li>工作日内处理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>设置默认兜底策略</p>
+<ul>
+<li>建立一个“平台级响应“的兜底升级策略，防止告警“掉地上”无人响应</li>
+<li>如果告警匹配不到任何业务的策略 → 自动丢到兜底值班组</li>
+</ul>
+</li>
+<li><p>P1 告警升级链要尽量短（&lt;30 分钟到管理层）</p>
+<ul>
+<li>暂定最多3个层级的告警升级链。值班人 -&gt; 主责团队负责人 -&gt; 管理层</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AE%89%E5%85%A8/" class="category-chain-item">安全</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%AE%89%E5%85%A8/" class="print-no-link">#安全</a>
+      
+        <a href="/tags/PagerDuty/" class="print-no-link">#PagerDuty</a>
+      
+        <a href="/tags/%E5%91%8A%E8%AD%A6/" class="print-no-link">#告警</a>
+      
+        <a href="/tags/%E8%BF%90%E7%BB%B4/" class="print-no-link">#运维</a>
+      
+        <a href="/tags/%E5%91%8A%E8%AD%A6%E6%96%B9%E6%A1%88/" class="print-no-link">#告警方案</a>
+      
+        <a href="/tags/AlertManager/" class="print-no-link">#AlertManager</a>
+      
+        <a href="/tags/WebHook/" class="print-no-link">#WebHook</a>
+      
+        <a href="/tags/PD-CEF/" class="print-no-link">#PD-CEF</a>
+      
+        <a href="/tags/oncall/" class="print-no-link">#oncall</a>
+      
+        <a href="/tags/%E5%8D%87%E7%BA%A7%E7%AD%96%E7%95%A5/" class="print-no-link">#升级策略</a>
+      
+        <a href="/tags/%E5%80%BC%E7%8F%AD/" class="print-no-link">#值班</a>
+      
+        <a href="/tags/%E7%B4%A7%E6%80%A5%E5%93%8D%E5%BA%94/" class="print-no-link">#紧急响应</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

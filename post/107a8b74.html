@@ -1,0 +1,803 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="背景 标准化的编码规范指导文档，希望整体编码风格能够趋近统一，便于项目维护、提高代码审核效率。  本文档主要内容是翻译（拼接、修改、裁剪）了 golang 官方及 Uber 的编码规范。  基本指导原则为：SOLID（单一功能、开闭原则、里氏替换、接口隔离以及依赖反转）。  建议把 go lint 和 go vet 在开发阶段都使用起来，目前已经有特别多低级错误的校验特性，已被验证为最佳实践之一。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang项目编码规范">
+<meta property="og:url" content="https://billzong.github.io/post/107a8b74.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="背景 标准化的编码规范指导文档，希望整体编码风格能够趋近统一，便于项目维护、提高代码审核效率。  本文档主要内容是翻译（拼接、修改、裁剪）了 golang 官方及 Uber 的编码规范。  基本指导原则为：SOLID（单一功能、开闭原则、里氏替换、接口隔离以及依赖反转）。  建议把 go lint 和 go vet 在开发阶段都使用起来，目前已经有特别多低级错误的校验特性，已被验证为最佳实践之一。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-12T14:33:00.000Z">
+<meta property="article:modified_time" content="2026-08-13T09:36:50.991Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="guide">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>golang项目编码规范 - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 25vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="golang项目编码规范"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">golang项目编码规范</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
+<li><p>标准化的编码规范指导文档，希望整体编码风格能够趋近统一，便于项目维护、提高代码审核效率。</p>
+</li>
+<li><p>本文档主要内容是翻译（拼接、修改、裁剪）了 <code>golang</code> 官方及 <code>Uber</code> 的编码规范。</p>
+</li>
+<li><p>基本指导原则为：SOLID（单一功能、开闭原则、里氏替换、接口隔离以及依赖反转）。</p>
+</li>
+<li><p>建议把 <code>go lint</code> 和 <code>go vet</code> 在开发阶段都使用起来，目前已经有特别多低级错误的校验特性，已被验证为最佳实践之一。</p>
+</li>
+<li><p>另外，强烈推荐你阅读最后的参考资料，以确保你真正理解了这些规定的根本原因。</p>
+</li>
+</ul>
+<hr>
+<h2 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h2><ul>
+<li><p>不用纠结缩进，直接使用 <code>gofmt</code> 统一风格即可。</p>
+</li>
+<li><p>（在保存时自动）使用 <code>goimports</code> 组织包引用关系。</p>
+<ul>
+<li>自动分组为系统、第三方（包括当前项目），也会去除不使用的包引用。</li>
+</ul>
+</li>
+<li><p>列长度限制。</p>
+<ul>
+<li>个人自由。考虑到各 IDE 差异性，建议 <code>120</code> 字符为换行标准。</li>
+</ul>
+</li>
+<li><p>少用括号。</p>
+</li>
+</ul>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><ul>
+<li>公共包及核心功能必须提供注释。<ul>
+<li>必须注释的内容包括：<code>package</code>, 公开的 <code>interface</code> | <code>enum</code> | <code>struct</code> | <code>func</code> 等。</li>
+<li>符合 <code>godoc</code> 注释标准。</li>
+<li>接口可使用 <code>swagger</code>  注释标准。</li>
+<li>方便团队其它童鞋阅读及使用。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// Compile parses a regular expression and returns, if successful,</span><br><span class="line">// a Regexp that can be used to match against text.</span><br><span class="line">func Compile(str string) (*Regexp, error) &#123;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h2><h3 id="Package"><a href="#Package" class="headerlink" title="Package"></a>Package</h3><ul>
+<li>纯小写、无特殊符号；简短、符合OOP语意。</li>
+<li>建议：使用源文件的目录名。例如 目录为 <code>src/encoding/base64</code>， 包名建议为 <code>encoding</code> 和 <code>base64</code>。</li>
+<li>包内内容语意上已包含了包名本身，所以不需要重复。例如： <code>bufio.BufReader</code> 建议修改为 <code>bufio.Reader</code>。</li>
+<li>明确不导出的方法、类型、字段一律使用小写开头。</li>
+</ul>
+<h3 id="Getter"><a href="#Getter" class="headerlink" title="Getter"></a>Getter</h3><ul>
+<li>没必要使用 <code>GetXxx()</code>，使用 <code>Xxx()</code>。</li>
+</ul>
+<h3 id="Interface"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</h3><ul>
+<li>建议使用 <code>-er</code> 结尾，例如 <code>type Reader interface&#123;&#125;</code>, <code>type CloseNotifier interface&#123;&#125;</code>。</li>
+<li>接口内容明确，如果存在多种行为，可以 考虑使用 <code>embed</code> 到一块。如<code>io.ReadWriter</code>, <code>io.ReadCloser</code>。</li>
+<li>使用 <code>String()</code> 而不是 <code>ToString()</code>。其它转换方法同理。</li>
+</ul>
+<h3 id="驼峰式命名"><a href="#驼峰式命名" class="headerlink" title="驼峰式命名"></a>驼峰式命名</h3><ul>
+<li>默认标准。</li>
+</ul>
+<hr>
+<h2 id="分号"><a href="#分号" class="headerlink" title="分号"></a>分号</h2><ul>
+<li><p>能不用则不用，能换行就不要使用分号将语句拼到一块。</p>
+</li>
+<li><p><code>if i &lt; f() &#123;</code> 花括号与表达式在同一行。<code>gofmt</code> 会检查它们。</p>
+</li>
+</ul>
+<h2 id="控制结构"><a href="#控制结构" class="headerlink" title="控制结构"></a>控制结构</h2><h3 id="if"><a href="#if" class="headerlink" title="if"></a>if</h3><ul>
+<li>尽快返回，避免过度嵌套。</li>
+<li>尽可能在判断条件中创建变量，以减少其作用范围。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">f, err := os.Open(name)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line">d, err := f.Stat()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    f.Close()</span><br><span class="line">    <span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line">codeUsing(f, d)</span><br></pre></td></tr></table></figure>
+
+<h3 id="重新声明-x2F-分配变量"><a href="#重新声明-x2F-分配变量" class="headerlink" title="重新声明&#x2F;分配变量"></a>重新声明&#x2F;分配变量</h3><ul>
+<li>变量覆盖前，要进行处理。<code>go vet</code> 会检查该项目。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">f, err := os.Open(name)</span><br><span class="line">handle(err)</span><br><span class="line">d, err := f.Stat()</span><br><span class="line">handle(err)</span><br></pre></td></tr></table></figure>
+
+<h3 id="for"><a href="#for" class="headerlink" title="for"></a>for</h3><ul>
+<li>注意 <code>for range</code> 使用的元素是（浅）拷贝而不是原对象。<ul>
+<li>所以如果对象为切片、数组时，复杂的元素应尽量使用指针：考虑性能（减少拷贝）、有可能在循环中修改元素。</li>
+<li>如果在循环中进行了数据拷贝，需要注意深浅拷贝问题。</li>
+</ul>
+</li>
+<li>多重循环或 <code>for switch</code> 嵌套流程，使用 <code>label</code> 来跳出整个大循环。</li>
+</ul>
+<h3 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h3><ul>
+<li>尽量少使用 <code>switch</code>，更不要提超长的 <code>if ... else  if ... else</code>  控制流程。</li>
+<li>如果 <code>switch</code> 表达式中包含复杂的逻辑，说明代码结构需要重新设计了。</li>
+</ul>
+<h3 id="type-switch"><a href="#type-switch" class="headerlink" title="type switch"></a>type switch</h3><ul>
+<li>类型判断时已生成对应的 <code>downcasting</code> 对象，可直接在表达式使用。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> t := t.(<span class="keyword">type</span>) &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="type">bool</span>:</span><br><span class="line">    fmt.Printf(<span class="string">&quot;boolean %t\n&quot;</span>, t)             <span class="comment">// t has type bool</span></span><br><span class="line"><span class="keyword">case</span> *<span class="type">bool</span>:</span><br><span class="line">    fmt.Printf(<span class="string">&quot;pointer to boolean %t\n&quot;</span>, *t) <span class="comment">// t has type *bool</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h2><h3 id="多返回值"><a href="#多返回值" class="headerlink" title="多返回值"></a>多返回值</h3><ul>
+<li>少用 <code>naked return</code>。<ul>
+<li>API 描述上啰嗦，直接 <code>return</code> 很突兀，特别是存在不同组合的返回结果时难以确认正确结果。</li>
+<li>如果返回结果很多，说明需要重新设计，而不是往上继续累变量名来打补丁。</li>
+</ul>
+</li>
+</ul>
+<p>不好的示例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(n *Node)</span></span> Parent1() (node *Node) &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(n *Node)</span></span> Parent2() (node *Node, err <span class="type">error</span>) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>良好的示例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(n *Node)</span></span> Parent1() *Node &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(n *Node)</span></span> Parent2() (*Node, <span class="type">error</span>) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h3><ul>
+<li>成功初始化后，应立刻使用 <code>defer</code> 释放资源。</li>
+</ul>
+<hr>
+<h3 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h3><h3 id="new-分配"><a href="#new-分配" class="headerlink" title="new() 分配"></a>new() 分配</h3><ul>
+<li>new() 不做初始化，不做初始化，不做初始化。</li>
+</ul>
+<h3 id="构造函数与Composite-Literals"><a href="#构造函数与Composite-Literals" class="headerlink" title="构造函数与Composite Literals"></a>构造函数与Composite Literals</h3><ul>
+<li>基本语法：<code>&amp;StructName &#123;Name1: val1&#125;</code>。<ul>
+<li>简洁明确，最常使用。</li>
+<li>跟 new() 一样，不设置的 <code>filed</code> 为’零值‘。</li>
+</ul>
+</li>
+</ul>
+<h3 id="make"><a href="#make" class="headerlink" title="make()"></a>make()</h3><ul>
+<li>如果明确切片、数组的大小及初始化内容，可直接设置 capacity，以减少重复分配空间。<ul>
+<li><code>s := make([]int, 100)</code>，再使用 <code>for i :=0; i &lt; len(s); i++ &#123;&#125;</code> 来完成设置。</li>
+<li><code>s := make([]int, 0, 100)</code> 使用’零值‘，这种用法也是可以接受的。</li>
+</ul>
+</li>
+<li>使用 <code>map</code> 时尽量指明 <code>capacity</code>，以减少重复分配空间。<ul>
+<li><code>m := make(map[string]string, 10)</code>。</li>
+<li>如果不确定初始大小，则应写成：<code>m := make([string]string)</code>，而不是 &#96;&#96;m :&#x3D; make([string]string, 0)&#96;。</li>
+</ul>
+</li>
+</ul>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><ul>
+<li>数组是值类型，是值类型，是值类型。</li>
+<li>数组的长度也是类型的一部分，所以 <code>[2]int</code> 不能赋值给 <code>[3]int</code>。</li>
+<li>较少使用，一般使用 <code>alias</code> 标识为具体类型，例如：<code>md5</code>, <code>hash</code>。</li>
+</ul>
+<h3 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h3><ul>
+<li>传递切片时传的是值，传的是值，传的是值。<ul>
+<li>如果需要变更入参的切片，使用其指针。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><ul>
+<li>使用  <code>, ok</code> 语法判断 key 对象是否存在，不要直接使用未确认的内容。</li>
+<li>移除对象建议使用 <code>delete(map, key)</code> 方法。</li>
+</ul>
+<hr>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><h3 id="常数"><a href="#常数" class="headerlink" title="常数"></a>常数</h3><ul>
+<li>枚举从 1 开始，除非’零值‘有明确的意义。</li>
+<li>全局相关的常量建议组织到一块，同理也适用于变量。</li>
+</ul>
+<hr>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><h3 id="指针-VS-值"><a href="#指针-VS-值" class="headerlink" title="指针 VS. 值"></a>指针 VS. 值</h3><p>接收者(receiver)到底应该使用指针还是值，有一些基本的指导原则：</p>
+<ul>
+<li>如果 receiver 是 map，function  或 chan，不要使用指向它们的指针。如果接收方是 slice，并且该方法未重新切片或重新分配切片，不要使用指向该切片的指针（以免让使用者误解）。</li>
+<li>如果该方法需要更改 receiver，则 receiver 必须是指针。</li>
+<li>如果 receiver 是包含 <code>sync.Mutex</code> 或者类似的 同步字段 的结构，则 receiver 必须是一个指针以避免复制。</li>
+<li>如果 receiver 是大型结构或数组（&gt;&#x3D;5个字段|元素），则指针接收器效率更高。</li>
+<li>如果 receiver 是 struct，array 或 slice，并且其任何元素都是指向可能正在变异的对象的指针，则最好使用指针，因为它将使读者更加清楚意图。</li>
+<li>如果 receiver 是一个很小的数组或结构，没有可变字段且没有指针，或者只是一个简单的基本类型（如int或string），建议使用值 receiver，可以减少可以生成的垃圾数量（栈分配 vs. 堆分配）。</li>
+<li><strong>如果不想了解以上复杂的规则，那么就使用指针接收器。</strong></li>
+</ul>
+<hr>
+<h2 id="interfaces与其他类型"><a href="#interfaces与其他类型" class="headerlink" title="interfaces与其他类型"></a>interfaces与其他类型</h2><h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><ul>
+<li>类型转换时，应尽量避免拷贝。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Sequence []<span class="type">int</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Method for printing - sorts the elements before printing</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s Sequence)</span></span> String() <span class="type">string</span> &#123;</span><br><span class="line">  s = s.Copy() <span class="comment">// 必须拷贝，否则会更改原来的切片内容</span></span><br><span class="line">  sort.IntSlice(s).Sort() <span class="comment">// 类型转换，必要性不大</span></span><br><span class="line">	<span class="keyword">return</span> fmt.Sprint([]<span class="type">int</span>(s)) <span class="comment">// 类型转换，减少拷贝</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="interface与方法"><a href="#interface与方法" class="headerlink" title="interface与方法"></a>interface与方法</h3><p>一个简易HTTP（GET）服务器的各种写法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;net/http&quot;</span></span><br><span class="line">...</span><br><span class="line">ctr := <span class="built_in">new</span>(Counter)</span><br><span class="line">http.Handle(<span class="string">&quot;/counter&quot;</span>, ctr)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问次数计数</span></span><br><span class="line"><span class="keyword">type</span> Counter <span class="keyword">struct</span> &#123;</span><br><span class="line">    n <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(ctr *Counter)</span></span> ServeHTTP(w http.ResponseWriter, req *http.Request) &#123;</span><br><span class="line">    ctr.n++</span><br><span class="line">    fmt.Fprintf(w, <span class="string">&quot;counter = %d\n&quot;</span>, ctr.n)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 整形 ---</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Counter <span class="type">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(ctr *Counter)</span></span> ServeHTTP(w http.ResponseWriter, req *http.Request) &#123;</span><br><span class="line">    *ctr++</span><br><span class="line">    fmt.Fprintf(w, <span class="string">&quot;counter = %d\n&quot;</span>, *ctr)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ---</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// A channel that sends a notification on each visit.</span></span><br><span class="line"><span class="comment">// (Probably want the channel to be buffered.)</span></span><br><span class="line"><span class="keyword">type</span> Chan <span class="keyword">chan</span> *http.Request</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(ch Chan)</span></span> ServeHTTP(w http.ResponseWriter, req *http.Request) &#123;</span><br><span class="line">    ch &lt;- req</span><br><span class="line">    fmt.Fprint(w, <span class="string">&quot;notification sent&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 函数式写法 ---</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// The HandlerFunc type is an adapter to allow the use of</span></span><br><span class="line"><span class="comment">// ordinary functions as HTTP handlers.  If f is a function</span></span><br><span class="line"><span class="comment">// with the appropriate signature, HandlerFunc(f) is a</span></span><br><span class="line"><span class="comment">// Handler object that calls f.</span></span><br><span class="line"><span class="keyword">type</span> HandlerFunc <span class="function"><span class="keyword">func</span><span class="params">(ResponseWriter, *Request)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ServeHTTP calls f(w, req).</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f HandlerFunc)</span></span> ServeHTTP(w ResponseWriter, req *Request) &#123;</span><br><span class="line">    f(w, req)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Argument server.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ArgServer</span><span class="params">(w http.ResponseWriter, req *http.Request)</span></span> &#123;</span><br><span class="line">    fmt.Fprintln(w, os.Args)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http.Handle(<span class="string">&quot;/args&quot;</span>, http.HandlerFunc(ArgServer))</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="内嵌"><a href="#内嵌" class="headerlink" title="内嵌"></a>内嵌</h2><ul>
+<li>内嵌类型放到结构体最上方，以明确其组合结构。<ul>
+<li>注意：同名方法会覆盖同名字段。</li>
+</ul>
+</li>
+<li>尽量不要内嵌结构。<ul>
+<li>根据 OOP 设计的原则，屏蔽内部（底层）实现细节会让代码结构更灵活也更健壮。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><h3 id="Share-By-Communicating"><a href="#Share-By-Communicating" class="headerlink" title="Share By Communicating"></a>Share By Communicating</h3><ul>
+<li><em>Do not communicate by sharing memory; instead, share memory by communicating.</em></li>
+</ul>
+<h3 id="goroutiens"><a href="#goroutiens" class="headerlink" title="goroutiens"></a>goroutiens</h3><ul>
+<li>注意其生命周期，特别是跟 <code>chan</code> 结合使用的时候。<ul>
+<li>如果内部有 <code>chan</code> 阻塞，那么 <code>grouting</code> 便不会被 <code>GC</code> 回收。</li>
+<li>如果不能简单地使用它，那么需要在文档或注释中说明。</li>
+</ul>
+</li>
+</ul>
+<h3 id="channel"><a href="#channel" class="headerlink" title="channel"></a>channel</h3><ul>
+<li>使用无缓冲 <code> chan</code> 或者只有一个缓冲的 <code>chan</code>，这种用例已经足够满足绝大部分负载性能需求。<ul>
+<li>如果使用超过一个缓冲的 <code>chan</code>，可能在设计层面上需要重新考虑通道的使用边界、竞态模型，以及相关逻辑。</li>
+</ul>
+</li>
+<li>等待 空<code>chan</code> 时，永远处于阻塞状态。<ul>
+<li>很常见的低级错误。</li>
+</ul>
+</li>
+</ul>
+<h3 id="并行计算"><a href="#并行计算" class="headerlink" title="并行计算"></a>并行计算</h3><ul>
+<li>需要使用到并行计算时，要求计算必须可拆分成独立计算单元，相互间没有任何依赖。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numCPU = runtime.GOMAXPROCS(<span class="number">0</span>) <span class="comment">// Use all the cpus that go proc can have</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v Vector)</span></span> DoAll(u Vector) &#123;</span><br><span class="line">    c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, numCPU)  <span class="comment">// Buffering optional but sensible.</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; numCPU; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> v.DoSome(i*<span class="built_in">len</span>(v)/numCPU, (i+<span class="number">1</span>)*<span class="built_in">len</span>(v)/numCPU, u, c)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Drain the channel.</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; numCPU; i++ &#123;</span><br><span class="line">        &lt;-c    <span class="comment">// wait for one task to complete</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// All done.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="一个泄漏缓冲示例"><a href="#一个泄漏缓冲示例" class="headerlink" title="一个泄漏缓冲示例"></a>一个泄漏缓冲示例</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> freeList = <span class="built_in">make</span>(<span class="keyword">chan</span> *Buffer, <span class="number">100</span>)</span><br><span class="line"><span class="keyword">var</span> serverChan = <span class="built_in">make</span>(<span class="keyword">chan</span> *Buffer)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">client</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> b *Buffer</span><br><span class="line">        <span class="comment">// Grab a buffer if available; allocate if not.</span></span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> b = &lt;-freeList:</span><br><span class="line">            <span class="comment">// Got one; nothing more to do.</span></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="comment">// None free, so allocate a new one.</span></span><br><span class="line">            b = <span class="built_in">new</span>(Buffer)</span><br><span class="line">        &#125;</span><br><span class="line">        load(b)              <span class="comment">// Read next message from the net.</span></span><br><span class="line">        serverChan &lt;- b      <span class="comment">// Send to server.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">server</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        b := &lt;-serverChan    <span class="comment">// Wait for work.</span></span><br><span class="line">        process(b)</span><br><span class="line">        <span class="comment">// Reuse buffer if there&#x27;s room.</span></span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> freeList &lt;- b:</span><br><span class="line">            <span class="comment">// Buffer on free list; nothing more to do.</span></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="comment">// Free list full, just carry on.</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h2><p>返回错误时，思考路径如下：</p>
+<ul>
+<li>这是一个不需要额外信息的简单错误吗？<ul>
+<li>是的。<a target="_blank" rel="noopener" href="https://golang.org/pkg/errors/#New"><code>errors.New</code></a> 足够了。</li>
+</ul>
+</li>
+<li>客户需要检测并处理此错误吗？<ul>
+<li>是的。使用自定义类型并实现该 <code>Error()</code> 方法。</li>
+</ul>
+</li>
+<li>是否正在传播下游函数*(downstream function)*返回的错误？<ul>
+<li>是的。使用 <a target="_blank" rel="noopener" href="https://godoc.org/github.com/pkg/errors#Wrap">“pkg&#x2F;errors”.Wrap</a>。</li>
+</ul>
+</li>
+<li>否则，使用  <a target="_blank" rel="noopener" href="https://golang.org/pkg/fmt/#Errorf"><code>fmt.Errorf</code></a>。</li>
+</ul>
+<h3 id="panic"><a href="#panic" class="headerlink" title="panic"></a>panic</h3><ul>
+<li>不要在业务代码或库里使用 <code>panic</code>。</li>
+</ul>
+<h3 id="recover"><a href="#recover" class="headerlink" title="recover"></a>recover</h3><ul>
+<li><code>recover</code> 不是错误处理机制。<ul>
+<li>如果你的程序不需要常驻伺服，那么让他接受 <code>panic</code> 信息退出会更合理一些。</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/uber-go/guide/blob/master/style.md">Uber Go Style Guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://golang.org/doc/effective_go.html">Effective Go</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/golang/go/wiki/CodeReviewComments">Go Code Review Comments</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/go-design-patterns/9781786466204/">Go Design Pattern</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Golang/" class="category-chain-item">Golang</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/golang/" class="print-no-link">#golang</a>
+      
+        <a href="/tags/guide/" class="print-no-link">#guide</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
