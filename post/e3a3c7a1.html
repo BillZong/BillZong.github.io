@@ -1,0 +1,750 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。 目录 BPE算法  概念与核心原理 推荐的Golang库 在Embedding阶段的作用 常见坑点   WordPiece 算法  概念与核心原理 推荐的Golang库 在Embedd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BPE 算法基本原理和应用剖析">
+<meta property="og:url" content="https://billzong.github.io/post/e3a3c7a1.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。 目录 BPE算法  概念与核心原理 推荐的Golang库 在Embedding阶段的作用 常见坑点   WordPiece 算法  概念与核心原理 推荐的Golang库 在Embedd">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-08-24T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-24T09:44:19.033Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="BPE">
+<meta property="article:tag" content="WordPiece">
+<meta property="article:tag" content="Unigram">
+<meta property="article:tag" content="NLP">
+<meta property="article:tag" content="分词">
+<meta property="article:tag" content="Tokenizer">
+<meta property="article:tag" content="Embedding">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>BPE 算法基本原理和应用剖析 - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":false,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 25vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="BPE 算法基本原理和应用剖析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">BPE 算法基本原理和应用剖析</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><p><a href="#BPE算法">BPE算法</a></p>
+<ul>
+<li><a href="#BPE概念与核心原理">概念与核心原理</a></li>
+<li><a href="#BPE推荐的Golang库">推荐的Golang库</a></li>
+<li><a href="#BPE在Embedding阶段的作用">在Embedding阶段的作用</a></li>
+<li><a href="#BPE常见坑点">常见坑点</a></li>
+</ul>
+</li>
+<li><p><a href="#WordPiece-算法">WordPiece 算法</a></p>
+<ul>
+<li><a href="#WP概念与核心原理">概念与核心原理</a></li>
+<li><a href="#WP推荐的Golang库">推荐的Golang库</a></li>
+<li><a href="#WP在Embedding阶段的作用">在Embedding阶段的作用</a></li>
+<li><a href="#WP常见坑点">常见坑点</a></li>
+</ul>
+</li>
+<li><p><a href="#UnigramLanguageModel算法">UnigramLanguageModel算法</a></p>
+<ul>
+<li><a href="#ULM概念与核心原理">概念与核心原理</a></li>
+<li><a href="#ULM推荐的Golang库">推荐的Golang库</a></li>
+<li><a href="#ULM在Embedding阶段的作用">在Embedding阶段的作用</a></li>
+<li><a href="#ULM常见坑点">常见坑点</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="BPE算法"><a href="#BPE算法" class="headerlink" title="BPE算法"></a>BPE算法</h2><h3 id="BPE概念与核心原理"><a href="#BPE概念与核心原理" class="headerlink" title="BPE概念与核心原理"></a>BPE概念与核心原理</h3><ul>
+<li><p>概念：BPE 最初是一种数据压缩算法，后来被引入自然语言处理（NLP）领域。它的核心思想是：<strong>从字符级（或字节级）开始，迭代地将最常出现的字符对（或词素对）合并为一个新的子词，直到达到预设的词表大小（Vocabulary Size）。</strong></p>
+</li>
+<li><p>核心工作原理：</p>
+<ul>
+<li><strong>初始化</strong>：将训练语料拆分为单个字符（或字节），并在每个单词末尾添加结束符（如 <code>&lt;/w&gt;</code>），统计所有字符的频次。此时，基础词表只包含单个字符。</li>
+<li><strong>统计频次</strong>：统计语料中相邻字符对（Pair）的出现频次。</li>
+<li><strong>合并最高频对</strong>：找出频次最高的一对（例如 <code>e</code> 和 <code>s</code> 组合成 <code>es</code>），将它们合并为一个新的子词，并加入词表。</li>
+<li><strong>循环迭代</strong>：重复上述“统计-合并”步骤，直到<strong>词表达到指定大小</strong>（如 32,000 或 50,257）或<strong>最高频次低于阈值</strong>。</li>
+<li><strong>推理分词（Tokenization）</strong>：当新文本输入时，分词器会按照训练时记录的<strong>合并规则顺序</strong>，由粗到细地将文本拆分为词表已有的最大子词。</li>
+</ul>
+</li>
+</ul>
+<h3 id="BPE推荐的Golang库"><a href="#BPE推荐的Golang库" class="headerlink" title="BPE推荐的Golang库"></a>BPE推荐的Golang库</h3><p>在 Go 语言生态中，实现或兼容主流大模型 BPE 分词的优秀开源库包括：</p>
+<ul>
+<li><strong><a target="_blank" rel="noopener" href="https://github.com/pkoukk/tiktoken-go">tiktoken-go&#x2F;tiktoken</a></strong><ul>
+<li><strong>特点</strong>：纯 Go 实现的 OpenAI <code>tiktoken</code> 库的高性能克隆版本。</li>
+<li><strong>适用场景</strong>：完全兼容 GPT-3.5、GPT-4 等模型的 <code>cl100k_base</code> 或 <code>o200k_base</code> 编码，适合开发 OpenAI 相关的应用、Prompt 长度计算及 RAG 系统。</li>
+</ul>
+</li>
+<li><strong><a target="_blank" rel="noopener" href="https://github.com/daulet/tokenizers">daulet&#x2F;tokenizers</a></strong><ul>
+<li><strong>特点</strong>：对 Hugging Face 官方 Rust 版本 <code>tokenizers</code> 的 Go 语言绑定（通过 CGO）。</li>
+<li><strong>适用场景</strong>：需要加载 LLaMA、BERT、CLIP 等主流开源模型的 <code>tokenizer.json</code> 文件。性能极高，但依赖 CGO 交叉编译稍显复杂。</li>
+</ul>
+</li>
+<li><strong><a target="_blank" rel="noopener" href="https://github.com/sugarme/tokenizer">sugarme&#x2F;tokenizer</a></strong><ul>
+<li><strong>特点</strong>：纯 Go 实现的 Hugging Face tokenizers 替代品。</li>
+<li><strong>适用场景</strong>：不想使用 CGO，且需要对标准 BPE、WordPiece 算法进行微调或本地训练的场景。</li>
+</ul>
+</li>
+</ul>
+<h3 id="BPE在Embedding阶段的作用"><a href="#BPE在Embedding阶段的作用" class="headerlink" title="BPE在Embedding阶段的作用"></a>BPE在Embedding阶段的作用</h3><p>在深度学习模型（如 Transformer）中，文本无法直接输入网络，必须经过 BPE 分词和 Embedding 两个阶段的衔接：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">原始文本 ➔ [ BPE Tokenizer ] ➔ Token IDs (整数) ➔ [ Embedding Lookup Table ] ➔ 稠密向量 (Float)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>映射离散符号到索引（Token IDs）</strong>：BPE 将文本切割为子词后，将每个子词转换为词表中唯一的整数索引（ID）。Embedding 层正是利用这些 ID 作为<strong>查找表的索引</strong>（Lookup Table）。</li>
+<li><strong>彻底解决 OOV（Out-of-Vocabulary，词表外）问题</strong>：传统的全词分词（Word-level）遇到未见过的词会映射为 <code>[UNK]</code>，丢失语义。BPE 的基础词表包含所有单字符&#x2F;字节，任何罕见词或生僻词（如 <code>Hyperthyroidism</code>）都会被拆解为已知子词（如 <code>Hyper</code> + <code>thyroid</code> + <code>ism</code>），确保<strong>任何文本都能被映射到 Embedding 向量</strong>。</li>
+<li><strong>计算效率与语义表征的平衡</strong>：<ul>
+<li>如果用字符级 Embedding：序列过长，模型注意力机制（Attention）计算量爆炸，且单个字符缺乏语义。</li>
+<li>如果用全词级 Embedding：词表巨大（几百万），导致 Embedding 矩阵极度稀疏，占用海量显存。</li>
+<li><strong>BPE 的作用</strong>：用较小的词表（如 5W 左右）实现了高压缩率，缩短了输入 Embedding 的序列长度，提升了计算效率，同时保留了前缀、后缀等形态学语义。</li>
+</ul>
+</li>
+</ol>
+<h3 id="BPE常见坑点"><a href="#BPE常见坑点" class="headerlink" title="BPE常见坑点"></a>BPE常见坑点</h3><ol>
+<li><p>字节级 BPE（BBPE）中的无效 UTF-8 截断坑</p>
+<ul>
+<li><p><strong>坑点</strong>：现代 BPE（如 GPT 采用的 Byte-level BPE）直接对底层字节（0-255）进行合并。如果文本在不恰当的位置被截断（例如在 RAG 分块、日志截断或滑动窗口中），一个多字节的中文字符（如 UTF-8 占 3 字节）可能被切成两半，产生<strong>非法的 UTF-8 序列</strong>。这会导致 Embedding 阶段查找出错误的 Token ID，产生乱码或模型幻觉。</p>
+</li>
+<li><p><strong>避坑指南</strong>：在进行文本切片（Chunking）时，<strong>必须先在字符串（Rune&#x2F;字符）层面进行切分</strong>，确保边界完整，再送入 Tokenizer；或者使用专门支持安全字节解码的 Tokenizer 库，在拼接回文本时使用 <code>strings.ToValidUTF8</code> 进行清洗。</p>
+</li>
+</ul>
+</li>
+<li><p>空格与特殊字符流失（Whitespace Artifacts）</p>
+<ul>
+<li><p><strong>坑点</strong>：BPE 算法高度依赖空格作为边界处理（例如 GPT 会将空格视为 Token 的一部分，如 <code> Ġword</code>）。如果在前处理阶段误删了连续空格、换行符（<code>\n</code>）或制表符（<code>\t</code>），会导致分词结果大相径庭，进而导致 Embedding 向量偏离原始语意。</p>
+</li>
+<li><p><strong>避坑指南</strong>：严格保持原始输入文本的干净与完整。在文本清洗阶段，<strong>不要盲目使用 <code>strings.ReplaceAll(text, &quot; &quot;, &quot;&quot;)</code> 剔除所有空格</strong>，必须与模型训练时的预处理（Pre-tokenization）规则保持绝对一致。</p>
+</li>
+</ul>
+</li>
+<li><p>词表不匹配导致 Embedding 错乱</p>
+<ul>
+<li><p><strong>坑点</strong>：不同模型（如 LLaMA-3、GPT-4、Gemma）的 BPE 词表和合并规则完全不同。误用 A 模型的 Tokenizer 转出的 ID 传给 B 模型的 Embedding 层，系统不会报错（因为 ID 范围可能重叠），但<strong>输出的向量语义会完全风马牛不相及</strong>。</p>
+</li>
+<li><p><strong>避坑指南</strong>：实行严格的<strong>“分词器-模型一对一绑定”</strong>。在 Go 架构设计中，将 Tokenizer 实例与 Embedding Model 配置封装在同一个结构体中，禁止跨模型复用分词组件。</p>
+</li>
+</ul>
+</li>
+<li><p>OOVs 降级拆分导致的“长序列性能劣化”</p>
+<ul>
+<li><p><strong>坑点</strong>：当遇到大量专业术语、代码、特殊符号或小众语言时，BPE 无法匹配大颗粒子词，会退化将它们拆解为大量的“单字符”或“单字节”。这会导致经 BPE 转换后的 Token IDs 序列<strong>长度激增</strong>。由于 Transformer 的 Attention 复杂度是长度的平方（O(N²)），这会导致 Embedding 后的计算耗时飙升，甚至超过模型的 Max Context Length 限制。</p>
+</li>
+<li><p><strong>避坑指南</strong>：在将 Token IDs 传入后续模型前，<strong>必须在 Go 代码中检查序列长度</strong>（如 <code>len(tokens)</code>），若超出阈值需提前截断或报警。针对特定垂直领域（如医疗、法律、特定编程语言），应选用专门在该语料上二次预训练、扩充过词表的 BPE Tokenizer。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="WordPiece-算法"><a href="#WordPiece-算法" class="headerlink" title="WordPiece 算法"></a>WordPiece 算法</h2><p>WordPiece 是一种自底向上的子词分词算法。它在合并子词时引入了统计学评估，通过最大化语言模型似然度来确保合并后的子词最具信息量。</p>
+<h3 id="WP概念与核心原理"><a href="#WP概念与核心原理" class="headerlink" title="WP概念与核心原理"></a>WP概念与核心原理</h3><ul>
+<li>概念：WordPiece 最初由谷歌用于语音处理，后被广泛应用于 BERT 等双向 Transformer 模型。它在 BPE 的频次统计基础之上，引入了条件概率，专门解决 BPE 盲目合并高频词导致无效子词膨胀的问题。</li>
+<li>核心原理：</li>
+</ul>
+<ol>
+<li>初始化：将所有基本字符和符号放入词表。在非单词开头的子词前添加特殊前缀（如 BERT 中的 ##）。<ol start="2">
+<li>互信息评估：不再只看子词 A 和子词 B 的组合频次 $count(AB)$，而是计算合并后的互信息分数：$\text{Score} &#x3D; \frac{count(AB)}{count(A) \times count(B)}$。</li>
+<li>合并与迭代：这个分数衡量的是“A 和 B 共同出现的概率是否远大于它们各自独立出现的概率”。算法每次只合并分数最高（最分不开）的字符对，直到词表达到预设大小。</li>
+<li>推理（最大前向匹配）：分词时，对整个单词从左到右贪心匹配词表中能找到的最长子词。若匹配到单词内部，则加上 ## 前缀。</li>
+</ol>
+</li>
+</ol>
+<h3 id="WP推荐的Golang库"><a href="#WP推荐的Golang库" class="headerlink" title="WP推荐的Golang库"></a>WP推荐的Golang库</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/daulet/tokenizers">daulet&#x2F;tokenizers</a>：调用 Hugging Face 官方 Rust tokenizers 的 CGO 绑定库。它是目前支持 WordPiece（尤其是 BERT 的 vocab.txt）性能最高、最纯正的 Go 语言通道。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/sugarme/tokenizer">sugarme&#x2F;tokenizer</a>：纯 Go 实现。它内置了 WordPiece 模型组件，适合在需要完全摆脱 CGO 交叉编译依赖的环境下操作。</li>
+</ul>
+<h3 id="WP在Embedding阶段的作用"><a href="#WP在Embedding阶段的作用" class="headerlink" title="WP在Embedding阶段的作用"></a>WP在Embedding阶段的作用</h3><ul>
+<li>形态学特征的语义对齐：通过 ## 前缀，WordPiece 在 Embedding 查找表中将“词根”与“词缀”分离开。例如，embeddings 被切分为 embed + ##ding + ##s。在 Embedding Lookup 时，##ding 和 ##s 的向量能代表动名词和复数的普适特征，显著降低了 Embedding 矩阵对变形词的存储压力。</li>
+<li>确定性的索引映射：与 BPE 类似，每个子词拥有固定的词表 ID，能够直接作为 Embedding 的位置索引，将离散符号转化为连续的稠密向量。</li>
+</ul>
+<h3 id="WP常见坑点"><a href="#WP常见坑点" class="headerlink" title="WP常见坑点"></a>WP常见坑点</h3><ul>
+<li><p>前缀在数据清洗中的“丢失坑”</p>
+<ul>
+<li>坑点：WordPiece 极度依赖 ## 标记来区分子词在单词中的位置（如 un 和 ##un 是完全不同的向量）。在一些做 RAG 或文本后处理的 Go 代码中，研发人员不小心通过正则表达式误删或误改了 ##，会导致整句话在 Embedding 查找时全部错位。</li>
+<li>避坑指南：任何对 Token 数组或分词文本的过滤逻辑，必须将 ## 作为合法字符保留。在转回原始文本时，使用 strings.ReplaceAll(text, “ ##”, “”) 还原空格，而不是直接暴力消除。</li>
+</ul>
+</li>
+<li><p>生僻词退化为大量的单字符（UNK&#x2F;字符激增）</p>
+<ul>
+<li>坑点：经典的 WordPiece（如 BERT 词表）没有采用 Byte-level。当遇到完全不在基础词表内的生僻汉字、特殊 emoji 或乱码时，它会触发 [UNK]（Unknown）机制，或者强行拆解成极碎的单字符，导致输入 Embedding 的序列长度暴增或语义彻底丢失。</li>
+<li>避坑指南：在 Go 管道中，送入 WordPiece 之前先进行 OOV 字符清洗，或使用支持多语言扩展的扩充词表。对超长序列传入 Embedding 层前，务必执行 len(tokens) 截断拦截。</li>
+</ul>
+</li>
+</ul>
+<h2 id="UnigramLanguageModel算法"><a href="#UnigramLanguageModel算法" class="headerlink" title="UnigramLanguageModel算法"></a>UnigramLanguageModel算法</h2><p>Unigram Language Model 是一种基于概率生成模型的自顶向下子词分词算法。它从一个巨大的词表开始，通过不断优化整体语料损失来剔除冗余词。</p>
+<h3 id="ULM概念与核心原理"><a href="#ULM概念与核心原理" class="headerlink" title="ULM概念与核心原理"></a>ULM概念与核心原理</h3><ul>
+<li>概念：与 BPE&#x2F;WordPiece 这种“从小变大”的合并逻辑相反，Unigram 是一种“从大变小”的剪枝算法。它将分词问题转化为一个语言模型优化问题，能够为一段文本提供多种分词路径及其概率。</li>
+<li>核心原理：</li>
+</ul>
+<ol>
+<li>初始化大词表：从语料中提取一个极为庞大的初始词表，包含几乎所有的单词、高频短语和单字符。<ol start="2">
+<li>期望最大化训练（EM 算法）：基于当前的词表概率，计算语料的似然度（Likelihood）。</li>
+<li>计算损失（Loss）：对词表中的每个子词进行评估：假设从词表中删掉这个子词，原本由它组成的句子就必须拆成更碎的子词，这会导致整体语料的似然度下降。似然度下降最少的子词，就是“冗余子词”。</li>
+<li>剪枝迭代：每次剔除掉贡献最小的 10%~20% 的子词，重新训练，直到词表缩减到目标大小。</li>
+<li>推理（Viterbi 算法）：分词时，因为词表中存在多种切分可能，算法利用维特比（Viterbi）算法找出一条概率最大的最佳切分路径。</li>
+</ol>
+</li>
+</ol>
+<h3 id="ULM推荐的Golang库"><a href="#ULM推荐的Golang库" class="headerlink" title="ULM推荐的Golang库"></a>ULM推荐的Golang库</h3><ul>
+<li>google&#x2F;sentencepiece (Go 命令行或 C 绑定)：Unigram 最权威的实现是谷歌的 SentencePiece。在 Go 中通常通过 CGO 绑定其 C++ 核心，或者在数据管道中将其作为独立的微服务调用。</li>
+<li>daulet&#x2F;tokenizers：Hugging Face 的 Rust 核心同样完整实现了 Unigram 算法，通过该库可以完美支持像 T5 这类基于 Unigram 的大模型分词。</li>
+</ul>
+<h3 id="ULM在Embedding阶段的作用"><a href="#ULM在Embedding阶段的作用" class="headerlink" title="ULM在Embedding阶段的作用"></a>ULM在Embedding阶段的作用</h3><ul>
+<li>支持分词正则化（Tokenization Regularization）：这是 Unigram 独有的杀手锏。在 Embedding 训练阶段，它可以依据概率故意输出非最优的次优分词组合。例如，“机器学习”可以 80% 几率切分为 机器&#x2F;学习，20% 几率切分为 机&#x2F;器&#x2F;学&#x2F;习。这样可以强迫 Embedding 层在训练时接触到不同粒度的数据，极大地增强了 Embedding 向量对文本噪声（如同音字、错别字）的抗干扰能力。</li>
+<li>无天然空格语言的端到端对齐：配合 SentencePiece，Unigram 将空格转化为特殊符号 _。在 Embedding 检索中，中英文等不同形态的语言都可以共享同一套统一的基础字节表征，无需前置复杂的第三方分词工具。</li>
+</ul>
+<h3 id="ULM常见坑点"><a href="#ULM常见坑点" class="headerlink" title="ULM常见坑点"></a>ULM常见坑点</h3><ol>
+<li><p>确定性推理与 RAG 检索不匹配的“概率坑”</p>
+<ul>
+<li><p>坑点：由于 Unigram 支持概率分词，如果在构建 RAG 向量知识库（Embedding Indexing） 时开启了随机正则化分词，而在用户提问（Query Inference） 时使用了确定性分词，就会导致同一句话转出的 Token ID 序列完全不同，进而导致向量相似度检索（Vector Search）彻底失效。</p>
+</li>
+<li><p>避坑指南：在数据预处理和推理线上，Go 代码中必须封装两套配置：模型训练&#x2F;微调阶段允许开启 sample_proba &gt; 0 的随机分词；而线上 Embedding 推理、RAG 向量库构建、Token 计数阶段，必须强制关闭随机性，使用确定的最优路径（Viterbi 极大似然结果）。</p>
+</li>
+</ul>
+</li>
+<li><p>Viterbi 动态规划解码的“性能坑”</p>
+<ul>
+<li>坑点：Unigram 分词由于在推理时需要对一句话的所有潜在切分路径进行动态规划计算，其计算复杂度高于 BPE 简单的哈希查表。在 Go 高并发处理海量文本时，可能会成为 CPU 的性能瓶颈。</li>
+<li>避坑指南：在 Go 并发架构中，避免单协程处理超大文本块。充分利用 Go 的 sync.Pool 复用分词器实例，并合理使用 goroutine 将长文本分段并发处理。对于高并发网关，可前置一级 LRU Cache（以原始文本为 Key，以 Token IDs 为 Value）来拦截高频重复文本。</li>
+</ul>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/BPE/" class="print-no-link">#BPE</a>
+      
+        <a href="/tags/WordPiece/" class="print-no-link">#WordPiece</a>
+      
+        <a href="/tags/Unigram/" class="print-no-link">#Unigram</a>
+      
+        <a href="/tags/NLP/" class="print-no-link">#NLP</a>
+      
+        <a href="/tags/%E5%88%86%E8%AF%8D/" class="print-no-link">#分词</a>
+      
+        <a href="/tags/Tokenizer/" class="print-no-link">#Tokenizer</a>
+      
+        <a href="/tags/Embedding/" class="print-no-link">#Embedding</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

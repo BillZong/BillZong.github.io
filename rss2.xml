@@ -15,8 +15,48 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 24 Aug 2026 08:17:33 GMT</pubDate>
+    <pubDate>Mon, 24 Aug 2026 09:44:19 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>BPE 算法基本原理和应用剖析</title>
+      <link>https://billzong.github.io/post/e3a3c7a1.html</link>
+      <guid>https://billzong.github.io/post/e3a3c7a1.html</guid>
+      <pubDate>Mon, 24 Aug 2026 04:00:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。&lt;/p&gt;
+&lt;h2 id=&quot;目录&quot;&gt;&lt;a</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/AI/">AI</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/BPE/">BPE</category>
+      
+      <category domain="https://billzong.github.io/tags/WordPiece/">WordPiece</category>
+      
+      <category domain="https://billzong.github.io/tags/Unigram/">Unigram</category>
+      
+      <category domain="https://billzong.github.io/tags/NLP/">NLP</category>
+      
+      <category domain="https://billzong.github.io/tags/%E5%88%86%E8%AF%8D/">分词</category>
+      
+      <category domain="https://billzong.github.io/tags/Tokenizer/">Tokenizer</category>
+      
+      <category domain="https://billzong.github.io/tags/Embedding/">Embedding</category>
+      
+      
+      <comments>https://billzong.github.io/post/e3a3c7a1.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>SOP 的专业解读</title>
