@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>SOP 的专业解读</title>
+    <link href="/post/fedaaaef.html"/>
+    <url>/post/fedaaaef.html</url>
+    
+    <content type="html"><![CDATA[<p>在管理和工作流程领域，<strong>SOP</strong> 是 <strong>Standard Operating Procedure</strong> 的英文首字母缩写，中文通常翻译为<strong>“标准作业程序”</strong>或<strong>“标准操作流程”</strong>。</p><p>当你在特定领域提到“SOP 是特定领域的知识包”时，它的核心含义可以拆解为以下几点：</p><h2 id="核心定义"><a href="#核心定义" class="headerlink" title="核心定义"></a>核心定义</h2><ul><li><strong>知识沉淀的载体</strong>：SOP 是将某个特定领域内、原本只存在于专家脑海中的<strong>隐性经验</strong>，转化为可复制、可量化的<strong>显性知识包</strong>。</li><li><strong>规范化的操作指南</strong>：它用统一的格式和步骤，明确了在特定场景下“谁、在什么时候、按照什么顺序、做到什么标准”。 [2, 4, 5]</li></ul><h2 id="知识包包含的关键要素"><a href="#知识包包含的关键要素" class="headerlink" title="知识包包含的关键要素"></a>知识包包含的关键要素</h2><p>一个完整的领域 SOP 知识包通常包含以下内容：</p><ul><li><strong>输入与范围</strong>：该流程适用于什么具体场景或业务领域。</li><li><strong>标准执行步骤</strong>：按先后顺序排列的、可拆解的行动步骤。</li><li><strong>质量控制&#x2F;关键控制点（Know-How）</strong>：明确每个步骤的核心要点、容易踩的坑以及量化标准。</li><li><strong>资源与工具</strong>：完成该任务需要调用的模板、表单或软件系统。</li></ul><p>在当前的数字化与人工智能（AI）时代，SOP 知识包也常被直接作为企业<strong>知识库</strong>的核心内容，用于训练 AI Agent（智能体）或帮助新员工快速上手。</p><h2 id="项目启动阶段标准作业程序"><a href="#项目启动阶段标准作业程序" class="headerlink" title="项目启动阶段标准作业程序"></a>项目启动阶段标准作业程序</h2><h2 id="1-文档控制"><a href="#1-文档控制" class="headerlink" title="1. 文档控制"></a>1. 文档控制</h2><ul><li><strong>版本号</strong>：v1.0</li><li><strong>编写&#x2F;所有者</strong>：项目管理办公室 (PMO) &#x2F; 首席项目经理</li><li><strong>适用范围</strong>：公司内部所有跨部门&#x2F;跨职能项目</li><li><strong>更新日期</strong>：2026年8月</li></ul><h2 id="2-目的与前置条件"><a href="#2-目的与前置条件" class="headerlink" title="2. 目的与前置条件"></a>2. 目的与前置条件</h2><ul><li><strong>目的</strong>：明确项目目标、范围、里程碑及团队分工，确保所有利益相关者（Stakeholders）达成共识，顺利推进项目开工。</li><li><strong>前置条件</strong>：<ul><li>项目章程（Project Charter）或业务合同已签署。</li><li>初始预算已获得批准。</li><li>项目核心团队成员已明确。</li></ul></li></ul><h2 id="3-标准作业流程步骤"><a href="#3-标准作业流程步骤" class="headerlink" title="3. 标准作业流程步骤"></a>3. 标准作业流程步骤</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[步骤1：准备材料] ➔ [步骤2：核心预沟通] ➔ [步骤3：发出会议邀请] ➔ [步骤4：召开启动会] ➔ [步骤5：会后跟进]</span><br></pre></td></tr></table></figure><h2 id="步骤-1：准备启动会材料"><a href="#步骤-1：准备启动会材料" class="headerlink" title="步骤 1：准备启动会材料"></a>步骤 1：准备启动会材料</h2><ul><li><strong>核心动作</strong>：撰写项目启动会演示文稿（Kickoff PPT&#x2F;Deck）。</li><li><strong>责任人</strong>：项目经理（PM）。</li><li><strong>必须包含的内容</strong>：<ul><li>项目背景与核心目标（Why &amp; What）。</li><li>高层级项目时间线与关键里程碑（When）。</li><li>RACI 分工矩阵（明确谁负责执行、谁负责审批、谁需要被咨询&#x2F;知会）。</li><li>沟通机制（周会安排、即时通讯工具频道、汇报路径）。</li></ul></li></ul><h2 id="步骤-2：核心利益相关者预沟通"><a href="#步骤-2：核心利益相关者预沟通" class="headerlink" title="步骤 2：核心利益相关者预沟通"></a>步骤 2：核心利益相关者预沟通</h2><ul><li><strong>核心动作</strong>：在正式大会前，与项目赞助人（Sponsor）及各部门核心负责人单独过一遍材料。</li><li><strong>目的</strong>：提前暴露并解决重大分歧，避免在正式启动会上出现公开争议。</li><li><strong>时间要求</strong>：正式启动会前 3-5 个工作日完成。</li></ul><h2 id="步骤-3：发出会议邀请"><a href="#步骤-3：发出会议邀请" class="headerlink" title="步骤 3：发出会议邀请"></a>步骤 3：发出会议邀请</h2><ul><li><strong>核心动作</strong>：发送日历邀请，并随附清晰的会议议程。</li><li><strong>标准会议议程模板</strong>：<ol><li>欢迎与团队成员介绍（5分钟）</li><li>项目愿景与业务目标说明（10分钟）</li><li>项目范围与关键里程碑（15分钟）</li><li>角色分工与 RACI 矩阵确认（10分钟）</li><li>沟通机制与后续行动计划（10分钟）</li><li>答疑与互动（10分钟）</li></ol></li></ul><h2 id="步骤-4：召开项目启动会"><a href="#步骤-4：召开项目启动会" class="headerlink" title="步骤 4：召开项目启动会"></a>步骤 4：召开项目启动会</h2><ul><li><strong>核心动作</strong>：宣讲材料，引导讨论，达成共识。</li><li><strong>关键任务</strong>：指定专人录音&#x2F;记录会议纪要，重点抓取<strong>待办事项（Action Items）</strong>。</li><li><strong>硬性标准</strong>：每一个待办事项必须有且仅有<strong>一位明确的负责人</strong>和<strong>截止日期（Due Date）</strong>。</li></ul><h2 id="步骤-5：会后总结与跟进"><a href="#步骤-5：会后总结与跟进" class="headerlink" title="步骤 5：会后总结与跟进"></a>步骤 5：会后总结与跟进</h2><ul><li><strong>核心动作</strong>：发出正式的会议纪要（Meeting Minutes）和最终版启动会材料。</li><li><strong>时间要求</strong>：启动会结束后 24 小时内完成。</li><li><strong>归档要求</strong>：将所有资料上传至公司统一的知识库&#x2F;项目空间（如 Wiki、Confluence、Notion、钉钉文档等）。</li></ul><h2 id="4-关键-Know-How-与质量闸口（控制点）"><a href="#4-关键-Know-How-与质量闸口（控制点）" class="headerlink" title="4. 关键 Know-How 与质量闸口（控制点）"></a>4. 关键 Know-How 与质量闸口（控制点）</h2><table><thead><tr><th align="left">步骤&#x2F;环节</th><th align="left">常见风险 &#x2F; 踩坑点</th><th align="left">质量闸口（如何算过关）</th></tr></thead><tbody><tr><td align="left"><strong>范围控制</strong></td><td align="left">项目刚启动，各方就开始无限制提需求（范围蔓延）。</td><td align="left">必须在启动会 PPT 中明确列出 <strong>“哪些内容不属于本次项目范围（Out of Scope）”</strong>。</td></tr><tr><td align="left"><strong>角色分工</strong></td><td align="left">职责模糊，事后扯皮“我不知道这事归我管”。</td><td align="left">所有核心成员必须在启动会上口头或书面确认其在 <strong>RACI 矩阵</strong>中的位置。</td></tr><tr><td align="left"><strong>人员出席</strong></td><td align="left">关键决策者（如业务老大、VP）未出席。</td><td align="left">如果核心决策者临时缺席，<strong>必须重新协调时间并改期</strong>，绝不带风险开会。</td></tr></tbody></table>]]></content>
+    
+    
+    <categories>
+      
+      <category>项目管理</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>SOP</tag>
+      
+      <tag>项目管理</tag>
+      
+      <tag>知识管理</tag>
+      
+      <tag>项目启动</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>AI 大模型与 Agent 工程设计模式概览</title>
     <link href="/post/0a3639e4.html"/>
     <url>/post/0a3639e4.html</url>
@@ -134,6 +165,39 @@
       <tag>工作流</tag>
       
       <tag>容器</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>如何让 cc-switch 在 Codex 中兼容 DeepSeek 原生模型和其它模型</title>
+    <link href="/post/2a4db7bf.html"/>
+    <url>/post/2a4db7bf.html</url>
+    
+    <content type="html"><![CDATA[<h2 id="如何让cc-switch在codex中兼容deepseek原生模型和其它模型"><a href="#如何让cc-switch在codex中兼容deepseek原生模型和其它模型" class="headerlink" title="如何让cc-switch在codex中兼容deepseek原生模型和其它模型"></a>如何让cc-switch在codex中兼容deepseek原生模型和其它模型</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>要实现“既保留 DeepSeek 官方最佳模型实践（Tool Calls 格式、推理档位、Context Window、System Prompt 等），又能通过 <code>cc-switch</code> 无缝无感切换多源（官方直连&#x2F;第三方中转）”<strong>，核心在于</strong>将能力定义（模型层）与路由鉴权（供应商层）进行解耦。</p><p>这个思路最低适配版本为： <code>codex-cli 0.144.0</code>。</p><h3 id="一、-核心解耦架构"><a href="#一、-核心解耦架构" class="headerlink" title="一、 核心解耦架构"></a>一、 核心解耦架构</h3><p>Codex 的配置由两个文件共同作用：</p><ol><li><strong><code>~/.codex/models.json</code>（能力定义层 - 静态保留）</strong><ul><li><strong>作用</strong>：向 Codex 声明 <code>deepseek-v4-flash</code> 的元数据（1M 上下文、<code>apply_patch</code> 补丁工具格式、<code>instructions_template</code>、<code>supported_reasoning_levels</code> 推理深度等）。</li><li><strong>策略</strong>：<strong>保持一次性写入后不动</strong>。无论 <code>cc-switch</code> 怎么切换源，只要 <code>slug</code> 叫 <code>deepseek-v4-flash</code>，Codex 就能自动应用 DeepSeek 最佳实践。</li></ul></li><li><strong><code>~/.codex/config.toml</code>（路由与鉴权层 - 动态切换）</strong><ul><li><strong>作用</strong>：控制当前激活的 <code>model</code>，以及对应 Provider 的 <code>base_url</code> 和 <code>api_key</code>。</li><li><strong>策略</strong>：<strong>交由 <code>cc-switch</code> 全权托管</strong>。</li></ul></li></ol><h3 id="二、-具体配置步骤"><a href="#二、-具体配置步骤" class="headerlink" title="二、 具体配置步骤"></a>二、 具体配置步骤</h3><h4 id="1-静态注入-DeepSeek-官方模型元数据"><a href="#1-静态注入-DeepSeek-官方模型元数据" class="headerlink" title="1. 静态注入 DeepSeek 官方模型元数据"></a>1. 静态注入 DeepSeek 官方模型元数据</h4><p>先运行一次官方脚本（或手动创建）生成 <code>~/.codex/models.json</code>，确保 Codex 拿到官方模型定义：</p><p>Bash</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 执行官方初始化脚本（仅用于生成/更新 models.json）</span><br><span class="line">bash &lt;(curl -fsSL https://cdn.deepseek.com/api-docs/codex-deepseek-setup.sh)</span><br></pre></td></tr></table></figure><blockquote><p><strong>注意</strong>：脚本会在 <code>~/.codex/models.json</code> 中写入 <code>slug: &quot;deepseek-v4-flash&quot;</code> 及配套的工具调用与 Agent 提示词配置。只要此文件存在，Codex 内部就能识别该模型的最佳生态行为。</p></blockquote><h4 id="2-在-cc-switch-中配置-DeepSeek-源与中转源"><a href="#2-在-cc-switch-中配置-DeepSeek-源与中转源" class="headerlink" title="2. 在 cc-switch 中配置 DeepSeek 源与中转源"></a>2. 在 <code>cc-switch</code> 中配置 DeepSeek 源与中转源</h4><p>打开 <code>cc-switch</code> (v3.19.1+)，添加或修改 Codex 相关的源配置（Profile）。</p><h5 id="方案-A：DeepSeek-官方源配置"><a href="#方案-A：DeepSeek-官方源配置" class="headerlink" title="方案 A：DeepSeek 官方源配置"></a>方案 A：DeepSeek 官方源配置</h5><ul><li><strong>Provider&#x2F;Key</strong>: <code>deepseek</code></li><li><strong>Base URL</strong>: <code>[https://api.deepseek.com/v1](https://api.deepseek.com/v1)</code> (或 <code>[https://api.deepseek.com](https://api.deepseek.com)</code>)</li><li><strong>Default Model</strong>: <code>deepseek-v4-flash</code></li><li><strong>API Key</strong>: <code>sk-xxx</code></li></ul><h5 id="方案-B：第三方-x2F-中转代理源配置"><a href="#方案-B：第三方-x2F-中转代理源配置" class="headerlink" title="方案 B：第三方&#x2F;中转代理源配置"></a>方案 B：第三方&#x2F;中转代理源配置</h5><p>若要切换到第三方中转源，在 <code>cc-switch</code> 添加新节点：</p><ul><li><strong>Base URL</strong>: <code>[https://your-proxy-domain.com/v1](https://your-proxy-domain.com/v1)</code></li><li><strong>Default Model</strong>: <code>deepseek-v4-flash</code> <em>(关键：Model 必须映射&#x2F;保持为 <code>deepseek-v4-flash</code>)</em></li><li><strong>API Key</strong>: <code>sk-your-proxy-key</code></li></ul><h3 id="三、-最终切换效果与生效机制"><a href="#三、-最终切换效果与生效机制" class="headerlink" title="三、 最终切换效果与生效机制"></a>三、 最终切换效果与生效机制</h3><p>当你通过 <code>cc-switch</code> 切换源时，<code>cc-switch</code> 会自动将 <code>~/.codex/config.toml</code> 写入类似如下的动态配置：</p><p>Ini, TOML</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">model = &quot;deepseek-v4-flash&quot;</span><br><span class="line">model_provider = &quot;deepseek&quot;</span><br><span class="line"></span><br><span class="line">[model_providers.deepseek]</span><br><span class="line">base_url = &quot;https://api.deepseek.com/v1&quot; # 或中转站 URL</span><br><span class="line">api_key = &quot;sk-xxx&quot;                        # 当前切换源的 API Key</span><br></pre></td></tr></table></figure><p><strong>运行逻辑：</strong></p><ol><li>Codex 启动时读取 <code>config.toml</code>，得知当前使用的模型是 <code>deepseek-v4-flash</code>，Provider 地址为 <code>cc-switch</code> 写入的 <code>base_url</code>。</li><li>Codex 在 <code>models.json</code> 中比对到 <code>slug == &quot;deepseek-v4-flash&quot;</code>，自动加载官方优化过的 <code>multi_agent_version = &quot;v2&quot;</code>、<code>instructions_template</code> 以及 <code>apply_patch</code> 命令行工具集。</li><li>实现了 <strong>源路由由 <code>cc-switch</code> 操控</strong>，而 <strong>Agent 交互与推理质量由 DeepSeek 官方规范兜底</strong>。</li></ol><h3 id="四、-关键注意点"><a href="#四、-关键注意点" class="headerlink" title="四、 关键注意点"></a>四、 关键注意点</h3><ol><li><p><strong>Model Slug 命名绑定</strong></p><p>在 <code>cc-switch</code> 配置各源的模型名称时，必须填 **<code>deepseek-v4-flash</code>**（与 <code>models.json</code> 保持严格一致）。若填成 <code>deepseek-chat</code> 或其他别名，Codex 会因匹配不到 <code>models.json</code> 中的元数据而退回到通用 OpenAI 行为，丢掉官方的 Agent 指令与 Patch 工具支持。</p></li><li><p><strong>中转源模型映射</strong></p><p>如果第三方中转站上模型的实际 Slug 不叫 <code>deepseek-v4-flash</code>（例如叫 <code>deepseek-v4</code>），请在中转网关侧做 Model Mapping；或者在 <code>models.json</code> 中复制一份配置块并修改 <code>slug</code> 为中转站的名字。</p></li><li><p><strong>配置文件冲突保护</strong></p><p>运行 DeepSeek 官方脚本后，若后续使用 <code>cc-switch</code> 切换其他非 DeepSeek 源（如 Anthropic&#x2F;OpenAI），<code>models.json</code> 的配置不会被覆盖，随时切回 <code>deepseek-v4-flash</code> 仍可直接生效。</p></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CLI</tag>
+      
+      <tag>AI</tag>
+      
+      <tag>cc-switch</tag>
+      
+      <tag>Codex</tag>
+      
+      <tag>DeepSeek</tag>
       
     </tags>
     

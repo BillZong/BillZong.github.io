@@ -15,8 +15,41 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 19 Aug 2026 04:38:26 GMT</pubDate>
+    <pubDate>Mon, 24 Aug 2026 08:17:33 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>SOP 的专业解读</title>
+      <link>https://billzong.github.io/post/fedaaaef.html</link>
+      <guid>https://billzong.github.io/post/fedaaaef.html</guid>
+      <pubDate>Fri, 21 Aug 2026 04:00:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;p&gt;在管理和工作流程领域，&lt;strong&gt;SOP&lt;/strong&gt; 是 &lt;strong&gt;Standard Operating Procedure&lt;/strong&gt;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/SOP/">SOP</category>
+      
+      <category domain="https://billzong.github.io/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</category>
+      
+      <category domain="https://billzong.github.io/tags/%E7%9F%A5%E8%AF%86%E7%AE%A1%E7%90%86/">知识管理</category>
+      
+      <category domain="https://billzong.github.io/tags/%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8/">项目启动</category>
+      
+      
+      <comments>https://billzong.github.io/post/fedaaaef.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>AI 大模型与 Agent 工程设计模式概览</title>
@@ -169,6 +202,41 @@
       
       
       <comments>https://billzong.github.io/post/b1310520.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>如何让 cc-switch 在 Codex 中兼容 DeepSeek 原生模型和其它模型</title>
+      <link>https://billzong.github.io/post/2a4db7bf.html</link>
+      <guid>https://billzong.github.io/post/2a4db7bf.html</guid>
+      <pubDate>Sun, 02 Aug 2026 04:00:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;如何让cc-switch在codex中兼容deepseek原生模型和其它模型&quot;&gt;&lt;a href=&quot;#如何让cc-switch在codex中兼容deepseek原生模型和其它模型&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/AI/">AI</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/CLI/">CLI</category>
+      
+      <category domain="https://billzong.github.io/tags/AI/">AI</category>
+      
+      <category domain="https://billzong.github.io/tags/cc-switch/">cc-switch</category>
+      
+      <category domain="https://billzong.github.io/tags/Codex/">Codex</category>
+      
+      <category domain="https://billzong.github.io/tags/DeepSeek/">DeepSeek</category>
+      
+      
+      <comments>https://billzong.github.io/post/2a4db7bf.html#disqus_thread</comments>
       
     </item>
     
