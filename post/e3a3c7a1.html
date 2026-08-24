@@ -27,7 +27,7 @@
 <meta property="og:description" content="字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。 目录 [BPE算法][#BPE算法]  概念与核心原理 推荐的Golang库 在Embedding阶段的作用 常见坑点   [WordPiece 算法](#WordPiece 算法)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-08-24T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-08-24T09:46:50.354Z">
+<meta property="article:modified_time" content="2026-08-24T09:47:28.549Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="BPE">
 <meta property="article:tag" content="WordPiece">
@@ -469,7 +469,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="WordPiece-算法"><a href="#WordPiece-算法" class="headerlink" title="WordPiece 算法"></a>WordPiece 算法</h2><p>WordPiece 是一种自底向上的子词分词算法。它在合并子词时引入了统计学评估，通过最大化语言模型似然度来确保合并后的子词最具信息量。</p>
+<h2 id="WordPiece-算法"><a href="#WordPiece-算法" class="headerlink" title="WordPiece 算法"></a>WordPiece 算法</h2><p>WordPiece 是一种自底向上的子词分词算法。它在合并子词时引入了统计学评估，通过最大化语言模型<strong>似然度</strong>来确保合并后的子词最具信息量。</p>
 <h3 id="WP概念与核心原理"><a href="#WP概念与核心原理" class="headerlink" title="WP概念与核心原理"></a>WP概念与核心原理</h3><ul>
 <li>概念：WordPiece 最初由谷歌用于语音处理，后被广泛应用于 BERT 等双向 Transformer 模型。它在 BPE 的频次统计基础之上，引入了条件概率，专门解决 BPE 盲目合并高频词导致无效子词膨胀的问题。</li>
 <li>核心原理：<ul>
