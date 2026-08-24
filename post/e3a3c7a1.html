@@ -19,15 +19,15 @@
   <meta name="author" content="Bill Zong">
   <meta name="keywords" content="">
   
-    <meta name="description" content="字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。 目录 BPE算法  概念与核心原理 推荐的Golang库 在Embedding阶段的作用 常见坑点   WordPiece 算法  概念与核心原理 推荐的Golang库 在Embedd">
+    <meta name="description" content="字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。 目录 [BPE算法][#BPE算法]  概念与核心原理 推荐的Golang库 在Embedding阶段的作用 常见坑点   [WordPiece 算法](#WordPiece 算法)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BPE 算法基本原理和应用剖析">
 <meta property="og:url" content="https://billzong.github.io/post/e3a3c7a1.html">
 <meta property="og:site_name" content="知易行难，一路向前">
-<meta property="og:description" content="字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。 目录 BPE算法  概念与核心原理 推荐的Golang库 在Embedding阶段的作用 常见坑点   WordPiece 算法  概念与核心原理 推荐的Golang库 在Embedd">
+<meta property="og:description" content="字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。 目录 [BPE算法][#BPE算法]  概念与核心原理 推荐的Golang库 在Embedding阶段的作用 常见坑点   [WordPiece 算法](#WordPiece 算法)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-08-24T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-08-24T09:44:19.033Z">
+<meta property="article:modified_time" content="2026-08-24T09:46:50.354Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="BPE">
 <meta property="article:tag" content="WordPiece">
@@ -365,28 +365,28 @@
                 
                 <p>字节对编码（Byte Pair Encoding, BPE）是一种广泛应用于大语言模型（如 GPT、LLaMA）的子词（Subword）分词算法，它通过将常见字词组合合并，在词表大小与文本表示效率之间取得最佳平衡。</p>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
-<li><p><a href="#BPE算法">BPE算法</a></p>
+<li><p>[BPE算法][#BPE算法]</p>
 <ul>
-<li><a href="#BPE概念与核心原理">概念与核心原理</a></li>
-<li><a href="#BPE推荐的Golang库">推荐的Golang库</a></li>
-<li><a href="#BPE在Embedding阶段的作用">在Embedding阶段的作用</a></li>
-<li><a href="#BPE常见坑点">常见坑点</a></li>
+<li><a href="#BPE%E6%A6%82%E5%BF%B5%E4%B8%8E%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86">概念与核心原理</a></li>
+<li><a href="#BPE%E6%8E%A8%E8%8D%90%E7%9A%84Golang%E5%BA%93">推荐的Golang库</a></li>
+<li><a href="#BPE%E5%9C%A8Embedding%E9%98%B6%E6%AE%B5%E7%9A%84%E4%BD%9C%E7%94%A8">在Embedding阶段的作用</a></li>
+<li><a href="#BPE%E5%B8%B8%E8%A7%81%E5%9D%91%E7%82%B9">常见坑点</a></li>
 </ul>
 </li>
-<li><p><a href="#WordPiece-算法">WordPiece 算法</a></p>
+<li><p>[WordPiece 算法](#WordPiece 算法)</p>
 <ul>
-<li><a href="#WP概念与核心原理">概念与核心原理</a></li>
-<li><a href="#WP推荐的Golang库">推荐的Golang库</a></li>
-<li><a href="#WP在Embedding阶段的作用">在Embedding阶段的作用</a></li>
-<li><a href="#WP常见坑点">常见坑点</a></li>
+<li><a href="#WP%E6%A6%82%E5%BF%B5%E4%B8%8E%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86">概念与核心原理</a></li>
+<li><a href="#WP%E6%8E%A8%E8%8D%90%E7%9A%84Golang%E5%BA%93">推荐的Golang库</a></li>
+<li><a href="#WP%E5%9C%A8Embedding%E9%98%B6%E6%AE%B5%E7%9A%84%E4%BD%9C%E7%94%A8">在Embedding阶段的作用</a></li>
+<li><a href="#WP%E5%B8%B8%E8%A7%81%E5%9D%91%E7%82%B9">常见坑点</a></li>
 </ul>
 </li>
-<li><p><a href="#UnigramLanguageModel算法">UnigramLanguageModel算法</a></p>
+<li><p><a href="#UnigramLanguageModel%E7%AE%97%E6%B3%95">UnigramLanguageModel算法</a></p>
 <ul>
-<li><a href="#ULM概念与核心原理">概念与核心原理</a></li>
-<li><a href="#ULM推荐的Golang库">推荐的Golang库</a></li>
-<li><a href="#ULM在Embedding阶段的作用">在Embedding阶段的作用</a></li>
-<li><a href="#ULM常见坑点">常见坑点</a></li>
+<li><a href="#ULM%E6%A6%82%E5%BF%B5%E4%B8%8E%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86">概念与核心原理</a></li>
+<li><a href="#ULM%E6%8E%A8%E8%8D%90%E7%9A%84Golang%E5%BA%93">推荐的Golang库</a></li>
+<li><a href="#ULM%E5%9C%A8Embedding%E9%98%B6%E6%AE%B5%E7%9A%84%E4%BD%9C%E7%94%A8">在Embedding阶段的作用</a></li>
+<li><a href="#ULM%E5%B8%B8%E8%A7%81%E5%9D%91%E7%82%B9">常见坑点</a></li>
 </ul>
 </li>
 </ul>
@@ -446,8 +446,9 @@
 <li><p>空格与特殊字符流失（Whitespace Artifacts）</p>
 <ul>
 <li><p><strong>坑点</strong>：BPE 算法高度依赖空格作为边界处理（例如 GPT 会将空格视为 Token 的一部分，如 <code> Ġword</code>）。如果在前处理阶段误删了连续空格、换行符（<code>\n</code>）或制表符（<code>\t</code>），会导致分词结果大相径庭，进而导致 Embedding 向量偏离原始语意。</p>
-</li>
-<li><p><strong>避坑指南</strong>：严格保持原始输入文本的干净与完整。在文本清洗阶段，<strong>不要盲目使用 <code>strings.ReplaceAll(text, &quot; &quot;, &quot;&quot;)</code> 剔除所有空格</strong>，必须与模型训练时的预处理（Pre-tokenization）规则保持绝对一致。</p>
+<ul>
+<li><strong>避坑指南</strong>：严格保持原始输入文本的干净与完整。在文本清洗阶段，<strong>不要盲目使用 <code>strings.ReplaceAll(text, &quot; &quot;, &quot;&quot;)</code> 剔除所有空格</strong>，必须与模型训练时的预处理（Pre-tokenization）规则保持绝对一致。</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -471,16 +472,14 @@
 <h2 id="WordPiece-算法"><a href="#WordPiece-算法" class="headerlink" title="WordPiece 算法"></a>WordPiece 算法</h2><p>WordPiece 是一种自底向上的子词分词算法。它在合并子词时引入了统计学评估，通过最大化语言模型似然度来确保合并后的子词最具信息量。</p>
 <h3 id="WP概念与核心原理"><a href="#WP概念与核心原理" class="headerlink" title="WP概念与核心原理"></a>WP概念与核心原理</h3><ul>
 <li>概念：WordPiece 最初由谷歌用于语音处理，后被广泛应用于 BERT 等双向 Transformer 模型。它在 BPE 的频次统计基础之上，引入了条件概率，专门解决 BPE 盲目合并高频词导致无效子词膨胀的问题。</li>
-<li>核心原理：</li>
-</ul>
-<ol>
-<li>初始化：将所有基本字符和符号放入词表。在非单词开头的子词前添加特殊前缀（如 BERT 中的 ##）。<ol start="2">
+<li>核心原理：<ul>
+<li>初始化：将所有基本字符和符号放入词表。在非单词开头的子词前添加特殊前缀（如 BERT 中的 ##）。</li>
 <li>互信息评估：不再只看子词 A 和子词 B 的组合频次 $count(AB)$，而是计算合并后的互信息分数：$\text{Score} &#x3D; \frac{count(AB)}{count(A) \times count(B)}$。</li>
 <li>合并与迭代：这个分数衡量的是“A 和 B 共同出现的概率是否远大于它们各自独立出现的概率”。算法每次只合并分数最高（最分不开）的字符对，直到词表达到预设大小。</li>
 <li>推理（最大前向匹配）：分词时，对整个单词从左到右贪心匹配词表中能找到的最长子词。若匹配到单词内部，则加上 ## 前缀。</li>
-</ol>
+</ul>
 </li>
-</ol>
+</ul>
 <h3 id="WP推荐的Golang库"><a href="#WP推荐的Golang库" class="headerlink" title="WP推荐的Golang库"></a>WP推荐的Golang库</h3><ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/daulet/tokenizers">daulet&#x2F;tokenizers</a>：调用 Hugging Face 官方 Rust tokenizers 的 CGO 绑定库。它是目前支持 WordPiece（尤其是 BERT 的 vocab.txt）性能最高、最纯正的 Go 语言通道。</li>
 <li><a target="_blank" rel="noopener" href="https://github.com/sugarme/tokenizer">sugarme&#x2F;tokenizer</a>：纯 Go 实现。它内置了 WordPiece 模型组件，适合在需要完全摆脱 CGO 交叉编译依赖的环境下操作。</li>
@@ -506,17 +505,15 @@
 <h2 id="UnigramLanguageModel算法"><a href="#UnigramLanguageModel算法" class="headerlink" title="UnigramLanguageModel算法"></a>UnigramLanguageModel算法</h2><p>Unigram Language Model 是一种基于概率生成模型的自顶向下子词分词算法。它从一个巨大的词表开始，通过不断优化整体语料损失来剔除冗余词。</p>
 <h3 id="ULM概念与核心原理"><a href="#ULM概念与核心原理" class="headerlink" title="ULM概念与核心原理"></a>ULM概念与核心原理</h3><ul>
 <li>概念：与 BPE&#x2F;WordPiece 这种“从小变大”的合并逻辑相反，Unigram 是一种“从大变小”的剪枝算法。它将分词问题转化为一个语言模型优化问题，能够为一段文本提供多种分词路径及其概率。</li>
-<li>核心原理：</li>
-</ul>
-<ol>
-<li>初始化大词表：从语料中提取一个极为庞大的初始词表，包含几乎所有的单词、高频短语和单字符。<ol start="2">
+<li>核心原理：<ul>
+<li>初始化大词表：从语料中提取一个极为庞大的初始词表，包含几乎所有的单词、高频短语和单字符。</li>
 <li>期望最大化训练（EM 算法）：基于当前的词表概率，计算语料的似然度（Likelihood）。</li>
 <li>计算损失（Loss）：对词表中的每个子词进行评估：假设从词表中删掉这个子词，原本由它组成的句子就必须拆成更碎的子词，这会导致整体语料的似然度下降。似然度下降最少的子词，就是“冗余子词”。</li>
 <li>剪枝迭代：每次剔除掉贡献最小的 10%~20% 的子词，重新训练，直到词表缩减到目标大小。</li>
 <li>推理（Viterbi 算法）：分词时，因为词表中存在多种切分可能，算法利用维特比（Viterbi）算法找出一条概率最大的最佳切分路径。</li>
-</ol>
+</ul>
 </li>
-</ol>
+</ul>
 <h3 id="ULM推荐的Golang库"><a href="#ULM推荐的Golang库" class="headerlink" title="ULM推荐的Golang库"></a>ULM推荐的Golang库</h3><ul>
 <li>google&#x2F;sentencepiece (Go 命令行或 C 绑定)：Unigram 最权威的实现是谷歌的 SentencePiece。在 Go 中通常通过 CGO 绑定其 C++ 核心，或者在数据管道中将其作为独立的微服务调用。</li>
 <li>daulet&#x2F;tokenizers：Hugging Face 的 Rust 核心同样完整实现了 Unigram 算法，通过该库可以完美支持像 T5 这类基于 Unigram 的大模型分词。</li>
