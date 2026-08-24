@@ -126,3 +126,19 @@ feed:
   icon: icon.png
   autodiscovery: true
   template:
+
+mathjax:
+  enable: true
+  version: 3
+  per_page: false
+  cdn: //cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  options:
+    skipHtmlTags:
+      - "script"
+      - "noscript"
+      - "style"
+      - "textarea"
+      - "pre"
+      - "code"
+    ignoreHtmlClass: "katex-html|nohighlight"
+  tags: none
