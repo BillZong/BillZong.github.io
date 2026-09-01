@@ -107,7 +107,7 @@ if [[ $SKIP_MASTER -eq 0 ]]; then
         TIMESTAMP="$(date '+%Y-%m-%d %H:%M')"
         MSG="site: hexo g rebuild at $TIMESTAMP"
       fi
-      git -c user.email=billzong@163.com -c user.name=BillZong commit -m "$MSG"
+      git -c user.email=billzong2012@gmail.com -c user.name=BillZong commit -m "$MSG"
       if [[ $PUSH -eq 1 ]]; then
         echo "    push master..."
         git push origin master
@@ -133,7 +133,7 @@ if [[ $SKIP_DEV -eq 0 ]]; then
         TIMESTAMP="$(date '+%Y-%m-%d %H:%M')"
         MSG="source: add posts/images at $TIMESTAMP"
       fi
-      git -c user.email=billzong@163.com -c user.name=BillZong commit -m "$MSG"
+      git -c user.email=billzong2012@gmail.com -c user.name=BillZong commit -m "$MSG"
       if [[ $PUSH -eq 1 ]]; then
         echo "    push dev..."
         git push origin dev
