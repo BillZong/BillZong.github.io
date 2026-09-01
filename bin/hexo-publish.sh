@@ -2,12 +2,12 @@
 # hexo-publish.sh — One-shot publish cycle for BillZong.github.io dual-branch (dev=source, master=deploy) blog.
 #
 # Usage:
-#   ./scripts/hexo-publish.sh                   # full cycle: hexo g + commit master + commit dev
-#   ./scripts/hexo-publish.sh --skip-dev        # only commit master (deploy)
-#   ./scripts/hexo-publish.sh --skip-master     # only commit dev (source)
-#   ./scripts/hexo-publish.sh --push            # also push both branches to origin
-#   ./scripts/hexo-publish.sh -m "msg"          # override commit message (otherwise auto-generated)
-#   ./scripts/hexo-publish.sh --dry-run         # show what would happen, no commit/push
+#   ./bin/hexo-publish.sh                   # full cycle: hexo g + commit master + commit dev
+#   ./bin/hexo-publish.sh --skip-dev        # only commit master (deploy)
+#   ./bin/hexo-publish.sh --skip-master     # only commit dev (source)
+#   ./bin/hexo-publish.sh --push            # also push both branches to origin
+#   ./bin/hexo-publish.sh -m "msg"          # override commit message (otherwise auto-generated)
+#   ./bin/hexo-publish.sh --dry-run         # show what would happen, no commit/push
 #
 # Workflow:
 #   dev (source):  hexo clean + hexo g
