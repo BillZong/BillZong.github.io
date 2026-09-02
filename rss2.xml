@@ -15,8 +15,68 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 24 Aug 2026 10:22:57 GMT</pubDate>
+    <pubDate>Wed, 02 Sep 2026 15:37:14 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>git 忽略非指定分支的内容</title>
+      <link>https://billzong.github.io/post/9471d398.html</link>
+      <guid>https://billzong.github.io/post/9471d398.html</guid>
+      <pubDate>Wed, 02 Sep 2026 15:36:54 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h2 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/git/">git</category>
+      
+      <category domain="https://billzong.github.io/tags/fetch/">fetch</category>
+      
+      <category domain="https://billzong.github.io/tags/refspec/">refspec</category>
+      
+      <category domain="https://billzong.github.io/tags/%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/">分支管理</category>
+      
+      
+      <comments>https://billzong.github.io/post/9471d398.html#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>《上瘾式学习：科学的自学成才法》阅读笔记</title>
+      <link>https://billzong.github.io/post/192dffb9.html</link>
+      <guid>https://billzong.github.io/post/192dffb9.html</guid>
+      <pubDate>Tue, 01 Sep 2026 13:17:28 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;转：《上瘾式学习：科学的自学成才法》阅读笔记&quot;&gt;&lt;a href=&quot;#转：《上瘾式学习：科学的自学成才法》阅读笔记&quot; class=&quot;headerlink&quot;</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/learning/">learning</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/learning-reading-%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/">learning, reading, 学习方法</category>
+      
+      
+      <comments>https://billzong.github.io/post/192dffb9.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>BPE 算法基本原理和应用剖析</title>

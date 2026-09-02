@@ -6,7 +6,7 @@
   <link href="https://billzong.github.io/atom.xml" rel="self"/>
   
   <link href="https://billzong.github.io/"/>
-  <updated>2026-08-24T10:22:57.185Z</updated>
+  <updated>2026-09-02T15:37:14.790Z</updated>
   <id>https://billzong.github.io/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>git 忽略非指定分支的内容</title>
+    <link href="https://billzong.github.io/post/9471d398.html"/>
+    <id>https://billzong.github.io/post/9471d398.html</id>
+    <published>2026-09-02T15:36:54.000Z</published>
+    <updated>2026-09-02T15:37:14.790Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;需求&quot;&gt;&lt;a href=&quot;#需求&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="工具" scheme="https://billzong.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="git" scheme="https://billzong.github.io/tags/git/"/>
+    
+    <category term="fetch" scheme="https://billzong.github.io/tags/fetch/"/>
+    
+    <category term="refspec" scheme="https://billzong.github.io/tags/refspec/"/>
+    
+    <category term="分支管理" scheme="https://billzong.github.io/tags/%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>《上瘾式学习：科学的自学成才法》阅读笔记</title>
+    <link href="https://billzong.github.io/post/192dffb9.html"/>
+    <id>https://billzong.github.io/post/192dffb9.html</id>
+    <published>2026-09-01T13:17:28.000Z</published>
+    <updated>2026-09-02T15:36:12.253Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;转：《上瘾式学习：科学的自学成才法》阅读笔记&quot;&gt;&lt;a href=&quot;#转：《上瘾式学习：科学的自学成才法》阅读笔记&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="learning" scheme="https://billzong.github.io/categories/learning/"/>
+    
+    
+    <category term="learning, reading, 学习方法" scheme="https://billzong.github.io/tags/learning-reading-%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/"/>
+    
+  </entry>
   
   <entry>
     <title>BPE 算法基本原理和应用剖析</title>
