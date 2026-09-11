@@ -1,0 +1,118 @@
+/* ==========================================================================
+   Custom CSS - 覆盖 Fluid 主题默认动画时长 + 修复代码块样式
+   ========================================================================== */
+
+/* 关闭 navbar 背景色/内边距的 transition */
+.navbar {
+  -webkit-transition: none !important;
+  transition: none !important;
+}
+
+/* 关闭 navbar 菜单项的 transition */
+@media (min-width: 600px) {
+  .navbar.scrolling-navbar .navbar-nav > li {
+    -webkit-transition-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+}
+
+/* 关闭 .fade-in-up 等所有元素动画，直接显示 */
+.fade-in-up,
+[class*="fade-in"],
+[class*="animation"] {
+  -webkit-animation: none !important;
+  animation: none !important;
+  -webkit-transition: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+
+/* 全局兜底：关闭所有元素的 transition 和 animation */
+*,
+*::before,
+*::after {
+  -webkit-transition: none !important;
+  transition: none !important;
+  -webkit-animation: none !important;
+  animation: none !important;
+}
+
+/* 隐藏 about 页面 banner 里的 slogan (typed.js 渲染的 "关于" 副标题) */
+#subtitle[data-typed-text="关于"] {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Code blocks - 修复 Fluid 主题代码块样式
+   用 fluid 主题自身定义的 CSS 变量 (--highlight-bg-color 等)
+   自动跟随 light/dark 模式切换:
+     light: --highlight-bg-color=#f6f8fa  --post-text-color=#3c4858
+     dark:  --highlight-bg-color=#2d333b  --post-text-color=#c4c6c9
+   ========================================================================== */
+
+/* 行内 code (如 markdown 反引号包的小段代码) */
+:not(pre) > code {
+  background-color: var(--inlinecode-bg-color) !important;
+  color: #c7254e !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+  font-size: 0.9em !important;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+/* 整块代码块 - figure.highlight (hexo-renderer-marked 5.0 的输出结构) */
+figure.highlight {
+  background-color: var(--highlight-bg-color) !important;
+  color: var(--post-text-color) !important;
+  border: 1px solid var(--line-color) !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  line-height: 1.5 !important;
+  margin: 16px 0 !important;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 0.875em !important;
+}
+
+figure.highlight pre {
+  background-color: transparent !important;
+  color: inherit !important;
+  padding: 16px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: auto !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+/* 行号 gutter */
+figure.highlight .gutter pre {
+  background-color: transparent !important;
+  color: var(--sec-text-color) !important;
+  border-right: 1px solid var(--line-color) !important;
+  padding: 16px 12px !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+
+/* 兜底: 裸 pre (没有 figure.highlight 包裹) */
+pre:not(.highlight):not([class*="language-"]) {
+  background-color: var(--highlight-bg-color) !important;
+  color: var(--post-text-color) !important;
+  padding: 16px !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--line-color) !important;
+  overflow: auto !important;
+  line-height: 1.5 !important;
+  margin: 16px 0 !important;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 0.875em !important;
+}
+
+/* Dark mode 行内 code 用更显眼的颜色 */
+[data-user-color-scheme="dark"] :not(pre) > code,
+:root:not([data-user-color-scheme]) :not(pre) > code {
+  color: #ff7b72 !important;
+}
