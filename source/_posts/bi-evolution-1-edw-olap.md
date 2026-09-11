@@ -2,9 +2,10 @@
 title: 企业数据仓库与经典 OLAP 时代（集中式语义的奠基）
 comments: true
 mathjax: false
+mermaid: true
 series: BI系统的发展进程：数据建模、计算引擎与语义交互的架构演进
 series_order: 2
-series_status: drafting
+series_status: published
 categories:
   - bi-evolution
 tags:
@@ -39,7 +40,7 @@ date: 2026-09-11 12:07:00
 
 为了系统性地探讨这一跨越数十年的架构蜕变,我们需要将分析型系统(Analytical System)解耦为四个核心的架构抽象层次,以及一个由四层协同作用自然衍生出的业务结果(Outcome)[^2]:
 
-```mermaid
+{% mermaid %}
 flowchart TB
     L1["交互展现层<br/>Interaction Layer<br/>Static Report / Dashboard / Agent"]
     L2["语义抽象层<br/>Semantic Layer<br/>OLAP Cube / Metrics / Ontology"]
@@ -50,7 +51,7 @@ flowchart TB
     L2 --> L3
     L3 --> L4
     L4 --> L5
-```
+{% endmermaid %}
 
 1. **数据源与平台层 (Data Platform Layer)**:负责物理数据的持久化与结构组织.它从早期的联机事务处理(OLTP)底座, 操作数据源(ODS),演进到集中式企业数据仓库(EDW),并最终走向如今存算分离的分布式数据湖与 Lakehouse 架构.
 2. **查询计算层 (Query Engine Layer)**:负责执行具体的数据算子与算力分发.它从单机关系型数据库管理系统(RDBMS)的通用执行器,演进到大规模并行处理(MPP)架构, 列式存储优化, 分布式查询优化器(Query Optimizer)以及利用硬件级 SIMD 指令集的向量化执行引擎.
@@ -165,11 +166,3 @@ MOLAP 架构的核心思想是**以空间换查询时间,将语义与数据提�
 - 系列索引页:[BI 系统的发展进程:数据建模, 计算引擎与语义交互的架构演进](/bi-evolution/)
 - 下一节:待补充(<第二篇:分布式计算与云原生数仓时代(计算与存储的解耦)>)
 - 系列内导航:自动注入(见页底,仅当同系列文章 ≥ 2 篇时显示)
-
----
-
-> **TODO(待你补充)**:
-> 1. **统一字符风格**:原文里有的引号是中文全角("...")有的是半角("..."),fluid 主题渲染时是否统一为某一种?(我已尽量保留原文)
-> 2. **配图**:第 1 节那张四层抽象 ASCII 图,建议重画成 mermaid 或更清晰的方块图
-> 3. **系列地图**:第 2-8 篇的标题你已预告"分布式计算与云原生数仓时代",后面 6 篇也定了吗?确定后我去更新 `source/bi-evolution/index.md` 索引页
-> 4. **上/下节链**:现在只有第 1 篇,series-nav.js 不显示(length < 2 不触发),加第 2 篇后自动出现
