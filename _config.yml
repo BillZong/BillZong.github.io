@@ -74,6 +74,21 @@ tag_map:
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
 meta_generator: true
 
+# markdown-it 渲染器配置（替代 hexo-renderer-marked）
+markdown:
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: false
+    linkify: true
+    typographer: false
+    quotes: '\u201c\u201d\u2018\u2019'
+  plugins:
+    - markdown-it-footnote
+  anchors:
+    level: 2
+    collisionSuffix: ''
+
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
 ## You can customize the date format as defined in
