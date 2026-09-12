@@ -119,8 +119,7 @@ theme: fluid
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  # repo: https://github.com/BillZong/BillZong.github.io.git
-  repo: git@github.com:BillZong/BillZong.github.io.git
+  repo: https://github.com/BillZong/BillZong.github.io.git
   branch: master
 
 hexo-asset-folder: true
