@@ -27,7 +27,7 @@
 <meta property="og:description" content="本节为系列第 1 &#x2F; 8 节. 系列开篇: 建立 BI 系统的四层架构抽象视角, 作为后续 7 篇的统一分析框架.  第一章: 企业数据仓库与经典 OLAP 时代 (集中式语义的奠基) Part I: The Monolithic EDW &amp; Classic OLAP Era (Foundational Centralized Semantics) 1. 引言: BI 的架构视角与四层抽">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-09-11T04:07:00.000Z">
-<meta property="article:modified_time" content="2026-09-12T02:35:37.561Z">
+<meta property="article:modified_time" content="2026-09-13T12:22:03.173Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="BI">
 <meta property="article:tag" content="数据仓库">
@@ -491,16 +491,10 @@ mjx-container[display="true"] + br {
 
 <pre>
 <code class="mermaid" >
-flowchart TB
-    L1 ["交互展现层<br/>Interaction Layer<br/>Static Report / Dashboard / Agent"]
-    L2 ["语义抽象层<br/>Semantic Layer<br/>OLAP Cube / Metrics / Ontology"]
-    L3 ["查询计算层<br/>Query Engine Layer<br/>RDBMS / MPP / Optimizer / SIMD"]
-    L4 ["数据源与平台层<br/>Data Platform Layer<br/>OLTP / EDW / Lakehouse"]
-    L5 ["业务行动结果<br/>Business Outcome"]
-    L1 --> L2
-    L2 --> L3
-    L3 --> L4
-    L4 --> L5
+flowchart LR
+    L1[交互展现层] --> L2[语义抽象层] --> L3[查询计算层] --> L4[数据源与平台层] --> L5[业务行动结果]
+    L5 --> O[Business Outcome]
+    style O fill:#f9f,stroke:#333
 </code>
 </pre>
 <ol>
@@ -705,13 +699,14 @@ flowchart TB
 
 
   <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
-    mermaid.initialize({"theme":"default"});
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
+    if (typeof mermaid === 'undefined') return;
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"16px"}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {
-        if ('mermaid' in window) {
-          mermaid.init();
+        if ('mermaid' in window && typeof mermaid.run === 'function') {
+          mermaid.run();
         }
       });
     });

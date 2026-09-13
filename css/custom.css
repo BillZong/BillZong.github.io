@@ -135,3 +135,70 @@ section.footnotes ol.footnotes-list li.footnote-item {
 section.footnotes ol.footnotes-list li.footnote-item p {
   margin-bottom: 0.1rem;
 }
+
+/* ==========================================================================
+   Mermaid - 字体加大 + 深色模式颜色覆盖
+   ========================================================================== */
+
+/* 全局：mermaid SVG 内文字加大（覆盖 fluid theme 的默认 14px） */
+.mermaid svg,
+.mermaid svg .nodeLabel,
+.mermaid svg .edgeLabel,
+.mermaid svg .label {
+  font-size: 18px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+}
+
+/* Dark mode：mermaid SVG 颜色覆盖（深色背景下原黑色节点/箭头不可见） */
+[data-user-color-scheme="dark"] .mermaid svg {
+  background-color: transparent !important;
+}
+
+[data-user-color-scheme="dark"] .mermaid svg .node rect,
+[data-user-color-scheme="dark"] .mermaid svg .node polygon,
+[data-user-color-scheme="dark"] .mermaid svg .node circle,
+[data-user-color-scheme="dark"] .mermaid svg .node ellipse,
+[data-user-color-scheme="dark"] .mermaid svg .node path {
+  fill: #1f1f1f !important;
+  stroke: #c4c6c9 !important;
+  stroke-width: 1.5px !important;
+}
+
+[data-user-color-scheme="dark"] .mermaid svg .edgePath .path,
+[data-user-color-scheme="dark"] .mermaid svg .flowchart-link {
+  stroke: #c4c6c9 !important;
+  stroke-width: 1.5px !important;
+}
+
+[data-user-color-scheme="dark"] .mermaid svg .arrowheadPath,
+[data-user-color-scheme="dark"] .mermaid svg marker path,
+[data-user-color-scheme="dark"] .mermaid svg marker polygon {
+  fill: #c4c6c9 !important;
+  stroke: #c4c6c9 !important;
+}
+
+[data-user-color-scheme="dark"] .mermaid svg text,
+[data-user-color-scheme="dark"] .mermaid svg .nodeLabel,
+[data-user-color-scheme="dark"] .mermaid svg .edgeLabel,
+[data-user-color-scheme="dark"] .mermaid svg .label {
+  fill: #c4c6c9 !important;
+  color: #c4c6c9 !important;
+}
+
+/* Dark mode 特例：Business Outcome 节点 (id 以 flowchart-O 开头)
+   保持浅粉背景 + 强制深色字 + 浅色描边，避免"浅字+浅底"对比度差 */
+[data-user-color-scheme="dark"] .mermaid svg g[id^="flowchart-O"] rect,
+[data-user-color-scheme="dark"] .mermaid svg g[id^="flowchart-O"] polygon,
+[data-user-color-scheme="dark"] .mermaid svg g[id^="flowchart-O"] circle,
+[data-user-color-scheme="dark"] .mermaid svg g[id^="flowchart-O"] ellipse,
+[data-user-color-scheme="dark"] .mermaid svg g[id^="flowchart-O"] path {
+  fill: #f9f !important;
+  stroke: #888 !important;
+  stroke-width: 1.5px !important;
+}
+
+[data-user-color-scheme="dark"] .mermaid svg g[id^="flowchart-O"] text,
+[data-user-color-scheme="dark"] .mermaid svg g[id^="flowchart-O"] .nodeLabel {
+  fill: #1f1f1f !important;
+  color: #1f1f1f !important;
+}

@@ -30,13 +30,13 @@
 <meta property="article:modified_time" content="2026-09-11T03:18:37.593Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="ucard">
-<meta property="article:tag" content="选型">
 <meta property="article:tag" content="授权参考码">
 <meta property="article:tag" content="分布式ID">
 <meta property="article:tag" content="Snowflake">
 <meta property="article:tag" content="UUIDv7">
 <meta property="article:tag" content="KSUID">
 <meta property="article:tag" content="Sonyflake">
+<meta property="article:tag" content="选型">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -665,8 +665,6 @@ mjx-container[display="true"] + br {
       
         <a href="/tags/ucard/" class="print-no-link">#ucard</a>
       
-        <a href="/tags/%E9%80%89%E5%9E%8B/" class="print-no-link">#选型</a>
-      
         <a href="/tags/%E6%8E%88%E6%9D%83%E5%8F%82%E8%80%83%E7%A0%81/" class="print-no-link">#授权参考码</a>
       
         <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8FID/" class="print-no-link">#分布式ID</a>
@@ -678,6 +676,8 @@ mjx-container[display="true"] + br {
         <a href="/tags/KSUID/" class="print-no-link">#KSUID</a>
       
         <a href="/tags/Sonyflake/" class="print-no-link">#Sonyflake</a>
+      
+        <a href="/tags/%E9%80%89%E5%9E%8B/" class="print-no-link">#选型</a>
       
     </div>
   
@@ -729,13 +729,14 @@ mjx-container[display="true"] + br {
 
 
   <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
-    mermaid.initialize({"theme":"default"});
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
+    if (typeof mermaid === 'undefined') return;
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"16px"}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {
-        if ('mermaid' in window) {
-          mermaid.init();
+        if ('mermaid' in window && typeof mermaid.run === 'function') {
+          mermaid.run();
         }
       });
     });

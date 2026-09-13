@@ -33,9 +33,9 @@
 <meta property="article:tag" content="告警">
 <meta property="article:tag" content="PagerDuty">
 <meta property="article:tag" content="运维">
+<meta property="article:tag" content="选型">
 <meta property="article:tag" content="电话通知">
 <meta property="article:tag" content="语音通知">
-<meta property="article:tag" content="选型">
 <meta property="article:tag" content="Webhook">
 <meta property="article:tag" content="事件管理">
 <meta name="twitter:card" content="summary_large_image">
@@ -539,11 +539,11 @@ mjx-container[display="true"] + br {
       
         <a href="/tags/%E8%BF%90%E7%BB%B4/" class="print-no-link">#运维</a>
       
+        <a href="/tags/%E9%80%89%E5%9E%8B/" class="print-no-link">#选型</a>
+      
         <a href="/tags/%E7%94%B5%E8%AF%9D%E9%80%9A%E7%9F%A5/" class="print-no-link">#电话通知</a>
       
         <a href="/tags/%E8%AF%AD%E9%9F%B3%E9%80%9A%E7%9F%A5/" class="print-no-link">#语音通知</a>
-      
-        <a href="/tags/%E9%80%89%E5%9E%8B/" class="print-no-link">#选型</a>
       
         <a href="/tags/Webhook/" class="print-no-link">#Webhook</a>
       
@@ -599,13 +599,14 @@ mjx-container[display="true"] + br {
 
 
   <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
-    mermaid.initialize({"theme":"default"});
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
+    if (typeof mermaid === 'undefined') return;
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"16px"}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {
-        if ('mermaid' in window) {
-          mermaid.init();
+        if ('mermaid' in window && typeof mermaid.run === 'function') {
+          mermaid.run();
         }
       });
     });

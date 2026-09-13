@@ -673,13 +673,14 @@ mjx-container[display="true"] + br {
 
 
   <script>
-  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
-    mermaid.initialize({"theme":"default"});
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
+    if (typeof mermaid === 'undefined') return;
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"16px"}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {
-        if ('mermaid' in window) {
-          mermaid.init();
+        if ('mermaid' in window && typeof mermaid.run === 'function') {
+          mermaid.run();
         }
       });
     });
