@@ -41,16 +41,10 @@ date: 2026-09-11 12:07:00
 为了系统性地探讨这一跨越数十年的架构蜕变, 我们需要将分析型系统 (Analytical System) 解耦为四个核心的架构抽象层次, 以及一个由四层协同作用自然衍生出的业务结果 (Outcome)[^2]:
 
 {% mermaid %}
-flowchart TB
-    L1 ["交互展现层<br/>Interaction Layer<br/>Static Report / Dashboard / Agent"]
-    L2 ["语义抽象层<br/>Semantic Layer<br/>OLAP Cube / Metrics / Ontology"]
-    L3 ["查询计算层<br/>Query Engine Layer<br/>RDBMS / MPP / Optimizer / SIMD"]
-    L4 ["数据源与平台层<br/>Data Platform Layer<br/>OLTP / EDW / Lakehouse"]
-    L5 ["业务行动结果<br/>Business Outcome"]
-    L1 --> L2
-    L2 --> L3
-    L3 --> L4
-    L4 --> L5
+flowchart LR
+    L1[交互展现层] --> L2[语义抽象层] --> L3[查询计算层] --> L4[数据源与平台层] --> L5[业务行动结果]
+    L5 --> O[Business Outcome]
+    style O fill:#f9f,stroke:#333
 {% endmermaid %}
 
 1. **数据源与平台层 (Data Platform Layer)**: 负责物理数据的持久化与结构组织. 它从早期的联机事务处理 (OLTP) 底座, 操作数据源 (ODS), 演进到集中式企业数据仓库 (EDW), 并最终走向如今存算分离的分布式数据湖与 Lakehouse 架构.
