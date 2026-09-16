@@ -92,7 +92,9 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+<style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
 
@@ -204,9 +206,7 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
-<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
-</head>
+</style></head>
 
 
 <body>
@@ -567,6 +567,36 @@ flowchart LR
 <li>下一节: 待补充 (&lt;第二篇: 分布式计算与云原生数仓时代 (计算与存储的解耦)&gt;)</li>
 <li>系列内导航: 自动注入 (见页底, 仅当同系列文章 ≥ 2 篇时显示)</li>
 </ul>
+<style>
+  .series-nav{margin:2.5rem 0 1rem;padding:1.25rem 1.5rem;border:1px solid rgba(0,0,0,.08);border-radius:8px;background:rgba(0,0,0,.02);font-size:.95rem;line-height:1.6}
+  .series-nav__head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px dashed rgba(0,0,0,.12)}
+  .series-nav__series{font-weight:600;color:var(--theme-color,#3da5f5)}
+  .series-nav__pos{color:#888;font-size:.85em}
+  .series-nav__list{list-style:none;padding:0;margin:.5rem 0 1rem;display:grid;grid-template-columns:1fr;gap:.35rem}
+  .series-nav__item{display:flex;gap:.5rem;align-items:baseline;padding:.2rem 0;color:#555}
+  .series-nav__item a{color:#555;text-decoration:none;flex:1}
+  .series-nav__item a:hover{color:var(--theme-color,#3da5f5)}
+  .series-nav__num{color:#bbb;font-variant-numeric:tabular-nums;font-size:.85em;min-width:1.75em}
+  .series-nav__item--current{font-weight:600;color:var(--theme-color,#3da5f5)}
+  .series-nav__item--current a{color:var(--theme-color,#3da5f5);pointer-events:none}
+  .series-nav__pager{display:flex;justify-content:space-between;gap:1rem;padding-top:.75rem;border-top:1px dashed rgba(0,0,0,.12);font-size:.9rem}
+  .series-nav__pager-link{display:flex;align-items:center;gap:.35rem;color:#555;text-decoration:none;max-width:48%;text-align:inherit}
+  .series-nav__pager-link:hover{color:var(--theme-color,#3da5f5)}
+  .series-nav__pager-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .series-nav__pager-disabled{color:#bbb;font-size:.85em}
+  @media(max-width:600px){.series-nav__pager-title{max-width:12em}}
+</style>
+<nav class="series-nav" aria-label="系列导航">
+  <div class="series-nav__head">
+    <span class="series-nav__series">📚 BI系统的发展进程：数据建模、计算引擎与语义交互的架构演进</span>
+    <span class="series-nav__pos">第 1 / 2 节</span>
+  </div>
+  <ol class="series-nav__list"><li class="series-nav__item series-nav__item--current"><span class="series-nav__num">01</span><a href="/post/1069e228.html">企业数据仓库与经典 OLAP 时代（集中式语义的奠基）</a></li><li class="series-nav__item"><span class="series-nav__num">02</span><a href="/post/b39845b2.html">分布式计算与云原生数仓时代（计算与存储的解耦）</a></li></ol>
+  <div class="series-nav__pager">
+    <span class="series-nav__pager-cell series-nav__pager-cell--prev"><span class="series-nav__pager-disabled">已是本系列首篇</span></span>
+    <span class="series-nav__pager-cell series-nav__pager-cell--next"><a class="series-nav__pager-link" href="/post/b39845b2.html" rel="next"><span class="series-nav__pager-title">分布式计算与云原生数仓时代（计算与存储的解耦）</span><i class="iconfont icon-arrowright"></i></a></span>
+  </div>
+</nav>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -701,7 +731,7 @@ flowchart LR
   <script>
   Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
     if (typeof mermaid === 'undefined') return;
-    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"16px"}});
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"18px"},"flowchart":{"useMaxWidth":false,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {

@@ -1,0 +1,988 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Bill Zong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本节为系列第 2 &#x2F; 8 节. 承接第一篇的&quot;数据源+查询计算&quot;两层奠基, 展开分布式计算, 云原生数仓, Lakehouse 三波底层范式跃迁, 并暴露第二代 BI 的核心新债务: 指标语义失控.  第二章: 分布式计算与云原生数仓时代 (计算与存储的解耦) Part II: Distributed Computing &amp; The Cloud Data Wareho">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式计算与云原生数仓时代（计算与存储的解耦）">
+<meta property="og:url" content="https://billzong.github.io/post/b39845b2.html">
+<meta property="og:site_name" content="知易行难，一路向前">
+<meta property="og:description" content="本节为系列第 2 &#x2F; 8 节. 承接第一篇的&quot;数据源+查询计算&quot;两层奠基, 展开分布式计算, 云原生数仓, Lakehouse 三波底层范式跃迁, 并暴露第二代 BI 的核心新债务: 指标语义失控.  第二章: 分布式计算与云原生数仓时代 (计算与存储的解耦) Part II: Distributed Computing &amp; The Cloud Data Wareho">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-16T03:30:00.000Z">
+<meta property="article:modified_time" content="2026-09-16T09:06:27.231Z">
+<meta property="article:author" content="Bill Zong">
+<meta property="article:tag" content="BI">
+<meta property="article:tag" content="分布式计算">
+<meta property="article:tag" content="Hadoop">
+<meta property="article:tag" content="Spark">
+<meta property="article:tag" content="列式存储">
+<meta property="article:tag" content="MPP">
+<meta property="article:tag" content="CBO">
+<meta property="article:tag" content="向量化执行">
+<meta property="article:tag" content="云原生数仓">
+<meta property="article:tag" content="存算分离">
+<meta property="article:tag" content="Lakehouse">
+<meta property="article:tag" content="开放表格式">
+<meta property="article:tag" content="Delta Lake">
+<meta property="article:tag" content="Iceberg">
+<meta property="article:tag" content="Medallion">
+<meta property="article:tag" content="ELT">
+<meta property="article:tag" content="指标地狱">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>分布式计算与云原生数仓时代（计算与存储的解耦） - 知易行难，一路向前</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h2,h3","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 25vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>知易行难，一路向前</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式计算与云原生数仓时代（计算与存储的解耦）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">分布式计算与云原生数仓时代（计算与存储的解耦）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>本节为系列第 2 / 8 节. 承接第一篇的&quot;数据源+查询计算&quot;两层奠基, 展开分布式计算, 云原生数仓, Lakehouse 三波底层范式跃迁, 并暴露第二代 BI 的核心新债务: 指标语义失控.</p>
+</blockquote>
+<h1 id="第二章:-分布式计算与云原生数仓时代-(计算与存储的解耦)">第二章: 分布式计算与云原生数仓时代 (计算与存储的解耦)</h1>
+<p><em>Part II: Distributed Computing &amp; The Cloud Data Warehouse Era (The Decoupling of Compute &amp; Storage)</em></p>
+<h2 id="1-大规模分布式计算范式的兴起与局限">1. 大规模分布式计算范式的兴起与局限</h2>
+<p>进入 2000 年代中后期, 互联网业务的爆发带来了半结构化日志与海量非结构化数据的几何级增长. 第一篇中所讨论的单机单体 RDBMS 存储与计算架构, 即使通过高昂的垂直扩展 (Scale-Up), 也无法在物理极限和成本效益内承接这一规模的数据处理吞吐. 为了打破算力的物理天花板, 数据工程界正式开启了从单机向分布式横向扩展 (Scale-Out) 的范式转移.</p>
+<h3 id="1-1-Hadoop-MapReduce-时代的得与失">1.1. Hadoop / MapReduce 时代的得与失</h3>
+<p>由 Google 的早期研究所点燃, 并由 Apache Hadoop 生态发扬光大的大规模分布式计算范式, 率先颠覆了传统数仓的存算一体模式 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>. 其核心架构思想是通过廉价商品服务器集群横向扩展, 利用分布式文件系统 (HDFS) 切分存储海量原始数据, 并利用 <strong>MapReduce (映射-归约)</strong> 框架将计算任务分发至数据所在的物理节点上执行, 实现数据本地性 (Data Locality).</p>
+<p>作为大规模批处理抽象, MapReduce 具有其特定的运行机制: 在任务执行过程中, Map 算子的中间输出通常会在本地进行缓冲并发生中间结果落盘, 随后通过高密度的网络 Shuffle 屏障分发给 Reduce 算子; 最终的任务输出结果才写入持久化存储 <sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1:1]</a></sup>. 这种对频繁中间结果磁盘物化与网络 Shuffle 的深度依赖, 导致其在面临 BI 系统高频的<strong>交互式敏捷分析 (Interactive Ad-hoc Queries)</strong> 时, 面临无法忽视的响应延迟. MapReduce 解决了&quot;能够处理海量数据&quot;的工程规模问题, 却尚未能解决低延迟交互分析的痛点.</p>
+<h3 id="1-2-内存计算与统一数据处理的飞跃">1.2. 内存计算与统一数据处理的飞跃</h3>
+<p>为了解除通用分布式批处理阶段性磁盘落盘的枷锁, Apache Spark 提出了基于<strong>弹性分布式数据集 (RDD, Resilient Distributed Dataset)</strong> 的内存计算范式 <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>. Spark 引擎通过运行时构建<strong>有向无环图 (DAG)</strong> 调度器, 将连续的数据转换算子组合成不同的执行阶段 (Stages). 在单个 Stage 内部, 数据在内存中以流式流水线 (Pipelining) 的方式进行变换, 显着降低了中间结果物化的开销. 这里的&quot;内存复用&quot;是指通过 RDD 缓存和 DAG 中间结果复用减少不必要的磁盘物化, 而不是指所有 Spark 计算都完全在内存中完成. 原始论文在特定迭代机器学习任务中报告了相对于 Hadoop 约 10 倍的性能提升, 并展示了交互式数据分析的低延迟能力 <sup class="footnote-ref"><a href="#fn2" id="fnref2:1">[2:1]</a></sup>. Spark 的出现将分布式计算从&quot;磁盘时代&quot;推进到了&quot;内存复用时代&quot;.</p>
+<h3 id="1-3-通用计算向专用分析引擎的桥接">1.3. 通用计算向专用分析引擎的桥接</h3>
+<p>需要指出的是, Hadoop 和 Spark 解决的首先是通用大规模数据处理与分布式编程的抽象问题, 而非直接作为交互式 BI 系统的专用替代品. 它们真正改变的是&quot;可用于分析的数据规模与底层的计算拓扑&quot;. 这一通用计算范式的确立, 为后续以海量 SQL 分析为核心的专用分布式分析型数据库 (Parallel Databases) 和 SQL-on-Hadoop 系统的发展创造了关键的技术温床.</p>
+<h2 id="2-列式存储、MPP、查询优化器与向量化执行">2. 列式存储、MPP、查询优化器与向量化执行</h2>
+<p>通用分布式计算框架解决了海量数据的批处理问题, 但要满足企业级 BI 对高并发、低延迟 SQL 分析的极致要求, 分析型数据库的底层核心必须完成从存储介质到处理器微架构的全局重构. 这一重构由以下四个交织在一起的技术变革共同驱动:</p>
+
+<pre>
+<code class="mermaid" >
+flowchart LR
+    Q[SQL] --> P[Parser] --> O{CBO} --> E[Plan] --> M{MPP} --> C[列存]
+    style O fill:#fff3b0,stroke:#b58900
+    style M fill:#fff3b0,stroke:#b58900
+</code>
+</pre>
+<h3 id="2-1-行式存储向列式存储-Columnar-Storage-的演进">2.1. 行式存储向列式存储 (Columnar Storage) 的演进</h3>
+<p>传统 RDBMS 采用行式存储 (Row Store), 页面内部连续排布单条记录的所有字段. 在 OLAP 大范围只读聚合场景下, 这会导致大量的无效磁盘 I/O. 列式存储 (Columnar Storage) 则将同一个字段的所有记录在物理页面上连续排布 <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>.</p>
+<ul>
+<li><strong>I/O 裁剪</strong>: 查询引擎可以根据 SQL 语句, 避免读取查询未涉及的列数据, 从而显着减少扫描 I/O.</li>
+<li><strong>编码与压缩红利</strong>: 由于同列数据的数据类型和值域空间完全一致, 列存可以原生应用高效的压缩算法 (如字典编码, 游程编码 RLE, 位打包 Bit-packing), 在低基数, 重复度较高的分析数据上能够获得显着更高的压缩比 <sup class="footnote-ref"><a href="#fn3" id="fnref3:1">[3:1]</a></sup>.</li>
+</ul>
+<h3 id="2-2-MPP-大规模并行处理-架构">2.2. MPP (大规模并行处理) 架构</h3>
+<p>MPP 数据库采用<strong>无共享 (Shared-Nothing)</strong> 架构, 本文所述 Shared-Nothing 指经典 MPP 语境中的节点本地资源独立, 即每个节点拥有独立的 CPU, 内存和存储资源 <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>. 现代云数据仓库在此基础上进一步演化出了共享存储与解耦计算的架构. 数据通过哈希 (Hash) 或轮询 (Round-Robin) 分散存储在不同的数据节点上. 执行 SQL 时, 总控节点将查询请求解耦为分布式物理执行计划, 分发至所有数据节点并行计算. 在执行多表复杂关联 (<code>JOIN</code>) 时, MPP 架构依靠物理网络层进行数据重分布: 通过广播连接 (Broadcast Join) 将小表复制到所有节点, 或者通过洗牌连接 (Shuffle/Hash Join) 将大表基于 Join Key 重新计算哈希并重分布到对应节点, 打破了单机单体内存与 I/O 吞吐的局限 <sup class="footnote-ref"><a href="#fn4" id="fnref4:1">[4:1]</a></sup>.</p>
+<h3 id="2-3-查询优化器-Query-Optimizer-与物理执行计划">2.3. 查询优化器 (Query Optimizer) 与物理执行计划</h3>
+<p>随着多表关联规模扩大以及分布式执行中 Join 顺序, 数据重分布和并行度选择变得更加复杂, 基于代价的查询优化器 (CBO, Cost-Based Optimizer) 在现代分析型数据库中承担了更加关键的角色 <sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>. 优化器遵循从 <code>SQL Parser → Logical Plan → Cost-Based Optimizer → Physical Plan</code> 的编译路径, 依据底层数据精确的统计信息, 由优化器及运行时执行机制共同应用以下优化:</p>
+<ul>
+<li><strong>谓词下推 (Predicate Pushdown) 与分区剪枝 (Partition Pruning)</strong>: 将 <code>WHERE</code> 过滤条件尽可能推向最底层的存储引擎, 提前在文件系统级甚至存储块 (Block) 级别过滤数据, 极大限度削减计算层的元组输入量.</li>
+<li><strong>投影剪枝 (Projection Pruning)</strong>: 分析 AST 树, 仅拉取 SQL 涉及的物理列, 丢弃未使用的字段.</li>
+<li><strong>连接重排 (Join Reordering)</strong>: 动态评估不同连接顺序下的中间结果集 (Cardinality) 大小, 利用贪心或动态规划算法推导代价最小的 JOIN 树结构 (如 Left-Deep Tree 还是 Bushy Tree).</li>
+<li><strong>运行时过滤 (Runtime Filtering)</strong>: 在大表连接小表时, 由小表 (Build 侧) 在内存中快速构建布隆过滤器 (Bloom Filter), 实时下发到大表的扫描算子中. 其具体下推位置取决于执行引擎和存储层能力, 可动态应用在 Scan, Storage 或 Network Exchange 阶段, 以此剔除无效数据行.</li>
+</ul>
+<h3 id="2-4-向量化执行-Vectorized-Execution">2.4. 向量化执行 (Vectorized Execution)</h3>
+<p>第一篇中讨论指出, 传统关系数据库的火山模型以单次元组 (Tuple-at-a-time) 为粒度进行迭代, 在海量数据扫描时面临严重的性能瓶颈. 向量化执行引擎彻底颠覆了这一模型 <sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup>. 它改变了算子之间的数据传递契约, 传递一个固定大小或批量大小的数据块 (例如数百至上千行, 常以 1024 行为典型 Vector 粒度).</p>
+<ul>
+<li><strong>硬件级 SIMD 利用</strong>: 数据块在物理内存中连续紧凑排布. 计算算子通过流式处理, 使现代单条 SIMD (单指令多数据) 指令可以对多个数据元素执行同一种操作, 从而显着提高处理器的数据处理吞吐 <sup class="footnote-ref"><a href="#fn6" id="fnref6:1">[6:1]</a></sup>.</li>
+<li><strong>降低解释开销</strong>: 将单次元组级别的虚函数深度调用, 摊薄为面向连续内存块的扁平循环, 大幅降低了查询执行时的指令开销与 CPU Cache Miss, 提升了 Cache Locality <sup class="footnote-ref"><a href="#fn6" id="fnref6:2">[6:2]</a></sup>.</li>
+</ul>
+<h2 id="3-云原生数仓与-Lakehouse-现代范式">3. 云原生数仓与 Lakehouse 现代范式</h2>
+<p>当分布式计算, 列式存储以及高效执行器在技术栈底层成熟后, 云计算基础设施的普及推动了企业数据分析平台走向全新的现代化范式.</p>
+<h3 id="3-1-存算分离-Storage-Compute-Separation-的革命">3.1. 存算分离 (Storage/Compute Separation) 的革命</h3>
+<p>传统的 MPP Shared-Nothing 架构虽然实现了横向扩展, 但其存储和计算在物理节点上依然是深度绑定的. 云原生数仓彻底斩断了这一纽带, 实现了<strong>存储与计算的强解耦 (Storage/Compute Separation)</strong> <sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup>.</p>
+<ul>
+<li><strong>BigQuery 模式</strong>: Dremel 是 Google 内部的大规模交互式分析系统, BigQuery 是其思想和技术路线的重要产品化延伸 <sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup>. 它通过独立的持久化存储与弹性计算资源池, 将存储容量和查询计算能力解耦, 由服务负责根据查询负载动态分配计算资源, 实现完全 Serverless 化的按需分析 <sup class="footnote-ref"><a href="#fn7" id="fnref7:1">[7:1]</a></sup>.</li>
+<li><strong>Snowflake 架构</strong>: 明确将其技术栈划分为共享对象存储层, 独立计算层 (虚拟数仓 Virtual Warehouses) 以及全局云服务管理层 <sup class="footnote-ref"><a href="#fn9" id="fnref9">[9]</a></sup>. 不同的业务部门可以为不同的工作负载独立创建计算集群, 这些虚拟数仓属于独立的计算集群, 在计算工作负载上彼此隔离以减少资源争用, 同时共享同一套底层的低成本对象存储 <sup class="footnote-ref"><a href="#fn9" id="fnref9:1">[9:1]</a></sup>.</li>
+</ul>
+<h3 id="3-2-开放表格式-Open-Table-Format-与-Medallion-架构分层治理">3.2. 开放表格式 (Open Table Format) 与 Medallion 架构分层治理</h3>
+<p>与此同时, 分析系统开始打破数据仓库与数据湖之间的边界, 全面迈向 <strong>Lakehouse (湖仓一体)</strong> 新阶段 <sup class="footnote-ref"><a href="#fn10" id="fnref10">[10]</a></sup>.</p>
+<ul>
+<li><strong>开放表格式的突围</strong>: 仅依赖对象存储上的裸文件时, 分析系统难以在多个数据文件之间提供可靠的原子提交, 事务一致性和并发更新语义. Delta Lake, Apache Iceberg 等开放表格式 (Open Table Formats) 的出现, 重新在开放的对象存储上引入了数据治理契约. 两者都在底层对象存储之上增加了事务一致性, 快照式表状态管理以及 Schema 管理等能力, 从而使对象存储上的文件集合具备更接近数据库表的管理语义.
+<ul>
+<li><em>Delta Lake</em>: 通过轻量级事务日志 (Transaction Log) 和硬性的 Schema 强约束 (Schema Enforcement) 确保端到端的 ACID 事务特性与快照回溯 (Time Travel) <sup class="footnote-ref"><a href="#fn11" id="fnref11">[11]</a></sup>.</li>
+<li><em>Apache Iceberg</em>: 摒弃了文件目录依赖, 通过快照 (Snapshots) 与清单元数据文件管理表状态, 原生提供独立的模式演进 (Schema Evolution) 与分区演进 (Partition Evolution) 支持 <sup class="footnote-ref"><a href="#fn12" id="fnref12">[12]</a></sup>.</li>
+</ul>
+</li>
+<li><strong>Medallion Architecture 的分层多模式建模</strong>: 在湖仓一体的工程实践中, 企业不再固守单一体制, 而是基于 Databricks 的 Medallion 架构这一数据设计模式 (Data Design Pattern), 开展分层建模策略, 体现了现代湖仓常见的分层, 多模式建模实践 <sup class="footnote-ref"><a href="#fn13" id="fnref13">[13]</a></sup>:
+<ul>
+<li><em>Bronze 层 (原始区)</em>: 保留历史各种结构化与半结构化 (JSON) 的原始变动流 (Schema-on-Read).</li>
+<li><em>Silver 层 (清洗区)</em>: 通过基础清洗, Schema 管理与演进对齐, 消除数据异常.</li>
+<li><em>Gold 层 (聚合区)</em>: 重新引入针对核心业务主题的强约束维度建模 (星型/雪花模型), 承接下游业务决策.</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-3-从-ETL-到-ELT-的范式跃迁">3.3. 从 ETL 到 ELT 的范式跃迁</h3>
+<p>由于云原生数仓和湖仓一体提供了强悍的算力弹性, 改变了计算资源的成本和获取方式, 数据平台管道的物理拓扑发生了重心转移, 在云数仓和湖仓环境中, <strong>ELT (Extract, Load, Transform)</strong> 成为越来越常见的主流范式之一 <sup class="footnote-ref"><a href="#fn5" id="fnref5:1">[5:1]</a></sup>. 数据团队不再需要在外部第三方中间服务器里进行预清洗加工, 而是选择&quot;先原样高速加载入湖, 再利用湖仓内部的分布式弹性算力, 进行高速并行清洗转换&quot;. 这释放了原始数据的敏捷度, 使上层分析人员可以根据需要动态重构数据加工策略任务.</p>
+<h2 id="4-第二代-BI-的核心变化与新衍生技术债">4. 第二代 BI 的核心变化与新衍生技术债</h2>
+<p>分布式计算与云原生数仓时代的爆发, 为商业智能系统带来了空前的计算红利. 第二代 BI (以 Self-Service 自助式分析与分布式 Ad-hoc 查询为典型代表) 完成了底层的彻底蜕变: 分析的主导方式逐步从大量预计算 Cube 转向基于分布式 SQL 引擎的按需计算 (On-demand Running SQL), 同时保留缓存, 物化视图和预聚合等性能优化手段.</p>
+<p>然而, 当技术栈底层成功解决了&quot;算得快, 算得海量&quot;的问题后, 上层的商业世界并没有变得完美, 反而由于计算壁垒的瓦解, 衍生出了全新的架构级技术债务:</p>
+<h3 id="4-1-指标逻辑的碎片化与-指标地狱-Metrics-Hell">4.1. 指标逻辑的碎片化与&quot;指标地狱 (Metrics Hell)&quot;</h3>
+<p>由于计算资源的廉价与弹性, 业务和分析人员获得了更大的 <strong>Ad-hoc 查询自由度</strong>. 然而, 由于整个平台缺乏一套与物理底座完全解耦的<strong>跨系统统一抽象语义协议</strong>, 大量业务人员在拖拽配置个性化看数看板时, 直接将复杂的商业聚合计算逻辑, 统计口径定义, 甚至是针对敏感数据的行级安全权限 (RLS), 直接硬编码在各自前端看板文件或下游胶水层 SQL 中.</p>
+<h3 id="4-2-算得快-≠-算得对">4.2. 算得快 ≠ 算得对</h3>
+<ul>
+<li><em>销售团队</em> 在自己的 BI 前端看板里写了一段 SQL 逻辑: <code>SELECT SUM(revenue) FROM ... WHERE status = 'completed'</code>.</li>
+<li><em>财务团队</em> 在自己的另一个独立可视化工具中写了另一段 SQL 逻辑: <code>SELECT SUM(revenue) FROM ... WHERE settlement_date IS NOT NULL</code>.</li>
+</ul>
+<p>这两段底层的 SQL 逻辑同时运行在同一个极速的云数仓 (如 Snowflake) 上, 两个查询都可以快速返回结果. 但当两份报表汇报到高管办公会时, 针对同一个商业指标 (如&quot;上月销售额&quot;), 由于口径硬编码散落各处, 算出了两个完全冲突的技术数值.</p>
+<h2 id="5-第二篇核心技术主张">5. 第二篇核心技术主张</h2>
+<blockquote>
+<p><strong>分布式计算解决的是&quot;算得动&quot;和&quot;算得快&quot;, 而不是&quot;算得对&quot;. 当计算能力成为廉价而通用的基础设施后, 真正稀缺的资源反而从算力转变为可信的业务语义.</strong></p>
+</blockquote>
+<p>分布式分析平台和云原生数仓的跨越, 彻底解决了&quot;算不出来&quot;的算力枷锁, 却由于缺乏集中的语义契约, 将企业推入了由于语义失控, 口径碎片化导致的&quot;指标地狱 (Metrics Hell)&quot;. 这一全新技术债的爆发, 直接推动了下一代 Headless 独立语义层技术的崛起.</p>
+<h2 id="下一篇技术演进预告">下一篇技术演进预告</h2>
+<p>算力的泛滥并没有消灭数据治理, 反而证明了缺乏统一契约的计算民主化只是一场混乱. 当企业厌倦了散落在数百个下游 Dashboard 中的碎片化 SQL 逻辑后, 商业智能的架构重心正式开启了它的第三次大跃迁: 将指标和业务语义彻底从前端 BI 看板的视觉网格中<strong>剥离, 解耦并服务化</strong>.</p>
+<p>语义不再是 BI 工具的附庸, 而是变为了一个平台无关, API 优先, 定义一次到处运行的独立架构层. 这一层不仅解救了处于&quot;指标地狱&quot;中的企业, 更意外地为即将到来的大模型和智能体时代, 铺设好了连接企业确定性物理数据不可或缺的唯一通路.</p>
+<p>我们在 <strong>《第三篇: 现代数据栈与语义层 (Semantic Layer) 的重新崛起》</strong> 中再见.</p>
+<h2 id="参考资料">参考资料</h2>
+<style>
+  .series-nav{margin:2.5rem 0 1rem;padding:1.25rem 1.5rem;border:1px solid rgba(0,0,0,.08);border-radius:8px;background:rgba(0,0,0,.02);font-size:.95rem;line-height:1.6}
+  .series-nav__head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px dashed rgba(0,0,0,.12)}
+  .series-nav__series{font-weight:600;color:var(--theme-color,#3da5f5)}
+  .series-nav__pos{color:#888;font-size:.85em}
+  .series-nav__list{list-style:none;padding:0;margin:.5rem 0 1rem;display:grid;grid-template-columns:1fr;gap:.35rem}
+  .series-nav__item{display:flex;gap:.5rem;align-items:baseline;padding:.2rem 0;color:#555}
+  .series-nav__item a{color:#555;text-decoration:none;flex:1}
+  .series-nav__item a:hover{color:var(--theme-color,#3da5f5)}
+  .series-nav__num{color:#bbb;font-variant-numeric:tabular-nums;font-size:.85em;min-width:1.75em}
+  .series-nav__item--current{font-weight:600;color:var(--theme-color,#3da5f5)}
+  .series-nav__item--current a{color:var(--theme-color,#3da5f5);pointer-events:none}
+  .series-nav__pager{display:flex;justify-content:space-between;gap:1rem;padding-top:.75rem;border-top:1px dashed rgba(0,0,0,.12);font-size:.9rem}
+  .series-nav__pager-link{display:flex;align-items:center;gap:.35rem;color:#555;text-decoration:none;max-width:48%;text-align:inherit}
+  .series-nav__pager-link:hover{color:var(--theme-color,#3da5f5)}
+  .series-nav__pager-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .series-nav__pager-disabled{color:#bbb;font-size:.85em}
+  @media(max-width:600px){.series-nav__pager-title{max-width:12em}}
+</style>
+<nav class="series-nav" aria-label="系列导航">
+  <div class="series-nav__head">
+    <span class="series-nav__series">📚 BI系统的发展进程：数据建模、计算引擎与语义交互的架构演进</span>
+    <span class="series-nav__pos">第 2 / 2 节</span>
+  </div>
+  <ol class="series-nav__list"><li class="series-nav__item"><span class="series-nav__num">01</span><a href="/post/1069e228.html">企业数据仓库与经典 OLAP 时代（集中式语义的奠基）</a></li><li class="series-nav__item series-nav__item--current"><span class="series-nav__num">02</span><a href="/post/b39845b2.html">分布式计算与云原生数仓时代（计算与存储的解耦）</a></li></ol>
+  <div class="series-nav__pager">
+    <span class="series-nav__pager-cell series-nav__pager-cell--prev"><a class="series-nav__pager-link" href="/post/1069e228.html" rel="prev"><i class="iconfont icon-arrowleft"></i><span class="series-nav__pager-title">企业数据仓库与经典 OLAP 时代（集中式语义的奠基）</span></a></span>
+    <span class="series-nav__pager-cell series-nav__pager-cell--next"><span class="series-nav__pager-disabled">已是本系列末篇</span></span>
+  </div>
+</nav>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://scholar.google.com/scholar?q=MapReduce+Simplified+Data+Processing+on+Large+Clusters+Dean+Ghemawat+2004">MapReduce: Simplified Data Processing on Large Clusters</a> — Jeffrey Dean and Sanjay Ghemawat, <em>ACM SIGOPS Operating Systems Review</em>, 38(5):137-150, 2004. (支撑大规模分布式批处理, 数据本地性, 调度与容错特性的划时代文献) <a href="#fnref1" class="footnote-backref">↩︎</a> <a href="#fnref1:1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.5555/1863103.1863113">Spark: Cluster Computing with Working Sets</a> — Matei Zaharia, Mosharaf Chowdhury, Michael J. Franklin, Scott Shenker, and Ion Stoica, <em>Proceedings of the 2nd USENIX Conference on Hot Topics in Cloud Computing (HotCloud)</em>, 2010. (正式提出内存计算 RDD 模型与 DAG 调度机制, 特定迭代机器学习任务中报告约 10 倍性能提升的里程碑学术论文) <a href="#fnref2" class="footnote-backref">↩︎</a> <a href="#fnref2:1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.5555/1083592.1083658">C-Store: A Column-oriented DBMS</a> — Michael Stonebraker, Daniel Abadi, Adam Batkin, Xuedong Chen, Mitch Cherniack, Miguel Ferreira, Edmond Lau, Amerson Lin, Sam Madden, Elizabeth O'Neil, Pat O'Neil, Alex Rasin, Nghia Tran, and Stan Zdonik, <em>Proceedings of the 31st VLDB</em>, 553-564, 2005. (图灵奖得主团队关于面向分析型工作负载的列式存储设计, I/O 裁剪与压缩红利的经典学术理论出处) <a href="#fnref3" class="footnote-backref">↩︎</a> <a href="#fnref3:1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/129888.129894">Parallel Database Systems: The Future of High Performance Database Systems</a> — David DeWitt and Jim Gray, <em>Communications of the ACM</em>, 35(6):85-98, 1992. (系统定义并行数据库, 大规模并行处理 (MPP) Shared-Nothing 架构与分布式连接/数据重分布的经典文献) <a href="#fnref4" class="footnote-backref">↩︎</a> <a href="#fnref4:1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/248603.248616">An Overview of Data Warehousing and OLAP Technology</a> — Surajit Chaudhuri and Umeshwar Dayal, <em>ACM SIGMOD Record</em>, 26(1):65-74, 1997. (多维分析与查询优化器通用关系代数演进路径的核心总括性文献引用) <a href="#fnref5" class="footnote-backref">↩︎</a> <a href="#fnref5:1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://scholar.google.com/scholar?q=MonetDB+X100+Zukowski+Boncz+2005">MonetDB/X100: a DBMS in the CPU Cache</a> — Marcin Zukowski, Peter Boncz, Nesime Guerdan, and Michiel Heman, <em>IEEE International Conference on Data Engineering (ICDE)</em>, 2005. (打破火山模型单次元组迭代开销, 确立固定大小高密度数据块向量化执行和单条 SIMD 指令处理多个数据元素的权威学术论文) <a href="#fnref6" class="footnote-backref">↩︎</a> <a href="#fnref6:1" class="footnote-backref">↩︎</a> <a href="#fnref6:2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://cloud.google.com/blog/products/bigquery/separation-of-storage-and-compute-in-bigquery">Separation of storage and compute in BigQuery</a> — Srivas Vaidyanathan, Google Cloud Architectural Blog, 2017. (官方技术文献, 支撑云原生数据仓库计算与存储分离解耦及按需资源调度演进的断言) <a href="#fnref7" class="footnote-backref">↩︎</a> <a href="#fnref7:1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn8" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://scholar.google.com/scholar?q=Dremel+Interactive+Analysis+Web-Scale+Datasets+Melnik+2010">Dremel: Interactive Analysis of Web-Scale Datasets</a> — Sergey Melnik, Andrey Gubarev, Jing Jing Long, Geoffrey Romer, Shiva Shivakumar, Matt Tolton, and Theo Vassilakis, <em>Proceedings of the VLDB Endowment</em>, 3(1-2):330-339, 2010. (揭示 Google BigQuery 核心思想源头 Dremel 引擎的多级执行树及大规模分布式交互分析机制的奠基性文献) <a href="#fnref8" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn9" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/2882903.2903741">The Snowflake Elastic Data Warehouse</a> — Benoit Dageville, Thierry Cruanes, Marcin Zukowski, Vadim Antonov, Artin Avanes, et al., <em>Proceedings of the ACM SIGMOD International Conference on Management of Data</em>, 215-226, 2016. (详尽解构云原生数据仓库多集群共享数据架构 (Multi-cluster Shared Data Architecture), 虚拟数仓独立计算集群工作负载隔离的官方技术白皮书) <a href="#fnref9" class="footnote-backref">↩︎</a> <a href="#fnref9:1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn10" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://scholar.google.com/scholar?q=Lakehouse+New+Generation+Open+Platforms+Unify+Data+Warehousing+Data+Lakes+Armbrust+2021">Lakehouse: A New Generation of Open Platforms that Unify Data Warehousing and Data Lakes</a> — Michael Armbrust, Ali Ghodsi, Reynold Xin, and Matei Zaharia, <em>Proceedings of the 11th Conference on Innovative Data Systems Research (CIDR)</em>, 2021. (支撑湖仓一体 (Lakehouse) 统一开放平台架构思想演进的基石论文引用) <a href="#fnref10" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn11" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.14778/3415478.3415560">Delta Lake: High-Performance ACID Table Storage over Cloud Object Stores</a> — Michael Armbrust, et al., <em>Proceedings of the VLDB Endowment</em>, 13(12):3411-3424, 2020. (专门支撑 Delta Lake 元数据轻量级事务日志及唯一模式强约束技术落地实践的出处) <a href="#fnref11" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn12" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://iceberg.apache.org/spec/">Apache Iceberg Table Format Specification</a> — Apache Iceberg Project, Apache Software Foundation, 2025. (专门支撑 Iceberg 开源快照元数据, 独立模式与分区演进落地细节的工业官方规范) <a href="#fnref12" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn13" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://docs.databricks.com/aws/en/lakehouse/medallion">What is the Medallion Design Pattern in a Lakehouse Architecture?</a> — Databricks Engineering, Databricks Production Documentation Guide, 2026. (专门支撑 Medallion 架构及湖仓分层治理生命周期职责划分的标准指南) <a href="#fnref13" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/bi-evolution/" class="category-chain-item">bi-evolution</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/BI/" class="print-no-link">#BI</a>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" class="print-no-link">#分布式计算</a>
+      
+        <a href="/tags/Hadoop/" class="print-no-link">#Hadoop</a>
+      
+        <a href="/tags/Spark/" class="print-no-link">#Spark</a>
+      
+        <a href="/tags/%E5%88%97%E5%BC%8F%E5%AD%98%E5%82%A8/" class="print-no-link">#列式存储</a>
+      
+        <a href="/tags/MPP/" class="print-no-link">#MPP</a>
+      
+        <a href="/tags/CBO/" class="print-no-link">#CBO</a>
+      
+        <a href="/tags/%E5%90%91%E9%87%8F%E5%8C%96%E6%89%A7%E8%A1%8C/" class="print-no-link">#向量化执行</a>
+      
+        <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%95%B0%E4%BB%93/" class="print-no-link">#云原生数仓</a>
+      
+        <a href="/tags/%E5%AD%98%E7%AE%97%E5%88%86%E7%A6%BB/" class="print-no-link">#存算分离</a>
+      
+        <a href="/tags/Lakehouse/" class="print-no-link">#Lakehouse</a>
+      
+        <a href="/tags/%E5%BC%80%E6%94%BE%E8%A1%A8%E6%A0%BC%E5%BC%8F/" class="print-no-link">#开放表格式</a>
+      
+        <a href="/tags/Delta-Lake/" class="print-no-link">#Delta Lake</a>
+      
+        <a href="/tags/Iceberg/" class="print-no-link">#Iceberg</a>
+      
+        <a href="/tags/Medallion/" class="print-no-link">#Medallion</a>
+      
+        <a href="/tags/ELT/" class="print-no-link">#ELT</a>
+      
+        <a href="/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/" class="print-no-link">#指标地狱</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
+    if (typeof mermaid === 'undefined') return;
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"18px"},"flowchart":{"useMaxWidth":false,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window && typeof mermaid.run === 'function') {
+          mermaid.run();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
