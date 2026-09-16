@@ -763,7 +763,7 @@ post:
     specific: false
 
     # See: http://mermaid-js.github.io/mermaid/
-    options: { theme: 'default', themeVariables: { fontSize: '16px' } }
+    options: { theme: 'default', themeVariables: { fontSize: '18px' }, flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'linear', nodeSpacing: 10, rankSpacing: 30, padding: 5 } }
 
   # 评论插件
   # Comment plugin

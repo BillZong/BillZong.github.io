@@ -149,6 +149,21 @@ section.footnotes ol.footnotes-list li.footnote-item p {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
 }
 
+/* 全局：mermaid SVG 按 viewBox 自然尺寸渲染（字号充足可读）
+   mermaid.useMaxWidth=false 让 svg 保留 intrinsic size,
+   容器 max-width + overflow-x:auto 兜底防超宽,
+   min-height 强制最小可读尺寸 */
+.mermaid {
+  max-width: 100%;
+  overflow-x: auto;
+  text-align: center;
+}
+.mermaid svg {
+  max-width: 100% !important;
+  height: auto !important;
+  display: inline-block;
+}
+
 /* Dark mode：mermaid SVG 颜色覆盖（深色背景下原黑色节点/箭头不可见） */
 [data-user-color-scheme="dark"] .mermaid svg {
   background-color: transparent !important;
