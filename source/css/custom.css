@@ -575,6 +575,21 @@ section.footnotes ol.footnotes-list li.footnote-item p {
   background-color: rgba(220, 53, 69, 0.12) !important;
 }
 
+
+/* Exclude mermaid 内部 <p> (来自 foreignObject) 的 typography 覆盖
+   原因: mermaid 通过 <foreignObject><p> 渲染节点标签, 上述 `.post-content p` 会强制
+   color: var(--post-text-color), 在暗色模式下变为浅灰, 导致 Business Outcome 等高亮节点
+   出现"浅灰字 + 浅粉底"对比度崩塌. 字号/字体也保留 mermaid 自己的 sans-serif 栈更协调. */
+.post-content .mermaid p {
+  color: inherit !important;
+  font-size: inherit !important;
+  font-family: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: normal !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 /* ==========================================================================
    Mermaid figure - 给 mermaid 块套上 <figure> + figcaption + noscript 兜底
    视觉上更接近正式出版物 (带图注 + 编号), JS 失效时显示文字描述
