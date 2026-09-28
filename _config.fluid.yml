@@ -105,7 +105,7 @@ fun_features:
   # 为文章内容中的标题添加锚图标
   # Add an anchor icon to the title on the post page
   anchorjs:
-    enable: false
+    enable: true
     element: h1,h2,h3,h4,h5,h6
     # Options: left | right
     placement: left
@@ -114,7 +114,7 @@ fun_features:
     visible: hover
 
     # Options: § | # | ❡
-    icon: ""
+    icon: "#"
 
   # 加载进度条
   # Progress bar when loading
@@ -719,12 +719,12 @@ post:
   # 文章图片标题
   # Image caption
   image_caption:
-    enable: false
+    enable: true
 
   # 文章图片可点击放大
   # Zoom feature of images
   image_zoom:
-    enable: false
+    enable: true
     # 放大后图片链接替换规则，可用于将压缩图片链接替换为原图片链接，如 ['-slim', ''] 是将链接中 `-slim` 移除；如果想使用正则请使用 `re:` 前缀，如 ['re:\\d{3,4}\\/\\d{3,4}\\/', '']
     # The image url replacement when zooming, the feature can be used to replace the compressed image to the original image, eg: ['-slim', ''] removes `-slim` from the image url when zooming; if you want to use regular, use prefix `re:`, eg: ['re:\\d{3,4}\\/\\d{3,4}\\/','']
     img_url_replace: ['', '']
