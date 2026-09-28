@@ -62,12 +62,18 @@ date: 2026-09-16 11:30:00
 
 通用分布式计算框架解决了海量数据的批处理问题, 但要满足企业级 BI 对高并发、低延迟 SQL 分析的极致要求, 分析型数据库的底层核心必须完成从存储介质到处理器微架构的全局重构. 这一重构由以下四个交织在一起的技术变革共同驱动:
 
-{% mermaid %}
-flowchart LR
-    Q[SQL] --> P[Parser] --> O{CBO} --> E[Plan] --> M{MPP} --> C[列存]
-    style O fill:#fff3b0,stroke:#b58900
-    style M fill:#fff3b0,stroke:#b58900
-{% endmermaid %}
+<figure class="mermaid-figure" role="img" aria-label="SQL 到列存的端到端物理执行路径: SQL 经 Parser 解析, 由基于代价的优化器 (CBO) 生成 Plan, 交由 MPP 引擎并行执行, 最终落到列式存储上完成物理扫描. CBO 与 MPP 两阶段为性能关键节点.">
+  {% mermaid %}
+  flowchart LR
+      Q[SQL] --> P[Parser] --> O{CBO} --> E[Plan] --> M{MPP} --> C[列存]
+      style O fill:#fff3b0,stroke:#b58900
+      style M fill:#fff3b0,stroke:#b58900
+  {% endmermaid %}
+  <figcaption class="mermaid-caption">图 2-1 · SQL 到列存的端到端物理执行路径 (CBO 与 MPP 为性能关键节点)</figcaption>
+  <noscript>
+    <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>SQL → Parser → CBO (基于代价的优化器) → Plan → MPP (大规模并行执行) → 列存. 其中 CBO 与 MPP 两节点为性能关键, 在原图中以浅黄底色高亮.</p>
+  </noscript>
+</figure>
 
 ### 2.1. 行式存储向列式存储 (Columnar Storage) 的演进
 
@@ -75,6 +81,20 @@ flowchart LR
 
 - **I/O 裁剪**: 查询引擎可以根据 SQL 语句, 避免读取查询未涉及的列数据, 从而显着减少扫描 I/O.
 - **编码与压缩红利**: 由于同列数据的数据类型和值域空间完全一致, 列存可以原生应用高效的压缩算法 (如字典编码, 游程编码 RLE, 位打包 Bit-packing), 在低基数, 重复度较高的分析数据上能够获得显着更高的压缩比 [^3].
+
+{% callout type="info" title="row_vs_column_store" %}
+下表把行存与列存的关键差异一次性对齐, 避免在 OLAP 场景下误选行存带来十倍以上的 I/O 开销.
+{% endcallout %}
+
+| 维度 | 行式存储 (Row Store) | 列式存储 (Columnar Storage) |
+| --- | --- | --- |
+| 物理排布 | 一行所有字段连续排布在页面内 | 同一列的所有记录在物理页面上连续排布 |
+| 典型场景 | OLTP: 按主键点查/插入/更新 | OLAP: 大范围聚合/按列投影 |
+| 全行读取 | 单次 I/O 命中, 高效 | 跨列分散, 需重组 |
+| 仅读若干列 | 仍需读整行, 浪费 I/O | **I/O 裁剪**: 仅读所选列, 显著减少扫描 |
+| 压缩 | 同列异构字段, 压缩比低 | **同列同构 + 字典/RLE/Bit-packing**: 压缩比高数倍 |
+| 写入吞吐 | 单行追加/更新友好 | 频繁单行更新代价高, 适合批量追加 |
+| 代表实现 | 传统 RDBMS (MySQL InnoDB, PostgreSQL) | C-Store, Parquet, ORC, ClickHouse, DuckDB |
 
 ### 2.2. MPP (大规模并行处理) 架构
 
@@ -114,14 +134,48 @@ MPP 数据库采用**无共享 (Shared-Nothing)** 架构, 本文所述 Shared-No
 - **开放表格式的突围**: 仅依赖对象存储上的裸文件时, 分析系统难以在多个数据文件之间提供可靠的原子提交, 事务一致性和并发更新语义. Delta Lake, Apache Iceberg 等开放表格式 (Open Table Formats) 的出现, 重新在开放的对象存储上引入了数据治理契约. 两者都在底层对象存储之上增加了事务一致性, 快照式表状态管理以及 Schema 管理等能力, 从而使对象存储上的文件集合具备更接近数据库表的管理语义.
   - *Delta Lake*: 通过轻量级事务日志 (Transaction Log) 和硬性的 Schema 强约束 (Schema Enforcement) 确保端到端的 ACID 事务特性与快照回溯 (Time Travel) [^11].
   - *Apache Iceberg*: 摒弃了文件目录依赖, 通过快照 (Snapshots) 与清单元数据文件管理表状态, 原生提供独立的模式演进 (Schema Evolution) 与分区演进 (Partition Evolution) 支持 [^12].
+
+{% callout type="info" title="delta_vs_iceberg" %}
+两大主流开放表格式在事务机制和演进灵活性上各有所长, 选型应基于查询引擎兼容性与演进需求强度.
+{% endcallout %}
+
+| 维度 | Delta Lake | Apache Iceberg |
+| --- | --- | --- |
+| 元数据载体 | 单一事务日志 `_delta_log/` (按序 JSON/Checkpoint) | 快照 (Snapshot) + 清单元数据文件 (Manifest List/Manifest) |
+| Schema 演进 | 通过 Schema Enforcement + Schema Evolution 显式支持 | 原生独立 Schema 演进, 与分区演进解耦 |
+| 分区演进 | 需通过 Z-Order / Liquid Clustering 等方式重写 | **原生 Partition Evolution**: 修改分区策略不重写数据 |
+| 隐藏分区 | 不原生支持 | 支持隐藏分区 (Hidden Partitioning), 自动按 Transform 计算 |
+| 查询引擎兼容 | Spark / Databricks 一等公民; 其他引擎逐步补齐 | Spark / Trino / Flink / Presto / Hive / DuckDB 多引擎中立 |
+| 典型适用 | Spark / Databricks 重度用户, 单平台锁定 | 多查询引擎并存的湖仓平台 |
+
 - **Medallion Architecture 的分层多模式建模**: 在湖仓一体的工程实践中, 企业不再固守单一体制, 而是基于 Databricks 的 Medallion 架构这一数据设计模式 (Data Design Pattern), 开展分层建模策略, 体现了现代湖仓常见的分层, 多模式建模实践 [^13]:
   - *Bronze 层 (原始区)*: 保留历史各种结构化与半结构化 (JSON) 的原始变动流 (Schema-on-Read).
   - *Silver 层 (清洗区)*: 通过基础清洗, Schema 管理与演进对齐, 消除数据异常.
   - *Gold 层 (聚合区)*: 重新引入针对核心业务主题的强约束维度建模 (星型/雪花模型), 承接下游业务决策.
 
+| 分层 | 职责 | 数据特征 | 建模风格 | 主要消费方 |
+| --- | --- | --- | --- | --- |
+| **Bronze** | 全量原始落湖, 不做清洗 | 高冗余, 含脏数据与 Schema 漂移 | Schema-on-Read, 仅追加 | 数据工程, 审计与回溯 |
+| **Silver** | 基础清洗, Schema 对齐, 去重 | 一致性提升, 字段标准化 | 3NF/轻量维度化 | 数据科学家, 中层分析师 |
+| **Gold** | 业务主题聚合, 强约束建模 | 高度聚合, 面向决策 | 星型/雪花维度模型, Kimball 范式 | 业务决策层, 报表与看板 |
+
 ### 3.3. 从 ETL 到 ELT 的范式跃迁
 
 由于云原生数仓和湖仓一体提供了强悍的算力弹性, 改变了计算资源的成本和获取方式, 数据平台管道的物理拓扑发生了重心转移, 在云数仓和湖仓环境中, **ELT (Extract, Load, Transform)** 成为越来越常见的主流范式之一 [^5]. 数据团队不再需要在外部第三方中间服务器里进行预清洗加工, 而是选择"先原样高速加载入湖, 再利用湖仓内部的分布式弹性算力, 进行高速并行清洗转换". 这释放了原始数据的敏捷度, 使上层分析人员可以根据需要动态重构数据加工策略任务.
+
+{% callout type="info" title="etl_vs_elt" %}
+传统 ETL 与云时代的 ELT 不是"哪个更好"的对立, 而是计算资源范式差异导致的拓扑重心转移.
+{% endcallout %}
+
+| 维度 | 传统 ETL | 云原生 ELT |
+| --- | --- | --- |
+| 计算位置 | 第三方 ETL 服务器 (Informatica, DataStage) | 数仓/湖仓内部 (Snowflake, BigQuery, Databricks SQL) |
+| 转换时机 | 加载前在中间服务器做大量清洗 | 加载后再用数仓弹性算力做转换 |
+| 数据落地次数 | 多次: 中间临时表 → 目标表 | **单次**: 原样加载 → 内部按需转换 |
+| 资源耦合 | 计算与 ETL 服务器规模强耦合 | 计算弹性, 与存储解耦 |
+| 敏捷性 | 业务逻辑变更需重跑管道 | 原始数据保留, 转换可重写 |
+| 适用场景 | 传统数仓时代, 算力受限 | 云数仓/Lakehouse, 算力按需 |
+| 主要风险 | 链路长, 错误恢复代价高 | 存储成本与下游计算冗余 |
 
 ## 4. 第二代 BI 的核心变化与新衍生技术债
 
