@@ -399,3 +399,176 @@ section.footnotes ol.footnotes-list li.footnote-item p {
 [data-user-color-scheme="dark"] .post-content blockquote {
   background-color: rgba(255, 255, 255, 0.04) !important;
 }
+
+/* ==========================================================================
+   TL;DR box - 文章开头 30 秒读完本节提示
+   ========================================================================== */
+
+.tldr {
+  margin: 1.5rem 0 2rem !important;
+  padding: 1rem 1.25rem 1.1rem !important;
+  border: 1px solid rgba(61, 165, 245, 0.35) !important;
+  border-left: 5px solid var(--theme-color, #3da5f5) !important;
+  border-radius: 6px !important;
+  background-color: rgba(61, 165, 245, 0.06) !important;
+}
+
+.tldr__head {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 0.6rem !important;
+  margin-bottom: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 1px dashed rgba(61, 165, 245, 0.35) !important;
+}
+
+.tldr__label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 0.08em !important;
+  color: var(--theme-color, #3da5f5) !important;
+  background-color: rgba(61, 165, 245, 0.12) !important;
+  padding: 0.18em 0.55em !important;
+  border-radius: 3px !important;
+}
+
+.tldr__hint {
+  font-size: 0.8rem !important;
+  color: var(--sec-text-color, #888) !important;
+  font-style: italic !important;
+}
+
+.tldr__body {
+  font-size: 0.975rem !important;
+  line-height: 1.7 !important;
+  color: var(--post-text-color, #3c4858) !important;
+}
+
+.tldr__body p {
+  margin-bottom: 0.5em !important;
+}
+
+.tldr__body p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.tldr__body ul,
+.tldr__body ol {
+  margin: 0.4em 0 0.6em !important;
+  padding-left: 1.5em !important;
+}
+
+[data-user-color-scheme="dark"] .tldr {
+  background-color: rgba(61, 165, 245, 0.1) !important;
+}
+
+/* ==========================================================================
+   Callout - 每节末的要点 / 说明 / 提示 / 注意 四色实心框
+   类名: callout callout--info|note|tip|warning
+   ========================================================================== */
+
+.callout {
+  margin: 1.5rem 0 !important;
+  padding: 0.85rem 1.15rem 1rem !important;
+  border-radius: 6px !important;
+  border: 1px solid transparent !important;
+  border-left-width: 5px !important;
+}
+
+.callout__head {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  padding-bottom: 0.4rem !important;
+  border-bottom: 1px dashed currentColor !important;
+  opacity: 0.92 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+}
+
+.callout__icon {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.callout__label {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+.callout__title {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  margin-left: 0.25rem !important;
+}
+
+.callout__body {
+  font-size: 0.975rem !important;
+  line-height: 1.75 !important;
+  color: var(--post-text-color, #3c4858) !important;
+}
+
+.callout__body p {
+  margin-bottom: 0.5em !important;
+}
+
+.callout__body p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.callout__body ul,
+.callout__body ol {
+  margin: 0.4em 0 0.6em !important;
+  padding-left: 1.5em !important;
+}
+
+/* info - 蓝色 */
+.callout--info {
+  border-color: rgba(61, 165, 245, 0.25) !important;
+  border-left-color: #3da5f5 !important;
+  background-color: rgba(61, 165, 245, 0.07) !important;
+  color: #1976d2 !important;
+}
+
+/* note - 灰色 (中性说明) */
+.callout--note {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  border-left-color: #6c757d !important;
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  color: #495057 !important;
+}
+
+/* tip - 绿色 */
+.callout--tip {
+  border-color: rgba(40, 167, 69, 0.25) !important;
+  border-left-color: #28a745 !important;
+  background-color: rgba(40, 167, 69, 0.07) !important;
+  color: #1e7e34 !important;
+}
+
+/* warning - 橙红 */
+.callout--warning {
+  border-color: rgba(220, 53, 69, 0.25) !important;
+  border-left-color: #dc3545 !important;
+  background-color: rgba(220, 53, 69, 0.07) !important;
+  color: #c82333 !important;
+}
+
+[data-user-color-scheme="dark"] .callout--info {
+  background-color: rgba(61, 165, 245, 0.12) !important;
+}
+
+[data-user-color-scheme="dark"] .callout--note {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-user-color-scheme="dark"] .callout--tip {
+  background-color: rgba(40, 167, 69, 0.12) !important;
+}
+
+[data-user-color-scheme="dark"] .callout--warning {
+  background-color: rgba(220, 53, 69, 0.12) !important;
+}
