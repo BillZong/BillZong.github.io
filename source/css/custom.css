@@ -217,3 +217,185 @@ section.footnotes ol.footnotes-list li.footnote-item p {
   fill: #1f1f1f !important;
   color: #1f1f1f !important;
 }
+
+/* ==========================================================================
+   Long-form reading baseline - 720px 行宽 + 中文衬线 + 1.85 行高 + 18px 字号
+   覆盖 fluid 默认的 padding 10% (~864px) + 16px system font + 1.5 line-height
+   目标接近付费阅读博客 (Stratechery / Substack / 知乎专栏) 长文版式基线
+   ========================================================================== */
+
+/* 正文容器：固定 720px 行宽，居中 */
+.post-content,
+.post-custom {
+  max-width: 720px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+
+/* 长文正文字体栈：
+   - 西文：Charter (Bitstream Charter) → Source Serif Pro → Iowan Old Style → Georgia → serif
+   - 中文：Noto Serif CJK SC → Songti SC → STSong → SimSun → serif
+   浏览器找不到衬线时降级到 system-ui 兜底，确保不会出现"白底无衬线"的退化 */
+.post-content p,
+.post-content li,
+.post-content blockquote,
+.post-content table,
+.post-content figcaption {
+  font-family: "Charter", "Bitstream Charter", "Sitka Text", "Source Serif Pro", "Iowan Old Style", "Apple Garamond", "Baskerville", Georgia, "Times New Roman", "Noto Serif CJK SC", "Songti SC", "STSong", "SimSun", serif !important;
+  font-size: 1.125rem !important;        /* 18px (root 16px × 1.125) */
+  line-height: 1.85 !important;
+  color: var(--post-text-color, #3c4858) !important;
+  font-feature-settings: "kern", "liga", "calt", "onum" !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* 中文标点 (CJK 字符) 视觉权重略调低 + 全角空格更明显 */
+.post-content p:lang(zh),
+.post-content li:lang(zh) {
+  letter-spacing: 0.01em;
+}
+
+/* 标题用同一字族的粗体，提升层级对比 */
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  font-family: "Charter", "Bitstream Charter", "Source Serif Pro", "Iowan Old Style", Georgia, "Noto Serif CJK SC", "Songti SC", "STSong", "SimSun", serif !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: var(--post-text-color, #2c3e50) !important;
+  letter-spacing: 0 !important;
+}
+
+/* 章节标题与正文的视觉间距：付费博客标配 1.5em+ 顶部间距 */
+.post-content h2 {
+  margin-top: 2.5rem !important;
+  margin-bottom: 1rem !important;
+  font-size: 1.625rem !important;        /* 26px */
+  padding-bottom: 0.35rem !important;
+  border-bottom: 1px solid var(--line-color, rgba(0,0,0,.08)) !important;
+}
+
+.post-content h3 {
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.75rem !important;
+  font-size: 1.25rem !important;         /* 20px */
+}
+
+/* 首段不缩进 (hexo-marked 默认 0)；段落间距 0.85em */
+.post-content p {
+  margin-top: 0 !important;
+  margin-bottom: 0.85em !important;
+}
+
+/* 引述块：左侧 4px 强调色边 + 浅灰背景 + 内边距，比 hexo 默认好看 */
+.post-content blockquote {
+  margin: 1.5rem 0 !important;
+  padding: 0.75rem 1.1rem !important;
+  border-left: 4px solid var(--theme-color, #3da5f5) !important;
+  background-color: rgba(0, 0, 0, 0.025) !important;
+  border-radius: 0 6px 6px 0 !important;
+  font-style: normal !important;
+  color: var(--sec-text-color, #555) !important;
+}
+
+.post-content blockquote p {
+  margin-bottom: 0.5em !important;
+}
+
+.post-content blockquote p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* 列表层级缩进和悬挂对齐 */
+.post-content ul,
+.post-content ol {
+  margin: 0.5em 0 1em !important;
+  padding-left: 1.75em !important;
+}
+
+.post-content li {
+  margin-bottom: 0.4em !important;
+}
+
+/* 表格：表头加底边 + 行 hover 高亮 */
+.post-content table {
+  width: 100% !important;
+  margin: 1.25rem 0 !important;
+  border-collapse: collapse !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+}
+
+.post-content table th,
+.post-content table td {
+  padding: 0.55rem 0.85rem !important;
+  border-bottom: 1px solid var(--line-color, rgba(0,0,0,.08)) !important;
+  vertical-align: top !important;
+}
+
+.post-content table th {
+  background-color: rgba(0, 0, 0, 0.025) !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid var(--line-color, rgba(0,0,0,.12)) !important;
+}
+
+.post-content table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.015) !important;
+}
+
+/* 平板 (≤ 991px)：字号 17px / 行高 1.8 */
+@media (max-width: 991px) {
+  .post-content p,
+  .post-content li,
+  .post-content blockquote,
+  .post-content table {
+    font-size: 1.0625rem !important;     /* 17px */
+    line-height: 1.8 !important;
+  }
+}
+
+/* 手机 (≤ 575px)：字号 16px / 行高 1.75 / 行宽收紧到 100% - 2rem */
+@media (max-width: 575px) {
+  .post-content,
+  .post-custom {
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .post-content p,
+  .post-content li,
+  .post-content blockquote,
+  .post-content table {
+    font-size: 1rem !important;          /* 16px */
+    line-height: 1.75 !important;
+  }
+
+  .post-content h2 {
+    font-size: 1.375rem !important;      /* 22px */
+  }
+
+  .post-content h3 {
+    font-size: 1.125rem !important;      /* 18px */
+  }
+}
+
+/* Dark mode：表格行 hover 微调以保证对比度 */
+[data-user-color-scheme="dark"] .post-content table th {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+[data-user-color-scheme="dark"] .post-content table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+[data-user-color-scheme="dark"] .post-content blockquote {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
