@@ -27,7 +27,7 @@
 <meta property="og:description" content="本节为系列第 2 &#x2F; 8 节. 承接第一篇的&quot;数据源+查询计算&quot;两层奠基, 展开分布式计算, 云原生数仓, Lakehouse 三波底层范式跃迁, 并暴露第二代 BI 的核心新债务: 指标语义失控.  第二章: 分布式计算与云原生数仓时代 (计算与存储的解耦) Part II: Distributed Computing &amp; The Cloud Data Wareho">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-09-16T03:30:00.000Z">
-<meta property="article:modified_time" content="2026-09-16T09:06:27.231Z">
+<meta property="article:modified_time" content="2026-09-28T07:07:09.670Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="BI">
 <meta property="article:tag" content="分布式计算">
@@ -60,6 +60,8 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -85,7 +87,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h2,h3","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"#"},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h2,h3","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -501,7 +503,8 @@ mjx-container[display="true"] + br {
 <p>需要指出的是, Hadoop 和 Spark 解决的首先是通用大规模数据处理与分布式编程的抽象问题, 而非直接作为交互式 BI 系统的专用替代品. 它们真正改变的是&quot;可用于分析的数据规模与底层的计算拓扑&quot;. 这一通用计算范式的确立, 为后续以海量 SQL 分析为核心的专用分布式分析型数据库 (Parallel Databases) 和 SQL-on-Hadoop 系统的发展创造了关键的技术温床.</p>
 <h2 id="2-列式存储、MPP、查询优化器与向量化执行">2. 列式存储、MPP、查询优化器与向量化执行</h2>
 <p>通用分布式计算框架解决了海量数据的批处理问题, 但要满足企业级 BI 对高并发、低延迟 SQL 分析的极致要求, 分析型数据库的底层核心必须完成从存储介质到处理器微架构的全局重构. 这一重构由以下四个交织在一起的技术变革共同驱动:</p>
-
+<figure class="mermaid-figure" role="img" aria-label="SQL 到列存的端到端物理执行路径: SQL 经 Parser 解析, 由基于代价的优化器 (CBO) 生成 Plan, 交由 MPP 引擎并行执行, 最终落到列式存储上完成物理扫描. CBO 与 MPP 两阶段为性能关键节点.">
+  
 <pre>
 <code class="mermaid" >
 flowchart LR
@@ -510,12 +513,70 @@ flowchart LR
     style M fill:#fff3b0,stroke:#b58900
 </code>
 </pre>
+  <figcaption class="mermaid-caption">图 2-1 · SQL 到列存的端到端物理执行路径 (CBO 与 MPP 为性能关键节点)</figcaption>
+  <noscript>
+    <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>SQL → Parser → CBO (基于代价的优化器) → Plan → MPP (大规模并行执行) → 列存. 其中 CBO 与 MPP 两节点为性能关键, 在原图中以浅黄底色高亮.</p>
+  </noscript>
+</figure>
 <h3 id="2-1-行式存储向列式存储-Columnar-Storage-的演进">2.1. 行式存储向列式存储 (Columnar Storage) 的演进</h3>
 <p>传统 RDBMS 采用行式存储 (Row Store), 页面内部连续排布单条记录的所有字段. 在 OLAP 大范围只读聚合场景下, 这会导致大量的无效磁盘 I/O. 列式存储 (Columnar Storage) 则将同一个字段的所有记录在物理页面上连续排布 <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>.</p>
 <ul>
 <li><strong>I/O 裁剪</strong>: 查询引擎可以根据 SQL 语句, 避免读取查询未涉及的列数据, 从而显着减少扫描 I/O.</li>
 <li><strong>编码与压缩红利</strong>: 由于同列数据的数据类型和值域空间完全一致, 列存可以原生应用高效的压缩算法 (如字典编码, 游程编码 RLE, 位打包 Bit-packing), 在低基数, 重复度较高的分析数据上能够获得显着更高的压缩比 <sup class="footnote-ref"><a href="#fn3" id="fnref3:1">[3:1]</a></sup>.</li>
 </ul>
+
+<aside class="callout callout--info" role="note">
+  <div class="callout__head"><span class="callout__icon">ℹ</span><span class="callout__label">要点</span><span class="callout__title">row vs column store</span></div>
+  <div class="callout__body"><p>下表把行存与列存的关键差异一次性对齐, 避免在 OLAP 场景下误选行存带来十倍以上的 I/O 开销.</p>
+</div>
+</aside>
+
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>行式存储 (Row Store)</th>
+<th>列式存储 (Columnar Storage)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理排布</td>
+<td>一行所有字段连续排布在页面内</td>
+<td>同一列的所有记录在物理页面上连续排布</td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>OLTP: 按主键点查/插入/更新</td>
+<td>OLAP: 大范围聚合/按列投影</td>
+</tr>
+<tr>
+<td>全行读取</td>
+<td>单次 I/O 命中, 高效</td>
+<td>跨列分散, 需重组</td>
+</tr>
+<tr>
+<td>仅读若干列</td>
+<td>仍需读整行, 浪费 I/O</td>
+<td><strong>I/O 裁剪</strong>: 仅读所选列, 显著减少扫描</td>
+</tr>
+<tr>
+<td>压缩</td>
+<td>同列异构字段, 压缩比低</td>
+<td><strong>同列同构 + 字典/RLE/Bit-packing</strong>: 压缩比高数倍</td>
+</tr>
+<tr>
+<td>写入吞吐</td>
+<td>单行追加/更新友好</td>
+<td>频繁单行更新代价高, 适合批量追加</td>
+</tr>
+<tr>
+<td>代表实现</td>
+<td>传统 RDBMS (MySQL InnoDB, PostgreSQL)</td>
+<td>C-Store, Parquet, ORC, ClickHouse, DuckDB</td>
+</tr>
+</tbody>
+</table>
 <h3 id="2-2-MPP-大规模并行处理-架构">2.2. MPP (大规模并行处理) 架构</h3>
 <p>MPP 数据库采用<strong>无共享 (Shared-Nothing)</strong> 架构, 本文所述 Shared-Nothing 指经典 MPP 语境中的节点本地资源独立, 即每个节点拥有独立的 CPU, 内存和存储资源 <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>. 现代云数据仓库在此基础上进一步演化出了共享存储与解耦计算的架构. 数据通过哈希 (Hash) 或轮询 (Round-Robin) 分散存储在不同的数据节点上. 执行 SQL 时, 总控节点将查询请求解耦为分布式物理执行计划, 分发至所有数据节点并行计算. 在执行多表复杂关联 (<code>JOIN</code>) 时, MPP 架构依靠物理网络层进行数据重分布: 通过广播连接 (Broadcast Join) 将小表复制到所有节点, 或者通过洗牌连接 (Shuffle/Hash Join) 将大表基于 Join Key 重新计算哈希并重分布到对应节点, 打破了单机单体内存与 I/O 吞吐的局限 <sup class="footnote-ref"><a href="#fn4" id="fnref4:1">[4:1]</a></sup>.</p>
 <h3 id="2-3-查询优化器-Query-Optimizer-与物理执行计划">2.3. 查询优化器 (Query Optimizer) 与物理执行计划</h3>
@@ -549,6 +610,56 @@ flowchart LR
 <li><em>Apache Iceberg</em>: 摒弃了文件目录依赖, 通过快照 (Snapshots) 与清单元数据文件管理表状态, 原生提供独立的模式演进 (Schema Evolution) 与分区演进 (Partition Evolution) 支持 <sup class="footnote-ref"><a href="#fn12" id="fnref12">[12]</a></sup>.</li>
 </ul>
 </li>
+</ul>
+
+<aside class="callout callout--info" role="note">
+  <div class="callout__head"><span class="callout__icon">ℹ</span><span class="callout__label">要点</span><span class="callout__title">delta vs iceberg</span></div>
+  <div class="callout__body"><p>两大主流开放表格式在事务机制和演进灵活性上各有所长, 选型应基于查询引擎兼容性与演进需求强度.</p>
+</div>
+</aside>
+
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Delta Lake</th>
+<th>Apache Iceberg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>元数据载体</td>
+<td>单一事务日志 <code>_delta_log/</code> (按序 JSON/Checkpoint)</td>
+<td>快照 (Snapshot) + 清单元数据文件 (Manifest List/Manifest)</td>
+</tr>
+<tr>
+<td>Schema 演进</td>
+<td>通过 Schema Enforcement + Schema Evolution 显式支持</td>
+<td>原生独立 Schema 演进, 与分区演进解耦</td>
+</tr>
+<tr>
+<td>分区演进</td>
+<td>需通过 Z-Order / Liquid Clustering 等方式重写</td>
+<td><strong>原生 Partition Evolution</strong>: 修改分区策略不重写数据</td>
+</tr>
+<tr>
+<td>隐藏分区</td>
+<td>不原生支持</td>
+<td>支持隐藏分区 (Hidden Partitioning), 自动按 Transform 计算</td>
+</tr>
+<tr>
+<td>查询引擎兼容</td>
+<td>Spark / Databricks 一等公民; 其他引擎逐步补齐</td>
+<td>Spark / Trino / Flink / Presto / Hive / DuckDB 多引擎中立</td>
+</tr>
+<tr>
+<td>典型适用</td>
+<td>Spark / Databricks 重度用户, 单平台锁定</td>
+<td>多查询引擎并存的湖仓平台</td>
+</tr>
+</tbody>
+</table>
+<ul>
 <li><strong>Medallion Architecture 的分层多模式建模</strong>: 在湖仓一体的工程实践中, 企业不再固守单一体制, 而是基于 Databricks 的 Medallion 架构这一数据设计模式 (Data Design Pattern), 开展分层建模策略, 体现了现代湖仓常见的分层, 多模式建模实践 <sup class="footnote-ref"><a href="#fn13" id="fnref13">[13]</a></sup>:
 <ul>
 <li><em>Bronze 层 (原始区)</em>: 保留历史各种结构化与半结构化 (JSON) 的原始变动流 (Schema-on-Read).</li>
@@ -557,8 +668,95 @@ flowchart LR
 </ul>
 </li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>分层</th>
+<th>职责</th>
+<th>数据特征</th>
+<th>建模风格</th>
+<th>主要消费方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bronze</strong></td>
+<td>全量原始落湖, 不做清洗</td>
+<td>高冗余, 含脏数据与 Schema 漂移</td>
+<td>Schema-on-Read, 仅追加</td>
+<td>数据工程, 审计与回溯</td>
+</tr>
+<tr>
+<td><strong>Silver</strong></td>
+<td>基础清洗, Schema 对齐, 去重</td>
+<td>一致性提升, 字段标准化</td>
+<td>3NF/轻量维度化</td>
+<td>数据科学家, 中层分析师</td>
+</tr>
+<tr>
+<td><strong>Gold</strong></td>
+<td>业务主题聚合, 强约束建模</td>
+<td>高度聚合, 面向决策</td>
+<td>星型/雪花维度模型, Kimball 范式</td>
+<td>业务决策层, 报表与看板</td>
+</tr>
+</tbody>
+</table>
 <h3 id="3-3-从-ETL-到-ELT-的范式跃迁">3.3. 从 ETL 到 ELT 的范式跃迁</h3>
 <p>由于云原生数仓和湖仓一体提供了强悍的算力弹性, 改变了计算资源的成本和获取方式, 数据平台管道的物理拓扑发生了重心转移, 在云数仓和湖仓环境中, <strong>ELT (Extract, Load, Transform)</strong> 成为越来越常见的主流范式之一 <sup class="footnote-ref"><a href="#fn5" id="fnref5:1">[5:1]</a></sup>. 数据团队不再需要在外部第三方中间服务器里进行预清洗加工, 而是选择&quot;先原样高速加载入湖, 再利用湖仓内部的分布式弹性算力, 进行高速并行清洗转换&quot;. 这释放了原始数据的敏捷度, 使上层分析人员可以根据需要动态重构数据加工策略任务.</p>
+
+<aside class="callout callout--info" role="note">
+  <div class="callout__head"><span class="callout__icon">ℹ</span><span class="callout__label">要点</span><span class="callout__title">etl vs elt</span></div>
+  <div class="callout__body"><p>传统 ETL 与云时代的 ELT 不是&quot;哪个更好&quot;的对立, 而是计算资源范式差异导致的拓扑重心转移.</p>
+</div>
+</aside>
+
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>传统 ETL</th>
+<th>云原生 ELT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算位置</td>
+<td>第三方 ETL 服务器 (Informatica, DataStage)</td>
+<td>数仓/湖仓内部 (Snowflake, BigQuery, Databricks SQL)</td>
+</tr>
+<tr>
+<td>转换时机</td>
+<td>加载前在中间服务器做大量清洗</td>
+<td>加载后再用数仓弹性算力做转换</td>
+</tr>
+<tr>
+<td>数据落地次数</td>
+<td>多次: 中间临时表 → 目标表</td>
+<td><strong>单次</strong>: 原样加载 → 内部按需转换</td>
+</tr>
+<tr>
+<td>资源耦合</td>
+<td>计算与 ETL 服务器规模强耦合</td>
+<td>计算弹性, 与存储解耦</td>
+</tr>
+<tr>
+<td>敏捷性</td>
+<td>业务逻辑变更需重跑管道</td>
+<td>原始数据保留, 转换可重写</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>传统数仓时代, 算力受限</td>
+<td>云数仓/Lakehouse, 算力按需</td>
+</tr>
+<tr>
+<td>主要风险</td>
+<td>链路长, 错误恢复代价高</td>
+<td>存储成本与下游计算冗余</td>
+</tr>
+</tbody>
+</table>
 <h2 id="4-第二代-BI-的核心变化与新衍生技术债">4. 第二代 BI 的核心变化与新衍生技术债</h2>
 <p>分布式计算与云原生数仓时代的爆发, 为商业智能系统带来了空前的计算红利. 第二代 BI (以 Self-Service 自助式分析与分布式 Ad-hoc 查询为典型代表) 完成了底层的彻底蜕变: 分析的主导方式逐步从大量预计算 Cube 转向基于分布式 SQL 引擎的按需计算 (On-demand Running SQL), 同时保留缓存, 物化视图和预聚合等性能优化手段.</p>
 <p>然而, 当技术栈底层成功解决了&quot;算得快, 算得海量&quot;的问题后, 上层的商业世界并没有变得完美, 反而由于计算壁垒的瓦解, 衍生出了全新的架构级技术债务:</p>
@@ -578,7 +776,16 @@ flowchart LR
 <h2 id="下一篇技术演进预告">下一篇技术演进预告</h2>
 <p>算力的泛滥并没有消灭数据治理, 反而证明了缺乏统一契约的计算民主化只是一场混乱. 当企业厌倦了散落在数百个下游 Dashboard 中的碎片化 SQL 逻辑后, 商业智能的架构重心正式开启了它的第三次大跃迁: 将指标和业务语义彻底从前端 BI 看板的视觉网格中<strong>剥离, 解耦并服务化</strong>.</p>
 <p>语义不再是 BI 工具的附庸, 而是变为了一个平台无关, API 优先, 定义一次到处运行的独立架构层. 这一层不仅解救了处于&quot;指标地狱&quot;中的企业, 更意外地为即将到来的大模型和智能体时代, 铺设好了连接企业确定性物理数据不可或缺的唯一通路.</p>
-<p>我们在 <strong>《第三篇: 现代数据栈与语义层 (Semantic Layer) 的重新崛起》</strong> 中再见.</p>
+<p>我们在 <strong>《第三篇: 现代数据栈与语义层 (Semantic Layer) 的重新崛起》</strong> 中再见 (尚未发布).</p>
+<hr>
+<blockquote>
+<p><strong>系列内跳转</strong></p>
+<ul>
+<li>上一篇: <a href="/post/1069e228.html">第一篇: 企业数据仓库与经典 OLAP 时代 (集中式语义的奠基)</a></li>
+<li>下一节: 待发布 — 《第三篇: 现代数据栈与语义层 (Semantic Layer) 的重新崛起》</li>
+<li>系列索引页: <a href="/bi-evolution/">BI 系统的发展进程</a></li>
+</ul>
+</blockquote>
 <h2 id="参考资料">参考资料</h2>
 <style>
   .series-nav{margin:2.5rem 0 1rem;padding:1.25rem 1.5rem;border:1px solid rgba(0,0,0,.08);border-radius:8px;background:rgba(0,0,0,.02);font-size:.95rem;line-height:1.6}
@@ -733,6 +940,7 @@ flowchart LR
     <span>目录</span>
   </p>
   <div class="toc-body" id="toc-body"></div>
+<noscript><div class="toc-noscript" role="navigation" aria-label="目录 (无 JS 兜底)"><p class="toc-noscript__head">目录 (静态版)</p><ul class="toc-noscript__list"><li><a href="#1-大规模分布式计算范式的兴起与局限">1. 大规模分布式计算范式的兴起与局限</a></li><li class="toc-noscript__sub"><a href="#1-1-Hadoop-MapReduce-时代的得与失">1.1. Hadoop / MapReduce 时代的得与失</a></li><li class="toc-noscript__sub"><a href="#1-2-内存计算与统一数据处理的飞跃">1.2. 内存计算与统一数据处理的飞跃</a></li><li class="toc-noscript__sub"><a href="#1-3-通用计算向专用分析引擎的桥接">1.3. 通用计算向专用分析引擎的桥接</a></li><li><a href="#2-列式存储、MPP、查询优化器与向量化执行">2. 列式存储、MPP、查询优化器与向量化执行</a></li><li class="toc-noscript__sub"><a href="#2-1-行式存储向列式存储-Columnar-Storage-的演进">2.1. 行式存储向列式存储 (Columnar Storage) 的演进</a></li><li class="toc-noscript__sub"><a href="#2-2-MPP-大规模并行处理-架构">2.2. MPP (大规模并行处理) 架构</a></li><li class="toc-noscript__sub"><a href="#2-3-查询优化器-Query-Optimizer-与物理执行计划">2.3. 查询优化器 (Query Optimizer) 与物理执行计划</a></li><li class="toc-noscript__sub"><a href="#2-4-向量化执行-Vectorized-Execution">2.4. 向量化执行 (Vectorized Execution)</a></li><li><a href="#3-云原生数仓与-Lakehouse-现代范式">3. 云原生数仓与 Lakehouse 现代范式</a></li><li class="toc-noscript__sub"><a href="#3-1-存算分离-Storage-Compute-Separation-的革命">3.1. 存算分离 (Storage/Compute Separation) 的革命</a></li><li class="toc-noscript__sub"><a href="#3-2-开放表格式-Open-Table-Format-与-Medallion-架构分层治理">3.2. 开放表格式 (Open Table Format) 与 Medallion 架构分层治理</a></li><li class="toc-noscript__sub"><a href="#3-3-从-ETL-到-ELT-的范式跃迁">3.3. 从 ETL 到 ELT 的范式跃迁</a></li><li><a href="#4-第二代-BI-的核心变化与新衍生技术债">4. 第二代 BI 的核心变化与新衍生技术债</a></li><li class="toc-noscript__sub"><a href="#4-1-指标逻辑的碎片化与-指标地狱-Metrics-Hell">4.1. 指标逻辑的碎片化与"指标地狱 (Metrics Hell)"</a></li><li class="toc-noscript__sub"><a href="#4-2-算得快-≠-算得对">4.2. 算得快 ≠ 算得对</a></li><li><a href="#5-第二篇核心技术主张">5. 第二篇核心技术主张</a></li><li><a href="#下一篇技术演进预告">下一篇技术演进预告</a></li><li><a href="#参考资料">参考资料</a></li></ul></div></noscript>
 </div>
 
 
@@ -753,7 +961,15 @@ flowchart LR
 
 
 
+  
 
+
+
+  
+
+
+
+  
 
 
 
@@ -967,6 +1183,54 @@ flowchart LR
 
   <script>Fluid.plugins.codeWidget();</script>
 
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

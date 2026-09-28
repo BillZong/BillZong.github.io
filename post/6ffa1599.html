@@ -27,7 +27,7 @@
 <meta property="og:description" content="背景 下面从 Twitter 已归档的 Snowflake 分布式 ID 生成算法 出发，说明：  Snowflake 算法简介（Twitter 版本） Go 语言中的成熟平替方案（现成库 + 中间件） 当前主流&#x2F;最新的分布式 ID 生成算法发展趋势（Snowflake 之后行业实践）   1. Twitter Snowflake 算法回顾（经典版本） Twitter Snowflake 输出一个">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-07T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-09-11T03:18:37.593Z">
+<meta property="article:modified_time" content="2026-09-28T03:47:12.518Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="ucard">
 <meta property="article:tag" content="授权参考码">
@@ -50,6 +50,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
@@ -76,7 +78,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h2,h3","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"#"},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h2,h3","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -704,6 +706,7 @@ mjx-container[display="true"] + br {
     <span>目录</span>
   </p>
   <div class="toc-body" id="toc-body"></div>
+<noscript><div class="toc-noscript" role="navigation" aria-label="目录 (无 JS 兜底)"><p class="toc-noscript__head">目录 (静态版)</p><ul class="toc-noscript__list"><li><a href="#背景">背景</a></li><li><a href="#1-Twitter-Snowflake-算法回顾（经典版本）">1. Twitter Snowflake 算法回顾（经典版本）</a></li><li><a href="#2-Snowflake-的-Golang-平替（成熟可用）">2. Snowflake 的 Golang 平替（成熟可用）</a></li><li class="toc-noscript__sub"><a href="#2-1-Sonyflake（更适合云分布场景）">2.1 Sonyflake（更适合云分布场景）</a></li><li class="toc-noscript__sub"><a href="#2-2-go-snowflake（Twitter-Snowflake-的纯-Go-版）">2.2 go-snowflake（Twitter Snowflake 的纯 Go 版）</a></li><li class="toc-noscript__sub"><a href="#2-3-uid-ksuid-ulid（并非雪花，但-Go-社区热门替代）">2.3 uid / ksuid / ulid（并非雪花，但 Go 社区热门替代）</a></li><li class="toc-noscript__sub"><a href="#2-4-leaf-tinyid（完整-ID-服务，而非库）">2.4 leaf + tinyid（完整 ID 服务，而非库）</a></li><li><a href="#3-分布式-ID-生成算法的-新趋势-（Snowflake-之后）">3. 分布式 ID 生成算法的"新趋势"（Snowflake 之后）</a></li><li class="toc-noscript__sub"><a href="#趋势-1：基于-号段（segment）模式-成为企业主流">趋势 1：基于"号段（segment）模式"成为企业主流</a></li><li class="toc-noscript__sub"><a href="#趋势-2：雪花-高可用节点分配（避免人工-NodeID）">趋势 2：雪花 + 高可用节点分配（避免人工 NodeID）</a></li><li class="toc-noscript__sub"><a href="#趋势-3：可排序-UUID（ULID-KSUID）强势崛起">趋势 3：可排序 UUID（ULID / KSUID）强势崛起</a></li><li class="toc-noscript__sub"><a href="#趋势-4：数据库-中间件原生-ID-生成（云厂商）">趋势 4：数据库/中间件原生 ID 生成（云厂商）</a></li><li><a href="#4-如何选择？">4. 如何选择？</a></li><li><a href="#5-进一步参考">5. 进一步参考</a></li></ul></div></noscript>
 </div>
 
 
@@ -724,7 +727,15 @@ mjx-container[display="true"] + br {
 
 
 
+  
 
+
+
+  
+
+
+
+  
 
 
 
@@ -938,6 +949,54 @@ mjx-container[display="true"] + br {
 
   <script>Fluid.plugins.codeWidget();</script>
 
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 

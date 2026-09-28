@@ -27,7 +27,7 @@
 <meta property="og:description" content="介绍 一些重要概念  BNF  Backus-Naur Form   ABNF  Augumented BNF   SNI  Server Name Indication   ESNI  Encrypted SNI    WebSocket设计哲学 Conceptually, WebSocket is really just a layer on top of TCP that does the">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-08T14:48:00.000Z">
-<meta property="article:modified_time" content="2026-09-11T03:18:37.601Z">
+<meta property="article:modified_time" content="2026-09-28T03:47:12.513Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="protocol">
 <meta property="article:tag" content="network">
@@ -45,6 +45,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
@@ -71,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":false,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h2,h3","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"billzong.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":"#"},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":false,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h2,h3","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -703,6 +705,7 @@ mjx-container[display="true"] + br {
     <span>目录</span>
   </p>
   <div class="toc-body" id="toc-body"></div>
+<noscript><div class="toc-noscript" role="navigation" aria-label="目录 (无 JS 兜底)"><p class="toc-noscript__head">目录 (静态版)</p><ul class="toc-noscript__list"><li><a href="#一些重要概念">一些重要概念</a></li><li><a href="#WebSocket设计哲学">WebSocket设计哲学</a></li><li><a href="#URI">URI</a></li><li><a href="#握手">握手</a></li><li class="toc-noscript__sub"><a href="#客户端请求规则">客户端请求规则</a></li><li class="toc-noscript__sub"><a href="#服务端回复规则">服务端回复规则</a></li><li><a href="#数据分帧">数据分帧</a></li><li class="toc-noscript__sub"><a href="#原因">原因</a></li><li class="toc-noscript__sub"><a href="#安全">安全</a></li><li class="toc-noscript__sub"><a href="#数据帧规则">数据帧规则</a></li><li class="toc-noscript__sub"><a href="#控制帧">控制帧</a></li><li class="toc-noscript__sub"><a href="#数据帧">数据帧</a></li><li><a href="#扩展">扩展</a></li><li><a href="#收发数据">收发数据</a></li><li><a href="#关闭连接">关闭连接</a></li><li><a href="#安全-2">安全</a></li></ul></div></noscript>
 </div>
 
 
@@ -723,7 +726,15 @@ mjx-container[display="true"] + br {
 
 
 
+  
 
+
+
+  
+
+
+
+  
 
 
 
@@ -937,6 +948,54 @@ mjx-container[display="true"] + br {
 
   <script>Fluid.plugins.codeWidget();</script>
 
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
 
