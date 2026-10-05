@@ -95,7 +95,7 @@ if [[ $SKIP_MASTER -eq 0 ]]; then
     find . -maxdepth 1 \( -name "*.bak" -o -name "*.original" \) -exec git rm --force -- {} + 2>/dev/null || true
     git add -A
     # 第二道保险：把源文件从 index 撤回（如果第一道失败 / 仍存在）
-    git reset HEAD public/ node_modules/ package-lock.json db.json source/ \
+    git reset HEAD public/ node_modules/ package-lock.json db.json .deploy_git source/ \
                    _config.yml _config.fluid.yml _config.landscape.yml _admin-config.yml \
                    package.json yarn.lock package-lock.json 2>/dev/null || true
     # 处理可能的 *.bak / *.original
