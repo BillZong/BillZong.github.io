@@ -6,7 +6,7 @@
   <link href="https://billzong.github.io/atom.xml" rel="self"/>
   
   <link href="https://billzong.github.io/"/>
-  <updated>2026-10-07T04:45:14.953Z</updated>
+  <updated>2026-10-07T12:06:58.479Z</updated>
   <id>https://billzong.github.io/</id>
   
   <author>
@@ -17,11 +17,63 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>现代数据栈与语义层（Semantic Layer）的重新崛起</title>
+    <link href="https://billzong.github.io/post/4e9995af.html"/>
+    <id>https://billzong.github.io/post/4e9995af.html</id>
+    <published>2026-10-07T12:05:00.000Z</published>
+    <updated>2026-10-07T12:06:58.479Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;第三章：现代数据栈与语义层（semantic-layer）的重新崛起&quot;&gt;第三章：现代数据栈与语义层（Semantic Layer）的重新崛起&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Part III: The Modern Data Stack &amp;amp; The</summary>
+        
+      
+    
+    
+    
+    <category term="bi-evolution" scheme="https://billzong.github.io/categories/bi-evolution/"/>
+    
+    
+    <category term="BI" scheme="https://billzong.github.io/tags/BI/"/>
+    
+    <category term="指标地狱" scheme="https://billzong.github.io/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/"/>
+    
+    <category term="Modern Data Stack" scheme="https://billzong.github.io/tags/Modern-Data-Stack/"/>
+    
+    <category term="语义层" scheme="https://billzong.github.io/tags/%E8%AF%AD%E4%B9%89%E5%B1%82/"/>
+    
+    <category term="Semantic Layer" scheme="https://billzong.github.io/tags/Semantic-Layer/"/>
+    
+    <category term="Headless BI" scheme="https://billzong.github.io/tags/Headless-BI/"/>
+    
+    <category term="Metrics Store" scheme="https://billzong.github.io/tags/Metrics-Store/"/>
+    
+    <category term="dbt" scheme="https://billzong.github.io/tags/dbt/"/>
+    
+    <category term="MetricFlow" scheme="https://billzong.github.io/tags/MetricFlow/"/>
+    
+    <category term="Cube" scheme="https://billzong.github.io/tags/Cube/"/>
+    
+    <category term="自助式 BI" scheme="https://billzong.github.io/tags/%E8%87%AA%E5%8A%A9%E5%BC%8F-BI/"/>
+    
+    <category term="血缘" scheme="https://billzong.github.io/tags/%E8%A1%80%E7%BC%98/"/>
+    
+    <category term="Lineage" scheme="https://billzong.github.io/tags/Lineage/"/>
+    
+    <category term="关注点分离" scheme="https://billzong.github.io/tags/%E5%85%B3%E6%B3%A8%E7%82%B9%E5%88%86%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
     <title>大模型重构时代（确定性语义层与概率模型的融合）</title>
     <link href="https://billzong.github.io/post/146af6e.html"/>
     <id>https://billzong.github.io/post/146af6e.html</id>
     <published>2026-10-07T04:30:00.000Z</published>
-    <updated>2026-10-07T04:45:14.953Z</updated>
+    <updated>2026-10-07T12:06:24.996Z</updated>
     
     
       
@@ -42,11 +94,11 @@
     
     <category term="BI" scheme="https://billzong.github.io/tags/BI/"/>
     
-    <category term="Text-to-SQL" scheme="https://billzong.github.io/tags/Text-to-SQL/"/>
-    
     <category term="语义层" scheme="https://billzong.github.io/tags/%E8%AF%AD%E4%B9%89%E5%B1%82/"/>
     
     <category term="Semantic Layer" scheme="https://billzong.github.io/tags/Semantic-Layer/"/>
+    
+    <category term="Text-to-SQL" scheme="https://billzong.github.io/tags/Text-to-SQL/"/>
     
     <category term="Semantic IR" scheme="https://billzong.github.io/tags/Semantic-IR/"/>
     
@@ -73,7 +125,7 @@
     <link href="https://billzong.github.io/post/b39845b2.html"/>
     <id>https://billzong.github.io/post/b39845b2.html</id>
     <published>2026-09-16T03:30:00.000Z</published>
-    <updated>2026-10-05T13:10:58.308Z</updated>
+    <updated>2026-10-07T12:06:24.996Z</updated>
     
     
       
@@ -131,7 +183,7 @@
     <link href="https://billzong.github.io/post/1069e228.html"/>
     <id>https://billzong.github.io/post/1069e228.html</id>
     <published>2026-09-11T04:07:00.000Z</published>
-    <updated>2026-10-05T13:10:58.307Z</updated>
+    <updated>2026-10-07T12:06:24.996Z</updated>
     
     
       
@@ -179,7 +231,7 @@
     <link href="https://billzong.github.io/post/9471d398.html"/>
     <id>https://billzong.github.io/post/9471d398.html</id>
     <published>2026-09-02T15:36:54.000Z</published>
-    <updated>2026-10-05T13:10:58.309Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -212,7 +264,7 @@
     <link href="https://billzong.github.io/post/192dffb9.html"/>
     <id>https://billzong.github.io/post/192dffb9.html</id>
     <published>2026-09-01T13:17:28.000Z</published>
-    <updated>2026-10-05T13:10:58.311Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -239,7 +291,7 @@
     <link href="https://billzong.github.io/post/e3a3c7a1.html"/>
     <id>https://billzong.github.io/post/e3a3c7a1.html</id>
     <published>2026-08-24T04:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.304Z</updated>
+    <updated>2026-10-07T12:06:24.991Z</updated>
     
     
       
@@ -277,7 +329,7 @@
     <link href="https://billzong.github.io/post/fedaaaef.html"/>
     <id>https://billzong.github.io/post/fedaaaef.html</id>
     <published>2026-08-21T04:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -308,7 +360,7 @@
     <link href="https://billzong.github.io/post/0a3639e4.html"/>
     <id>https://billzong.github.io/post/0a3639e4.html</id>
     <published>2026-08-19T04:30:00.000Z</published>
-    <updated>2026-10-05T13:10:58.307Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -342,7 +394,7 @@
     <link href="https://billzong.github.io/post/7c745b16.html"/>
     <id>https://billzong.github.io/post/7c745b16.html</id>
     <published>2026-08-12T16:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.994Z</updated>
     
     
       
@@ -377,7 +429,7 @@
     <link href="https://billzong.github.io/post/d18568c9.html"/>
     <id>https://billzong.github.io/post/d18568c9.html</id>
     <published>2026-08-12T04:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -414,7 +466,7 @@
     <link href="https://billzong.github.io/post/b1310520.html"/>
     <id>https://billzong.github.io/post/b1310520.html</id>
     <published>2026-08-11T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.308Z</updated>
+    <updated>2026-10-07T12:06:24.996Z</updated>
     
     
       
@@ -456,7 +508,7 @@
     <link href="https://billzong.github.io/post/2a4db7bf.html"/>
     <id>https://billzong.github.io/post/2a4db7bf.html</id>
     <published>2026-08-02T04:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -491,7 +543,7 @@
     <link href="https://billzong.github.io/post/30f5e2fa.html"/>
     <id>https://billzong.github.io/post/30f5e2fa.html</id>
     <published>2026-04-16T06:14:00.000Z</published>
-    <updated>2026-10-05T13:10:58.307Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -529,7 +581,7 @@
     <link href="https://billzong.github.io/post/6ffa1599.html"/>
     <id>https://billzong.github.io/post/6ffa1599.html</id>
     <published>2025-12-07T16:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -571,7 +623,7 @@
     <link href="https://billzong.github.io/post/e49981f1.html"/>
     <id>https://billzong.github.io/post/e49981f1.html</id>
     <published>2025-10-09T16:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.313Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -610,7 +662,7 @@
     <link href="https://billzong.github.io/post/g1b2c3d4.html"/>
     <id>https://billzong.github.io/post/g1b2c3d4.html</id>
     <published>2025-09-26T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -658,7 +710,7 @@
     <link href="https://billzong.github.io/post/h2c3d4e5.html"/>
     <id>https://billzong.github.io/post/h2c3d4e5.html</id>
     <published>2025-09-15T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.994Z</updated>
     
     
       
@@ -707,7 +759,7 @@
     <link href="https://billzong.github.io/post/j4e5f6a7.html"/>
     <id>https://billzong.github.io/post/j4e5f6a7.html</id>
     <published>2025-09-09T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.313Z</updated>
+    <updated>2026-10-07T12:06:25.001Z</updated>
     
     
       
@@ -764,7 +816,7 @@
     <link href="https://billzong.github.io/post/i3d4e5f6.html"/>
     <id>https://billzong.github.io/post/i3d4e5f6.html</id>
     <published>2025-09-08T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -818,7 +870,7 @@
     <link href="https://billzong.github.io/post/f0a2b3c4.html"/>
     <id>https://billzong.github.io/post/f0a2b3c4.html</id>
     <published>2025-08-11T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -867,7 +919,7 @@
     <link href="https://billzong.github.io/post/b8e4f2a6.html"/>
     <id>https://billzong.github.io/post/b8e4f2a6.html</id>
     <published>2025-08-08T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.313Z</updated>
+    <updated>2026-10-07T12:06:25.001Z</updated>
     
     
       
@@ -919,7 +971,7 @@
     <link href="https://billzong.github.io/post/c9f5a3b7.html"/>
     <id>https://billzong.github.io/post/c9f5a3b7.html</id>
     <published>2025-08-08T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.313Z</updated>
+    <updated>2026-10-07T12:06:25.001Z</updated>
     
     
       
@@ -966,7 +1018,7 @@
     <link href="https://billzong.github.io/post/a7c3d9e1.html"/>
     <id>https://billzong.github.io/post/a7c3d9e1.html</id>
     <published>2025-08-07T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.313Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -1010,7 +1062,7 @@
     <link href="https://billzong.github.io/post/d2a1f0e3.html"/>
     <id>https://billzong.github.io/post/d2a1f0e3.html</id>
     <published>2024-04-30T10:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -1053,7 +1105,7 @@
     <link href="https://billzong.github.io/post/55f12938.html"/>
     <id>https://billzong.github.io/post/55f12938.html</id>
     <published>2022-08-29T04:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.309Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -1093,7 +1145,7 @@
     <link href="https://billzong.github.io/post/228615af.html"/>
     <id>https://billzong.github.io/post/228615af.html</id>
     <published>2021-09-05T15:45:25.000Z</published>
-    <updated>2026-10-05T13:10:58.311Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -1118,7 +1170,7 @@
     <link href="https://billzong.github.io/post/e9025282.html"/>
     <id>https://billzong.github.io/post/e9025282.html</id>
     <published>2021-04-25T14:11:00.000Z</published>
-    <updated>2026-10-05T13:10:58.311Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -1143,7 +1195,7 @@
     <link href="https://billzong.github.io/post/c9a962b3.html"/>
     <id>https://billzong.github.io/post/c9a962b3.html</id>
     <published>2021-04-25T14:10:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -1173,7 +1225,7 @@
     <link href="https://billzong.github.io/post/2a353e7b.html"/>
     <id>https://billzong.github.io/post/2a353e7b.html</id>
     <published>2021-04-25T14:09:00.000Z</published>
-    <updated>2026-10-05T13:10:58.304Z</updated>
+    <updated>2026-10-07T12:06:24.992Z</updated>
     
     
       
@@ -1202,7 +1254,7 @@
     <link href="https://billzong.github.io/post/87c46404.html"/>
     <id>https://billzong.github.io/post/87c46404.html</id>
     <published>2021-04-25T14:08:00.000Z</published>
-    <updated>2026-10-05T13:10:58.311Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -1229,7 +1281,7 @@
     <link href="https://billzong.github.io/post/4cf4d379.html"/>
     <id>https://billzong.github.io/post/4cf4d379.html</id>
     <published>2021-04-25T14:07:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.994Z</updated>
     
     
       
@@ -1258,7 +1310,7 @@
     <link href="https://billzong.github.io/post/4c3910cf.html"/>
     <id>https://billzong.github.io/post/4c3910cf.html</id>
     <published>2021-04-25T14:04:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -1286,7 +1338,7 @@
     <link href="https://billzong.github.io/post/6fcc8439.html"/>
     <id>https://billzong.github.io/post/6fcc8439.html</id>
     <published>2021-04-25T14:04:00.000Z</published>
-    <updated>2026-10-05T13:10:58.313Z</updated>
+    <updated>2026-10-07T12:06:25.001Z</updated>
     
     
       
@@ -1315,7 +1367,7 @@
     <link href="https://billzong.github.io/post/ae364355.html"/>
     <id>https://billzong.github.io/post/ae364355.html</id>
     <published>2021-04-25T14:02:00.000Z</published>
-    <updated>2026-10-05T13:10:58.304Z</updated>
+    <updated>2026-10-07T12:06:24.991Z</updated>
     
     
       
@@ -1343,7 +1395,7 @@
     <link href="https://billzong.github.io/post/756e1ce4.html"/>
     <id>https://billzong.github.io/post/756e1ce4.html</id>
     <published>2021-04-13T14:02:00.000Z</published>
-    <updated>2026-10-05T13:10:58.307Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -1372,7 +1424,7 @@
     <link href="https://billzong.github.io/post/3305f638.html"/>
     <id>https://billzong.github.io/post/3305f638.html</id>
     <published>2021-04-13T14:01:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -1399,7 +1451,7 @@
     <link href="https://billzong.github.io/post/56b134ed.html"/>
     <id>https://billzong.github.io/post/56b134ed.html</id>
     <published>2021-04-13T14:00:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -1428,7 +1480,7 @@
     <link href="https://billzong.github.io/post/5574d8a6.html"/>
     <id>https://billzong.github.io/post/5574d8a6.html</id>
     <published>2021-04-13T13:59:00.000Z</published>
-    <updated>2026-10-05T13:10:58.308Z</updated>
+    <updated>2026-10-07T12:06:24.996Z</updated>
     
     
       
@@ -1456,7 +1508,7 @@
     <link href="https://billzong.github.io/post/89751058.html"/>
     <id>https://billzong.github.io/post/89751058.html</id>
     <published>2021-04-12T14:36:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -1487,7 +1539,7 @@
     <link href="https://billzong.github.io/post/9c69c716.html"/>
     <id>https://billzong.github.io/post/9c69c716.html</id>
     <published>2021-04-12T14:34:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -1515,7 +1567,7 @@
     <link href="https://billzong.github.io/post/107a8b74.html"/>
     <id>https://billzong.github.io/post/107a8b74.html</id>
     <published>2021-04-12T14:33:00.000Z</published>
-    <updated>2026-10-05T13:10:58.309Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -1548,7 +1600,7 @@
     <link href="https://billzong.github.io/post/fe86d1b6.html"/>
     <id>https://billzong.github.io/post/fe86d1b6.html</id>
     <published>2021-04-12T14:32:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -1576,7 +1628,7 @@
     <link href="https://billzong.github.io/post/37e0e416.html"/>
     <id>https://billzong.github.io/post/37e0e416.html</id>
     <published>2021-04-12T14:32:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -1604,7 +1656,7 @@
     <link href="https://billzong.github.io/post/6d4a1154.html"/>
     <id>https://billzong.github.io/post/6d4a1154.html</id>
     <published>2021-04-12T14:30:00.000Z</published>
-    <updated>2026-10-05T13:10:58.309Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -1635,7 +1687,7 @@
     <link href="https://billzong.github.io/post/a646ef82.html"/>
     <id>https://billzong.github.io/post/a646ef82.html</id>
     <published>2021-04-12T14:29:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -1662,7 +1714,7 @@
     <link href="https://billzong.github.io/post/1ec527c6.html"/>
     <id>https://billzong.github.io/post/1ec527c6.html</id>
     <published>2021-04-12T14:28:00.000Z</published>
-    <updated>2026-10-05T13:10:58.309Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -1699,7 +1751,7 @@
     <link href="https://billzong.github.io/post/cb3e5607.html"/>
     <id>https://billzong.github.io/post/cb3e5607.html</id>
     <published>2021-04-12T14:27:00.000Z</published>
-    <updated>2026-10-05T13:10:58.309Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -1727,7 +1779,7 @@
     <link href="https://billzong.github.io/post/d5577457.html"/>
     <id>https://billzong.github.io/post/d5577457.html</id>
     <published>2021-04-12T14:24:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -1759,7 +1811,7 @@
     <link href="https://billzong.github.io/post/8d8620.html"/>
     <id>https://billzong.github.io/post/8d8620.html</id>
     <published>2021-04-12T14:23:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -1790,7 +1842,7 @@
     <link href="https://billzong.github.io/post/48c09b8d.html"/>
     <id>https://billzong.github.io/post/48c09b8d.html</id>
     <published>2021-04-12T14:21:00.000Z</published>
-    <updated>2026-10-05T13:10:58.311Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -1822,7 +1874,7 @@
     <link href="https://billzong.github.io/post/5d25bab6.html"/>
     <id>https://billzong.github.io/post/5d25bab6.html</id>
     <published>2021-04-12T14:19:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -1858,7 +1910,7 @@
     <link href="https://billzong.github.io/post/749896c7.html"/>
     <id>https://billzong.github.io/post/749896c7.html</id>
     <published>2021-04-12T14:17:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -1890,7 +1942,7 @@
     <link href="https://billzong.github.io/post/410d6a4b.html"/>
     <id>https://billzong.github.io/post/410d6a4b.html</id>
     <published>2021-04-12T14:15:00.000Z</published>
-    <updated>2026-10-05T13:10:58.309Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -1919,7 +1971,7 @@
     <link href="https://billzong.github.io/post/7742e199.html"/>
     <id>https://billzong.github.io/post/7742e199.html</id>
     <published>2021-04-11T08:39:00.000Z</published>
-    <updated>2026-10-05T13:10:58.307Z</updated>
+    <updated>2026-10-07T12:06:24.996Z</updated>
     
     
       
@@ -1950,7 +2002,7 @@
     <link href="https://billzong.github.io/post/85d1e09b.html"/>
     <id>https://billzong.github.io/post/85d1e09b.html</id>
     <published>2021-04-11T08:38:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -1989,7 +2041,7 @@
     <link href="https://billzong.github.io/post/d13f2d70.html"/>
     <id>https://billzong.github.io/post/d13f2d70.html</id>
     <published>2021-04-11T08:38:00.000Z</published>
-    <updated>2026-10-05T13:10:58.313Z</updated>
+    <updated>2026-10-07T12:06:25.001Z</updated>
     
     
       
@@ -2016,7 +2068,7 @@
     <link href="https://billzong.github.io/post/51afbe53.html"/>
     <id>https://billzong.github.io/post/51afbe53.html</id>
     <published>2021-04-11T08:36:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -2049,7 +2101,7 @@
     <link href="https://billzong.github.io/post/d6ffd7c3.html"/>
     <id>https://billzong.github.io/post/d6ffd7c3.html</id>
     <published>2021-04-11T08:36:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -2082,7 +2134,7 @@
     <link href="https://billzong.github.io/post/ef6faf01.html"/>
     <id>https://billzong.github.io/post/ef6faf01.html</id>
     <published>2021-04-11T08:35:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -2119,7 +2171,7 @@
     <link href="https://billzong.github.io/post/3e321d5a.html"/>
     <id>https://billzong.github.io/post/3e321d5a.html</id>
     <published>2021-04-11T08:35:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -2149,7 +2201,7 @@
     <link href="https://billzong.github.io/post/b854b9de.html"/>
     <id>https://billzong.github.io/post/b854b9de.html</id>
     <published>2021-04-11T08:34:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.994Z</updated>
     
     
       
@@ -2179,7 +2231,7 @@
     <link href="https://billzong.github.io/post/659e5780.html"/>
     <id>https://billzong.github.io/post/659e5780.html</id>
     <published>2021-04-11T08:34:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -2218,7 +2270,7 @@
     <link href="https://billzong.github.io/post/73ccc9b4.html"/>
     <id>https://billzong.github.io/post/73ccc9b4.html</id>
     <published>2021-04-11T08:33:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.994Z</updated>
     
     
       
@@ -2252,7 +2304,7 @@
     <link href="https://billzong.github.io/post/58d09dd7.html"/>
     <id>https://billzong.github.io/post/58d09dd7.html</id>
     <published>2021-04-11T08:33:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -2289,7 +2341,7 @@
     <link href="https://billzong.github.io/post/605dd585.html"/>
     <id>https://billzong.github.io/post/605dd585.html</id>
     <published>2021-04-11T08:32:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.994Z</updated>
     
     
       
@@ -2320,7 +2372,7 @@
     <link href="https://billzong.github.io/post/1c1002d6.html"/>
     <id>https://billzong.github.io/post/1c1002d6.html</id>
     <published>2021-04-11T08:32:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -2357,7 +2409,7 @@
     <link href="https://billzong.github.io/post/81965e0a.html"/>
     <id>https://billzong.github.io/post/81965e0a.html</id>
     <published>2021-04-11T08:31:00.000Z</published>
-    <updated>2026-10-05T13:10:58.303Z</updated>
+    <updated>2026-10-07T12:06:24.991Z</updated>
     
     
       
@@ -2391,7 +2443,7 @@
     <link href="https://billzong.github.io/post/5f89c663.html"/>
     <id>https://billzong.github.io/post/5f89c663.html</id>
     <published>2021-04-11T08:31:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -2428,7 +2480,7 @@
     <link href="https://billzong.github.io/post/b265443c.html"/>
     <id>https://billzong.github.io/post/b265443c.html</id>
     <published>2021-04-09T15:30:00.000Z</published>
-    <updated>2026-10-05T13:10:58.306Z</updated>
+    <updated>2026-10-07T12:06:24.994Z</updated>
     
     
       
@@ -2456,7 +2508,7 @@
     <link href="https://billzong.github.io/post/4e670e66.html"/>
     <id>https://billzong.github.io/post/4e670e66.html</id>
     <published>2021-04-09T15:30:00.000Z</published>
-    <updated>2026-10-05T13:10:58.310Z</updated>
+    <updated>2026-10-07T12:06:24.998Z</updated>
     
     
       
@@ -2495,7 +2547,7 @@
     <link href="https://billzong.github.io/post/1c6c86cc.html"/>
     <id>https://billzong.github.io/post/1c6c86cc.html</id>
     <published>2021-04-08T15:30:00.000Z</published>
-    <updated>2026-10-05T13:10:58.304Z</updated>
+    <updated>2026-10-07T12:06:24.991Z</updated>
     
     
       
@@ -2522,7 +2574,7 @@
     <link href="https://billzong.github.io/post/afdd4898.html"/>
     <id>https://billzong.github.io/post/afdd4898.html</id>
     <published>2021-04-08T15:29:00.000Z</published>
-    <updated>2026-10-05T13:10:58.304Z</updated>
+    <updated>2026-10-07T12:06:24.991Z</updated>
     
     
       
@@ -2549,7 +2601,7 @@
     <link href="https://billzong.github.io/post/3363d042.html"/>
     <id>https://billzong.github.io/post/3363d042.html</id>
     <published>2021-04-08T15:28:00.000Z</published>
-    <updated>2026-10-05T13:10:58.304Z</updated>
+    <updated>2026-10-07T12:06:24.992Z</updated>
     
     
       
@@ -2576,7 +2628,7 @@
     <link href="https://billzong.github.io/post/e4cf1ff8.html"/>
     <id>https://billzong.github.io/post/e4cf1ff8.html</id>
     <published>2021-04-08T15:26:00.000Z</published>
-    <updated>2026-10-05T13:10:58.313Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -2604,7 +2656,7 @@
     <link href="https://billzong.github.io/post/1eec93ef.html"/>
     <id>https://billzong.github.io/post/1eec93ef.html</id>
     <published>2021-04-08T15:24:00.000Z</published>
-    <updated>2026-10-05T13:10:58.312Z</updated>
+    <updated>2026-10-07T12:06:25.000Z</updated>
     
     
       
@@ -2631,7 +2683,7 @@
     <link href="https://billzong.github.io/post/12d311d1.html"/>
     <id>https://billzong.github.io/post/12d311d1.html</id>
     <published>2021-04-08T14:55:00.000Z</published>
-    <updated>2026-10-05T13:10:58.309Z</updated>
+    <updated>2026-10-07T12:06:24.997Z</updated>
     
     
       
@@ -2660,7 +2712,7 @@
     <link href="https://billzong.github.io/post/d3239b62.html"/>
     <id>https://billzong.github.io/post/d3239b62.html</id>
     <published>2021-04-08T14:52:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -2690,7 +2742,7 @@
     <link href="https://billzong.github.io/post/f80ec8a1.html"/>
     <id>https://billzong.github.io/post/f80ec8a1.html</id>
     <published>2021-04-08T14:52:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -2721,7 +2773,7 @@
     <link href="https://billzong.github.io/post/facd8695.html"/>
     <id>https://billzong.github.io/post/facd8695.html</id>
     <published>2021-04-08T14:50:00.000Z</published>
-    <updated>2026-10-05T13:10:58.305Z</updated>
+    <updated>2026-10-07T12:06:24.993Z</updated>
     
     
       
@@ -2751,7 +2803,7 @@
     <link href="https://billzong.github.io/post/beb9dd3.html"/>
     <id>https://billzong.github.io/post/beb9dd3.html</id>
     <published>2021-04-08T14:48:00.000Z</published>
-    <updated>2026-10-05T13:10:58.307Z</updated>
+    <updated>2026-10-07T12:06:24.995Z</updated>
     
     
       
@@ -2790,7 +2842,7 @@
     <link href="https://billzong.github.io/post/44e52148.html"/>
     <id>https://billzong.github.io/post/44e52148.html</id>
     <published>2021-04-07T16:33:00.000Z</published>
-    <updated>2026-10-05T13:10:58.311Z</updated>
+    <updated>2026-10-07T12:06:24.999Z</updated>
     
     
       
@@ -2821,7 +2873,7 @@
     <link href="https://billzong.github.io/post/888b8b30.html"/>
     <id>https://billzong.github.io/post/888b8b30.html</id>
     <published>2021-04-07T16:10:00.000Z</published>
-    <updated>2026-10-05T13:10:58.304Z</updated>
+    <updated>2026-10-07T12:06:24.992Z</updated>
     
     
       
@@ -2851,7 +2903,7 @@
     <link href="https://billzong.github.io/post/2f833ac7.html"/>
     <id>https://billzong.github.io/post/2f833ac7.html</id>
     <published>2021-04-07T15:56:00.000Z</published>
-    <updated>2026-10-05T13:10:58.304Z</updated>
+    <updated>2026-10-07T12:06:24.991Z</updated>
     
     
       

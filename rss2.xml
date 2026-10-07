@@ -15,8 +15,62 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 07 Oct 2026 04:45:14 GMT</pubDate>
+    <pubDate>Wed, 07 Oct 2026 12:06:58 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>现代数据栈与语义层（Semantic Layer）的重新崛起</title>
+      <link>https://billzong.github.io/post/4e9995af.html</link>
+      <guid>https://billzong.github.io/post/4e9995af.html</guid>
+      <pubDate>Wed, 07 Oct 2026 12:05:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;第三章：现代数据栈与语义层（semantic-layer）的重新崛起&quot;&gt;第三章：现代数据栈与语义层（Semantic Layer）的重新崛起&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Part III: The Modern Data Stack &amp;amp; The</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/bi-evolution/">bi-evolution</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/BI/">BI</category>
+      
+      <category domain="https://billzong.github.io/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/">指标地狱</category>
+      
+      <category domain="https://billzong.github.io/tags/Modern-Data-Stack/">Modern Data Stack</category>
+      
+      <category domain="https://billzong.github.io/tags/%E8%AF%AD%E4%B9%89%E5%B1%82/">语义层</category>
+      
+      <category domain="https://billzong.github.io/tags/Semantic-Layer/">Semantic Layer</category>
+      
+      <category domain="https://billzong.github.io/tags/Headless-BI/">Headless BI</category>
+      
+      <category domain="https://billzong.github.io/tags/Metrics-Store/">Metrics Store</category>
+      
+      <category domain="https://billzong.github.io/tags/dbt/">dbt</category>
+      
+      <category domain="https://billzong.github.io/tags/MetricFlow/">MetricFlow</category>
+      
+      <category domain="https://billzong.github.io/tags/Cube/">Cube</category>
+      
+      <category domain="https://billzong.github.io/tags/%E8%87%AA%E5%8A%A9%E5%BC%8F-BI/">自助式 BI</category>
+      
+      <category domain="https://billzong.github.io/tags/%E8%A1%80%E7%BC%98/">血缘</category>
+      
+      <category domain="https://billzong.github.io/tags/Lineage/">Lineage</category>
+      
+      <category domain="https://billzong.github.io/tags/%E5%85%B3%E6%B3%A8%E7%82%B9%E5%88%86%E7%A6%BB/">关注点分离</category>
+      
+      
+      <comments>https://billzong.github.io/post/4e9995af.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>大模型重构时代（确定性语义层与概率模型的融合）</title>
@@ -43,11 +97,11 @@
       
       <category domain="https://billzong.github.io/tags/BI/">BI</category>
       
-      <category domain="https://billzong.github.io/tags/Text-to-SQL/">Text-to-SQL</category>
-      
       <category domain="https://billzong.github.io/tags/%E8%AF%AD%E4%B9%89%E5%B1%82/">语义层</category>
       
       <category domain="https://billzong.github.io/tags/Semantic-Layer/">Semantic Layer</category>
+      
+      <category domain="https://billzong.github.io/tags/Text-to-SQL/">Text-to-SQL</category>
       
       <category domain="https://billzong.github.io/tags/Semantic-IR/">Semantic IR</category>
       
