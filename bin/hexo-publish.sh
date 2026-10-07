@@ -93,6 +93,10 @@ if [[ $SKIP_MASTER -eq 0 ]]; then
       fi
     done
     find . -maxdepth 1 \( -name "*.bak" -o -name "*.original" \) -exec git rm --force -- {} + 2>/dev/null || true
+    # 第一道保险：先把 .deploy_git 从 index 撤掉，防止下面 git add -A
+    # 把它当 embedded git repo 加成 160000 gitlink（.gitignore 的 .deploy*/
+    # 管不到这种 gitlink 模式，且 git reset HEAD 也撤不掉已经入 index 的 gitlink）
+    git rm --cached --force -- .deploy_git 2>/dev/null || true
     git add -A
     # 第二道保险：把源文件从 index 撤回（如果第一道失败 / 仍存在）
     git reset HEAD public/ node_modules/ package-lock.json db.json .deploy_git source/ \
