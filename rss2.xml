@@ -15,8 +15,62 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Mon, 05 Oct 2026 13:09:21 GMT</pubDate>
+    <pubDate>Wed, 07 Oct 2026 04:45:14 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>大模型重构时代（确定性语义层与概率模型的融合）</title>
+      <link>https://billzong.github.io/post/146af6e.html</link>
+      <guid>https://billzong.github.io/post/146af6e.html</guid>
+      <pubDate>Wed, 07 Oct 2026 04:30:00 GMT</pubDate>
+      
+        
+        
+          
+          
+      <description>&lt;h1 id=&quot;第四章：大模型重构时代（确定性语义层与概率模型的融合）&quot;&gt;第四章：大模型重构时代（确定性语义层与概率模型的融合）&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Part IV: The LLM Reconstruction Era (The Integration of</description>
+          
+        
+      
+      
+      
+      
+      <category domain="https://billzong.github.io/categories/bi-evolution/">bi-evolution</category>
+      
+      
+      <category domain="https://billzong.github.io/tags/LLM/">LLM</category>
+      
+      <category domain="https://billzong.github.io/tags/BI/">BI</category>
+      
+      <category domain="https://billzong.github.io/tags/Text-to-SQL/">Text-to-SQL</category>
+      
+      <category domain="https://billzong.github.io/tags/%E8%AF%AD%E4%B9%89%E5%B1%82/">语义层</category>
+      
+      <category domain="https://billzong.github.io/tags/Semantic-Layer/">Semantic Layer</category>
+      
+      <category domain="https://billzong.github.io/tags/Semantic-IR/">Semantic IR</category>
+      
+      <category domain="https://billzong.github.io/tags/%E6%A6%82%E7%8E%87%E6%A8%A1%E5%9E%8B/">概率模型</category>
+      
+      <category domain="https://billzong.github.io/tags/%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%B3%BB%E7%BB%9F/">确定性系统</category>
+      
+      <category domain="https://billzong.github.io/tags/RAG/">RAG</category>
+      
+      <category domain="https://billzong.github.io/tags/%E9%97%AD%E7%8E%AF%E7%BA%A0%E9%94%99/">闭环纠错</category>
+      
+      <category domain="https://billzong.github.io/tags/RLS/">RLS</category>
+      
+      <category domain="https://billzong.github.io/tags/Prompt-Injection/">Prompt Injection</category>
+      
+      <category domain="https://billzong.github.io/tags/Spider/">Spider</category>
+      
+      <category domain="https://billzong.github.io/tags/BIRD/">BIRD</category>
+      
+      
+      <comments>https://billzong.github.io/post/146af6e.html#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>分布式计算与云原生数仓时代（计算与存储的解耦）</title>
