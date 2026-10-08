@@ -74,6 +74,13 @@ echo "==> 1/4 hexo clean + generate (dev 分支)"
 if [[ $DRY_RUN -eq 0 ]]; then
   npx hexo clean
   npx hexo generate
+  # hexo-abbrlink 插件在 generate 阶段会把空的 frontmatter abbrlink
+  # 字段写回源文件（如 `abbrlink: 4e9995af`），导致下面 `git checkout master`
+  # 因为 "Your local changes would be overwritten" 而 abort。
+  # crc32 算法是确定性的：同一篇文章每次 generate 拿到的 abbrlink 一致，
+  # 所以这里把 source/_posts/ 还原成 HEAD，让脚本能继续走 master 部署；
+  # public/ 里已经生成的 HTML 用的是正确 abbrlink 派生的 URL，不受影响。
+  git checkout HEAD -- source/_posts/ 2>/dev/null || true
 fi
 
 # ---------- 2. master: 平铺 public 到根并 commit ----------
