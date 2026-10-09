@@ -15,21 +15,21 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Fri, 09 Oct 2026 04:35:47 GMT</pubDate>
+    <pubDate>Fri, 09 Oct 2026 07:13:08 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
       <title>业务对象图时代（从 System of Insight 到 System of Action）</title>
       <link>https://billzong.github.io/post/3f081d36.html</link>
       <guid>https://billzong.github.io/post/3f081d36.html</guid>
-      <pubDate>Fri, 09 Oct 2026 04:35:45 GMT</pubDate>
+      <pubDate>Fri, 09 Oct 2026 04:00:00 GMT</pubDate>
       
         
         
           
           
-      <description>&lt;h1 id=&quot;第-5-章-(v6)&quot;&gt;第 5 章 (V6)&lt;/h1&gt;
-&lt;h2 id=&quot;第五章：业务对象图时代——从-System-of-Insight-到-System-of-Action&quot;&gt;第五章：业务对象图时代——从 System of Insight 到 System</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本节为系列第 5 / 8 节. 承接第 4 篇&amp;quot;大模型时代&amp;quot;的语义 IR 与自然语言交互,展开业务对象图(Ontology)如何把分析与行动整合到同一张可治理的语义网络上,聚焦&amp;quot;看数 →</description>
           
         
       
@@ -50,6 +50,18 @@
       <category domain="https://billzong.github.io/tags/System-of-Action/">System of Action</category>
       
       <category domain="https://billzong.github.io/tags/%E6%99%BA%E8%83%BD%E4%BD%93/">智能体</category>
+      
+      <category domain="https://billzong.github.io/tags/HITL/">HITL</category>
+      
+      <category domain="https://billzong.github.io/tags/OPA/">OPA</category>
+      
+      <category domain="https://billzong.github.io/tags/Rego/">Rego</category>
+      
+      <category domain="https://billzong.github.io/tags/ABAC/">ABAC</category>
+      
+      <category domain="https://billzong.github.io/tags/Saga/">Saga</category>
+      
+      <category domain="https://billzong.github.io/tags/Outbox/">Outbox</category>
       
       
       <comments>https://billzong.github.io/post/3f081d36.html#disqus_thread</comments>
