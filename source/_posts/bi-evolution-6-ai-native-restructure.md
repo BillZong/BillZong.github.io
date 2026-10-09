@@ -187,6 +187,22 @@ Prompts（提示模板）：用于提供可复用的任务模板或交互流程�
           │                │                │
           ▼                ▼                ▼
      指标与元数据       数据库/沙箱       ERP/CRM/工作流
+
+{% mermaid %}
+flowchart TB
+    MCP["MCP 协议交互层"]
+    MCP --> D1["数据与语义服务<br/>Resources/Tools"]
+    MCP --> D2["分析执行服务<br/>SQL/Python"]
+    MCP --> D3["业务动作服务<br/>Ontology/API"]
+    D1 --> M1["指标与元数据"]
+    D2 --> M2["数据库/沙箱"]
+    D3 --> M3["ERP/CRM/工作流"]
+    style MCP fill:#fff3b0,stroke:#b58900
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-1 · MCP 协议交互层与三类服务映射</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>MCP 协议交互层 → 数据与语义服务 (Resources/Tools) → 指标与元数据;MCP 协议交互层 → 分析执行服务 (SQL/Python) → 数据库/沙箱;MCP 协议交互层 → 业务动作服务 (Ontology/API) → ERP/CRM/工作流。</p>
+</noscript>
 ### 4. 标准化接口不等于标准化信任
 
 协议统一后，企业仍然需要解决一个关键问题：工具是否值得信任，以及它可以在什么条件下被调用。
@@ -414,6 +430,36 @@ Agentic BI 的可观测性不应只关注传统服务的 CPU、内存和请求�
 └──────────────────────────────────────────────────────────┘
 
   横向贯穿：身份认证、策略授权、隐私保护、审批与执行审计
+
+{% mermaid %}
+flowchart TB
+    subgraph L1["<b>交互与任务编排层</b>"]
+        A1["用户请求 / Agent Host / Router"]
+    end
+    subgraph L2["<b>智能体协作层</b>"]
+        A2["Retriever"] --- A3["Executor"] --- A4["Auditor"]
+    end
+    subgraph L3["<b>模型与协议层</b>"]
+        A5["小模型 / 推理模型 / Model Routing / MCP Client-Server"]
+    end
+    subgraph L4["<b>语义与执行层</b>"]
+        A6["Semantic Layer / Ontology / SQL Engine / Python Sandbox"]
+    end
+    subgraph L5["<b>数据与业务系统层</b>"]
+        A7["Lakehouse / Data Warehouse / ERP / CRM / APIs"]
+    end
+    L1 --> L2 --> L3 --> L4 --> L5
+    H["<i>横向贯穿:身份认证、策略授权、隐私保护、审批与执行审计</i>"] -.- L1
+    H -.- L2
+    H -.- L3
+    H -.- L4
+    H -.- L5
+    style H fill:#fff3b0,stroke:#b58900
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-2 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>交互与任务编排层 (用户请求/Agent Host/Router) → 智能体协作层 (Retriever/Executor/Auditor) → 模型与协议层 (小模型/推理模型/Model Routing/MCP Client-Server) → 语义与执行层 (Semantic Layer/Ontology/SQL Engine/Python Sandbox) → 数据与业务系统层 (Lakehouse/Data Warehouse/ERP/CRM/APIs)。横向贯穿:身份认证、策略授权、隐私保护、审批与执行审计。</p>
+</noscript>
 
 这一参考架构不要求所有企业一次性部署全部组件。对于简单的自然语言指标查询，可以先建立语义层、结构化请求和确定性 SQL 执行链路；当任务开始跨越多个数据域时，再引入独立检索与任务规划；当系统需要访问大量异构工具时，可以通过 MCP 减少集成成本；当模型调用规模增长或敏感数据约束变得严格时，再进一步建设模型路由、受保护执行环境与统一治理面。
 
