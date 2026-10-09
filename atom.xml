@@ -65,6 +65,52 @@
   </entry>
   
   <entry>
+    <title>BI 真正演进的不是 UI,而是抽象层</title>
+    <link href="https://billzong.github.io/post/ee970a16.html"/>
+    <id>https://billzong.github.io/post/ee970a16.html</id>
+    <published>2026-10-09T04:00:02.000Z</published>
+    <updated>2026-10-09T12:21:55.801Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;第七章：bi-真正演进的不是-ui，而是抽象层&quot;&gt;第七章：BI 真正演进的不是 UI，而是抽象层&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;The Evolution of BI: From Data Analytics to Decision Intelligence and</summary>
+        
+      
+    
+    
+    
+    <category term="bi-evolution" scheme="https://billzong.github.io/categories/bi-evolution/"/>
+    
+    
+    <category term="Agent" scheme="https://billzong.github.io/tags/Agent/"/>
+    
+    <category term="BI" scheme="https://billzong.github.io/tags/BI/"/>
+    
+    <category term="Ontology" scheme="https://billzong.github.io/tags/Ontology/"/>
+    
+    <category term="Governance" scheme="https://billzong.github.io/tags/Governance/"/>
+    
+    <category term="抽象层" scheme="https://billzong.github.io/tags/%E6%8A%BD%E8%B1%A1%E5%B1%82/"/>
+    
+    <category term="演进" scheme="https://billzong.github.io/tags/%E6%BC%94%E8%BF%9B/"/>
+    
+    <category term="总结" scheme="https://billzong.github.io/tags/%E6%80%BB%E7%BB%93/"/>
+    
+    <category term="泛在化分析" scheme="https://billzong.github.io/tags/%E6%B3%9B%E5%9C%A8%E5%8C%96%E5%88%86%E6%9E%90/"/>
+    
+    <category term="人机分工" scheme="https://billzong.github.io/tags/%E4%BA%BA%E6%9C%BA%E5%88%86%E5%B7%A5/"/>
+    
+    <category term="系列结论" scheme="https://billzong.github.io/tags/%E7%B3%BB%E5%88%97%E7%BB%93%E8%AE%BA/"/>
+    
+    <category term="Execution Trace" scheme="https://billzong.github.io/tags/Execution-Trace/"/>
+    
+  </entry>
+  
+  <entry>
     <title>AI-Native 现代分析系统的底层重构</title>
     <link href="https://billzong.github.io/post/20291056.html"/>
     <id>https://billzong.github.io/post/20291056.html</id>
@@ -142,6 +188,8 @@
     
     <category term="BI" scheme="https://billzong.github.io/tags/BI/"/>
     
+    <category term="指标地狱" scheme="https://billzong.github.io/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/"/>
+    
     <category term="Modern Data Stack" scheme="https://billzong.github.io/tags/Modern-Data-Stack/"/>
     
     <category term="语义层" scheme="https://billzong.github.io/tags/%E8%AF%AD%E4%B9%89%E5%B1%82/"/>
@@ -159,8 +207,6 @@
     <category term="Cube" scheme="https://billzong.github.io/tags/Cube/"/>
     
     <category term="自助式 BI" scheme="https://billzong.github.io/tags/%E8%87%AA%E5%8A%A9%E5%BC%8F-BI/"/>
-    
-    <category term="指标地狱" scheme="https://billzong.github.io/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/"/>
     
     <category term="血缘" scheme="https://billzong.github.io/tags/%E8%A1%80%E7%BC%98/"/>
     
@@ -246,8 +292,6 @@
     
     <category term="BI" scheme="https://billzong.github.io/tags/BI/"/>
     
-    <category term="指标地狱" scheme="https://billzong.github.io/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/"/>
-    
     <category term="分布式计算" scheme="https://billzong.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/"/>
     
     <category term="Hadoop" scheme="https://billzong.github.io/tags/Hadoop/"/>
@@ -277,6 +321,8 @@
     <category term="Medallion" scheme="https://billzong.github.io/tags/Medallion/"/>
     
     <category term="ELT" scheme="https://billzong.github.io/tags/ELT/"/>
+    
+    <category term="指标地狱" scheme="https://billzong.github.io/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/"/>
     
   </entry>
   
