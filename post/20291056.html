@@ -27,7 +27,7 @@
 <meta property="og:description" content="第六章: AI-Native 现代分析系统的底层重构 The Underlying Restructure for AI-Native Modern Analytics 引言：当智能体成为分析系统的执行主体 在前五篇的技术演进中，企业分析系统完成了一系列关键的架构跃迁：从经典数据仓库集中管理业务数据，到分布式计算与云原生数仓突破算力瓶颈；从独立语义层统一指标口径，到大模型借助 Semantic I">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-10-09T04:00:01.000Z">
-<meta property="article:modified_time" content="2026-10-09T23:20:33.562Z">
+<meta property="article:modified_time" content="2026-10-10T02:10:55.570Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="BI">
@@ -568,20 +568,6 @@ Auditor
 <p>此时，Agent 不必了解每个下游系统内部使用何种编程语言、数据库方言或服务框架，而是通过工具描述与参数契约发现并调用相应能力。</p>
 <p>需要注意，MCP 并不会自动把任意数据库变成语义一致的数据平台。它可以标准化工具接入方式，却不能替代指标口径治理、SQL 编译器、数据访问控制或事务一致性机制。一个定义错误的 query_metric 工具，即使完全符合 MCP 协议，依然可能返回错误的业务结果。</p>
 <p>因此，合理的架构应将 MCP 放在工具互操作层，而将业务语义与确定性执行能力保留在相应的服务层中。</p>
-<pre><code>              AI 应用 / Agent Host
-                       │
-                 MCP Client
-                       │
-              MCP 协议交互层
-                       │
-      ┌────────────────┼────────────────┐
-      ▼                ▼                ▼
-数据与语义服务      分析执行服务       业务动作服务
-Resources/Tools     SQL/Python        Ontology/API
-      │                │                │
-      ▼                ▼                ▼
- 指标与元数据       数据库/沙箱       ERP/CRM/工作流
-</code></pre>
 
 <pre>
 <code class="mermaid" >
@@ -729,23 +715,6 @@ Action
 <p>在交互与编排层，Router、Retriever、Executor 和 Auditor 根据任务契约完成分工协作<sup class="footnote-ref"><a href="#fn2" id="fnref2:2">[2:2]</a></sup></p>
 <p>。MCP 可以作为连接外部资源与工具的一种标准化协议，而模型路由机制则根据任务复杂度、成本和安全要求，决定使用何种模型或确定性组件。</p>
 <p>在安全与治理层，身份认证、策略引擎、工具授权、沙箱隔离、人工审批和执行追踪贯穿整个任务生命周期。TEE 等硬件辅助安全技术可以在特定场景下加强运行时数据保护，但仍需与密钥管理、数据最小化及输出治理共同使用。</p>
-<p>┌──────────────────────────────────────────────────────────┐
-│                    交互与任务编排层                       │
-│            用户请求 / Agent Host / Router                │
-├──────────────────────────────────────────────────────────┤
-│                    智能体协作层                           │
-│       Retriever  │  Executor  │  Auditor                 │
-├──────────────────────────────────────────────────────────┤
-│                    模型与协议层                           │
-│  小模型 / 推理模型 / Model Routing / MCP Client-Server   │
-├──────────────────────────────────────────────────────────┤
-│                    语义与执行层                           │
-│  Semantic Layer / Ontology / SQL Engine / Python Sandbox │
-├──────────────────────────────────────────────────────────┤
-│                    数据与业务系统层                       │
-│       Lakehouse / Data Warehouse / ERP / CRM / APIs      │
-└──────────────────────────────────────────────────────────┘</p>
-<p>横向贯穿：身份认证、策略授权、隐私保护、审批与执行审计</p>
 
 <pre>
 <code class="mermaid" >
