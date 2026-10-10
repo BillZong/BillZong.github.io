@@ -141,11 +141,11 @@ flowchart LR
         A7["Lakehouse / Data Warehouse / ERP / CRM / APIs"]:::end
     end
     L1 --> L2 --> L3 --> L4 --> L5
-    H -.- L1
-    H -.- L2
-    H -.- L3
-    H -.- L4
-    H -.- L5
+    H -.-> L1
+    H -.-> L2
+    H -.-> L3
+    H -.-> L4
+    H -.-> L5
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-6 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入</figcaption>
 <noscript>
@@ -465,9 +465,9 @@ flowchart LR
     A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]:::key
     Pass["<b>结果解释与授权后的业务动作</b>"]:::end
     Fail["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]:::key
-    A -- 校验通过 --> Pass
-    A -- 校验失败 --> Fail
-    Fail -. 修正后回到 Executor .-> E
+    A -->|校验通过| Pass
+    A -->|校验失败| Fail
+    Fail -.->|修正后回到 Executor| E
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-2 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)</figcaption>
 <noscript>
