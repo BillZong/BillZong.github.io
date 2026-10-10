@@ -1655,6 +1655,23 @@ figure.highlight td.code > pre {
   margin: 0 auto;
   display: inline-block;
 }
+.markdown-body figure.mermaid-figure .nodeLabel,
+.markdown-body figure.mermaid-figure .nodeLabel p,
+.markdown-body figure.mermaid-figure foreignObject div,
+.markdown-body figure.mermaid-figure foreignObject span {
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+  font-family: var(--font-family-sans-serif) !important;
+}
+.markdown-body figure.mermaid-figure .node foreignObject {
+  min-width: 80px !important;
+}
+.markdown-body figure.mermaid-figure foreignObject > div {
+  min-width: 80px !important;
+  text-align: center !important;
+  padding: 4px 8px !important;
+  box-sizing: border-box !important;
+}
 .markdown-body blockquote {
   color: var(--sec-text-color);
 }

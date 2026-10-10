@@ -27,7 +27,7 @@
 <meta property="og:description" content="第六章: AI-Native 现代分析系统的底层重构 The Underlying Restructure for AI-Native Modern Analytics 引言：当智能体成为分析系统的执行主体 在前五篇的技术演进中，企业分析系统完成了一系列关键的架构跃迁：从经典数据仓库集中管理业务数据，到分布式计算与云原生数仓突破算力瓶颈；从独立语义层统一指标口径，到大模型借助 Semantic I">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-10-09T04:00:01.000Z">
-<meta property="article:modified_time" content="2026-10-10T03:15:59.760Z">
+<meta property="article:modified_time" content="2026-10-10T03:57:08.289Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="BI">
@@ -98,9 +98,7 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
-<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
-<style>mjx-container[jax="SVG"] {
+<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
 
@@ -212,7 +210,9 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style></head>
+</style><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head>
 
 
 <body>
@@ -523,13 +523,13 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    MCP["MCP\n协议交互层"]:::entry
-    D1["数据与语义\n服务"]:::normal
-    D2["分析执行\n服务"]:::normal
-    D3["业务动作\n服务"]:::normal
-    M1["指标与\n元数据"]:::normal
-    M2["数据库\n沙箱"]:::normal
-    M3["ERP\nCRM"]:::exit
+    MCP["MCP\n协议"]:::entry
+    D1["数据\n服务"]:::normal
+    D2["执行\n服务"]:::normal
+    D3["动作\n服务"]:::normal
+    M1["指标\n数据"]:::normal
+    M2["数据\n沙箱"]:::normal
+    M3["ERP\n系统"]:::exit
     MCP --> D1 --> M1
     MCP --> D2 --> M2
     MCP --> D3 --> M3
@@ -540,7 +540,30 @@ flowchart LR
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions)。</p>
 </noscript>
 </figure>
-<figure class="mermaid-figure" role="img" aria-label="图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)">
+<figure class="mermaid-figure" role="img" aria-label="图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层)">
+
+<pre>
+<code class="mermaid" >
+flowchart TB
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    L1["交互\n编排"]:::normal
+    L2["智能\n协作"]:::normal
+    L3["模型\n协议"]:::normal
+    L4["语义\n执行"]:::normal
+    L5["数据\n业务"]:::exit
+    L1 --> L2 --> L3 --> L4 --> L5
+</code>
+</pre>
+<figcaption class="mermaid-caption">图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层)</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>交互与编排层 (用户请求/Agent Host/Router) → 智能体协作层 (Retriever/Executor/Auditor) → 模型与协议层 (小模型/推理模型/Model Routing/MCP Client-Server) → 语义与执行层 (Semantic Layer/Ontology/SQL Engine/Python Sandbox) → 数据与业务系统层 (Lakehouse/Data Warehouse/ERP/CRM/APIs)。</p>
+</noscript>
+</figure>
+<figure class="mermaid-figure" role="img" aria-label="图 6-7 · 横向治理贯穿全栈 5 层">
 
 <pre>
 <code class="mermaid" >
@@ -550,25 +573,12 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    H["横向治理\n贯穿"]:::entry
-    subgraph L1["交互与\n编排层"]
-        A1["用户请求\nRouter"]:::normal
-    end
-    subgraph L2["智能体\n协作层"]
-        A2["Retriever"]:::normal
-        A3["Executor"]:::normal
-        A4["Auditor"]:::normal
-    end
-    subgraph L3["模型与\n协议层"]
-        A5["小模型\n推理模型"]:::normal
-    end
-    subgraph L4["语义与\n执行层"]
-        A6["Semantic\nLayer"]:::normal
-    end
-    subgraph L5["数据与\n业务层"]
-        A7["Lakehouse\nERP"]:::exit
-    end
-    L1 --> L2 --> L3 --> L4 --> L5
+    H["横向\n治理"]:::entry
+    L1["交互\n编排"]:::normal
+    L2["智能\n协作"]:::normal
+    L3["模型\n协议"]:::normal
+    L4["语义\n执行"]:::normal
+    L5["数据\n业务"]:::normal
     H -.-> L1
     H -.-> L2
     H -.-> L3
@@ -576,9 +586,9 @@ flowchart LR
     H -.-> L5
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)</figcaption>
+<figcaption class="mermaid-caption">图 6-7 · 横向治理贯穿全栈 5 层</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Auditor (口径校验、结果复核、策略合规检查) → 校验通过 → 结果解释与授权后的业务动作;校验失败 → 限定范围内重试或请求人工介入(修正后回到 Executor)。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>横向贯穿:身份认证、策略授权、隐私保护、审批与执行审计。</p>
 </noscript>
 </figure>
 <p>在这一流程中，任务状态、重试次数、超时和错误处理均应由运行时编排器控制。模型可以提出下一步行动，但不应自行决定是否绕过权限检查、无限重试或突破资源限制。</p>
@@ -621,10 +631,10 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["Request\n用户请求"]:::entry
-    B["Intent / Plan\n结构化计划"]:::normal
-    C["Retrieved Context\n语义与元数据"]:::normal
-    D["Semantic IR\n查询意图"]:::exit
+    A["用户\n请求"]:::entry
+    B["意图\n规划"]:::normal
+    C["检索\n元数据"]:::normal
+    D["查询\n意图"]:::exit
     A --> B --> C --> D
 </code>
 </pre>
@@ -728,12 +738,12 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    E["Tool Call\n工具调用"]:::entry
-    F["SQL\n查询执行"]:::normal
-    G["Query Result\n查询结果"]:::normal
-    H["Validation\n校验"]:::decision
-    I["Final Answer\n最终结论"]:::normal
-    J["Action\n业务动作"]:::exit
+    E["工具\n调用"]:::entry
+    F["查询\n执行"]:::normal
+    G["查询\n结果"]:::normal
+    H["执行\n校验"]:::decision
+    I["最终\n结论"]:::normal
+    J["业务\n动作"]:::exit
     E --> F --> G --> H --> I --> J
 </code>
 </pre>
@@ -751,11 +761,11 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    Q["用户问题"]:::entry
-    R["Router\n路由与规划"]:::normal
-    Re["Retriever\n语义检索"]:::normal
-    P["结构化计划"]:::normal
-    E["Executor\n执行器"]:::exit
+    Q["用户\n问题"]:::entry
+    R["路由\n规划"]:::normal
+    Re["语义\n检索"]:::normal
+    P["结构\n计划"]:::normal
+    E["执行\n器"]:::exit
     Q --> R --> Re --> P --> E
 </code>
 </pre>
@@ -790,12 +800,12 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["Auditor\n口径校验"]:::decision
-    Pass["业务动作"]:::exit
-    Fail["限定范围\n重试 / 人工"]:::decision
-    A -->|校验通过| Pass
-    A -->|校验失败| Fail
-    Fail -.->|修正后重试| A
+    A["审计\n校验"]:::decision
+    Pass["业务\n动作"]:::exit
+    Fail["限定\n介入"]:::decision
+    A -->|通过| Pass
+    A -->|失败| Fail
+    Fail -.->|重试| A
 </code>
 </pre>
 <figcaption class="mermaid-caption">图 6-2 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入</figcaption>
@@ -987,7 +997,7 @@ flowchart LR
   <script>
   Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
     if (typeof mermaid === 'undefined') return;
-    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":true,"htmlLabels":false,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":true,"htmlLabels":false,"curve":"linear","nodeSpacing":50,"rankSpacing":60,"padding":12,"wrappingWidth":200}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {
