@@ -89,31 +89,28 @@ Auditor：独立校验与结果审计。 Auditor 负责验证分析结果是否�
 
 例如，Router 输出任务计划，Retriever 输出带有来源标识的语义上下文，Executor 输出查询结果与执行元数据，Auditor 则输出明确的校验结论。各阶段通过结构化数据交换，而不是依赖隐含在长篇自然语言中的约定。
 
-用户问题
-   │
-   ▼
-Router / Planner
-意图解析、任务拆解、风险初判
-   │
-   ▼
-Retriever
-语义定义、元数据、对象与权限上下文
-   │
-   ▼
-结构化任务计划与执行约束
-   │
-   ▼
-Executor
-语义 API / SQL / Python Sandbox / Actions
-   │
-   ▼
-Auditor
-口径校验、结果复核、策略合规检查
-   │
-   ├── 校验失败 ──► 限定范围内重试或请求人工介入
-   │
-   ▼
-结果解释与授权后的业务动作
+{% mermaid %}
+flowchart TB
+    Q["<b>用户问题</b>"]
+    R["<b>Router / Planner</b><br/>意图解析、任务拆解、风险初判"]
+    Re["<b>Retriever</b><br/>语义定义、元数据、对象与权限上下文"]
+    P["<b>结构化任务计划与执行约束</b>"]
+    E["<b>Executor</b><br/>语义 API / SQL / Python Sandbox / Actions"]
+    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]
+    F["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]
+    Out["<b>结果解释与授权后的业务动作</b>"]
+    Q --> R --> Re --> P --> E --> A
+    A -- "校验通过" --> Out
+    A -- "校验失败" --> F
+    F -. 修正后回到 Executor .-> E
+    style Q fill:#fff3b0,stroke:#b58900
+    style Out fill:#e8f5e8,stroke:#2e7d32
+    style F fill:#ffe0e0,stroke:#c62828
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-4 · 多智能体协作的运行时流程:Router → Retriever → 结构化计划 → Executor → Auditor(含校验失败重试分支)</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions) → Auditor (口径校验、结果复核、策略合规检查)。分支:校验失败 → 限定范围内重试或请求人工介入(回到 Executor);校验通过 → 结果解释与授权后的业务动作。</p>
+</noscript>
 
 在这一流程中，任务状态、重试次数、超时和错误处理均应由运行时编排器控制。模型可以提出下一步行动，但不应自行决定是否绕过权限检查、无限重试或突破资源限制。
 
