@@ -97,13 +97,13 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    MCP["MCP\n协议"]:::entry
-    D1["数据\n服务"]:::normal
-    D2["执行\n服务"]:::normal
-    D3["动作\n服务"]:::normal
-    M1["指标\n数据"]:::normal
-    M2["数据\n沙箱"]:::normal
-    M3["ERP\n系统"]:::exit
+    MCP["MCP协议"]:::entry
+    D1["数据服务"]:::normal
+    D2["执行服务"]:::normal
+    D3["动作服务"]:::normal
+    M1["指标数据"]:::normal
+    M2["数据沙箱"]:::normal
+    M3["ERP系统"]:::exit
     MCP --> D1 --> M1
     MCP --> D2 --> M2
     MCP --> D3 --> M3
@@ -122,11 +122,11 @@ flowchart TB
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    L1["交互\n编排"]:::normal
-    L2["智能\n协作"]:::normal
-    L3["模型\n协议"]:::normal
-    L4["语义\n执行"]:::normal
-    L5["数据\n业务"]:::exit
+    L1["交互编排"]:::normal
+    L2["智能协作"]:::normal
+    L3["模型协议"]:::normal
+    L4["语义执行"]:::normal
+    L5["数据业务"]:::exit
     L1 --> L2 --> L3 --> L4 --> L5
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层)</figcaption>
@@ -143,12 +143,12 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    H["横向\n治理"]:::entry
-    L1["交互\n编排"]:::normal
-    L2["智能\n协作"]:::normal
-    L3["模型\n协议"]:::normal
-    L4["语义\n执行"]:::normal
-    L5["数据\n业务"]:::normal
+    H["横向治理"]:::entry
+    L1["交互编排"]:::normal
+    L2["智能协作"]:::normal
+    L3["模型协议"]:::normal
+    L4["语义执行"]:::normal
+    L5["数据业务"]:::normal
     H -.-> L1
     H -.-> L2
     H -.-> L3
@@ -229,8 +229,8 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["用户\n请求"]:::entry
-    B["意图\n规划"]:::normal
+    A["用户请求"]:::entry
+    B["意图规划"]:::normal
     A --> B
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-1A · 分析意图阶段 (上):Request → Intent</figcaption>
@@ -247,8 +247,8 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    C["检索\n元数据"]:::normal
-    D["查询\n意图"]:::exit
+    C["检索元数据"]:::normal
+    D["查询意图"]:::exit
     C --> D
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-1B · 分析意图阶段 (下):Retrieved Context → Semantic IR</figcaption>
@@ -301,16 +301,16 @@ flowchart TB
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    U["用户\n请求"]:::entry
-    R["轻量\n模型路由"]:::normal
-    Simple["简单\n任务"]:::normal
-    Small["专用\n小模型"]:::normal
-    Complex["复杂\n任务"]:::decision
-    Reason["推理\n模型"]:::normal
-    Plan["结构\n化请求"]:::normal
-    DetEng["确定性\n执行引擎"]:::decision
-    Exec["SQL / 工具\n执行"]:::normal
-    Audit["结果\n校验审计"]:::exit
+    U["用户请求"]:::entry
+    R["轻量模型路由"]:::normal
+    Simple["简单任务"]:::normal
+    Small["专用小模型"]:::normal
+    Complex["复杂任务"]:::decision
+    Reason["推理模型"]:::normal
+    Plan["结构化请求"]:::normal
+    DetEng["确定性执行引擎"]:::decision
+    Exec["SQL / 工具执行"]:::normal
+    Audit["结果校验审计"]:::exit
 
     U --> R
     R --> Simple
@@ -427,9 +427,9 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    E["工具\n调用"]:::entry
-    F["查询\n执行"]:::normal
-    G["查询\n结果"]:::normal
+    E["工具调用"]:::entry
+    F["查询执行"]:::normal
+    G["查询结果"]:::normal
     E --> F --> G
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-3A · 分析执行与决策阶段 (上):Tool Call → SQL → Query Result</figcaption>
@@ -446,9 +446,9 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    H["执行\n校验"]:::decision
-    I["最终\n结论"]:::normal
-    J["业务\n动作"]:::exit
+    H["执行校验"]:::decision
+    I["最终结论"]:::normal
+    J["业务动作"]:::exit
     H --> I --> J
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-3B · 分析执行与决策阶段 (下):Validation → Final Answer → Action</figcaption>
@@ -465,9 +465,9 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    Q["用户\n问题"]:::entry
-    R["路由\n规划"]:::normal
-    Re["语义\n检索"]:::normal
+    Q["用户问题"]:::entry
+    R["路由规划"]:::normal
+    Re["语义检索"]:::normal
     Q --> R --> Re
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-4A · 多智能体协作主路径 (前 3 步):用户问题 → Router → Retriever</figcaption>
@@ -484,8 +484,8 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    P["结构\n计划"]:::normal
-    E["执行\n器"]:::exit
+    P["结构计划"]:::normal
+    E["执行器"]:::exit
     P --> E
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-4B · 多智能体协作主路径 (后 2 步):结构化计划 → Executor</figcaption>
@@ -533,9 +533,9 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["审计\n校验"]:::decision
-    Pass["业务\n动作"]:::exit
-    Fail["限定\n介入"]:::decision
+    A["审计校验"]:::decision
+    Pass["业务动作"]:::exit
+    Fail["限定介入"]:::decision
     A -->|通过| Pass
     A -->|失败| Fail
     Fail -.->|重试| A
