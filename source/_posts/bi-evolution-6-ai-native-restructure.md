@@ -89,6 +89,7 @@ Auditor：独立校验与结果审计。 Auditor 负责验证分析结果是否�
 
 例如，Router 输出任务计划，Retriever 输出带有来源标识的语义上下文，Executor 输出查询结果与执行元数据，Auditor 则输出明确的校验结论。各阶段通过结构化数据交换，而不是依赖隐含在长篇自然语言中的约定。
 
+<figure class="mermaid-figure" role="img" aria-label="图 6-4 · 多智能体协作的运行时流程:Router → Retriever → 结构化计划 → Executor → Auditor(含校验失败重试分支)">
 {% mermaid %}
 flowchart TB
     Q["<b>用户问题</b>"]
@@ -111,6 +112,7 @@ flowchart TB
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions) → Auditor (口径校验、结果复核、策略合规检查)。分支:校验失败 → 限定范围内重试或请求人工介入(回到 Executor);校验通过 → 结果解释与授权后的业务动作。</p>
 </noscript>
+</figure>
 
 在这一流程中，任务状态、重试次数、超时和错误处理均应由运行时编排器控制。模型可以提出下一步行动，但不应自行决定是否绕过权限检查、无限重试或突破资源限制。
 
@@ -172,6 +174,7 @@ Prompts（提示模板）：用于提供可复用的任务模板或交互流程�
 因此，合理的架构应将 MCP 放在工具互操作层，而将业务语义与确定性执行能力保留在相应的服务层中。
 
 
+<figure class="mermaid-figure" role="img" aria-label="图 6-1 · MCP 协议交互层与三类服务映射">
 {% mermaid %}
 flowchart TB
     MCP["MCP 协议交互层"]
@@ -187,6 +190,7 @@ flowchart TB
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>MCP 协议交互层 → 数据与语义服务 (Resources/Tools) → 指标与元数据;MCP 协议交互层 → 分析执行服务 (SQL/Python) → 数据库/沙箱;MCP 协议交互层 → 业务动作服务 (Ontology/API) → ERP/CRM/工作流。</p>
 </noscript>
+</figure>
 ### 4. 标准化接口不等于标准化信任
 
 协议统一后，企业仍然需要解决一个关键问题：工具是否值得信任，以及它可以在什么条件下被调用。
@@ -336,6 +340,7 @@ Governance Plane 并不是一个独立产品名称所能概括的单一模块[^5
 
 一条完整的分析链路至少应包含以下关键节点：
 
+<figure class="mermaid-figure" role="img" aria-label="图 6-3 · 一条完整的分析链路:Request → Intent → Retrieved Context → Semantic IR → Tool Call → SQL → Query Result → Validation → Final Answer → Action">
 {% mermaid %}
 flowchart TB
     A["<b>Request</b><br/>用户请求、身份与请求 ID"]
@@ -356,6 +361,7 @@ flowchart TB
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Request (用户请求、身份与请求 ID) → Intent/Plan (任务类型、结构化计划与策略判定) → Retrieved Context (数据来源、指标定义、版本与权限范围) → Semantic IR (结构化指标、维度、过滤条件与查询意图) → Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识) → Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
 </noscript>
+</figure>
 
 这里的重点不是记录所有原始内容，而是建立能够重建执行过程的证据链。对于敏感数据，日志应优先记录稳定标识、哈希、脱敏摘要与必要的元数据，而不是默认保存完整的原始数据集、凭证或模型上下文。
 
@@ -387,6 +393,7 @@ Agentic BI 的可观测性不应只关注传统服务的 CPU、内存和请求�
 
 在安全与治理层，身份认证、策略引擎、工具授权、沙箱隔离、人工审批和执行追踪贯穿整个任务生命周期。TEE 等硬件辅助安全技术可以在特定场景下加强运行时数据保护，但仍需与密钥管理、数据最小化及输出治理共同使用。
 
+<figure class="mermaid-figure" role="img" aria-label="图 6-2 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)">
 {% mermaid %}
 flowchart TB
     subgraph L1["<b>交互与任务编排层</b>"]
@@ -416,6 +423,7 @@ flowchart TB
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>交互与任务编排层 (用户请求/Agent Host/Router) → 智能体协作层 (Retriever/Executor/Auditor) → 模型与协议层 (小模型/推理模型/Model Routing/MCP Client-Server) → 语义与执行层 (Semantic Layer/Ontology/SQL Engine/Python Sandbox) → 数据与业务系统层 (Lakehouse/Data Warehouse/ERP/CRM/APIs)。横向贯穿:身份认证、策略授权、隐私保护、审批与执行审计。</p>
 </noscript>
+</figure>
 
 这一参考架构不要求所有企业一次性部署全部组件。对于简单的自然语言指标查询，可以先建立语义层、结构化请求和确定性 SQL 执行链路；当任务开始跨越多个数据域时，再引入独立检索与任务规划；当系统需要访问大量异构工具时，可以通过 MCP 减少集成成本；当模型调用规模增长或敏感数据约束变得严格时，再进一步建设模型路由、受保护执行环境与统一治理面。
 
