@@ -27,7 +27,7 @@
 <meta property="og:description" content="第六章: AI-Native 现代分析系统的底层重构 The Underlying Restructure for AI-Native Modern Analytics 引言：当智能体成为分析系统的执行主体 在前五篇的技术演进中，企业分析系统完成了一系列关键的架构跃迁：从经典数据仓库集中管理业务数据，到分布式计算与云原生数仓突破算力瓶颈；从独立语义层统一指标口径，到大模型借助 Semantic I">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-10-09T04:00:01.000Z">
-<meta property="article:modified_time" content="2026-10-10T03:02:13.546Z">
+<meta property="article:modified_time" content="2026-10-10T03:15:59.760Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="BI">
@@ -98,7 +98,9 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+<style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
 
@@ -210,9 +212,7 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
-<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
-</head>
+</style></head>
 
 
 <body>
@@ -513,7 +513,7 @@ mjx-container[display="true"] + br {
 <p>从工程实现看，多智能体系统不能依赖各个模型之间自由传递自然语言来维持协作。否则，一个角色对业务概念的模糊理解可能被下游角色不断放大，最终难以确定错误发生在哪个阶段。</p>
 <p>更可靠的方式是建立结构化的任务契约（Task Contract），规定每个角色接收什么输入、产生什么输出，以及在什么条件下允许任务继续执行。</p>
 <p>例如，Router 输出任务计划，Retriever 输出带有来源标识的语义上下文，Executor 输出查询结果与执行元数据，Auditor 则输出明确的校验结论。各阶段通过结构化数据交换，而不是依赖隐含在长篇自然语言中的约定。</p>
-<figure class="mermaid-figure" role="img" aria-label="图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor">
+<figure class="mermaid-figure" role="img" aria-label="图 6-5 · MCP 协议交互层与三类服务映射">
 
 <pre>
 <code class="mermaid" >
@@ -523,24 +523,24 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    MCP["MCP 协议交互层"]:::entry
-    D1["数据与语义服务 - Resources/Tools"]:::normal
-    D2["分析执行服务 - SQL / Python"]:::normal
-    D3["业务动作服务 - Ontology / API"]:::normal
-    M1["指标与元数据"]:::normal
-    M2["数据库 / 沙箱"]:::normal
-    M3["ERP / CRM / 工作流"]:::exit
+    MCP["MCP\n协议交互层"]:::entry
+    D1["数据与语义\n服务"]:::normal
+    D2["分析执行\n服务"]:::normal
+    D3["业务动作\n服务"]:::normal
+    M1["指标与\n元数据"]:::normal
+    M2["数据库\n沙箱"]:::normal
+    M3["ERP\nCRM"]:::exit
     MCP --> D1 --> M1
     MCP --> D2 --> M2
     MCP --> D3 --> M3
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor</figcaption>
+<figcaption class="mermaid-caption">图 6-5 · MCP 协议交互层与三类服务映射</figcaption>
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions)。</p>
 </noscript>
 </figure>
-<figure class="mermaid-figure" role="img" aria-label="图 6-6 · Auditor 校验通过/失败双分支">
+<figure class="mermaid-figure" role="img" aria-label="图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)">
 
 <pre>
 <code class="mermaid" >
@@ -550,23 +550,23 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    H["横向贯穿 - 身份认证 / 策略授权 / 隐私保护 / 审批与执行审计"]:::decision
-    subgraph L1["交互与任务编排层"]
-        A1["用户请求 / Agent Host / Router"]:::normal
+    H["横向治理\n贯穿"]:::entry
+    subgraph L1["交互与\n编排层"]
+        A1["用户请求\nRouter"]:::normal
     end
-    subgraph L2["智能体协作层"]
+    subgraph L2["智能体\n协作层"]
         A2["Retriever"]:::normal
         A3["Executor"]:::normal
         A4["Auditor"]:::normal
     end
-    subgraph L3["模型与协议层"]
-        A5["小模型 / 推理模型 / Model Routing / MCP Client-Server"]:::normal
+    subgraph L3["模型与\n协议层"]
+        A5["小模型\n推理模型"]:::normal
     end
-    subgraph L4["语义与执行层"]
-        A6["Semantic Layer / Ontology / SQL Engine / Python Sandbox"]:::normal
+    subgraph L4["语义与\n执行层"]
+        A6["Semantic\nLayer"]:::normal
     end
-    subgraph L5["数据与业务系统层"]
-        A7["Lakehouse / Data Warehouse / ERP / CRM / APIs"]:::exit
+    subgraph L5["数据与\n业务层"]
+        A7["Lakehouse\nERP"]:::exit
     end
     L1 --> L2 --> L3 --> L4 --> L5
     H -.-> L1
@@ -576,7 +576,7 @@ flowchart LR
     H -.-> L5
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-6 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入</figcaption>
+<figcaption class="mermaid-caption">图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)</figcaption>
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Auditor (口径校验、结果复核、策略合规检查) → 校验通过 → 结果解释与授权后的业务动作;校验失败 → 限定范围内重试或请求人工介入(修正后回到 Executor)。</p>
 </noscript>
@@ -611,7 +611,7 @@ flowchart LR
 <p>此时，Agent 不必了解每个下游系统内部使用何种编程语言、数据库方言或服务框架，而是通过工具描述与参数契约发现并调用相应能力。</p>
 <p>需要注意，MCP 并不会自动把任意数据库变成语义一致的数据平台。它可以标准化工具接入方式，却不能替代指标口径治理、SQL 编译器、数据访问控制或事务一致性机制。一个定义错误的 query_metric 工具，即使完全符合 MCP 协议，依然可能返回错误的业务结果。</p>
 <p>因此，合理的架构应将 MCP 放在工具互操作层，而将业务语义与确定性执行能力保留在相应的服务层中。</p>
-<figure class="mermaid-figure" role="img" aria-label="图 6-1 · MCP 协议交互层与三类服务映射">
+<figure class="mermaid-figure" role="img" aria-label="图 6-1 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR">
 
 <pre>
 <code class="mermaid" >
@@ -621,14 +621,14 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["Request - 用户请求、身份与请求 ID"]:::entry
-    B["Intent / Plan - 任务类型、结构化计划与策略判定"]:::normal
-    C["Retrieved Context - 数据来源、指标定义、版本与权限范围"]:::normal
-    D["Semantic IR - 结构化指标、维度、过滤条件与查询意图"]:::exit
+    A["Request\n用户请求"]:::entry
+    B["Intent / Plan\n结构化计划"]:::normal
+    C["Retrieved Context\n语义与元数据"]:::normal
+    D["Semantic IR\n查询意图"]:::exit
     A --> B --> C --> D
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-1 · MCP 协议交互层与三类服务映射</figcaption>
+<figcaption class="mermaid-caption">图 6-1 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR</figcaption>
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>MCP 协议交互层 → 数据与语义服务 (Resources/Tools) → 指标与元数据;MCP 协议交互层 → 分析执行服务 (SQL/Python) → 数据库/沙箱;MCP 协议交互层 → 业务动作服务 (Ontology/API) → ERP/CRM/工作流。</p>
 </noscript>
@@ -718,7 +718,7 @@ SQL / 分析代码 / 工具
 <p>生产级系统更需要工程化的执行追踪（Execution Trace），重点记录可以验证的事件与数据流转<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></p>
 <p>。</p>
 <p>一条完整的分析链路至少应包含以下关键节点：</p>
-<figure class="mermaid-figure" role="img" aria-label="图 6-3 · 一条完整的分析链路:Request → Intent → Retrieved Context → Semantic IR → Tool Call → SQL → Query Result → Validation → Final Answer → Action">
+<figure class="mermaid-figure" role="img" aria-label="图 6-3 · 分析执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action">
 
 <pre>
 <code class="mermaid" >
@@ -728,20 +728,20 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    E["Tool Call - 工具名称、参数摘要、身份与授权结果"]:::entry
-    F["SQL / Execution - 查询标识、执行计划摘要、资源消耗与状态"]:::normal
-    G["Query Result - 结果版本、数据时效、结果规模与引用标识"]:::normal
-    H["Validation - 校验规则、异常与复核结论"]:::decision
-    I["Final Answer - 结论、证据引用与不确定性说明"]:::normal
-    J["Action - 审批记录、执行主体、幂等标识与最终状态"]:::exit
+    E["Tool Call\n工具调用"]:::entry
+    F["SQL\n查询执行"]:::normal
+    G["Query Result\n查询结果"]:::normal
+    H["Validation\n校验"]:::decision
+    I["Final Answer\n最终结论"]:::normal
+    J["Action\n业务动作"]:::exit
     E --> F --> G --> H --> I --> J
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-3 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR</figcaption>
+<figcaption class="mermaid-caption">图 6-3 · 分析执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Request (用户请求、身份与请求 ID) → Intent/Plan (任务类型、结构化计划与策略判定) → Retrieved Context (数据来源、指标定义、版本与权限范围) → Semantic IR (结构化指标、维度、过滤条件与查询意图)。</p>
 </noscript>
-<figure class="mermaid-figure" role="img" aria-label="图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action">
+<figure class="mermaid-figure" role="img" aria-label="图 6-4 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor">
 
 <pre>
 <code class="mermaid" >
@@ -752,14 +752,14 @@ flowchart LR
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
     Q["用户问题"]:::entry
-    R["Router / Planner - 意图解析、任务拆解、风险初判"]:::normal
-    Re["Retriever - 语义定义、元数据、对象与权限上下文"]:::normal
-    P["结构化任务计划与执行约束"]:::normal
-    E["Executor - 语义 API / SQL / Python Sandbox / Actions"]:::exit
+    R["Router\n路由与规划"]:::normal
+    Re["Retriever\n语义检索"]:::normal
+    P["结构化计划"]:::normal
+    E["Executor\n执行器"]:::exit
     Q --> R --> Re --> P --> E
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
+<figcaption class="mermaid-caption">图 6-4 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor</figcaption>
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识) → Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
 </noscript>
@@ -780,7 +780,7 @@ flowchart LR
 <p>在交互与编排层，Router、Retriever、Executor 和 Auditor 根据任务契约完成分工协作<sup class="footnote-ref"><a href="#fn2" id="fnref2:2">[2:2]</a></sup></p>
 <p>。MCP 可以作为连接外部资源与工具的一种标准化协议，而模型路由机制则根据任务复杂度、成本和安全要求，决定使用何种模型或确定性组件。</p>
 <p>在安全与治理层，身份认证、策略引擎、工具授权、沙箱隔离、人工审批和执行追踪贯穿整个任务生命周期。TEE 等硬件辅助安全技术可以在特定场景下加强运行时数据保护，但仍需与密钥管理、数据最小化及输出治理共同使用。</p>
-<figure class="mermaid-figure" role="img" aria-label="图 6-2 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)">
+<figure class="mermaid-figure" role="img" aria-label="图 6-2 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入">
 
 <pre>
 <code class="mermaid" >
@@ -790,15 +790,15 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["Auditor - 口径校验、结果复核、策略合规检查"]:::decision
-    Pass["结果解释与授权后的业务动作"]:::exit
-    Fail["校验失败 - 限定范围内重试或请求人工介入"]:::decision
+    A["Auditor\n口径校验"]:::decision
+    Pass["业务动作"]:::exit
+    Fail["限定范围\n重试 / 人工"]:::decision
     A -->|校验通过| Pass
     A -->|校验失败| Fail
-    Fail -.->|修正后回到 Executor| E
+    Fail -.->|修正后重试| A
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-2 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)</figcaption>
+<figcaption class="mermaid-caption">图 6-2 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入</figcaption>
 <noscript>
   <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>交互与任务编排层 (用户请求/Agent Host/Router) → 智能体协作层 (Retriever/Executor/Auditor) → 模型与协议层 (小模型/推理模型/Model Routing/MCP Client-Server) → 语义与执行层 (Semantic Layer/Ontology/SQL Engine/Python Sandbox) → 数据与业务系统层 (Lakehouse/Data Warehouse/ERP/CRM/APIs)。横向贯穿:身份认证、策略授权、隐私保护、审批与执行审计。</p>
 </noscript>
