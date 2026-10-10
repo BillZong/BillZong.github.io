@@ -30,7 +30,6 @@
 <meta property="article:modified_time" content="2026-10-07T12:07:42.000Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="BI">
-<meta property="article:tag" content="指标地狱">
 <meta property="article:tag" content="分布式计算">
 <meta property="article:tag" content="Hadoop">
 <meta property="article:tag" content="Spark">
@@ -46,6 +45,7 @@
 <meta property="article:tag" content="Iceberg">
 <meta property="article:tag" content="Medallion">
 <meta property="article:tag" content="ELT">
+<meta property="article:tag" content="指标地狱">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -883,8 +883,6 @@ flowchart LR
       
         <a href="/tags/BI/" class="print-no-link">#BI</a>
       
-        <a href="/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/" class="print-no-link">#指标地狱</a>
-      
         <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" class="print-no-link">#分布式计算</a>
       
         <a href="/tags/Hadoop/" class="print-no-link">#Hadoop</a>
@@ -914,6 +912,8 @@ flowchart LR
         <a href="/tags/Medallion/" class="print-no-link">#Medallion</a>
       
         <a href="/tags/ELT/" class="print-no-link">#ELT</a>
+      
+        <a href="/tags/%E6%8C%87%E6%A0%87%E5%9C%B0%E7%8B%B1/" class="print-no-link">#指标地狱</a>
       
     </div>
   
@@ -976,7 +976,7 @@ flowchart LR
   <script>
   Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
     if (typeof mermaid === 'undefined') return;
-    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"18px"},"flowchart":{"useMaxWidth":false,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":true,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {
