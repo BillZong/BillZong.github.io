@@ -27,17 +27,17 @@
 <meta property="og:description" content="第六章: AI-Native 现代分析系统的底层重构 The Underlying Restructure for AI-Native Modern Analytics 引言：当智能体成为分析系统的执行主体 在前五篇的技术演进中，企业分析系统完成了一系列关键的架构跃迁：从经典数据仓库集中管理业务数据，到分布式计算与云原生数仓突破算力瓶颈；从独立语义层统一指标口径，到大模型借助 Semantic I">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-10-09T04:00:01.000Z">
-<meta property="article:modified_time" content="2026-10-10T02:11:41.187Z">
+<meta property="article:modified_time" content="2026-10-10T02:13:07.696Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="BI">
-<meta property="article:tag" content="Governance">
 <meta property="article:tag" content="AI-Native">
 <meta property="article:tag" content="Model Context Protocol">
 <meta property="article:tag" content="MCP">
 <meta property="article:tag" content="Model Routing">
 <meta property="article:tag" content="TEE">
 <meta property="article:tag" content="可信执行环境">
+<meta property="article:tag" content="Governance">
 <meta property="article:tag" content="可观测性">
 <meta property="article:tag" content="角色分拆">
 <meta property="article:tag" content="Router">
@@ -98,9 +98,7 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
-<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
-<style>mjx-container[jax="SVG"] {
+<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
 
@@ -212,7 +210,9 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style></head>
+</style><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+</head>
 
 
 <body>
@@ -513,31 +513,31 @@ mjx-container[display="true"] + br {
 <p>从工程实现看，多智能体系统不能依赖各个模型之间自由传递自然语言来维持协作。否则，一个角色对业务概念的模糊理解可能被下游角色不断放大，最终难以确定错误发生在哪个阶段。</p>
 <p>更可靠的方式是建立结构化的任务契约（Task Contract），规定每个角色接收什么输入、产生什么输出，以及在什么条件下允许任务继续执行。</p>
 <p>例如，Router 输出任务计划，Retriever 输出带有来源标识的语义上下文，Executor 输出查询结果与执行元数据，Auditor 则输出明确的校验结论。各阶段通过结构化数据交换，而不是依赖隐含在长篇自然语言中的约定。</p>
-<p>用户问题
-│
-▼
-Router / Planner
-意图解析、任务拆解、风险初判
-│
-▼
-Retriever
-语义定义、元数据、对象与权限上下文
-│
-▼
-结构化任务计划与执行约束
-│
-▼
-Executor
-语义 API / SQL / Python Sandbox / Actions
-│
-▼
-Auditor
-口径校验、结果复核、策略合规检查
-│
-├── 校验失败 ──► 限定范围内重试或请求人工介入
-│
-▼
-结果解释与授权后的业务动作</p>
+
+<pre>
+<code class="mermaid" >
+flowchart TB
+    Q["<b>用户问题</b>"]
+    R["<b>Router / Planner</b><br/>意图解析、任务拆解、风险初判"]
+    Re["<b>Retriever</b><br/>语义定义、元数据、对象与权限上下文"]
+    P["<b>结构化任务计划与执行约束</b>"]
+    E["<b>Executor</b><br/>语义 API / SQL / Python Sandbox / Actions"]
+    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]
+    F["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]
+    Out["<b>结果解释与授权后的业务动作</b>"]
+    Q --> R --> Re --> P --> E --> A
+    A -- "校验通过" --> Out
+    A -- "校验失败" --> F
+    F -. 修正后回到 Executor .-> E
+    style Q fill:#fff3b0,stroke:#b58900
+    style Out fill:#e8f5e8,stroke:#2e7d32
+    style F fill:#ffe0e0,stroke:#c62828
+</code>
+</pre>
+<figcaption class="mermaid-caption">图 6-4 · 多智能体协作的运行时流程:Router → Retriever → 结构化计划 → Executor → Auditor(含校验失败重试分支)</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions) → Auditor (口径校验、结果复核、策略合规检查)。分支:校验失败 → 限定范围内重试或请求人工介入(回到 Executor);校验通过 → 结果解释与授权后的业务动作。</p>
+</noscript>
 <p>在这一流程中，任务状态、重试次数、超时和错误处理均应由运行时编排器控制。模型可以提出下一步行动，但不应自行决定是否绕过权限检查、无限重试或突破资源限制。</p>
 <p>例如，当 SQL 执行失败时，系统可以把经过脱敏的错误信息返回给 Executor，允许其在限定次数内修正查询；当检索到的指标定义存在冲突时，系统则应暂停自动推理，要求业务负责人确认口径，而不是让模型任意选择一个定义。</p>
 <p>这种架构将概率性的模型行为限制在明确的工程契约之内，使复杂任务具备更好的可调试性、可恢复性与可验证性。</p>
@@ -838,8 +838,6 @@ flowchart TB
       
         <a href="/tags/BI/" class="print-no-link">#BI</a>
       
-        <a href="/tags/Governance/" class="print-no-link">#Governance</a>
-      
         <a href="/tags/AI-Native/" class="print-no-link">#AI-Native</a>
       
         <a href="/tags/Model-Context-Protocol/" class="print-no-link">#Model Context Protocol</a>
@@ -851,6 +849,8 @@ flowchart TB
         <a href="/tags/TEE/" class="print-no-link">#TEE</a>
       
         <a href="/tags/%E5%8F%AF%E4%BF%A1%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83/" class="print-no-link">#可信执行环境</a>
+      
+        <a href="/tags/Governance/" class="print-no-link">#Governance</a>
       
         <a href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/" class="print-no-link">#可观测性</a>
       
