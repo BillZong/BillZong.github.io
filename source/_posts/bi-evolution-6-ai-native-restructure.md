@@ -92,18 +92,18 @@ Auditor：独立校验与结果审计。 Auditor 负责验证分析结果是否�
 <figure class="mermaid-figure" role="img" aria-label="图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor">
 {% mermaid %}
 flowchart LR
-    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
-    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
-    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
-    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    MCP["<b>MCP 协议交互层</b>"]:::start
-    D1["<b>数据与语义服务</b><br/>Resources/Tools"]:::def
-    D2["<b>分析执行服务</b><br/>SQL / Python"]:::def
-    D3["<b>业务动作服务</b><br/>Ontology / API"]:::def
-    M1["指标与元数据"]:::def
-    M2["数据库 / 沙箱"]:::def
-    M3["ERP / CRM / 工作流"]:::end
+    MCP["<b>MCP 协议交互层</b>"]:::entry
+    D1["<b>数据与语义服务</b><br/>Resources/Tools"]:::normal
+    D2["<b>分析执行服务</b><br/>SQL / Python"]:::normal
+    D3["<b>业务动作服务</b><br/>Ontology / API"]:::normal
+    M1["指标与元数据"]:::normal
+    M2["数据库 / 沙箱"]:::normal
+    M3["ERP / CRM / 工作流"]:::exit
     MCP --> D1 --> M1
     MCP --> D2 --> M2
     MCP --> D3 --> M3
@@ -117,28 +117,28 @@ flowchart LR
 <figure class="mermaid-figure" role="img" aria-label="图 6-6 · Auditor 校验通过/失败双分支">
 {% mermaid %}
 flowchart LR
-    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
-    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
-    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
-    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    H["<b>横向贯穿</b><br/>身份认证 / 策略授权 / 隐私保护 / 审批与执行审计"]:::key
+    H["<b>横向贯穿</b><br/>身份认证 / 策略授权 / 隐私保护 / 审批与执行审计"]:::decision
     subgraph L1["<b>交互与任务编排层</b>"]
-        A1["用户请求 / Agent Host / Router"]:::def
+        A1["用户请求 / Agent Host / Router"]:::normal
     end
     subgraph L2["<b>智能体协作层</b>"]
-        A2["Retriever"]:::def
-        A3["Executor"]:::def
-        A4["Auditor"]:::def
+        A2["Retriever"]:::normal
+        A3["Executor"]:::normal
+        A4["Auditor"]:::normal
     end
     subgraph L3["<b>模型与协议层</b>"]
-        A5["小模型 / 推理模型 / Model Routing / MCP Client-Server"]:::def
+        A5["小模型 / 推理模型 / Model Routing / MCP Client-Server"]:::normal
     end
     subgraph L4["<b>语义与执行层</b>"]
-        A6["Semantic Layer / Ontology / SQL Engine / Python Sandbox"]:::def
+        A6["Semantic Layer / Ontology / SQL Engine / Python Sandbox"]:::normal
     end
     subgraph L5["<b>数据与业务系统层</b>"]
-        A7["Lakehouse / Data Warehouse / ERP / CRM / APIs"]:::end
+        A7["Lakehouse / Data Warehouse / ERP / CRM / APIs"]:::exit
     end
     L1 --> L2 --> L3 --> L4 --> L5
     H -.-> L1
@@ -216,15 +216,15 @@ Prompts（提示模板）：用于提供可复用的任务模板或交互流程�
 <figure class="mermaid-figure" role="img" aria-label="图 6-1 · MCP 协议交互层与三类服务映射">
 {% mermaid %}
 flowchart LR
-    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
-    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
-    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
-    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["<b>Request</b><br/>用户请求、身份与请求 ID"]:::start
-    B["<b>Intent / Plan</b><br/>任务类型、结构化计划与策略判定"]:::def
-    C["<b>Retrieved Context</b><br/>数据来源、指标定义、版本与权限范围"]:::def
-    D["<b>Semantic IR</b><br/>结构化指标、维度、过滤条件与查询意图"]:::end
+    A["<b>Request</b><br/>用户请求、身份与请求 ID"]:::entry
+    B["<b>Intent / Plan</b><br/>任务类型、结构化计划与策略判定"]:::normal
+    C["<b>Retrieved Context</b><br/>数据来源、指标定义、版本与权限范围"]:::normal
+    D["<b>Semantic IR</b><br/>结构化指标、维度、过滤条件与查询意图"]:::exit
     A --> B --> C --> D
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-1 · MCP 协议交互层与三类服务映射</figcaption>
@@ -384,17 +384,17 @@ Governance Plane 并不是一个独立产品名称所能概括的单一模块[^5
 <figure class="mermaid-figure" role="img" aria-label="图 6-3 · 一条完整的分析链路:Request → Intent → Retrieved Context → Semantic IR → Tool Call → SQL → Query Result → Validation → Final Answer → Action">
 {% mermaid %}
 flowchart LR
-    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
-    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
-    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
-    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    E["<b>Tool Call</b><br/>工具名称、参数摘要、身份与授权结果"]:::start
-    F["<b>SQL / Execution</b><br/>查询标识、执行计划摘要、资源消耗与状态"]:::def
-    G["<b>Query Result</b><br/>结果版本、数据时效、结果规模与引用标识"]:::def
-    H["<b>Validation</b><br/>校验规则、异常与复核结论"]:::key
-    I["<b>Final Answer</b><br/>结论、证据引用与不确定性说明"]:::def
-    J["<b>Action</b><br/>审批记录、执行主体、幂等标识与最终状态"]:::end
+    E["<b>Tool Call</b><br/>工具名称、参数摘要、身份与授权结果"]:::entry
+    F["<b>SQL / Execution</b><br/>查询标识、执行计划摘要、资源消耗与状态"]:::normal
+    G["<b>Query Result</b><br/>结果版本、数据时效、结果规模与引用标识"]:::normal
+    H["<b>Validation</b><br/>校验规则、异常与复核结论"]:::decision
+    I["<b>Final Answer</b><br/>结论、证据引用与不确定性说明"]:::normal
+    J["<b>Action</b><br/>审批记录、执行主体、幂等标识与最终状态"]:::exit
     E --> F --> G --> H --> I --> J
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-3 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR</figcaption>
@@ -405,16 +405,16 @@ flowchart LR
 <figure class="mermaid-figure" role="img" aria-label="图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action">
 {% mermaid %}
 flowchart LR
-    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
-    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
-    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
-    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    Q["<b>用户问题</b>"]:::start
-    R["<b>Router / Planner</b><br/>意图解析、任务拆解、风险初判"]:::def
-    Re["<b>Retriever</b><br/>语义定义、元数据、对象与权限上下文"]:::def
-    P["<b>结构化任务计划与执行约束</b>"]:::def
-    E["<b>Executor</b><br/>语义 API / SQL / Python Sandbox / Actions"]:::end
+    Q["<b>用户问题</b>"]:::entry
+    R["<b>Router / Planner</b><br/>意图解析、任务拆解、风险初判"]:::normal
+    Re["<b>Retriever</b><br/>语义定义、元数据、对象与权限上下文"]:::normal
+    P["<b>结构化任务计划与执行约束</b>"]:::normal
+    E["<b>Executor</b><br/>语义 API / SQL / Python Sandbox / Actions"]:::exit
     Q --> R --> Re --> P --> E
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
@@ -457,14 +457,14 @@ Agentic BI 的可观测性不应只关注传统服务的 CPU、内存和请求�
 <figure class="mermaid-figure" role="img" aria-label="图 6-2 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)">
 {% mermaid %}
 flowchart LR
-    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
-    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
-    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
-    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]:::key
-    Pass["<b>结果解释与授权后的业务动作</b>"]:::end
-    Fail["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]:::key
+    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]:::decision
+    Pass["<b>结果解释与授权后的业务动作</b>"]:::exit
+    Fail["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]:::decision
     A -->|校验通过| Pass
     A -->|校验失败| Fail
     Fail -.->|修正后回到 Executor| E
