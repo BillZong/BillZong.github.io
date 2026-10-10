@@ -1644,6 +1644,17 @@ figure.highlight td.code > pre {
   border-radius: 4px;
   background-color: transparent;
 }
+.markdown-body figure.mermaid-figure {
+  margin: 1.5rem auto;
+  display: block;
+  text-align: center;
+}
+.markdown-body figure.mermaid-figure > svg {
+  max-width: 90%;
+  height: auto;
+  margin: 0 auto;
+  display: inline-block;
+}
 .markdown-body blockquote {
   color: var(--sec-text-color);
 }
