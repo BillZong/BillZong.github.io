@@ -27,17 +27,17 @@
 <meta property="og:description" content="第六章: AI-Native 现代分析系统的底层重构 The Underlying Restructure for AI-Native Modern Analytics 引言：当智能体成为分析系统的执行主体 在前五篇的技术演进中，企业分析系统完成了一系列关键的架构跃迁：从经典数据仓库集中管理业务数据，到分布式计算与云原生数仓突破算力瓶颈；从独立语义层统一指标口径，到大模型借助 Semantic I">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-10-09T04:00:01.000Z">
-<meta property="article:modified_time" content="2026-10-10T02:22:51.680Z">
+<meta property="article:modified_time" content="2026-10-10T02:40:14.937Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="BI">
-<meta property="article:tag" content="Governance">
 <meta property="article:tag" content="AI-Native">
 <meta property="article:tag" content="Model Context Protocol">
 <meta property="article:tag" content="MCP">
 <meta property="article:tag" content="Model Routing">
 <meta property="article:tag" content="TEE">
 <meta property="article:tag" content="可信执行环境">
+<meta property="article:tag" content="Governance">
 <meta property="article:tag" content="可观测性">
 <meta property="article:tag" content="角色分拆">
 <meta property="article:tag" content="Router">
@@ -98,7 +98,9 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+<style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
 
@@ -210,9 +212,7 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
-<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
-</head>
+</style></head>
 
 
 <body>
@@ -513,31 +513,43 @@ mjx-container[display="true"] + br {
 <p>从工程实现看，多智能体系统不能依赖各个模型之间自由传递自然语言来维持协作。否则，一个角色对业务概念的模糊理解可能被下游角色不断放大，最终难以确定错误发生在哪个阶段。</p>
 <p>更可靠的方式是建立结构化的任务契约（Task Contract），规定每个角色接收什么输入、产生什么输出，以及在什么条件下允许任务继续执行。</p>
 <p>例如，Router 输出任务计划，Retriever 输出带有来源标识的语义上下文，Executor 输出查询结果与执行元数据，Auditor 则输出明确的校验结论。各阶段通过结构化数据交换，而不是依赖隐含在长篇自然语言中的约定。</p>
-<figure class="mermaid-figure" role="img" aria-label="图 6-4 · 多智能体协作的运行时流程:Router → Retriever → 结构化计划 → Executor → Auditor(含校验失败重试分支)">
+<figure class="mermaid-figure" role="img" aria-label="图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor">
 
 <pre>
 <code class="mermaid" >
-flowchart TB
+flowchart LR
     Q["<b>用户问题</b>"]
     R["<b>Router / Planner</b><br/>意图解析、任务拆解、风险初判"]
     Re["<b>Retriever</b><br/>语义定义、元数据、对象与权限上下文"]
     P["<b>结构化任务计划与执行约束</b>"]
     E["<b>Executor</b><br/>语义 API / SQL / Python Sandbox / Actions"]
-    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]
-    F["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]
-    Out["<b>结果解释与授权后的业务动作</b>"]
-    Q --> R --> Re --> P --> E --> A
-    A -- "校验通过" --> Out
-    A -- "校验失败" --> F
-    F -. 修正后回到 Executor .-> E
+    Q --> R --> Re --> P --> E
     style Q fill:#fff3b0,stroke:#b58900
-    style Out fill:#e8f5e8,stroke:#2e7d32
-    style F fill:#ffe0e0,stroke:#c62828
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-4 · 多智能体协作的运行时流程:Router → Retriever → 结构化计划 → Executor → Auditor(含校验失败重试分支)</figcaption>
+<figcaption class="mermaid-caption">图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions) → Auditor (口径校验、结果复核、策略合规检查)。分支:校验失败 → 限定范围内重试或请求人工介入(回到 Executor);校验通过 → 结果解释与授权后的业务动作。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions)。</p>
+</noscript>
+</figure>
+<figure class="mermaid-figure" role="img" aria-label="图 6-6 · Auditor 校验通过/失败双分支">
+
+<pre>
+<code class="mermaid" >
+flowchart LR
+    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]
+    Pass["<b>结果解释与授权后的业务动作</b>"]
+    Fail["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]
+    A -- 校验通过 --> Pass
+    A -- 校验失败 --> Fail
+    Fail -. 修正后回到 Executor .-> E
+    style Pass fill:#e8f5e8,stroke:#2e7d32
+    style Fail fill:#ffe0e0,stroke:#c62828
+</code>
+</pre>
+<figcaption class="mermaid-caption">图 6-6 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Auditor (口径校验、结果复核、策略合规检查) → 校验通过 → 结果解释与授权后的业务动作;校验失败 → 限定范围内重试或请求人工介入(修正后回到 Executor)。</p>
 </noscript>
 </figure>
 <p>在这一流程中，任务状态、重试次数、超时和错误处理均应由运行时编排器控制。模型可以提出下一步行动，但不应自行决定是否绕过权限检查、无限重试或突破资源限制。</p>
@@ -679,26 +691,41 @@ SQL / 分析代码 / 工具
 
 <pre>
 <code class="mermaid" >
-flowchart TB
+flowchart LR
     A["<b>Request</b><br/>用户请求、身份与请求 ID"]
     B["<b>Intent / Plan</b><br/>任务类型、结构化计划与策略判定"]
     C["<b>Retrieved Context</b><br/>数据来源、指标定义、版本与权限范围"]
     D["<b>Semantic IR</b><br/>结构化指标、维度、过滤条件与查询意图"]
+    A --> B --> C --> D
+    style A fill:#fff3b0,stroke:#b58900
+    style D fill:#fff3b0,stroke:#b58900
+</code>
+</pre>
+<figcaption class="mermaid-caption">图 6-3 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Request (用户请求、身份与请求 ID) → Intent/Plan (任务类型、结构化计划与策略判定) → Retrieved Context (数据来源、指标定义、版本与权限范围) → Semantic IR (结构化指标、维度、过滤条件与查询意图)。</p>
+</noscript>
+<figure class="mermaid-figure" role="img" aria-label="图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action">
+
+<pre>
+<code class="mermaid" >
+flowchart LR
     E["<b>Tool Call</b><br/>工具名称、参数摘要、身份与授权结果"]
     F["<b>SQL / Execution</b><br/>查询标识、执行计划摘要、资源消耗与状态"]
     G["<b>Query Result</b><br/>结果版本、数据时效、结果规模与引用标识"]
     H["<b>Validation</b><br/>校验规则、异常与复核结论"]
     I["<b>Final Answer</b><br/>结论、证据引用与不确定性说明"]
     J["<b>Action</b><br/>审批记录、执行主体、幂等标识与最终状态"]
-    A --> B --> C --> D --> E --> F --> G --> H --> I --> J
-    style A fill:#fff3b0,stroke:#b58900
+    E --> F --> G --> H --> I --> J
+    style E fill:#fff3b0,stroke:#b58900
     style J fill:#e8f5e8,stroke:#2e7d32
 </code>
 </pre>
-<figcaption class="mermaid-caption">图 6-3 · 一条完整的分析链路:Request → Intent → Retrieved Context → Semantic IR → Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
+<figcaption class="mermaid-caption">图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Request (用户请求、身份与请求 ID) → Intent/Plan (任务类型、结构化计划与策略判定) → Retrieved Context (数据来源、指标定义、版本与权限范围) → Semantic IR (结构化指标、维度、过滤条件与查询意图) → Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识) → Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识) → Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
 </noscript>
+</figure>
 </figure>
 <p>这里的重点不是记录所有原始内容，而是建立能够重建执行过程的证据链。对于敏感数据，日志应优先记录稳定标识、哈希、脱敏摘要与必要的元数据，而不是默认保存完整的原始数据集、凭证或模型上下文。</p>
 <p>同时，执行追踪应使用统一的 Request ID、Trace ID 和跨服务关联标识，将 Agent 编排服务、MCP Server、语义层、查询引擎与业务动作服务连接起来。只有这样，运维人员才能在一次跨系统任务中定位具体的延迟来源、失败环节和权限决策。</p>
@@ -846,8 +873,6 @@ flowchart TB
       
         <a href="/tags/BI/" class="print-no-link">#BI</a>
       
-        <a href="/tags/Governance/" class="print-no-link">#Governance</a>
-      
         <a href="/tags/AI-Native/" class="print-no-link">#AI-Native</a>
       
         <a href="/tags/Model-Context-Protocol/" class="print-no-link">#Model Context Protocol</a>
@@ -859,6 +884,8 @@ flowchart TB
         <a href="/tags/TEE/" class="print-no-link">#TEE</a>
       
         <a href="/tags/%E5%8F%AF%E4%BF%A1%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83/" class="print-no-link">#可信执行环境</a>
+      
+        <a href="/tags/Governance/" class="print-no-link">#Governance</a>
       
         <a href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/" class="print-no-link">#可观测性</a>
       
