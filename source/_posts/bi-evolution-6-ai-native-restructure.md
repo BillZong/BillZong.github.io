@@ -339,35 +339,26 @@ Governance Plane 并不是一个独立产品名称所能概括的单一模块[^5
 
 一条完整的分析链路至少应包含以下关键节点：
 
-Request
-  │ 用户请求、身份与请求 ID
-  ▼
-Intent / Plan
-  │ 任务类型、结构化计划与策略判定
-  ▼
-Retrieved Context
-  │ 数据来源、指标定义、版本与权限范围
-  ▼
-Semantic IR
-  │ 结构化指标、维度、过滤条件与查询意图
-  ▼
-Tool Call
-  │ 工具名称、参数摘要、身份与授权结果
-  ▼
-SQL / Execution
-  │ 查询标识、执行计划摘要、资源消耗与状态
-  ▼
-Query Result
-  │ 结果版本、数据时效、结果规模与引用标识
-  ▼
-Validation
-  │ 校验规则、异常与复核结论
-  ▼
-Final Answer
-  │ 结论、证据引用与不确定性说明
-  ▼
-Action
-  │ 审批记录、执行主体、幂等标识与最终状态
+{% mermaid %}
+flowchart TB
+    A["<b>Request</b><br/>用户请求、身份与请求 ID"]
+    B["<b>Intent / Plan</b><br/>任务类型、结构化计划与策略判定"]
+    C["<b>Retrieved Context</b><br/>数据来源、指标定义、版本与权限范围"]
+    D["<b>Semantic IR</b><br/>结构化指标、维度、过滤条件与查询意图"]
+    E["<b>Tool Call</b><br/>工具名称、参数摘要、身份与授权结果"]
+    F["<b>SQL / Execution</b><br/>查询标识、执行计划摘要、资源消耗与状态"]
+    G["<b>Query Result</b><br/>结果版本、数据时效、结果规模与引用标识"]
+    H["<b>Validation</b><br/>校验规则、异常与复核结论"]
+    I["<b>Final Answer</b><br/>结论、证据引用与不确定性说明"]
+    J["<b>Action</b><br/>审批记录、执行主体、幂等标识与最终状态"]
+    A --> B --> C --> D --> E --> F --> G --> H --> I --> J
+    style A fill:#fff3b0,stroke:#b58900
+    style J fill:#e8f5e8,stroke:#2e7d32
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-3 · 一条完整的分析链路:Request → Intent → Retrieved Context → Semantic IR → Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Request (用户请求、身份与请求 ID) → Intent/Plan (任务类型、结构化计划与策略判定) → Retrieved Context (数据来源、指标定义、版本与权限范围) → Semantic IR (结构化指标、维度、过滤条件与查询意图) → Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识) → Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
+</noscript>
 
 这里的重点不是记录所有原始内容，而是建立能够重建执行过程的证据链。对于敏感数据，日志应优先记录稳定标识、哈希、脱敏摘要与必要的元数据，而不是默认保存完整的原始数据集、凭证或模型上下文。
 
