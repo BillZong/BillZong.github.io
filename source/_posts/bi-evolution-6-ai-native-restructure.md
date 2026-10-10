@@ -92,13 +92,21 @@ Auditor：独立校验与结果审计。 Auditor 负责验证分析结果是否�
 <figure class="mermaid-figure" role="img" aria-label="图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor">
 {% mermaid %}
 flowchart LR
-    Q["<b>用户问题</b>"]
-    R["<b>Router / Planner</b><br/>意图解析、任务拆解、风险初判"]
-    Re["<b>Retriever</b><br/>语义定义、元数据、对象与权限上下文"]
-    P["<b>结构化任务计划与执行约束</b>"]
-    E["<b>Executor</b><br/>语义 API / SQL / Python Sandbox / Actions"]
-    Q --> R --> Re --> P --> E
-    style Q fill:#fff3b0,stroke:#b58900
+    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    MCP["<b>MCP 协议交互层</b>"]:::start
+    D1["<b>数据与语义服务</b><br/>Resources/Tools"]:::def
+    D2["<b>分析执行服务</b><br/>SQL / Python"]:::def
+    D3["<b>业务动作服务</b><br/>Ontology / API"]:::def
+    M1["指标与元数据"]:::def
+    M2["数据库 / 沙箱"]:::def
+    M3["ERP / CRM / 工作流"]:::end
+    MCP --> D1 --> M1
+    MCP --> D2 --> M2
+    MCP --> D3 --> M3
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor</figcaption>
 <noscript>
@@ -109,14 +117,35 @@ flowchart LR
 <figure class="mermaid-figure" role="img" aria-label="图 6-6 · Auditor 校验通过/失败双分支">
 {% mermaid %}
 flowchart LR
-    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]
-    Pass["<b>结果解释与授权后的业务动作</b>"]
-    Fail["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]
-    A -- 校验通过 --> Pass
-    A -- 校验失败 --> Fail
-    Fail -. 修正后回到 Executor .-> E
-    style Pass fill:#e8f5e8,stroke:#2e7d32
-    style Fail fill:#ffe0e0,stroke:#c62828
+    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    H["<b>横向贯穿</b><br/>身份认证 / 策略授权 / 隐私保护 / 审批与执行审计"]:::key
+    subgraph L1["<b>交互与任务编排层</b>"]
+        A1["用户请求 / Agent Host / Router"]:::def
+    end
+    subgraph L2["<b>智能体协作层</b>"]
+        A2["Retriever"]:::def
+        A3["Executor"]:::def
+        A4["Auditor"]:::def
+    end
+    subgraph L3["<b>模型与协议层</b>"]
+        A5["小模型 / 推理模型 / Model Routing / MCP Client-Server"]:::def
+    end
+    subgraph L4["<b>语义与执行层</b>"]
+        A6["Semantic Layer / Ontology / SQL Engine / Python Sandbox"]:::def
+    end
+    subgraph L5["<b>数据与业务系统层</b>"]
+        A7["Lakehouse / Data Warehouse / ERP / CRM / APIs"]:::end
+    end
+    L1 --> L2 --> L3 --> L4 --> L5
+    H -.- L1
+    H -.- L2
+    H -.- L3
+    H -.- L4
+    H -.- L5
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-6 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入</figcaption>
 <noscript>
@@ -186,15 +215,17 @@ Prompts（提示模板）：用于提供可复用的任务模板或交互流程�
 
 <figure class="mermaid-figure" role="img" aria-label="图 6-1 · MCP 协议交互层与三类服务映射">
 {% mermaid %}
-flowchart TB
-    MCP["MCP 协议交互层"]
-    MCP --> D1["数据与语义服务<br/>Resources/Tools"]
-    MCP --> D2["分析执行服务<br/>SQL/Python"]
-    MCP --> D3["业务动作服务<br/>Ontology/API"]
-    D1 --> M1["指标与元数据"]
-    D2 --> M2["数据库/沙箱"]
-    D3 --> M3["ERP/CRM/工作流"]
-    style MCP fill:#fff3b0,stroke:#b58900
+flowchart LR
+    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    A["<b>Request</b><br/>用户请求、身份与请求 ID"]:::start
+    B["<b>Intent / Plan</b><br/>任务类型、结构化计划与策略判定"]:::def
+    C["<b>Retrieved Context</b><br/>数据来源、指标定义、版本与权限范围"]:::def
+    D["<b>Semantic IR</b><br/>结构化指标、维度、过滤条件与查询意图"]:::end
+    A --> B --> C --> D
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-1 · MCP 协议交互层与三类服务映射</figcaption>
 <noscript>
@@ -353,13 +384,18 @@ Governance Plane 并不是一个独立产品名称所能概括的单一模块[^5
 <figure class="mermaid-figure" role="img" aria-label="图 6-3 · 一条完整的分析链路:Request → Intent → Retrieved Context → Semantic IR → Tool Call → SQL → Query Result → Validation → Final Answer → Action">
 {% mermaid %}
 flowchart LR
-    A["<b>Request</b><br/>用户请求、身份与请求 ID"]
-    B["<b>Intent / Plan</b><br/>任务类型、结构化计划与策略判定"]
-    C["<b>Retrieved Context</b><br/>数据来源、指标定义、版本与权限范围"]
-    D["<b>Semantic IR</b><br/>结构化指标、维度、过滤条件与查询意图"]
-    A --> B --> C --> D
-    style A fill:#fff3b0,stroke:#b58900
-    style D fill:#fff3b0,stroke:#b58900
+    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    E["<b>Tool Call</b><br/>工具名称、参数摘要、身份与授权结果"]:::start
+    F["<b>SQL / Execution</b><br/>查询标识、执行计划摘要、资源消耗与状态"]:::def
+    G["<b>Query Result</b><br/>结果版本、数据时效、结果规模与引用标识"]:::def
+    H["<b>Validation</b><br/>校验规则、异常与复核结论"]:::key
+    I["<b>Final Answer</b><br/>结论、证据引用与不确定性说明"]:::def
+    J["<b>Action</b><br/>审批记录、执行主体、幂等标识与最终状态"]:::end
+    E --> F --> G --> H --> I --> J
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-3 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR</figcaption>
 <noscript>
@@ -369,15 +405,17 @@ flowchart LR
 <figure class="mermaid-figure" role="img" aria-label="图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action">
 {% mermaid %}
 flowchart LR
-    E["<b>Tool Call</b><br/>工具名称、参数摘要、身份与授权结果"]
-    F["<b>SQL / Execution</b><br/>查询标识、执行计划摘要、资源消耗与状态"]
-    G["<b>Query Result</b><br/>结果版本、数据时效、结果规模与引用标识"]
-    H["<b>Validation</b><br/>校验规则、异常与复核结论"]
-    I["<b>Final Answer</b><br/>结论、证据引用与不确定性说明"]
-    J["<b>Action</b><br/>审批记录、执行主体、幂等标识与最终状态"]
-    E --> F --> G --> H --> I --> J
-    style E fill:#fff3b0,stroke:#b58900
-    style J fill:#e8f5e8,stroke:#2e7d32
+    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    Q["<b>用户问题</b>"]:::start
+    R["<b>Router / Planner</b><br/>意图解析、任务拆解、风险初判"]:::def
+    Re["<b>Retriever</b><br/>语义定义、元数据、对象与权限上下文"]:::def
+    P["<b>结构化任务计划与执行约束</b>"]:::def
+    E["<b>Executor</b><br/>语义 API / SQL / Python Sandbox / Actions"]:::end
+    Q --> R --> Re --> P --> E
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
 <noscript>
@@ -418,29 +456,18 @@ Agentic BI 的可观测性不应只关注传统服务的 CPU、内存和请求�
 
 <figure class="mermaid-figure" role="img" aria-label="图 6-2 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)">
 {% mermaid %}
-flowchart TB
-    subgraph L1["<b>交互与任务编排层</b>"]
-        A1["用户请求 / Agent Host / Router"]
-    end
-    subgraph L2["<b>智能体协作层</b>"]
-        A2["Retriever"] --- A3["Executor"] --- A4["Auditor"]
-    end
-    subgraph L3["<b>模型与协议层</b>"]
-        A5["小模型 / 推理模型 / Model Routing / MCP Client-Server"]
-    end
-    subgraph L4["<b>语义与执行层</b>"]
-        A6["Semantic Layer / Ontology / SQL Engine / Python Sandbox"]
-    end
-    subgraph L5["<b>数据与业务系统层</b>"]
-        A7["Lakehouse / Data Warehouse / ERP / CRM / APIs"]
-    end
-    L1 --> L2 --> L3 --> L4 --> L5
-    H["<i>横向贯穿:身份认证、策略授权、隐私保护、审批与执行审计</i>"] -.- L1
-    H -.- L2
-    H -.- L3
-    H -.- L4
-    H -.- L5
-    style H fill:#fff3b0,stroke:#b58900
+flowchart LR
+    classDef start fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef key fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef end fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef def fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]:::key
+    Pass["<b>结果解释与授权后的业务动作</b>"]:::end
+    Fail["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]:::key
+    A -- 校验通过 --> Pass
+    A -- 校验失败 --> Fail
+    Fail -. 修正后回到 Executor .-> E
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-2 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)</figcaption>
 <noscript>
