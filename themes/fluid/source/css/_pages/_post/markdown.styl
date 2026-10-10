@@ -59,6 +59,18 @@
     border-radius 4px
     background-color transparent
 
+  // 2026-10-10 mermaid SVG 在 figure > img 选不中,需要 figure > svg 单独约束
+  figure.mermaid-figure
+    margin 1.5rem auto
+    display block
+    text-align center
+
+  figure.mermaid-figure > svg
+    max-width 90%
+    height auto
+    margin 0 auto
+    display inline-block
+
   blockquote
     color var(--sec-text-color)
 
