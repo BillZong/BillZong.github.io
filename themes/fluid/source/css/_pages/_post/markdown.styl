@@ -64,12 +64,61 @@
     margin 1.5rem auto
     display block
     text-align center
+    overflow-x auto  // 2026-10-10 viewBox 宽超过容器时横向滚动,不被强制缩放
 
-  figure.mermaid-figure > svg
-    max-width 90%
-    height auto
+  // 2026-10-10 mermaid 把 SVG 渲染到 <pre><code class="mermaid">,pre 是 block 元素
+  // 默认 width=容器宽 把 SVG 强制拉宽。强制 pre 按内容宽度,SVG 按 viewBox 1:1 渲染。
+  // 2026-10-10 删除 max-width:100%,宽 viewBox 图靠 figure overflow-x:auto 横滚,
+  // 保证所有图字号都是 viewBox 内 14px 矢量单位,不被二次缩放。
+  figure.mermaid-figure pre,
+  figure.mermaid-figure pre > code.mermaid
+    width fit-content
+    margin 0 auto
+    padding 0
+    background transparent
+    text-align center
+
+  // 2026-10-10 useMaxWidth: false 让 SVG 按 viewBox 1:1 渲染,字号不被二次缩放
+  // 注意 SVG 不是 figure 直接子,是 figure > pre > code.mermaid > svg,必须用后代选择器
+  figure.mermaid-figure svg,
+  figure.mermaid-figure pre svg,
+  figure.mermaid-figure pre .mermaid > svg
+    max-width none !important
+    width auto !important
+    height auto !important
     margin 0 auto
     display inline-block
+
+  // 2026-10-10 main.css line 1633 默认 .markdown-body pre .mermaid > svg { min-width: 100% }
+  // 强制 SVG 至少 pre 宽,宽 viewBox 图会被拉宽,字号被二次缩放。覆盖此规则
+  figure.mermaid-figure pre .mermaid > svg,
+  figure.mermaid-figure pre svg
+    min-width 0 !important
+
+  // 2026-10-10 强制 mermaid 节点 label 字号统一,跨图不靠 label 长度决定
+  figure.mermaid-figure .nodeLabel,
+  figure.mermaid-figure .nodeLabel p,
+  figure.mermaid-figure foreignObject div,
+  figure.mermaid-figure foreignObject span
+    font-size 14px !important
+    line-height 1.25 !important
+    font-family $font-family !important
+
+  // 强制节点框最小尺寸 + 居中,跨图统一
+  figure.mermaid-figure .node foreignObject
+    min-width 80px !important
+
+  figure.mermaid-figure foreignObject > div
+    min-width 80px !important
+    text-align center !important
+    padding 4px 8px !important
+    box-sizing border-box !important
+
+  // 强制 rect 节点框最小尺寸,跨图统一视觉大小
+  figure.mermaid-figure .node.default .basic.label-container
+    min-width 110px !important
+
+
 
   blockquote
     color var(--sec-text-color)

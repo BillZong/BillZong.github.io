@@ -97,13 +97,13 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    MCP["MCP\n协议交互层"]:::entry
-    D1["数据与语义\n服务"]:::normal
-    D2["分析执行\n服务"]:::normal
-    D3["业务动作\n服务"]:::normal
-    M1["指标与\n元数据"]:::normal
-    M2["数据库\n沙箱"]:::normal
-    M3["ERP\nCRM"]:::exit
+    MCP["MCP\n协议"]:::entry
+    D1["数据\n服务"]:::normal
+    D2["执行\n服务"]:::normal
+    D3["动作\n服务"]:::normal
+    M1["指标\n数据"]:::normal
+    M2["数据\n沙箱"]:::normal
+    M3["ERP\n系统"]:::exit
     MCP --> D1 --> M1
     MCP --> D2 --> M2
     MCP --> D3 --> M3
@@ -114,7 +114,28 @@ flowchart LR
 </noscript>
 </figure>
 
-<figure class="mermaid-figure" role="img" aria-label="图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)">
+<figure class="mermaid-figure" role="img" aria-label="图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层)">
+{% mermaid %}
+flowchart TB
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    L1["交互\n编排"]:::normal
+    L2["智能\n协作"]:::normal
+    L3["模型\n协议"]:::normal
+    L4["语义\n执行"]:::normal
+    L5["数据\n业务"]:::exit
+    L1 --> L2 --> L3 --> L4 --> L5
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层)</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>交互与编排层 (用户请求/Agent Host/Router) → 智能体协作层 (Retriever/Executor/Auditor) → 模型与协议层 (小模型/推理模型/Model Routing/MCP Client-Server) → 语义与执行层 (Semantic Layer/Ontology/SQL Engine/Python Sandbox) → 数据与业务系统层 (Lakehouse/Data Warehouse/ERP/CRM/APIs)。</p>
+</noscript>
+</figure>
+
+<figure class="mermaid-figure" role="img" aria-label="图 6-7 · 横向治理贯穿全栈 5 层">
 {% mermaid %}
 flowchart LR
     classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
@@ -122,34 +143,21 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    H["横向治理\n贯穿"]:::entry
-    subgraph L1["交互与\n编排层"]
-        A1["用户请求\nRouter"]:::normal
-    end
-    subgraph L2["智能体\n协作层"]
-        A2["Retriever"]:::normal
-        A3["Executor"]:::normal
-        A4["Auditor"]:::normal
-    end
-    subgraph L3["模型与\n协议层"]
-        A5["小模型\n推理模型"]:::normal
-    end
-    subgraph L4["语义与\n执行层"]
-        A6["Semantic\nLayer"]:::normal
-    end
-    subgraph L5["数据与\n业务层"]
-        A7["Lakehouse\nERP"]:::exit
-    end
-    L1 --> L2 --> L3 --> L4 --> L5
+    H["横向\n治理"]:::entry
+    L1["交互\n编排"]:::normal
+    L2["智能\n协作"]:::normal
+    L3["模型\n协议"]:::normal
+    L4["语义\n执行"]:::normal
+    L5["数据\n业务"]:::normal
     H -.-> L1
     H -.-> L2
     H -.-> L3
     H -.-> L4
     H -.-> L5
 {% endmermaid %}
-<figcaption class="mermaid-caption">图 6-6 · AI-Native 现代分析系统全栈参考架构(纵向 5 层 + 横向治理贯穿)</figcaption>
+<figcaption class="mermaid-caption">图 6-7 · 横向治理贯穿全栈 5 层</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Auditor (口径校验、结果复核、策略合规检查) → 校验通过 → 结果解释与授权后的业务动作;校验失败 → 限定范围内重试或请求人工介入(修正后回到 Executor)。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>横向贯穿:身份认证、策略授权、隐私保护、审批与执行审计。</p>
 </noscript>
 </figure>
 
@@ -213,7 +221,7 @@ Prompts（提示模板）：用于提供可复用的任务模板或交互流程�
 因此，合理的架构应将 MCP 放在工具互操作层，而将业务语义与确定性执行能力保留在相应的服务层中。
 
 
-<figure class="mermaid-figure" role="img" aria-label="图 6-1 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR">
+<figure class="mermaid-figure" role="img" aria-label="图 6-1A · 分析意图阶段 (上):Request → Intent">
 {% mermaid %}
 flowchart LR
     classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
@@ -221,15 +229,31 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["Request\n用户请求"]:::entry
-    B["Intent / Plan\n结构化计划"]:::normal
-    C["Retrieved Context\n语义与元数据"]:::normal
-    D["Semantic IR\n查询意图"]:::exit
-    A --> B --> C --> D
+    A["用户\n请求"]:::entry
+    B["意图\n规划"]:::normal
+    A --> B
 {% endmermaid %}
-<figcaption class="mermaid-caption">图 6-1 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR</figcaption>
+<figcaption class="mermaid-caption">图 6-1A · 分析意图阶段 (上):Request → Intent</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>MCP 协议交互层 → 数据与语义服务 (Resources/Tools) → 指标与元数据;MCP 协议交互层 → 分析执行服务 (SQL/Python) → 数据库/沙箱;MCP 协议交互层 → 业务动作服务 (Ontology/API) → ERP/CRM/工作流。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户请求 (意图、身份、上下文) → 意图/规划 (任务类型、结构化计划与策略判定)。</p>
+</noscript>
+</figure>
+
+<figure class="mermaid-figure" role="img" aria-label="图 6-1B · 分析意图阶段 (下):Retrieved Context → Semantic IR">
+{% mermaid %}
+flowchart LR
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    C["检索\n元数据"]:::normal
+    D["查询\n意图"]:::exit
+    C --> D
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-1B · 分析意图阶段 (下):Retrieved Context → Semantic IR</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>检索上下文 (数据来源、指标定义、版本与权限范围) → 语义 IR (结构化指标、维度、过滤条件与查询意图)。</p>
 </noscript>
 </figure>
 ### 4. 标准化接口不等于标准化信任
@@ -269,26 +293,40 @@ MCP 的工程价值在于降低异构工具集成的摩擦，而不是消除系�
 
 三者共同构成一种混合计算范式：
 
-用户请求
-   │
-   ▼
-轻量模型 / 规则路由
-   │
-   ├── 简单任务 ──► 专用小模型或确定性规则
-   │
-   └── 复杂任务 ──► 推理模型与多步任务规划
-                           │
-                           ▼
-                   结构化语义请求
-                           │
-                           ▼
-                确定性编译与权限校验
-                           │
-                           ▼
-                 SQL / 分析代码 / 工具
-                           │
-                           ▼
-                    结果校验与审计
+<figure class="mermaid-figure" role="img" aria-label="图 6-8 · 混合模型路由:分层决策与确定性执行">
+{% mermaid %}
+flowchart TB
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    U["用户\n请求"]:::entry
+    R["轻量\n模型路由"]:::normal
+    Simple["简单\n任务"]:::normal
+    Small["专用\n小模型"]:::normal
+    Complex["复杂\n任务"]:::decision
+    Reason["推理\n模型"]:::normal
+    Plan["结构\n化请求"]:::normal
+    DetEng["确定性\n执行引擎"]:::decision
+    Exec["SQL / 工具\n执行"]:::normal
+    Audit["结果\n校验审计"]:::exit
+
+    U --> R
+    R --> Simple
+    R --> Complex
+    Simple --> Small
+    Complex --> Reason
+    Reason --> Plan
+    Plan --> DetEng
+    DetEng --> Exec
+    Exec --> Audit
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-8 · 混合模型路由:分层决策与确定性执行</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户请求 → 轻量模型路由 → 简单任务 → 专用小模型;用户请求 → 轻量模型路由 → 复杂任务 → 推理模型 → 结构化语义请求 → 确定性编译与权限校验 → SQL / 分析代码 / 工具 → 结果校验与审计。</p>
+</noscript>
+</figure>
 
 该架构将模型推理与业务计算的职责明确分开：模型负责概率性的意图理解和问题拆解，确定性引擎负责在既定约束下执行计算与操作。模型路由则根据任务需要，动态决定何时值得投入更高的推理成本。
 
@@ -381,7 +419,7 @@ Governance Plane 并不是一个独立产品名称所能概括的单一模块[^5
 
 一条完整的分析链路至少应包含以下关键节点：
 
-<figure class="mermaid-figure" role="img" aria-label="图 6-3 · 分析执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action">
+<figure class="mermaid-figure" role="img" aria-label="图 6-3A · 分析执行与决策阶段 (上):Tool Call → SQL → Query Result">
 {% mermaid %}
 flowchart LR
     classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
@@ -389,20 +427,18 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    E["Tool Call\n工具调用"]:::entry
-    F["SQL\n查询执行"]:::normal
-    G["Query Result\n查询结果"]:::normal
-    H["Validation\n校验"]:::decision
-    I["Final Answer\n最终结论"]:::normal
-    J["Action\n业务动作"]:::exit
-    E --> F --> G --> H --> I --> J
+    E["工具\n调用"]:::entry
+    F["查询\n执行"]:::normal
+    G["查询\n结果"]:::normal
+    E --> F --> G
 {% endmermaid %}
-<figcaption class="mermaid-caption">图 6-3 · 分析执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
+<figcaption class="mermaid-caption">图 6-3A · 分析执行与决策阶段 (上):Tool Call → SQL → Query Result</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Request (用户请求、身份与请求 ID) → Intent/Plan (任务类型、结构化计划与策略判定) → Retrieved Context (数据来源、指标定义、版本与权限范围) → Semantic IR (结构化指标、维度、过滤条件与查询意图)。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识)。</p>
 </noscript>
+</figure>
 
-<figure class="mermaid-figure" role="img" aria-label="图 6-4 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor">
+<figure class="mermaid-figure" role="img" aria-label="图 6-3B · 分析执行与决策阶段 (下):Validation → Final Answer → Action">
 {% mermaid %}
 flowchart LR
     classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
@@ -410,16 +446,51 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    Q["用户问题"]:::entry
-    R["Router\n路由与规划"]:::normal
-    Re["Retriever\n语义检索"]:::normal
-    P["结构化计划"]:::normal
-    E["Executor\n执行器"]:::exit
-    Q --> R --> Re --> P --> E
+    H["执行\n校验"]:::decision
+    I["最终\n结论"]:::normal
+    J["业务\n动作"]:::exit
+    H --> I --> J
 {% endmermaid %}
-<figcaption class="mermaid-caption">图 6-4 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor</figcaption>
+<figcaption class="mermaid-caption">图 6-3B · 分析执行与决策阶段 (下):Validation → Final Answer → Action</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识) → Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
+</noscript>
+</figure>
+
+<figure class="mermaid-figure" role="img" aria-label="图 6-4A · 多智能体协作主路径 (前 3 步):用户问题 → Router → Retriever">
+{% mermaid %}
+flowchart LR
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    Q["用户\n问题"]:::entry
+    R["路由\n规划"]:::normal
+    Re["语义\n检索"]:::normal
+    Q --> R --> Re
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-4A · 多智能体协作主路径 (前 3 步):用户问题 → Router → Retriever</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文)。</p>
+</noscript>
+</figure>
+
+<figure class="mermaid-figure" role="img" aria-label="图 6-4B · 多智能体协作主路径 (后 2 步):结构化计划 → Executor">
+{% mermaid %}
+flowchart LR
+    classDef entry fill:#fff3b0,stroke:#b58900,color:#000,stroke-width:1.5px
+    classDef decision fill:#fce4ec,stroke:#c62828,color:#000,stroke-width:1.5px
+    classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
+    classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
+
+    P["结构\n计划"]:::normal
+    E["执行\n器"]:::exit
+    P --> E
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-4B · 多智能体协作主路径 (后 2 步):结构化计划 → Executor</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions)。</p>
 </noscript>
 </figure>
 </figure>
@@ -462,12 +533,12 @@ flowchart LR
     classDef exit fill:#e8f5e8,stroke:#2e7d32,color:#000,stroke-width:1.5px
     classDef normal fill:#f5f5f5,stroke:#999,color:#000,stroke-width:1.5px
 
-    A["Auditor\n口径校验"]:::decision
-    Pass["业务动作"]:::exit
-    Fail["限定范围\n重试 / 人工"]:::decision
-    A -->|校验通过| Pass
-    A -->|校验失败| Fail
-    Fail -.->|修正后重试| A
+    A["审计\n校验"]:::decision
+    Pass["业务\n动作"]:::exit
+    Fail["限定\n介入"]:::decision
+    A -->|通过| Pass
+    A -->|失败| Fail
+    Fail -.->|重试| A
 {% endmermaid %}
 <figcaption class="mermaid-caption">图 6-2 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入</figcaption>
 <noscript>
