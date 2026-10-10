@@ -31,7 +31,6 @@
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="BI">
-<meta property="article:tag" content="Governance">
 <meta property="article:tag" content="抽象层">
 <meta property="article:tag" content="演进">
 <meta property="article:tag" content="总结">
@@ -39,6 +38,7 @@
 <meta property="article:tag" content="人机分工">
 <meta property="article:tag" content="系列结论">
 <meta property="article:tag" content="Ontology">
+<meta property="article:tag" content="Governance">
 <meta property="article:tag" content="Execution Trace">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -726,8 +726,6 @@ mjx-container[display="true"] + br {
       
         <a href="/tags/BI/" class="print-no-link">#BI</a>
       
-        <a href="/tags/Governance/" class="print-no-link">#Governance</a>
-      
         <a href="/tags/%E6%8A%BD%E8%B1%A1%E5%B1%82/" class="print-no-link">#抽象层</a>
       
         <a href="/tags/%E6%BC%94%E8%BF%9B/" class="print-no-link">#演进</a>
@@ -741,6 +739,8 @@ mjx-container[display="true"] + br {
         <a href="/tags/%E7%B3%BB%E5%88%97%E7%BB%93%E8%AE%BA/" class="print-no-link">#系列结论</a>
       
         <a href="/tags/Ontology/" class="print-no-link">#Ontology</a>
+      
+        <a href="/tags/Governance/" class="print-no-link">#Governance</a>
       
         <a href="/tags/Execution-Trace/" class="print-no-link">#Execution Trace</a>
       
@@ -805,7 +805,7 @@ mjx-container[display="true"] + br {
   <script>
   Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
     if (typeof mermaid === 'undefined') return;
-    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":true,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":true,"htmlLabels":false,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {
