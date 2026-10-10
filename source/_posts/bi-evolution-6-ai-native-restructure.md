@@ -89,28 +89,38 @@ Auditor：独立校验与结果审计。 Auditor 负责验证分析结果是否�
 
 例如，Router 输出任务计划，Retriever 输出带有来源标识的语义上下文，Executor 输出查询结果与执行元数据，Auditor 则输出明确的校验结论。各阶段通过结构化数据交换，而不是依赖隐含在长篇自然语言中的约定。
 
-<figure class="mermaid-figure" role="img" aria-label="图 6-4 · 多智能体协作的运行时流程:Router → Retriever → 结构化计划 → Executor → Auditor(含校验失败重试分支)">
+<figure class="mermaid-figure" role="img" aria-label="图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor">
 {% mermaid %}
-flowchart TB
+flowchart LR
     Q["<b>用户问题</b>"]
     R["<b>Router / Planner</b><br/>意图解析、任务拆解、风险初判"]
     Re["<b>Retriever</b><br/>语义定义、元数据、对象与权限上下文"]
     P["<b>结构化任务计划与执行约束</b>"]
     E["<b>Executor</b><br/>语义 API / SQL / Python Sandbox / Actions"]
-    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]
-    F["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]
-    Out["<b>结果解释与授权后的业务动作</b>"]
-    Q --> R --> Re --> P --> E --> A
-    A -- "校验通过" --> Out
-    A -- "校验失败" --> F
-    F -. 修正后回到 Executor .-> E
+    Q --> R --> Re --> P --> E
     style Q fill:#fff3b0,stroke:#b58900
-    style Out fill:#e8f5e8,stroke:#2e7d32
-    style F fill:#ffe0e0,stroke:#c62828
 {% endmermaid %}
-<figcaption class="mermaid-caption">图 6-4 · 多智能体协作的运行时流程:Router → Retriever → 结构化计划 → Executor → Auditor(含校验失败重试分支)</figcaption>
+<figcaption class="mermaid-caption">图 6-5 · 多智能体协作主路径:用户问题 → Router → Retriever → 结构化计划 → Executor</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions) → Auditor (口径校验、结果复核、策略合规检查)。分支:校验失败 → 限定范围内重试或请求人工介入(回到 Executor);校验通过 → 结果解释与授权后的业务动作。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>用户问题 → Router/Planner (意图解析、任务拆解、风险初判) → Retriever (语义定义、元数据、对象与权限上下文) → 结构化任务计划与执行约束 → Executor (语义 API / SQL / Python Sandbox / Actions)。</p>
+</noscript>
+</figure>
+
+<figure class="mermaid-figure" role="img" aria-label="图 6-6 · Auditor 校验通过/失败双分支">
+{% mermaid %}
+flowchart LR
+    A["<b>Auditor</b><br/>口径校验、结果复核、策略合规检查"]
+    Pass["<b>结果解释与授权后的业务动作</b>"]
+    Fail["<b>校验失败</b><br/>限定范围内重试或请求人工介入"]
+    A -- 校验通过 --> Pass
+    A -- 校验失败 --> Fail
+    Fail -. 修正后回到 Executor .-> E
+    style Pass fill:#e8f5e8,stroke:#2e7d32
+    style Fail fill:#ffe0e0,stroke:#c62828
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-6 · Auditor 校验双分支:通过 → 业务动作,失败 → 限定范围内重试或人工介入</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Auditor (口径校验、结果复核、策略合规检查) → 校验通过 → 结果解释与授权后的业务动作;校验失败 → 限定范围内重试或请求人工介入(修正后回到 Executor)。</p>
 </noscript>
 </figure>
 
@@ -342,25 +352,38 @@ Governance Plane 并不是一个独立产品名称所能概括的单一模块[^5
 
 <figure class="mermaid-figure" role="img" aria-label="图 6-3 · 一条完整的分析链路:Request → Intent → Retrieved Context → Semantic IR → Tool Call → SQL → Query Result → Validation → Final Answer → Action">
 {% mermaid %}
-flowchart TB
+flowchart LR
     A["<b>Request</b><br/>用户请求、身份与请求 ID"]
     B["<b>Intent / Plan</b><br/>任务类型、结构化计划与策略判定"]
     C["<b>Retrieved Context</b><br/>数据来源、指标定义、版本与权限范围"]
     D["<b>Semantic IR</b><br/>结构化指标、维度、过滤条件与查询意图"]
+    A --> B --> C --> D
+    style A fill:#fff3b0,stroke:#b58900
+    style D fill:#fff3b0,stroke:#b58900
+{% endmermaid %}
+<figcaption class="mermaid-caption">图 6-3 · 分析意图阶段:Request → Intent → Retrieved Context → Semantic IR</figcaption>
+<noscript>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Request (用户请求、身份与请求 ID) → Intent/Plan (任务类型、结构化计划与策略判定) → Retrieved Context (数据来源、指标定义、版本与权限范围) → Semantic IR (结构化指标、维度、过滤条件与查询意图)。</p>
+</noscript>
+
+<figure class="mermaid-figure" role="img" aria-label="图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action">
+{% mermaid %}
+flowchart LR
     E["<b>Tool Call</b><br/>工具名称、参数摘要、身份与授权结果"]
     F["<b>SQL / Execution</b><br/>查询标识、执行计划摘要、资源消耗与状态"]
     G["<b>Query Result</b><br/>结果版本、数据时效、结果规模与引用标识"]
     H["<b>Validation</b><br/>校验规则、异常与复核结论"]
     I["<b>Final Answer</b><br/>结论、证据引用与不确定性说明"]
     J["<b>Action</b><br/>审批记录、执行主体、幂等标识与最终状态"]
-    A --> B --> C --> D --> E --> F --> G --> H --> I --> J
-    style A fill:#fff3b0,stroke:#b58900
+    E --> F --> G --> H --> I --> J
+    style E fill:#fff3b0,stroke:#b58900
     style J fill:#e8f5e8,stroke:#2e7d32
 {% endmermaid %}
-<figcaption class="mermaid-caption">图 6-3 · 一条完整的分析链路:Request → Intent → Retrieved Context → Semantic IR → Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
+<figcaption class="mermaid-caption">图 6-4 · 执行与决策阶段:Tool Call → SQL → Query Result → Validation → Final Answer → Action</figcaption>
 <noscript>
-  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Request (用户请求、身份与请求 ID) → Intent/Plan (任务类型、结构化计划与策略判定) → Retrieved Context (数据来源、指标定义、版本与权限范围) → Semantic IR (结构化指标、维度、过滤条件与查询意图) → Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识) → Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
+  <p class="mermaid-fallback"><strong>图表文字版 (无 JS 渲染时):</strong>Tool Call (工具名称、参数摘要、身份与授权结果) → SQL/Execution (查询标识、执行计划摘要、资源消耗与状态) → Query Result (结果版本、数据时效、结果规模与引用标识) → Validation (校验规则、异常与复核结论) → Final Answer (结论、证据引用与不确定性说明) → Action (审批记录、执行主体、幂等标识与最终状态)。</p>
 </noscript>
+</figure>
 </figure>
 
 这里的重点不是记录所有原始内容，而是建立能够重建执行过程的证据链。对于敏感数据，日志应优先记录稳定标识、哈希、脱敏摘要与必要的元数据，而不是默认保存完整的原始数据集、凭证或模型上下文。
