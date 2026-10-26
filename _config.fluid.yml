@@ -763,7 +763,16 @@ post:
     specific: false
 
     # See: http://mermaid-js.github.io/mermaid/
-    options: { theme: 'default', themeVariables: { fontSize: '14px' }, flowchart: { useMaxWidth: false, htmlLabels: false, curve: 'linear', nodeSpacing: 50, rankSpacing: 60, padding: 12, wrappingWidth: 200 } }
+    # useMaxWidth: false 让 SVG 保留 viewBox 原始尺寸(1:1 渲染,字号不被二次缩放)。
+    # mindmap 有独立的 config 命名空间,flowchart 下的设置对 mindmap 不生效,
+    # 必须单独设置 mindmap.useMaxWidth,否则 mindmap 会被拉伸到容器宽度。
+    # mindmap.padding 是 mindmap 节点间距,默认 10。mindmap 是径向树状布局,
+    # 节点间距直接决定整棵树宽度:padding=10 时图 1-1 宽 665px,超出 680px 正文栏
+    # 的可用内容宽度(减 figure 内边距后 646px),触发横向滚动;改成 6 后
+    # 5 张图最宽 582px,桌面(646px)和平板(618px)都 1:1 收进正文栏,不用横滚;
+    # 手机(358px)仍需横向滚动,这是径向树状布局的固有宽度,主题 CSS 已用
+    # figure overflow-x:auto 兜底。
+    options: { theme: 'default', themeVariables: { fontSize: '14px' }, flowchart: { useMaxWidth: false, htmlLabels: false, curve: 'linear', nodeSpacing: 50, rankSpacing: 60, padding: 12, wrappingWidth: 200 }, mindmap: { useMaxWidth: false, padding: 6 } }
 
   # 评论插件
   # Comment plugin

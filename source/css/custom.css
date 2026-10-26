@@ -111,6 +111,26 @@ pre:not(.highlight):not([class*="language-"]) {
   font-size: 0.875em !important;
 }
 
+/* mermaid 图的 <pre> 是渲染容器，不是代码块：
+   上面 pre:not(.highlight):not([class*="language-"]) 这条兜底规则会给它加上
+   16px padding + 1px 边框，把 SVG 容器撑到 (SVG 宽度 + 34px)，
+   超出正文栏宽度，触发横向滚动。
+   这里按 figure.mermaid-figure 作用域把 mermaid 的 pre 复位为
+   无 padding / 无边框 / 透明背景（与 fluid 主题 markdown.styl 的
+   "figure.mermaid-figure pre { padding: 0; background: transparent }" 意图一致），
+   只影响 mermaid 图，普通代码块样式保持不变。
+   选择器带 .markdown-body 是为了压过上面那条兜底规则：
+   :not() 的特异性按参数算，所以兜底规则是 (0,2,1)，必须同级或更高才能覆盖。 */
+.markdown-body figure.mermaid-figure pre,
+.markdown-body figure.mermaid-figure pre > code.mermaid {
+  padding: 0 !important;
+  margin: 0 auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
 /* 行内 code 文本色变量: 浅色用经典红, 深色用 GitHub dark 风格的橙红 */
 :root {
   --inlinecode-text-color: #c7254e;
@@ -166,6 +186,19 @@ section.footnotes ol.footnotes-list li.footnote-item p {
   display: inline-block;
 }
 
+/* mindmap 专用字号覆盖
+   mindmap 的文字是 g.mindmap-node 下面嵌套的 g > g > text，
+   不是 flowchart 的 .nodeLabel，所以走不到 markdown.styl 里的 14px 规则，
+   实际命中上面 .mermaid svg 的 18px。
+   mindmap 是径向树状布局，天然比正文栏宽：18px 下 5 张图里有 4 张
+   (715/682/673/688px) 超出 680px 正文栏，只能横向滚动才能看全。
+   这里压到 14px，与 markdown.styl 里 flowchart 节点的 14px 对齐——
+   同一站点内所有 mermaid 图字号统一（不靠 label 长度决定），
+   重新布局后 5 张图最宽约 640px，全部自然收进正文栏，不用横滚。 */
+.mermaid svg g.mindmap-node text {
+  font-size: 14px !important;
+}
+
 /* Dark mode：mermaid SVG 颜色覆盖（深色背景下原黑色节点/箭头不可见） */
 [data-user-color-scheme="dark"] .mermaid svg {
   background-color: transparent !important;
@@ -218,6 +251,42 @@ section.footnotes ol.footnotes-list li.footnote-item p {
 [data-user-color-scheme="dark"] .mermaid svg g[id^="flowchart-O"] .nodeLabel {
   fill: #1f1f1f !important;
   color: #1f1f1f !important;
+}
+
+/* Dark mode：mindmap 专用覆盖
+   mindmap 的 DOM 结构与 flowchart 不同：
+     - 节点底色是 g.mindmap-node 内的 .node-bkg (path/circle)，不在 .node 里，
+       上面的 .node rect 规则匹配不到，所以默认的亮黄底在深色背景下依旧刺眼；
+     - 连线是 g.mindmap-edges 内的 path.edge，不在 .edgePath 里；
+     - 文字是 g.mindmap-node 内嵌套的 g > g > text，通用 text 规则已覆盖成浅灰，
+       但叠在亮黄底上对比度不足。
+   处理：节点底色改成深色系，文字改成近白，连线改浅灰。 */
+[data-user-color-scheme="dark"] .mermaid svg g.mindmap-node .node-bkg {
+  fill: #2f3542 !important;
+  stroke: #7f8ea3 !important;
+  stroke-width: 1.5px !important;
+}
+
+[data-user-color-scheme="dark"] .mermaid svg g.mindmap-node text {
+  fill: #e8ecf3 !important;
+  color: #e8ecf3 !important;
+}
+
+[data-user-color-scheme="dark"] .mermaid svg g.mindmap-edges path.edge {
+  stroke: #7f8ea3 !important;
+  stroke-width: 1.5px !important;
+}
+
+/* mindmap 根节点是实心圆，默认蓝底白字在深色背景下对比度尚可，
+   但圆内文字也要跟着提亮，保证清晰 */
+[data-user-color-scheme="dark"] .mermaid svg g.mindmap-node.section-root .node-bkg {
+  fill: #1f3a5f !important;
+  stroke: #64b5f6 !important;
+}
+
+[data-user-color-scheme="dark"] .mermaid svg g.mindmap-node.section-root text {
+  fill: #ffffff !important;
+  color: #ffffff !important;
 }
 
 /* ==========================================================================
