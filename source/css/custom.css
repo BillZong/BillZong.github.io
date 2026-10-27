@@ -763,3 +763,27 @@ section.footnotes ol.footnotes-list li.footnote-item p {
 [data-user-color-scheme="dark"] .toc-noscript {
   background-color: rgba(255, 255, 255, 0.03) !important;
 }
+
+/* tocbot 目录滚动同步修正
+   tocbot 的 updateTocScroll 用 activeItem.offsetTop 决定目录的滚动位置,
+   而嵌套列表的 ol.tocbot-list 自带 position:relative,
+   子项 li 的 offsetTop 变成"相对嵌套 ol"的小数值(实测 112,真实位置 902),
+   导致每次滚动目录都被拉回顶部,读长文时看不到当前章节。
+   取消嵌套列表的定位,offsetTop 回到顶层列表坐标系,目录才能正确跟随当前章节。 */
+.toc-body ol ol.tocbot-list {
+  position: static;
+}
+
+/* 配套: 取消嵌套列表定位后, 激活标记统一相对顶层列表定位,
+   按层级补回缩进量, 保持标记与条目文字对齐 */
+.toc-body .toc-list-item.is-active-li::before {
+  left: 0.25rem;
+}
+
+.toc-body li > ol > .toc-list-item.is-active-li::before {
+  left: 1.25rem;
+}
+
+.toc-body li > ol > li > ol > .toc-list-item.is-active-li::before {
+  left: 2.25rem;
+}
