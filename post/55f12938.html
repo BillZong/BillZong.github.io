@@ -27,7 +27,7 @@
 <meta property="og:description" content="主要流程   heimdall bridge 命令负责监听跨链事件，存储并触发执行器执行业务逻辑。  processor.NewProcessorService() 会针对每个合约创建一个执行器。 执行器一般会将同步 eth 主网交易，并将相关内容存入存储（LevelDB）或转发交易给 heimdall 或 bor 进行业务处理。    质押合约相关的执行器是 StakingProcessor。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-29T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-10-07T12:06:24.997Z">
+<meta property="article:modified_time" content="2026-10-07T12:07:42.002Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="Matic">
 <meta property="article:tag" content="Polygon">
@@ -650,7 +650,7 @@ sequenceDiagram
   <script>
   Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
     if (typeof mermaid === 'undefined') return;
-    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"18px"},"flowchart":{"useMaxWidth":false,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":false,"htmlLabels":false,"curve":"linear","nodeSpacing":50,"rankSpacing":60,"padding":12,"wrappingWidth":200},"mindmap":{"useMaxWidth":false,"padding":6}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {

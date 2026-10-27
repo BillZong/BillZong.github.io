@@ -27,7 +27,7 @@
 <meta property="og:description" content="本节为系列第 1 &#x2F; 8 节. 系列开篇: 建立 BI 系统的四层架构抽象视角, 作为后续 7 篇的统一分析框架.  第一章: 企业数据仓库与经典 OLAP 时代 (集中式语义的奠基) Part I: The Monolithic EDW &amp; Classic OLAP Era (Foundational Centralized Semantics) 1. 引言: BI 的架构视角与四层抽">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-09-11T04:07:00.000Z">
-<meta property="article:modified_time" content="2026-10-07T12:06:24.996Z">
+<meta property="article:modified_time" content="2026-10-07T12:07:42.000Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="BI">
 <meta property="article:tag" content="数据仓库">
@@ -591,9 +591,9 @@ flowchart LR
 <nav class="series-nav" aria-label="系列导航">
   <div class="series-nav__head">
     <span class="series-nav__series">📚 BI系统的发展进程：数据建模、计算引擎与语义交互的架构演进</span>
-    <span class="series-nav__pos">第 1 / 4 节</span>
+    <span class="series-nav__pos">第 1 / 7 节</span>
   </div>
-  <ol class="series-nav__list"><li class="series-nav__item series-nav__item--current"><span class="series-nav__num">01</span><a href="/post/1069e228.html">企业数据仓库与经典 OLAP 时代（集中式语义的奠基）</a></li><li class="series-nav__item"><span class="series-nav__num">02</span><a href="/post/b39845b2.html">分布式计算与云原生数仓时代（计算与存储的解耦）</a></li><li class="series-nav__item"><span class="series-nav__num">03</span><a href="/post/4e9995af.html">现代数据栈与语义层（Semantic Layer）的重新崛起</a></li><li class="series-nav__item"><span class="series-nav__num">04</span><a href="/post/146af6e.html">大模型重构时代（确定性语义层与概率模型的融合）</a></li></ol>
+  <ol class="series-nav__list"><li class="series-nav__item series-nav__item--current"><span class="series-nav__num">01</span><a href="/post/1069e228.html">企业数据仓库与经典 OLAP 时代（集中式语义的奠基）</a></li><li class="series-nav__item"><span class="series-nav__num">02</span><a href="/post/b39845b2.html">分布式计算与云原生数仓时代（计算与存储的解耦）</a></li><li class="series-nav__item"><span class="series-nav__num">03</span><a href="/post/4e9995af.html">现代数据栈与语义层（Semantic Layer）的重新崛起</a></li><li class="series-nav__item"><span class="series-nav__num">04</span><a href="/post/146af6e.html">大模型重构时代（确定性语义层与概率模型的融合）</a></li><li class="series-nav__item"><span class="series-nav__num">05</span><a href="/post/3f081d36.html">业务对象图时代(从 System of Insight 到 System of Action)</a></li><li class="series-nav__item"><span class="series-nav__num">06</span><a href="/post/20291056.html">AI-Native 现代分析系统的底层重构</a></li><li class="series-nav__item"><span class="series-nav__num">07</span><a href="/post/ee970a16.html">BI 真正演进的不是 UI,而是抽象层</a></li></ol>
   <div class="series-nav__pager">
     <span class="series-nav__pager-cell series-nav__pager-cell--prev"><span class="series-nav__pager-disabled">已是本系列首篇</span></span>
     <span class="series-nav__pager-cell series-nav__pager-cell--next"><a class="series-nav__pager-link" href="/post/b39845b2.html" rel="next"><span class="series-nav__pager-title">分布式计算与云原生数仓时代（计算与存储的解耦）</span><i class="iconfont icon-arrowright"></i></a></span>
@@ -742,7 +742,7 @@ flowchart LR
   <script>
   Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
     if (typeof mermaid === 'undefined') return;
-    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"18px"},"flowchart":{"useMaxWidth":false,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":false,"htmlLabels":false,"curve":"linear","nodeSpacing":50,"rankSpacing":60,"padding":12,"wrappingWidth":200},"mindmap":{"useMaxWidth":false,"padding":6}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {

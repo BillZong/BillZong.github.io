@@ -27,7 +27,7 @@
 <meta property="og:description" content="Helm 部署全流程解析  本节为系列第 3 &#x2F; 8 节。Helm Chart 拆解 + 集群级部署的关键决策。  章节导言 从 Mac 跳到生产集群，OpenWhisk 官方只给一条路：Helm Chart。本节拆解这套 Chart 的目录结构、关键 values 参数、组件依赖关系，以及生产部署时必须做的几个关键决策（高可用、持久化、外部依赖）。 为什么 Helm 是 OpenWhisk 的&amp;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-11T08:32:00.000Z">
-<meta property="article:modified_time" content="2026-10-07T12:06:24.998Z">
+<meta property="article:modified_time" content="2026-10-07T12:07:42.002Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="OpenWhisk">
 <meta property="article:tag" content="Serverless">
@@ -638,7 +638,7 @@ mjx-container[display="true"] + br {
   <script>
   Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
     if (typeof mermaid === 'undefined') return;
-    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"18px"},"flowchart":{"useMaxWidth":false,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":false,"htmlLabels":false,"curve":"linear","nodeSpacing":50,"rankSpacing":60,"padding":12,"wrappingWidth":200},"mindmap":{"useMaxWidth":false,"padding":6}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {

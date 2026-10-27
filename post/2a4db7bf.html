@@ -27,7 +27,7 @@
 <meta property="og:description" content="如何让cc-switch在codex中兼容deepseek原生模型和其它模型 原理 要实现“既保留 DeepSeek 官方最佳模型实践（Tool Calls 格式、推理档位、Context Window、System Prompt 等），又能通过 cc-switch 无缝无感切换多源（官方直连&#x2F;第三方中转）”，核心在于将能力定义（模型层）与路由鉴权（供应商层）进行解耦。 这个思路最低适配版本为：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-08-02T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-10-07T12:06:25.000Z">
+<meta property="article:modified_time" content="2026-10-07T12:07:42.004Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="CLI">
 <meta property="article:tag" content="AI">
@@ -648,7 +648,7 @@ mjx-container[display="true"] + br {
   <script>
   Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js', function() {
     if (typeof mermaid === 'undefined') return;
-    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"18px"},"flowchart":{"useMaxWidth":false,"htmlLabels":true,"curve":"linear","nodeSpacing":10,"rankSpacing":30,"padding":5}});
+    mermaid.initialize({"theme":"default","themeVariables":{"fontSize":"14px"},"flowchart":{"useMaxWidth":false,"htmlLabels":false,"curve":"linear","nodeSpacing":50,"rankSpacing":60,"padding":12,"wrappingWidth":200},"mindmap":{"useMaxWidth":false,"padding":6}});
 
     Fluid.utils.listenDOMLoaded(function() {
       Fluid.events.registerRefreshCallback(function() {
