@@ -787,3 +787,53 @@ section.footnotes ol.footnotes-list li.footnote-item p {
 .toc-body li > ol > li > ol > .toc-list-item.is-active-li::before {
   left: 2.25rem;
 }
+
+/* ==========================================================================
+   小书入口卡片
+   汇总稿顶部指向 /books/ 的引导卡片。用 fluid 主题的 CSS 变量,
+   深色模式自动跟随, 不写死颜色。
+   ========================================================================== */
+.book-entry {
+  margin: 1.5rem 0 2rem;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid var(--border-color, #e3e6ed);
+  border-left: 4px solid var(--theme-color, #4c7cf3);
+  border-radius: 6px;
+  background-color: var(--custom-box-background, rgba(0, 0, 0, 0.02));
+}
+
+.book-entry__label {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--sec-text-color, #6c757d);
+}
+
+.book-entry__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.book-entry__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.book-entry__title a:hover {
+  color: var(--theme-color, #4c7cf3);
+}
+
+.book-entry__desc {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--sec-text-color, #6c757d);
+}
+
+.book-entry__link {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
