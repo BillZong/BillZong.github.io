@@ -96,9 +96,9 @@
       
       <tag>语义层</tag>
       
-      <tag>Ontology</tag>
-      
       <tag>业务对象图</tag>
+      
+      <tag>Ontology</tag>
       
       <tag>System of Action</tag>
       
@@ -143,6 +143,10 @@
       
       <tag>BI</tag>
       
+      <tag>Ontology</tag>
+      
+      <tag>Governance</tag>
+      
       <tag>抽象层</tag>
       
       <tag>演进</tag>
@@ -154,10 +158,6 @@
       <tag>人机分工</tag>
       
       <tag>系列结论</tag>
-      
-      <tag>Ontology</tag>
-      
-      <tag>Governance</tag>
       
       <tag>Execution Trace</tag>
       
@@ -188,8 +188,6 @@
       
       <tag>BI</tag>
       
-      <tag>Governance</tag>
-      
       <tag>AI-Native</tag>
       
       <tag>Model Context Protocol</tag>
@@ -201,6 +199,8 @@
       <tag>TEE</tag>
       
       <tag>可信执行环境</tag>
+      
+      <tag>Governance</tag>
       
       <tag>可观测性</tag>
       
@@ -239,6 +239,8 @@
       
       <tag>BI</tag>
       
+      <tag>指标地狱</tag>
+      
       <tag>Modern Data Stack</tag>
       
       <tag>语义层</tag>
@@ -256,8 +258,6 @@
       <tag>Cube</tag>
       
       <tag>自助式 BI</tag>
-      
-      <tag>指标地狱</tag>
       
       <tag>血缘</tag>
       
@@ -341,8 +341,6 @@
       
       <tag>BI</tag>
       
-      <tag>指标地狱</tag>
-      
       <tag>分布式计算</tag>
       
       <tag>Hadoop</tag>
@@ -372,6 +370,8 @@
       <tag>Medallion</tag>
       
       <tag>ELT</tag>
+      
+      <tag>指标地狱</tag>
       
     </tags>
     
@@ -2417,9 +2417,9 @@
       
       <tag>FaaS</tag>
       
-      <tag>Helm</tag>
-      
       <tag>Kubernetes</tag>
+      
+      <tag>Helm</tag>
       
     </tags>
     
