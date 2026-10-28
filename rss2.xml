@@ -15,7 +15,7 @@
     <atom:link href="https://billzong.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 27 Oct 2026 13:17:31 GMT</pubDate>
+    <pubDate>Wed, 28 Oct 2026 12:06:45 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -29,7 +29,9 @@
           
           
       <description>&lt;hr&gt;
-&lt;h2 id=&quot;0-怎么用这份总结&quot;&gt;0.</description>
+&lt;div class=&quot;book-entry&quot;&gt;
+  &lt;p class=&quot;book-entry__label&quot;&gt;配套小书&lt;/p&gt;
+  &lt;p class=&quot;book-entry__title&quot;&gt;&lt;a href=&quot;/books/algorithm/&quot;&gt;《算法体系》· 21</description>
           
         
       
@@ -2764,9 +2766,9 @@
       
       <category domain="https://billzong.github.io/tags/FaaS/">FaaS</category>
       
-      <category domain="https://billzong.github.io/tags/Kubernetes/">Kubernetes</category>
-      
       <category domain="https://billzong.github.io/tags/Helm/">Helm</category>
+      
+      <category domain="https://billzong.github.io/tags/Kubernetes/">Kubernetes</category>
       
       
       <comments>https://billzong.github.io/post/1c1002d6.html#disqus_thread</comments>
