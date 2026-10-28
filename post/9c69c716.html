@@ -27,7 +27,7 @@
 <meta property="og:description" content="简介 在 Go http包的Server中，每一个请求在都有一个对应的 goroutine 去处理。 请求处理函数通常会启动额外的 goroutine 用来访问后端服务，比如数据库和RPC服务。 用来处理一个请求的 goroutine 通常需要访问一些与请求特定的数据，比如终端用户的身份认证信息、验证相关的token、请求的截止时间。 当一个请求被取消或超时时，所有用来处理该请求的 gorouti">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-12T14:34:00.000Z">
-<meta property="article:modified_time" content="2026-10-28T12:06:45.537Z">
+<meta property="article:modified_time" content="2026-10-28T12:19:06.595Z">
 <meta property="article:author" content="Bill Zong">
 <meta property="article:tag" content="golang">
 <meta property="article:tag" content="context">
@@ -85,7 +85,9 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"><style>mjx-container[jax="SVG"] {
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
+<style>mjx-container[jax="SVG"] {
   direction: ltr;
 }
 
@@ -197,9 +199,7 @@ mjx-container[display="true"] {
 mjx-container[display="true"] + br {
   display: none;
 }
-</style><link rel="alternate" href="/atom.xml" title="知易行难，一路向前" type="application/atom+xml">
-<link rel="alternate" href="/rss2.xml" title="知易行难，一路向前" type="application/rss+xml">
-</head>
+</style></head>
 
 
 <body>
